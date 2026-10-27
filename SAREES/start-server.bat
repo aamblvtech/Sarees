@@ -11,21 +11,21 @@ start "" "http://127.0.0.1:8000"
 
 if exist ".venv\Scripts\python.exe" (
     echo Launching FastAPI via .venv environment...
-    ".venv\Scripts\python.exe" -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+    ".venv\Scripts\python.exe" -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     goto end
 )
 
 where py >nul 2>nul
 if %ERRORLEVEL% equ 0 (
     echo Launching FastAPI via py launcher...
-    py -3.12 -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+    py -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     goto end
 )
 
 where python >nul 2>nul
 if %ERRORLEVEL% equ 0 (
     echo Launching FastAPI via system Python...
-    python -m uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+    python -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     goto end
 )
 

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Upload Portrait • AURA Dressing Room</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #801336;
+      --primary-light: #c72c41;
+      --gold: #dfb15b;
+      --gold-light: #f7e7b4;
+      --gold-dark: #b8860b;
+      --bg-dark: #0d0a10;
+      --card-bg: rgba(26, 18, 28, 0.95);
+      --card-border: rgba(223, 177, 91, 0.25);
+      --text-main: #f5f0eb;
+      --text-muted: #b8aba0;
+      --success: #2ecc71;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #2a121e 0%, var(--bg-dark) 85%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand-logo {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #120e14;
+      box-shadow: 0 0 20px rgba(223, 177, 91, 0.4);
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #fff, var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    .session-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(223, 177, 91, 0.12);
+      border: 1px solid rgba(223, 177, 91, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--gold-light);
+      margin-top: 10px;
+      font-family: monospace;
+    }
+
+    .session-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 6px var(--success);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    /* Preview area */
+    .preview-box {
+      width: 100%;
+      height: 340px;
+      background: #09070c;
+      border: 2px dashed rgba(223, 177, 91, 0.35);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    .preview-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 24px;
+    }
+
+    .preview-placeholder svg {
+      width: 52px;
+      height: 52px;
+      stroke: var(--gold);
+      opacity: 0.8;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .btn {
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid rgba(223, 177, 91, 0.4);
+    }
+
+    .btn-outline:active {
+      background: rgba(223, 177, 91, 0.15);
+      transform: scale(0.98);
+    }
+
+    .btn-gold {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold), #c99330);
+      color: #120e14;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(223, 177, 91, 0.3);
+    }
+
+    .btn-gold:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-gold:not(:disabled):active {
+      transform: scale(0.98);
+    }
+
+    /* Success Screen */
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 36px 20px;
+    }
+
+    .success-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(46, 204, 113, 0.15);
+      border: 2px solid var(--success);
+      color: var(--success);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 16px;
+    }
+
+    .tips-card {
+      background: rgba(223, 177, 91, 0.05);
+      border: 1px solid rgba(223, 177, 91, 0.15);
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Spinner */
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(18, 14, 20, 0.3);
+      border-top-color: #120e14;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand-logo">A</div>
+    <h1>AURA ATELIER</h1>
+    <div class="subtitle">Looklet In-Store Mobile Sync</div>
+    <div class="session-badge" id="sessionBadge">
+      <span class="session-dot"></span>
+      <span id="sessionText">Connecting...</span>
+    </div>
+  </header>
+
+  <!-- Upload View -->
+  <div class="card" id="uploadCard">
+    <h2 class="card-title">Send Your Portrait</h2>
+    <p class="card-desc">Take a photo or choose one from your gallery. It will instantly appear on the dressing room kiosk screen!</p>
+
+    <div class="preview-box" id="previewBox">
+      <div class="preview-placeholder" id="placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="M21 15l-5-5L5 21"/>
+        </svg>
+        <span>No photo selected yet<br><small style="opacity: 0.7;">Take photo or choose from gallery below</small></span>
+      </div>
+      <img id="previewImg" alt="Portrait Preview">
+    </div>
+
+    <!-- Hidden file inputs -->
+    <input type="file" id="cameraInput" accept="image/jpeg,image/png,image/webp" capture="user" onchange="onFileSelected(event)" hidden>
+    <input type="file" id="galleryInput" accept="image/jpeg,image/png,image/webp" onchange="onFileSelected(event)" hidden>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="document.getElementById('cameraInput').click()">
+        📸 Take Photo
+      </button>
+      <button class="btn btn-outline" onclick="document.getElementById('galleryInput').click()">
+        🖼️ Pick Photo
+      </button>
+    </div>
+
+    <button class="btn btn-gold" id="btnUpload" disabled onclick="submitUpload()">
+      <span id="btnText">🚀 Send to Dressing Room</span>
+      <div class="spinner" id="btnSpinner"></div>
+    </button>
+  </div>
+
+  <!-- Success View -->
+  <div class="card success-card" id="successCard">
+    <div class="success-icon">✓</div>
+    <h2 class="card-title" style="color: var(--gold-light);">Portrait Transferred!</h2>
+    <p style="font-size: 14px; color: var(--text-muted); margin: 12px 0 24px; line-height: 1.5;">
+      Your photo is now active on the store screen. Look up at the kiosk, select any outfit, and your AI virtual try-on will start immediately!
+    </p>
+    <button class="btn btn-outline" style="width: 100%;" onclick="resetForm()">
+      📸 Upload Another Photo
+    </button>
+  </div>
+
+  <!-- Guidance Tips -->
+  <div class="tips-card">
+    <strong style="color: var(--gold);">💡 Tips for Best Fitting:</strong>
+    <ul style="padding-left: 18px; margin-top: 6px;">
+      <li>Stand straight with full body or waist-up visible.</li>
+      <li>Good, even lighting without shadows.</li>
+      <li>Fitted clothing helps the AI drape realistically.</li>
+    </ul>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get("session") || "kiosk_live";
+    let selectedFile = null;
+
+    document.getElementById("sessionText").textContent = "Kiosk Session: " + sessionId.substring(0, 14);
+
+    function onFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Photo is larger than 10MB. Please select a smaller photo.");
+        return;
+      }
+
+      selectedFile = file;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById("previewImg");
+        img.src = e.target.result;
+        img.style.display = "block";
+        document.getElementById("placeholder").style.display = "none";
+        document.getElementById("btnUpload").disabled = false;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function submitUpload() {
+      if (!selectedFile) return;
+
+      const btn = document.getElementById("btnUpload");
+      const text = document.getElementById("btnText");
+      const spinner = document.getElementById("btnSpinner");
+
+      btn.disabled = true;
+      text.textContent = "Transferring to Screen...";
+      spinner.style.display = "inline-block";
+
+      try {
+        const formData = new FormData();
+        formData.append("person", selectedFile);
+        formData.append("session_id", sessionId);
+        formData.append("user_consent", "true");
+
+        // Use the standard backend session-photo endpoint
+        const res = await fetch("/api/tryon/session-photo", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Upload failed");
+        }
+
+        document.getElementById("uploadCard").style.display = "none";
+        document.getElementById("successCard").style.display = "block";
+
+      } catch (err) {
+        alert("Upload error: " + err.message);
+        btn.disabled = false;
+        text.textContent = "🚀 Send to Dressing Room";
+        spinner.style.display = "none";
+      }
+    }
+
+    function resetForm() {
+      selectedFile = null;
+      document.getElementById("previewImg").src = "";
+      document.getElementById("previewImg").style.display = "none";
+      document.getElementById("placeholder").style.display = "flex";
+      document.getElementById("btnUpload").disabled = true;
+      document.getElementById("btnText").textContent = "🚀 Send to Dressing Room";
+      document.getElementById("btnSpinner").style.display = "none";
+      document.getElementById("uploadCard").style.display = "block";
+      document.getElementById("successCard").style.display = "none";
+    }
+  </script>
+</body>
+</html>

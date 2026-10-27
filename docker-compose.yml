@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: aura_virtual_dressing_room
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - ENVIRONMENT=production
+      - HOST=0.0.0.0
+      - PORT=8000
+      - PUBLIC_STORE_URL=${PUBLIC_STORE_URL:-http://localhost:8000}
+      - AI_TRYON_PROVIDER=${AI_TRYON_PROVIDER:-idm-vton}
+      - HF_TOKEN=${HF_TOKEN:-}
+      - FASHN_API_KEY=${FASHN_API_KEY:-}
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_secure_pass}@db:5432/${POSTGRES_DB:-dressing_room}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-adminpass123}
+      - ADMIN_SECRET_KEY=${ADMIN_SECRET_KEY:-super_secret_jwt_admin_key}
+      - TEMPORARY_RETENTION_SECONDS=1800
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - app_images:/app/backend/images
+      - app_outputs:/app/backend/outputs
+
+  db:
+    image: postgres:15-alpine
+    container_name: aura_dressing_room_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres_secure_pass}
+      - POSTGRES_DB=${POSTGRES_DB:-dressing_room}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  app_images:
+  app_outputs:

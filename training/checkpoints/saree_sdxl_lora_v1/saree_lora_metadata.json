@@ -1,0 +1,22 @@
+{
+  "status": "PIPELINE_VALIDATED_TRAINING_PENDING_GPU",
+  "model_type": "sdxl_inpainting_lora",
+  "base_model": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+  "resolution": 1024,
+  "lora_rank": 32,
+  "lora_alpha": 32,
+  "train_samples_count": 9,
+  "validation_samples_count": 3,
+  "trained_steps": 0,
+  "convergence_metrics": {
+    "training_loss": "NOT_RUN_LOCAL_CPU",
+    "validation_loss": "NOT_RUN_LOCAL_CPU"
+  },
+  "environment_audit": {
+    "os": "nt",
+    "device": "cpu",
+    "cuda_available": false,
+    "reason": "Training requires 16GB+ VRAM NVIDIA GPU. CPU execution would cause system freezing."
+  },
+  "timestamp": "2026-10-27 15:33:11"
+}

@@ -1,0 +1,87 @@
+import json
+
+notebook = {
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# AURA ATELIER — Saree-Specific Virtual Try-On Model Training (SDXL LoRA)\n",
+    "This notebook trains a saree-specific LoRA adapter on Stable Diffusion XL Inpainting with IP-Adapter garment reference conditioning.\n",
+    "\n",
+    "**Hardware Recommendation**: Google Colab T4 GPU (free) or A100 GPU (Colab Pro).\n",
+    "**Resolution**: 1024x1024 native.\n",
+    "**Target Garment**: Traditional Indian Sarees (Banarasi, Kanchipuram, Chiffon, Organza)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 1. Environment Setup & Dependencies\n",
+    "!pip install -q torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121\n",
+    "!pip install -q diffusers==0.27.2 transformers==4.39.3 accelerate==0.28.0 peft==0.10.0 mediapipe opencv-python pillow einops"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 2. Verify GPU & VRAM\n",
+    "import torch\n",
+    "assert torch.cuda.is_available(), \"CUDA GPU required! Change runtime type to T4 or A100.\"\n",
+    "gpu_name = torch.cuda.get_device_name(0)\n",
+    "vram = torch.cuda.get_device_properties(0).total_memory / (1024**3)\n",
+    "print(f\"Connected to GPU: {gpu_name} | VRAM: {vram:.2f} GB\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 3. Clone Repository or Upload Saree Dataset\n",
+    "# Upload your dataset.json and processed/ folder or pull from git:\n",
+    "# !git clone <YOUR_REPO_URL>\n",
+    "# %cd saree"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 4. Launch Training\n",
+    "!python training/scripts/train_saree_lora.py --config training/configs/saree_lora_config.json"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# 5. Export Trained Checkpoint\n",
+    "from google.colab import files\n",
+    "# files.download('training/checkpoints/saree_sdxl_lora_v1/saree_lora_weights.safetensors')"
+   ]
+  }
+ ],
+ "metadata": {
+  "language_info": {
+   "name": "python"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+
+with open("d:/AAMBLV/saree/training/Saree_VTON_SDXL_Training_Colab.ipynb", "w", encoding="utf-8") as f:
+    json.dump(notebook, f, indent=1)
+print("Saved Saree_VTON_SDXL_Training_Colab.ipynb successfully!")

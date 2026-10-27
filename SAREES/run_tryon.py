@@ -6,7 +6,7 @@ from main import in_place_saree_clothing_swap, generate_saree_inpainting_mask, S
 
 def main():
     parser = argparse.ArgumentParser(description="Manual Saree Try-On & Mask Pipeline Runner")
-    parser.add_argument("--person", type=str, default="images/customer_garden_dress.jpg", help="Path to customer portrait")
+    parser.add_argument("--person", type=str, default="images/customer_jeans_model.jpg", help="Path to customer portrait")
     parser.add_argument("--saree", type=int, default=2, help="Saree ID (1: Red, 2: Blue, 3: Green)")
     parser.add_argument("--output", type=str, default=None, help="Output image path")
     parser.add_argument("--dilation", type=int, default=18, help="Mask boundary dilation in pixels (default: 18)")
@@ -20,7 +20,7 @@ def main():
             print(f"\n[Saree {s_id}: {SAREES[s_id]['name']}]")
             print(f"Positive Prompt:\n  {p_data['positive']}")
             print(f"Negative Prompt:\n  {p_data['negative']}")
-        if not args.mask_only and not args.output and args.saree == 2 and args.person == "images/customer_garden_dress.jpg":
+        if not args.mask_only and not args.output and args.saree == 2 and args.person == "images/customer_jeans_model.jpg":
             return
 
     person_path = Path(args.person)

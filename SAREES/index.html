@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AURA • Virtual Saree Studio | AI Shopping Mall Kiosk</title>
+  <title>Looklet Dressing Room • AURA Virtual Saree Studio</title>
   
-  <!-- Modern Fonts -->
+  <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary: #801336;
-      --primary-dark: #510a22;
+      --primary-dark: #4d0a1f;
       --primary-light: #c72c41;
       --gold: #dfb15b;
       --gold-light: #f7e7b4;
       --gold-dark: #b8860b;
-      --bg-dark: #120e14;
-      --card-bg: rgba(28, 20, 27, 0.75);
+      --bg-dark: #0d0a10;
+      --surface-dark: #16111a;
+      --card-bg: rgba(24, 18, 27, 0.85);
       --card-border: rgba(223, 177, 91, 0.22);
       --text-main: #f5f0eb;
       --text-muted: #b8aba0;
@@ -35,22 +36,22 @@
 
     body {
       font-family: 'Outfit', sans-serif;
-      background: radial-gradient(circle at 50% 0%, #2d141e 0%, var(--bg-dark) 75%);
+      background: radial-gradient(circle at 50% 0%, #28121d 0%, var(--bg-dark) 80%);
       color: var(--text-main);
       min-height: 100vh;
       overflow-x: hidden;
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
-    /* Header Bar */
+    /* Top Studio Header */
     header {
-      background: rgba(18, 14, 20, 0.85);
-      backdrop-filter: blur(16px);
+      background: rgba(13, 10, 16, 0.92);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--card-border);
       position: sticky;
       top: 0;
-      z-index: 100;
-      padding: 16px 32px;
+      z-index: 200;
+      padding: 14px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -59,39 +60,45 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .brand-logo {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold), var(--primary-light));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
       font-weight: 700;
-      color: #1a080d;
-      box-shadow: 0 0 16px var(--accent-glow);
+      color: #120e14;
+      box-shadow: 0 0 18px var(--accent-glow);
     }
 
-    .brand h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      background: linear-gradient(90deg, #fff, var(--gold-light));
+    .brand-titles h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      background: linear-gradient(90deg, #fff 0%, var(--gold-light) 60%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      line-height: 1.2;
     }
 
-    .brand p {
+    .brand-titles p {
       font-size: 11px;
-      text-transform: uppercase;
       letter-spacing: 2px;
+      text-transform: uppercase;
       color: var(--gold);
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .kiosk-badge {
@@ -120,44 +127,22 @@
       50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* Main Container */
+    /* Dressing Room Main Stage */
     main {
-      max-width: 1380px;
+      max-width: 1540px;
       margin: 0 auto;
-      padding: 32px 24px 60px;
+      padding: 24px 20px 60px;
     }
 
-    /* Intro Hero */
-    .hero-title {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .hero-title h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 38px;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 8px;
-    }
-
-    .hero-title p {
-      font-size: 16px;
-      color: var(--text-muted);
-      max-width: 650px;
-      margin: 0 auto;
-    }
-
-    /* Step Grid */
-    .studio-layout {
+    .dressing-room-container {
       display: grid;
-      grid-template-columns: 1.15fr 1.35fr;
-      gap: 32px;
+      grid-template-columns: 1.18fr 1fr;
+      gap: 28px;
       align-items: start;
     }
 
-    @media (max-width: 1024px) {
-      .studio-layout {
+    @media (max-width: 1120px) {
+      .dressing-room-container {
         grid-template-columns: 1fr;
       }
     }
@@ -167,181 +152,521 @@
       backdrop-filter: blur(20px);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 28px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
       position: relative;
     }
 
-    .card-header {
+    .stage-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(223, 177, 91, 0.15);
-      padding-bottom: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .step-tag {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      background: var(--primary);
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 600;
-    }
-
-    .card-title {
+    .stage-title {
       font-family: 'Playfair Display', serif;
-      font-size: 22px;
+      font-size: 24px;
       color: #fff;
     }
 
-    /* Camera Feed Area */
-    .camera-wrapper {
+    .view-toggles {
+      display: flex;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(223, 177, 91, 0.25);
+      border-radius: 12px;
+      padding: 3px;
+      gap: 4px;
+    }
+
+    .view-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 9px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .view-btn.active {
+      background: var(--gold);
+      color: #120e14;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    /* Looklet Model Canvas Viewport */
+    .viewport-box {
       position: relative;
       width: 100%;
-      min-height: 400px;
-      max-height: 540px;
+      height: 640px;
+      background: #0a080c;
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       overflow: hidden;
-      background: #0d0a0e;
-      border: 2px dashed rgba(223, 177, 91, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85);
+      user-select: none;
     }
 
-    video#camera {
+    /* Studio Lighting Overlays */
+    .viewport-box.light-daylight {
+      filter: brightness(1.02) contrast(1.03);
+    }
+    .viewport-box.light-palace {
+      filter: sepia(0.18) saturate(1.15) brightness(1.04);
+    }
+    .viewport-box.light-evening {
+      filter: contrast(1.12) brightness(0.96) drop-shadow(0 0 20px rgba(26,54,93,0.3));
+    }
+    .viewport-box.light-golden {
+      filter: saturate(1.25) contrast(1.05) brightness(1.06);
+    }
+
+    /* Comparison Split Slider Containers */
+    .split-slider-container {
+      position: relative;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      transform: scaleX(-1); /* Mirror effect for natural camera feel */
+      overflow: hidden;
+      cursor: ew-resize;
     }
 
-    img#customerPhoto {
-      width: 100%;
-      height: 100%;
-      max-height: 540px;
-      object-fit: contain; /* NEVER CROP UPLOADED PHOTOS: Full image preserved */
-      transform: none;
-      background: #0d0a0e;
-    }
-
-    /* Guide Overlay Silhouette */
-    .camera-guide {
+    .split-image {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      object-fit: contain;
       pointer-events: none;
+    }
+
+    .split-before-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 2;
+      border-right: 2px solid var(--gold);
+      box-shadow: 2px 0 12px rgba(223, 177, 91, 0.6);
+    }
+
+    .split-before-wrap .split-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      max-width: none;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Handle Bar */
+    .split-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border: 2px solid #fff;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(223, 177, 91, 0.2);
+      z-index: 10;
+      cursor: ew-resize;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8), 0 0 12px var(--gold);
     }
 
-    .guide-silhouette {
-      width: 60%;
-      height: 75%;
-      border: 2px dashed rgba(223, 177, 91, 0.4);
-      border-radius: 120px 120px 40px 40px;
-      box-shadow: 0 0 24px rgba(223, 177, 91, 0.1) inset;
+    .split-handle svg {
+      width: 20px;
+      height: 20px;
+      fill: #120e14;
     }
 
-    .guide-text {
+    .slider-tag {
       position: absolute;
-      bottom: 16px;
-      background: rgba(18, 14, 20, 0.75);
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
+      top: 16px;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      z-index: 5;
+    }
+
+    .tag-before {
+      left: 16px;
+      background: rgba(18, 14, 20, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .tag-after {
+      right: 16px;
+      background: rgba(128, 19, 54, 0.85);
+      border: 1px solid var(--gold);
       color: var(--gold-light);
     }
 
-    /* Camera Controls */
-    .btn-group {
-      display: flex;
+    /* Side-by-Side Dual View */
+    .dual-view-container {
+      display: none;
+      width: 100%;
+      height: 100%;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
-      flex-wrap: wrap;
+      padding: 8px;
     }
 
-    .btn {
-      flex: 1;
-      padding: 12px 20px;
-      border: none;
+    .dual-box {
+      position: relative;
+      height: 100%;
+      background: #0d0a0e;
       border-radius: 12px;
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid rgba(223, 177, 91, 0.15);
+    }
+
+    .dual-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* Magnifier Loupe Lens */
+    .zoom-loupe {
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7), 0 0 15px var(--accent-glow);
+      pointer-events: none;
+      display: none;
+      z-index: 50;
+      background-repeat: no-repeat;
+      background-color: #0d0a0e;
+    }
+
+    /* Mobile QR Upload Modal & Card Styling */
+    .qr-box-wrapper {
+      background: #ffffff;
+      padding: 16px;
+      border-radius: 18px;
+      display: inline-block;
+      margin: 14px auto;
+      position: relative;
+      box-shadow: 0 0 35px rgba(223, 177, 91, 0.4);
+      overflow: hidden;
+    }
+
+    .qr-scanner-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #c72c41, #dfb15b, transparent);
+      box-shadow: 0 0 10px #dfb15b;
+      animation: scanQR 2.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes scanQR {
+      0% { top: 12px; }
+      100% { top: calc(100% - 12px); }
+    }
+
+    .qr-listening-badge {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      transition: all 0.25s ease;
+      font-size: 13px;
+      color: var(--gold-light);
+      background: rgba(223, 177, 91, 0.1);
+      border: 1px solid rgba(223, 177, 91, 0.25);
+      border-radius: 20px;
+      padding: 6px 16px;
+      margin-top: 8px;
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: white;
-      box-shadow: 0 4px 14px rgba(128, 19, 54, 0.4);
+    .qr-listening-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4caf50;
+      box-shadow: 0 0 8px #4caf50;
+      animation: pulse 1.6s infinite;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(128, 19, 54, 0.6);
+    .toast-notification {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(24, 18, 27, 0.96);
+      border: 1px solid var(--gold);
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 14px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 20px var(--accent-glow);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      animation: slideInUp 0.3s ease;
     }
 
-    .btn-gold {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: #1a080d;
-      font-weight: 600;
-      box-shadow: 0 4px 16px rgba(223, 177, 91, 0.3);
+    @keyframes slideInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    .btn-gold:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 22px rgba(223, 177, 91, 0.5);
+    /* Stage Controls Bar */
+    .stage-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .btn-outline {
+    .lighting-presets {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lighting-presets span {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .light-btn {
+      padding: 5px 12px;
+      font-size: 12px;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(223, 177, 91, 0.3);
+      border: 1px solid rgba(223, 177, 91, 0.2);
+      border-radius: 14px;
       color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .btn-outline:hover {
-      background: rgba(223, 177, 91, 0.15);
+    .light-btn.active {
+      background: rgba(223, 177, 91, 0.2);
       border-color: var(--gold);
+      color: var(--gold-light);
+      font-weight: 600;
     }
 
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
-      box-shadow: none !important;
+    /* Model Selection Shelf */
+    .models-shelf {
+      margin-top: 20px;
+      border-top: 1px solid rgba(223, 177, 91, 0.15);
+      padding-top: 16px;
     }
 
-    /* Saree Catalog Grid */
-    .catalog-grid {
+    .shelf-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .model-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .model-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .model-thumb-card {
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid transparent;
+      border-radius: 12px;
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .model-thumb-card:hover {
+      border-color: rgba(223, 177, 91, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .model-thumb-card.active {
+      border-color: var(--gold);
+      background: rgba(128, 19, 54, 0.25);
+      box-shadow: 0 0 16px var(--accent-glow);
+    }
+
+    .model-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid var(--gold);
+    }
+
+    .model-thumb-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .model-thumb-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* Looklet Authentic Dressing Room Widget */
+    .looklet-dressing-room-box {
+      background: rgba(18, 12, 16, 0.85);
+      border: 1px solid rgba(223, 177, 91, 0.25);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .looklet-dr-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .looklet-dr-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .looklet-dr-item .garment-type {
+      font-weight: 600;
+      color: var(--gold-light);
+    }
+
+    .looklet-dr-item .garment-name {
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #fff;
+    }
+
+    .looklet-btn-remove {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: all 0.2s;
+    }
+
+    .looklet-btn-remove:hover {
+      color: #ff4d4d;
+      background: rgba(255, 77, 77, 0.15);
+    }
+
+    .looklet-btn-clear {
+      align-self: flex-start;
+      margin-top: 4px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      transition: color 0.2s;
+    }
+
+    .looklet-btn-clear:hover {
+      color: var(--gold-light);
+    }
+
+    /* Right Column: Wardrobe & Styling Rack */
+    .wardrobe-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(223, 177, 91, 0.2);
+      margin-bottom: 20px;
+      gap: 8px;
+    }
+
+    .wardrobe-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .wardrobe-tab-btn.active {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold);
+    }
+
+    /* Sarees Catalog Grid */
+    .sarees-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 16px;
-      margin-top: 14px;
+      margin-bottom: 20px;
     }
 
     .saree-card {
-      background: rgba(38, 28, 36, 0.85);
+      background: rgba(36, 26, 34, 0.85);
       border: 2px solid transparent;
       border-radius: 16px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       position: relative;
     }
 
@@ -354,28 +679,50 @@
     .saree-card.selected {
       border-color: var(--gold);
       box-shadow: 0 0 24px var(--accent-glow);
-      background: rgba(56, 32, 48, 0.95);
+      background: rgba(60, 32, 50, 0.95);
     }
 
     .saree-card.selected::after {
-      content: "✓ Selected";
+      content: "Selected";
       position: absolute;
       top: 8px;
       right: 8px;
       background: var(--gold);
       color: #120e14;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      padding: 2px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .saree-quality-pill {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 5px;
+      letter-spacing: 0.3px;
+    }
+
+    .pill-verified {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .pill-partial {
+      background: rgba(234, 179, 8, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(250, 204, 21, 0.3);
     }
 
     .saree-img-box {
       width: 100%;
-      height: 210px;
+      height: 200px;
+      background: #181217;
       overflow: hidden;
-      background: #1b131a;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -384,16 +731,16 @@
     .saree-img-box img {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Full uncropped saree visible */
+      object-fit: contain;
+      padding: 6px;
       transition: transform 0.4s ease;
-      padding: 4px;
     }
 
     .saree-card:hover .saree-img-box img {
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
-    .saree-details {
+    .saree-info {
       padding: 12px;
     }
 
@@ -409,8 +756,8 @@
       font-size: 14px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 6px;
       line-height: 1.3;
+      margin-bottom: 6px;
     }
 
     .saree-price {
@@ -419,117 +766,170 @@
       color: var(--gold-light);
     }
 
-    /* Try-On Action & Result Section */
-    .tryon-section {
-      margin-top: 32px;
+    /* Style Customization Options */
+    .style-customizer {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(223, 177, 91, 0.18);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 20px;
     }
 
-    .tryon-cta-bar {
-      background: linear-gradient(90deg, rgba(128, 19, 54, 0.8), rgba(28, 20, 27, 0.9));
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 24px 32px;
+    .customizer-row {
+      margin-bottom: 14px;
+    }
+
+    .customizer-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .customizer-label {
+      font-size: 12px;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .options-pills {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .cta-text h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 24px;
-      color: #fff;
-    }
-
-    .cta-text p {
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    /* Result Preview Area */
-    .result-container {
-      margin-top: 28px;
-      display: none;
-    }
-
-    .result-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    @media (max-width: 768px) {
-      .result-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .result-box {
-      border-radius: 16px;
-      overflow: hidden;
-      background: #0d0a0e;
-      border: 1px solid var(--card-border);
-      position: relative;
-      min-height: 480px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .result-box img {
-      width: 100%;
-      height: 100%;
-      max-height: 580px;
-      object-fit: contain; /* NEVER CROP RESULT OR ORIGINAL PHOTOS: Full view visible */
-      display: block;
-      background: #0d0a0e;
-    }
-
-    .result-label {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(18, 14, 20, 0.85);
-      border: 1px solid rgba(223, 177, 91, 0.3);
+    .option-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(223, 177, 91, 0.2);
+      border-radius: 20px;
       padding: 6px 14px;
-      border-radius: 10px;
       font-size: 12px;
-      color: var(--gold-light);
-      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    .result-info-card {
-      margin-top: 18px;
-      padding: 18px;
-      background: rgba(223, 177, 91, 0.08);
+    .option-pill.active {
+      background: var(--primary);
+      border-color: var(--gold);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 0 12px rgba(128, 19, 54, 0.5);
+    }
+
+    /* Fit Specs Box */
+    .fit-specs-box {
+      background: rgba(223, 177, 91, 0.06);
       border: 1px solid rgba(223, 177, 91, 0.25);
       border-radius: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
+      padding: 16px;
+      margin-bottom: 24px;
     }
 
-    /* Loading / Processing State */
-    .loader-overlay {
+    .fit-specs-box h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .specs-item strong {
+      color: #fff;
+      display: block;
+    }
+
+    /* Dressing Actions */
+    .action-cta-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      text-decoration: none;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #120e14;
+      box-shadow: 0 4px 18px rgba(223, 177, 91, 0.35);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(223, 177, 91, 0.55);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      box-shadow: 0 4px 16px rgba(128, 19, 54, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(128, 19, 54, 0.6);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(223, 177, 91, 0.3);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background: rgba(223, 177, 91, 0.15);
+      border-color: var(--gold);
+    }
+
+    /* Loading Spinner */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(13, 10, 16, 0.88);
+      backdrop-filter: blur(8px);
       display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
-      text-align: center;
+      z-index: 80;
+      border-radius: 16px;
     }
 
-    .sparkle-spinner {
-      width: 60px;
-      height: 60px;
+    .spinner {
+      width: 50px;
+      height: 50px;
       border: 3px solid rgba(223, 177, 91, 0.2);
       border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 1s infinite linear;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       box-shadow: 0 0 20px var(--accent-glow);
     }
 
@@ -537,15 +937,15 @@
       to { transform: rotate(360deg); }
     }
 
-    /* Modal for Privacy Consent */
+    /* Modal Backdrop */
     .modal-backdrop {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(10, 8, 12, 0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(10, 8, 12, 0.88);
+      backdrop-filter: blur(10px);
       z-index: 1000;
       display: none;
       align-items: center;
@@ -554,276 +954,391 @@
     }
 
     .modal-card {
-      background: #1e151c;
-      border: 1px solid var(--gold);
+      background: #19121a;
+      border: 1px solid var(--card-border);
       border-radius: 20px;
       max-width: 520px;
       width: 100%;
-      padding: 32px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-      animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-    }
-
-    @keyframes popIn {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      padding: 30px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
     .modal-card h3 {
       font-family: 'Playfair Display', serif;
       font-size: 24px;
-      color: var(--gold-light);
+      color: #fff;
       margin-bottom: 12px;
-    }
-
-    .modal-card p {
-      color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
-
-    .privacy-list {
-      background: rgba(0,0,0,0.3);
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 22px;
-      list-style: none;
-      font-size: 13px;
-      color: #e2dcd5;
-    }
-
-    .privacy-list li {
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .privacy-list li:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Status Banner */
-    #statusBanner {
-      padding: 12px 18px;
-      border-radius: 12px;
-      margin-top: 16px;
-      font-size: 14px;
-      display: none;
-    }
-
-    .status-info {
-      background: rgba(223, 177, 91, 0.15);
-      border: 1px solid var(--gold);
-      color: var(--gold-light);
-    }
-
-    .status-error {
-      background: rgba(199, 44, 65, 0.2);
-      border: 1px solid #c72c41;
-      color: #ff9da9;
-    }
-
-    .status-success {
-      background: rgba(46, 125, 50, 0.2);
-      border: 1px solid #4caf50;
-      color: #a5d6a7;
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Top Navigation Header -->
+  <!-- Top Studio Navigation Bar -->
   <header>
     <div class="brand">
-      <div class="brand-logo">A</div>
-      <div>
-        <h1>AURA STUDIO</h1>
-        <p>AI Virtual Saree Mirror • Mall Kiosk</p>
+      <div class="brand-logo">L</div>
+      <div class="brand-titles">
+        <h1>LOOKLET DRESSING ROOM</h1>
+        <p>Aura Virtual Saree Fitting Studio • Neural Drape Engine</p>
       </div>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 14px;">
-      <button class="btn btn-outline" onclick="openSettingsModal()" style="padding: 7px 16px; font-size: 13px; border-radius: 20px; display: flex; align-items: center; gap: 8px; border-color: rgba(223, 177, 91, 0.45); cursor: pointer;">
-        ⚙️ AI Pipeline Settings
+    <div class="header-badges">
+      <button class="btn btn-outline" style="padding: 6px 14px; font-size: 12px;" onclick="openSettingsModal()">
+        ⚙️ Engine Settings
       </button>
       <div class="kiosk-badge" id="kioskBadge">
         <span class="dot"></span>
-        <span id="backendStatus">Connecting to Kiosk Backend...</span>
+        <span id="backendStatus">Connecting to Dressing Engine...</span>
       </div>
     </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- Main Dressing Room -->
   <main>
-    <div class="hero-title">
-      <h2>Experience Royal Drapes in Seconds</h2>
-      <p>Stand in front of our smart mirror camera, select your favorite heritage saree, and let AI reveal your festive look.</p>
-    </div>
+    <div class="dressing-room-container">
 
-    <div class="studio-layout">
-      <!-- Left Column: Camera Mirror Capture -->
+      <!-- Left Column: High-Fashion Model Stage -->
       <div class="glass-card">
-        <div class="card-header">
+        <div class="stage-header">
           <div>
-            <span class="step-tag">Step 1</span>
-            <h3 class="card-title">Customer Pose Capture</h3>
+            <h2 class="stage-title">Model Showcase</h2>
+            <p style="font-size: 13px; color: var(--text-muted);">
+              Hover on garment for fabric zoom loupe • Drag gold handle to inspect fit
+            </p>
+          </div>
+
+          <!-- View Toggles (Looklet Split vs Dual) -->
+          <div class="view-toggles">
+            <button class="view-btn active" id="viewBtnSplit" onclick="setViewMode('split')">Split Comparison</button>
+            <button class="view-btn" id="viewBtnDual" onclick="setViewMode('dual')">Dual View</button>
+            <button class="view-btn" id="viewBtnDraped" onclick="setViewMode('draped')">Draped Only</button>
           </div>
         </div>
 
-        <div class="camera-wrapper">
-          <video id="camera" autoplay playsinline></video>
-          <img id="customerPhoto" alt="Captured customer portrait" hidden>
+        <!-- Viewport Box (Interactive Stage) -->
+        <div class="viewport-box light-daylight" id="viewportBox" onmousemove="handleLoupeMove(event)" onmouseleave="hideLoupe()">
+          
+          <!-- Split Slider View -->
+          <div class="split-slider-container" id="splitSliderContainer">
+            <span class="slider-tag tag-before">Original</span>
+            <span class="slider-tag tag-after" id="drapeTag">Draped Look</span>
 
-          <!-- Framing Guide Overlay -->
-          <div class="camera-guide" id="cameraGuide">
-            <div class="guide-silhouette"></div>
-            <div class="guide-text">Align shoulders & torso inside the frame</div>
+            <!-- Before (Original) Masked Area -->
+            <div class="split-before-wrap" id="splitBeforeWrap">
+              <img id="beforeImg" class="split-image" src="images/customer_jeans_model.jpg" alt="Model Original Outfit">
+            </div>
+
+            <!-- After (Draped) Full Base Image -->
+            <img id="afterImg" class="split-image" src="outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_2.jpg?v=full_v5" alt="Model Saree Drape">
+
+            <!-- Draggable Golden Handle -->
+            <div class="split-handle" id="splitHandle">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l-6-7 6-7zm8 0v14l6-7-6-7z"/></svg>
+            </div>
+          </div>
+
+          <!-- Dual Side-by-Side View -->
+          <div class="dual-view-container" id="dualViewContainer">
+            <div class="dual-box">
+              <span class="slider-tag tag-before">Original</span>
+              <img id="dualBeforeImg" src="images/customer_jeans_model.jpg" alt="Original Look">
+            </div>
+            <div class="dual-box" style="border-color: var(--gold);">
+              <span class="slider-tag tag-after">Draped Look</span>
+              <img id="dualAfterImg" src="outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_2.jpg?v=full_v5" alt="Draped Look">
+            </div>
+          </div>
+
+          <!-- Zoom Magnifier Loupe -->
+          <div class="zoom-loupe" id="zoomLoupe"></div>
+
+          <!-- Loading State Overlay -->
+          <div class="loading-overlay" id="stageLoader">
+            <div class="spinner"></div>
+            <h3 style="font-family: 'Playfair Display', serif; color: var(--gold-light); font-size: 20px; margin-bottom: 6px;">
+              Draping Silk Saree...
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted);" id="loaderSubtitle">
+              Anatomically conforming fabric drape & preserving face contours
+            </p>
           </div>
         </div>
 
-        <canvas id="canvas" hidden></canvas>
+        <!-- Stage Controls Bar: Lighting & Capture -->
+        <div class="stage-controls">
+          <div class="lighting-presets">
+            <span>Lighting:</span>
+            <button class="light-btn active" onclick="setLighting('daylight')">Studio High-Key</button>
+            <button class="light-btn" onclick="setLighting('palace')">Warm Palace</button>
+            <button class="light-btn" onclick="setLighting('evening')">Evening Velvet</button>
+            <button class="light-btn" onclick="setLighting('golden')">Golden Hour</button>
+          </div>
 
-        <div class="btn-group">
-          <button class="btn btn-outline" id="btnStartCamera" onclick="startCamera()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-            Start Camera
-          </button>
-
-          <button class="btn btn-gold" id="btnCapture" onclick="capturePhoto()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg>
-            Capture Photo
-          </button>
-
-          <label class="btn btn-outline" style="cursor: pointer; flex: 0.8;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-            Upload
-            <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto(event)" hidden>
-          </label>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-gold" style="padding: 8px 16px; font-size: 13px; font-weight: 600; background: linear-gradient(135deg, #9333ea, #4f46e5); border: 1px solid #c084fc; color: #fff; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);" onclick="openArtcraftModal()">
+              🎨 ArtCraft AI Studio
+            </button>
+            <button class="btn btn-gold" id="btnOpenMobileQR" style="padding: 8px 16px; font-size: 13px; font-weight: 600;" onclick="openQrModal()">
+              📱 Upload via Phone QR
+            </button>
+            <label class="btn btn-outline" style="padding: 8px 16px; font-size: 13px; cursor: pointer;">
+              📁 Upload My Photo
+              <input type="file" id="userPhotoInput" accept="image/*" onchange="handleUserPhotoUpload(event)" hidden>
+            </label>
+          </div>
         </div>
 
-        <div id="statusBanner"></div>
+        <!-- Looklet Authentic Dressing Room Widget -->
+        <div class="looklet-dressing-room-box" id="lookletDressingBox">
+          <div class="looklet-dr-title">ITEMS IN DRESSING ROOM</div>
+          <div id="lookletEmptyMsg" style="display: none; font-size: 13px; color: var(--text-muted);">
+            Click a garment to try it on.
+          </div>
+          <div id="lookletActiveGarment" class="looklet-dr-item">
+            <span><span class="garment-type">Saree, </span><span id="lookletGarmentName" class="garment-name">PEACOCK ROYAL BLUE</span></span>
+            <button class="looklet-btn-remove" onclick="clearStyling()" title="Remove Garment">✕</button>
+          </div>
+          <button id="lookletBtnClear" class="looklet-btn-clear" onclick="clearStyling()">CLEAR STYLING</button>
+        </div>
+
+        <!-- Model Selection Shelf -->
+        <div class="models-shelf">
+          <div class="shelf-title">
+            <span>Choose Studio Model or Custom Fitting</span>
+            <span id="activeModelLabel" style="color: #fff; font-weight: 600;">Active: Customer Portrait (Studio Fit)</span>
+          </div>
+
+          <div class="model-cards">
+            <!-- Customer Studio Photo -->
+            <div class="model-thumb-card active" id="cardModelUserPhoto" onclick="switchModel('userPhoto')">
+              <img src="images/customer_jeans_model.jpg" class="model-avatar" alt="Customer Portrait">
+              <span class="model-thumb-name">My Portrait</span>
+              <span class="model-thumb-desc">Studio Photo</span>
+            </div>
+
+            <!-- Model 1 (Studio Model Priya) -->
+            <div class="model-thumb-card" id="cardModel1" onclick="switchModel('model1')">
+              <img src="images/drape_model1_saree1.jpg" class="model-avatar" alt="Model Priya">
+              <span class="model-thumb-name">Priya</span>
+              <span class="model-thumb-desc">Studio Classic</span>
+            </div>
+
+            <!-- Model 2 (Studio Model Ananya) -->
+            <div class="model-thumb-card" id="cardModel2" onclick="switchModel('model2')">
+              <img src="images/drape_model2_saree1.jpg" class="model-avatar" alt="Model Ananya">
+              <span class="model-thumb-name">Ananya</span>
+              <span class="model-thumb-desc">Studio High-Fashion</span>
+            </div>
+
+            <!-- Model 3 / Custom -->
+            <div class="model-thumb-card" id="cardModelCustom" onclick="triggerCustomUpload()">
+              <div class="model-avatar" id="customAvatarBox" style="background: rgba(223, 177, 91, 0.15); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                👤
+              </div>
+              <span class="model-thumb-name" id="customModelName">My Photo</span>
+              <span class="model-thumb-desc">File Upload</span>
+            </div>
+
+            <!-- Mobile Phone QR Upload -->
+            <div class="model-thumb-card" id="cardModelQr" onclick="openQrModal()">
+              <div class="model-avatar" style="background: rgba(128, 19, 54, 0.45); border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 20px;">
+                📱
+              </div>
+              <span class="model-thumb-name" style="color: var(--gold-light);">Scan QR</span>
+              <span class="model-thumb-desc">Upload from Phone</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Right Column: Saree Catalog Selection -->
+      <!-- Right Column: Wardrobe & Garment Rack -->
       <div class="glass-card">
-        <div class="card-header">
-          <div>
-            <span class="step-tag">Step 2</span>
-            <h3 class="card-title">Curated Saree Collection</h3>
+        
+        <!-- Tabs -->
+        <div class="wardrobe-tabs">
+          <button class="wardrobe-tab-btn active">Curated Sarees</button>
+          <button class="wardrobe-tab-btn" onclick="openShareModal()">Share & QR</button>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 20px; color: #fff;">Luxury Saree Collection</h3>
+          <span style="font-size: 12px; color: var(--gold);" id="catalogSummary">3 Masterpiece Weaves</span>
+        </div>
+
+        <!-- Saree Cards Grid -->
+        <div class="sarees-grid" id="sareesCatalog">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Looklet Style Customization Panel -->
+        <div class="style-customizer">
+          <div class="customizer-row">
+            <span class="customizer-label">Draping Style</span>
+            <div class="options-pills">
+              <button class="option-pill active" onclick="selectDrapeStyle(this, 'Classic Nivi Drape (Pleated Shoulder)')">Classic Nivi Drape</button>
+              <button class="option-pill" onclick="selectDrapeStyle(this, 'Royal Gujarati Seedha Pallu (Front Flow)')">Gujarati Front Pallu</button>
+              <button class="option-pill" onclick="selectDrapeStyle(this, 'Regal Bengali Drape (Broad Pallu)')">Bengali Regal Drape</button>
+              <button class="option-pill" onclick="selectDrapeStyle(this, 'Contemporary Reception Drape')">Modern Reception</button>
+            </div>
           </div>
-          <span style="font-size: 13px; color: var(--gold);" id="catalogCount">3 Exclusive Weaves</span>
-        </div>
 
-        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 12px;">
-          Touch or click on a saree to select it for your AI drape preview:
-        </p>
+          <div class="customizer-row">
+            <span class="customizer-label">Blouse Neckline Coordination</span>
+            <div class="options-pills">
+              <button class="option-pill active" onclick="selectBlouse(this, 'Matching Royal Brocade with Gold Zari Border')">Matching Brocade</button>
+              <button class="option-pill" onclick="selectBlouse(this, 'Rich Contrast Golden Velvet')">Gold Velvet</button>
+              <button class="option-pill" onclick="selectBlouse(this, 'Sleeveless Temple Embroidered Silk')">Temple Embroidered</button>
+            </div>
+          </div>
 
-        <div class="catalog-grid" id="catalog">
-          <!-- Populated dynamically via JS -->
-        </div>
-
-        <!-- Selected Saree Summary Pill -->
-        <div id="selectedSummary" style="margin-top: 18px; padding: 12px 16px; background: rgba(0,0,0,0.3); border-radius: 12px; display: none; border-left: 3px solid var(--gold);">
-          <strong style="color: var(--gold-light);" id="summaryName">Traditional Crimson Saree</strong>
-          <div style="font-size: 13px; color: var(--text-muted);" id="summaryDesc">Banarasi Katan Silk • Festive Bridal</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Step 3: Action & Try-On Results -->
-    <div class="tryon-section">
-      <div class="tryon-cta-bar">
-        <div class="cta-text">
-          <h3>Ready for Your Virtual Fitting?</h3>
-          <p id="ctaStatus">Capture your photo and select a saree to unlock the AI transformation.</p>
-          <div style="display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap;">
-            <span style="font-size: 12px; color: var(--gold-light); font-weight: 600;">Try-On Engine:</span>
-            <button type="button" class="btn btn-gold" id="modeBtnInplace" onclick="setFittingMode('inplace')" style="padding: 6px 14px; font-size: 12px; flex: none;">
-              ✨ In-Place Saree Drape (100% Same Background, Body Shape & Face)
-            </button>
-            <button type="button" class="btn btn-outline" id="modeBtnFastLocal" onclick="setFittingMode('fast_local')" style="padding: 6px 14px; font-size: 12px; flex: none;">
-              ⚡ Fast Local Drape (Instant Offline)
-            </button>
+          <div class="customizer-row">
+            <span class="customizer-label">Jewelry & Accents</span>
+            <div class="options-pills">
+              <button class="option-pill active" onclick="selectJewelry(this, 'Temple Gold Choker & Jhumkas')">Temple Gold Choker</button>
+              <button class="option-pill" onclick="selectJewelry(this, 'Royal Kundan & Basra Pearls')">Royal Kundan Set</button>
+              <button class="option-pill" onclick="selectJewelry(this, 'Minimal Diamond Solitaire Pendant')">Solitaire Minimal</button>
+            </div>
           </div>
         </div>
 
-        <button class="btn btn-primary" id="btnTryOn" onclick="confirmTryOn()" style="padding: 16px 36px; font-size: 18px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-          Try Selected Saree
-        </button>
-      </div>
+        <!-- Fit & Garment Technical Specifications -->
+        <div class="fit-specs-box">
+          <h4>
+            <span>👑</span>
+            <span id="specSareeName">Peacock Royal Blue Saree</span>
+          </h4>
+          <p id="specSareeDesc" style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+            Lustrous peacock blue saree featuring ornate hand-embroidered silver borders.
+          </p>
 
-      <!-- Processing Loader -->
-      <div class="glass-card loader-overlay" id="loaderOverlay">
-        <div class="sparkle-spinner"></div>
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; color: var(--gold-light); margin-bottom: 8px;">
-          Crafting Your Virtual Saree Preview
-        </h3>
-        <p style="color: var(--text-muted); font-size: 14px;" id="loaderMsg">
-          Mapping fabric boundaries and generating natural pleat shadows...
-        </p>
-      </div>
-
-      <!-- Result Showcase -->
-      <div class="glass-card result-container" id="resultContainer">
-        <div class="card-header">
-          <div>
-            <span class="step-tag" style="background: var(--gold); color: #120e14;">Final Look</span>
-            <h3 class="card-title">Your Virtual Drape Result</h3>
+          <div class="specs-grid">
+            <div class="specs-item">
+              <span>Fabric Purity</span>
+              <strong id="specFabric">Royal Chiffon Georgette</strong>
+            </div>
+            <div class="specs-item">
+              <span>Fit Geometry</span>
+              <strong>Anatomic Curvature Mapping</strong>
+            </div>
+            <div class="specs-item">
+              <span>Identity Lock</span>
+              <strong>100% Bit-Exact Face & Background</strong>
+            </div>
+            <div class="specs-item">
+              <span>Retail Price</span>
+              <strong id="specPrice" style="color: var(--gold-light); font-size: 14px;">₹3,299</strong>
+            </div>
           </div>
-          <button class="btn btn-outline" onclick="resetTryOn()" style="padding: 6px 14px; font-size: 13px;">
-            Try Another Saree
+        </div>
+
+        <!-- Action CTA Buttons -->
+        <div class="action-cta-box">
+          <button class="btn btn-gold" id="btnApplyDrape" onclick="applyCurrentDrape()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            ✨ Refresh Drape on Active Model
           </button>
-        </div>
 
-        <div class="result-grid">
-          <div class="result-box">
-            <span class="result-label">Original Photo</span>
-            <img id="resultOriginal" alt="Customer original photo">
-          </div>
-          <div class="result-box" style="border-color: var(--gold);">
-            <span class="result-label" style="background: var(--gold); color: #120e14;">AI Saree Drape</span>
-            <img id="resultOutput" alt="AI virtual saree preview">
-          </div>
-        </div>
-
-        <div class="result-info-card">
-          <div>
-            <h4 id="resultSareeTitle" style="font-size: 18px; color: #fff;">Traditional Crimson Silk Saree</h4>
-            <p id="resultSareeMeta" style="font-size: 13px; color: var(--gold-light);">Banarasi Katan Silk • ₹2,499</p>
-          </div>
-          <div class="btn-group" style="flex: 0 0 auto;">
-            <a id="btnDownload" class="btn btn-gold" download="my-saree-tryon.jpg" href="#">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Save Look
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <a id="btnDownloadLook" class="btn btn-outline" download="looklet-saree-tryon.jpg" href="images/drape_model1_saree2.jpg">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Look
             </a>
-            <button class="btn btn-outline" onclick="showShareModal()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-              QR to Phone
+
+            <button class="btn btn-primary" onclick="showAddedToCart()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              Shop This Look
             </button>
           </div>
         </div>
+
       </div>
+
     </div>
   </main>
 
-  <!-- Privacy & Consent Modal Dialog (Mall Standard) -->
-  <div class="modal-backdrop" id="consentModal">
+  <!-- Settings Modal Dialog -->
+  <div class="modal-backdrop" id="settingsModal">
     <div class="modal-card">
-      <h3>Customer Privacy Notice</h3>
-      <p>Before generating your saree drape preview, please review our privacy commitment:</p>
-      
-      <ul class="privacy-list">
-        <li>🔒 Your photo is used exclusively to render your virtual fitting preview.</li>
-        <li>⏱️ Temporary images are automatically wiped within 30 minutes.</li>
-        <li>🚫 We never store, sell, or profile biometric identities.</li>
-      </ul>
+      <h3>⚙️ AI Fitting Engine Settings</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+        Configure your Virtual Saree Try-On engine and credentials:
+      </p>
 
-      <div class="btn-group">
-        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-gold" onclick="executeTryOn()">I Agree & Generate Look</button>
+      <div style="margin-bottom: 16px;">
+        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">Active Drape Engine:</label>
+        <select id="settingEngineSelect" class="btn btn-outline" style="width: 100%; text-align: left; background: #120e14; color: #fff; padding: 10px 14px;" onchange="onEngineChange()">
+          <option value="diffusion">🌟 Looklet IDM-VTON (Genuine Reference Garment Neural Diffusion)</option>
+          <option value="inplace">🛡️ Neural In-Place Drape (Local Delaunay Mesh & Bit-Exact Face Lock - Instant)</option>
+          <option value="fashn">✨ FASHN.ai (Cloud Diffusion Try-On)</option>
+          <option value="artcraft">🎨 ArtCraft AI (Text-to-Image Concept Generator • Note: No Garment Reference)</option>
+        </select>
+      </div>
+
+      <div id="artcraftKeySection" style="margin-bottom: 16px;">
+        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">ArtCraft API Key (app.getartcraft.com):</label>
+        <input type="text" id="artcraftApiKeyInput" value="artcraft_api_vmqjq49v7n3f1nwxtd3n69mae0wyas6yysmgt11t" 
+               style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 10px; color: #4ade80; font-family: monospace;">
+        <span style="font-size: 11px; color: #4ade80; display: block; margin-top: 4px;">⚡ Connected • Unlimited Free Generation Active</span>
+      </div>
+
+      <div id="fashnKeySection" style="margin-bottom: 16px; display: none;">
+        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">FASHN.ai API Key:</label>
+        <input type="password" id="fashnApiKeyInput" placeholder="fa-live-... or paste your key" 
+               style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-family: monospace;">
+      </div>
+
+      <div id="hfTokenSection" style="margin-bottom: 16px; display: none;">
+        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">Hugging Face User Access Token:</label>
+        <input type="password" id="hfTokenInput" placeholder="hf_..." 
+               style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-family: monospace;">
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+        <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
+        <button class="btn btn-gold" onclick="saveSettings()">Save & Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ArtCraft AI Saree Studio Modal -->
+  <div class="modal-backdrop" id="artcraftModal">
+    <div class="modal-card" style="max-width: 580px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold-light); margin: 0;">
+          🎨 ArtCraft AI Saree Studio
+        </h3>
+        <button onclick="closeArtcraftModal()" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+        Powered by your ArtCraft API (<code style="color: var(--gold-light);">app.getartcraft.com</code> • FLUX.1 Engine). Enter any bespoke saree or bridal costume prompt:
+      </p>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 13px; color: var(--gold-light); font-weight: 600; display: block; margin-bottom: 6px;">
+          Outfit & Styling Prompt:
+        </label>
+        <textarea id="artcraftPromptInput" rows="3" 
+                  style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-family: inherit; font-size: 13px; line-height: 1.5; resize: vertical;"
+                  placeholder="Full body portrait of a graceful Indian woman standing outdoors in a garden, wearing an authentic Crimson Banarasi silk saree with intricate golden zari embroidery..."></textarea>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;">
+        <span style="font-size: 11px; color: var(--text-muted); width: 100%;">Quick Masterpiece Presets:</span>
+        <button class="option-pill" onclick="setArtcraftPreset(1)">Crimson Banarasi</button>
+        <button class="option-pill" onclick="setArtcraftPreset(2)">Peacock Royal Blue</button>
+        <button class="option-pill" onclick="setArtcraftPreset(3)">Emerald Temple Zari</button>
+        <button class="option-pill" onclick="setArtcraftPreset(4)">Royal Lavender Silk</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+        <span style="font-size: 12px; color: #4ade80;">⚡ Unlimited API Access Connected</span>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn btn-outline" onclick="closeArtcraftModal()">Close</button>
+          <button class="btn btn-gold" id="btnRunArtcraft" onclick="generateWithArtcraft()">✨ Generate Image (3s)</button>
+        </div>
       </div>
     </div>
   </div>
@@ -831,73 +1346,703 @@
   <!-- Share QR Modal -->
   <div class="modal-backdrop" id="shareModal">
     <div class="modal-card" style="text-align: center;">
-      <h3>Scan to View on Your Phone</h3>
-      <p>Take this photo home or show it to your family on WhatsApp:</p>
-      <div style="background: white; padding: 18px; border-radius: 12px; display: inline-block; margin-bottom: 16px;">
+      <h3>Take Your Look Home</h3>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+        Scan this QR code to view and share your fitted saree portrait on WhatsApp or Instagram:
+      </p>
+      
+      <div style="background: white; padding: 16px; border-radius: 12px; display: inline-block; margin-bottom: 16px;">
         <svg width="160" height="160" viewBox="0 0 100 100">
           <rect width="100" height="100" fill="white"/>
           <path d="M10 10h30v30h-30zM15 15h20v20h-20zM60 10h30v30h-30zM65 15h20v20h-20zM10 60h30v30h-30zM15 65h20v20h-20zM22 22h6v6h-6zM72 22h6v6h-6zM22 72h6v6h-6zM50 10h5v15h-5zM50 35h5v25h-5zM60 50h15v5h-15zM75 60h15v10h-15zM60 75h10v15h-10zM80 80h10v10h-10z" fill="black"/>
         </svg>
       </div>
-      <p style="font-size: 12px; color: var(--gold-light);">Connect to Mall Wi-Fi to load instant fitting</p>
-      <button class="btn btn-outline" onclick="closeShareModal()" style="margin-top: 10px;">Close</button>
+
+      <p style="font-size: 12px; color: var(--gold-light);" id="shareModalSareeText">
+        Peacock Royal Blue Saree • ₹3,299
+      </p>
+      <button class="btn btn-outline" onclick="closeShareModal()" style="margin-top: 14px;">Close</button>
     </div>
   </div>
 
-  <!-- AI Pipeline Settings Modal -->
-  <div class="modal-backdrop" id="settingsModal">
-    <div class="modal-card" style="max-width: 580px;">
-      <h3>⚙️ AI Pipeline Settings</h3>
-      <p>Configure your Virtual Saree Try-On engine and credentials:</p>
+  <!-- Mobile Upload QR Modal Dialog -->
+  <div class="modal-backdrop" id="qrUploadModal">
+    <div class="modal-card" style="text-align: center; max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h3 style="margin-bottom: 0;">📱 Mobile Portrait Upload</h3>
+        <button class="btn btn-outline" style="padding: 4px 10px; font-size: 14px;" onclick="closeQrModal()">✕</button>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+        Scan with your smartphone camera to upload your photo directly to this dressing room screen.
+      </p>
 
-      <div style="margin-bottom: 16px;">
-        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">Active AI Engine:</label>
-        <select id="settingEngineSelect" class="btn btn-outline" style="width: 100%; text-align: left; background: #120e14; color: #fff; padding: 10px 14px;" onchange="onEngineChange()">
-          <option value="fashn">🌟 FASHN.ai (Ultra-Realistic Full-Body Diffusion - Recommended)</option>
-          <option value="diffusion">⚡ Hugging Face IDM-VTON (Serverless AI)</option>
-          <option value="inplace">🛡️ Neural In-Place Drape (Local 25px Mask & Upward Neck Expansion)</option>
-        </select>
+      <div class="qr-box-wrapper">
+        <div class="qr-scanner-line"></div>
+        <img id="qrCodeImage" alt="Upload QR Code" src="" width="220" height="220" style="display: block; border-radius: 8px;">
       </div>
 
-      <div id="fashnKeySection" style="margin-bottom: 16px;">
-        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">FASHN.ai API Key:</label>
-        <input type="password" id="fashnApiKeyInput" placeholder="fa-live-... or paste your FASHN key" 
-               style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-family: monospace;">
-        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">Configured with category='one-pieces' (full-body dress) & quality mode.</div>
+      <div class="qr-listening-badge">
+        <span class="dot"></span>
+        <span id="qrStatusText">Waiting for photo upload...</span>
       </div>
 
-      <div id="hfTokenSection" style="margin-bottom: 18px; display: none;">
-        <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">Hugging Face User Access Token:</label>
-        <input type="password" id="hfTokenInput" placeholder="hf_..." 
-               style="width: 100%; padding: 10px 14px; background: rgba(0,0,0,0.4); border: 1px solid var(--card-border); border-radius: 10px; color: #fff; font-family: monospace;">
+      <div style="margin: 14px 0 10px; font-size: 12px; color: var(--text-muted);">
+        Or open in your mobile browser:
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
+          <input type="text" id="qrDirectUrl" readonly style="flex: 1; padding: 8px 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--card-border); border-radius: 8px; color: var(--gold-light); font-size: 11px;">
+          <button class="btn btn-outline" style="padding: 8px 14px; font-size: 12px;" onclick="copyQrUrl()">📋 Copy</button>
+        </div>
       </div>
 
-      <div class="privacy-list" style="font-size: 12px; margin-bottom: 20px;">
-        <li>✨ <strong>Positive Prompt:</strong> (photorealistic:1.3), full-body portrait wearing luxury silk saree, matching fitted blouse, draped pallu, bare neck & collarbones...</li>
-        <li>🚫 <strong>Negative Prompt:</strong> (visible previous clothing:1.4), (black jacket, zipper, jeans:1.4), collar remnants around neck...</li>
-        <li>✂️ <strong>Mask Expansion:</strong> 25px outward dilation erasing jacket borders + upward neck expansion to chin.</li>
-      </div>
-
-      <div class="btn-group">
-        <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
-        <button class="btn btn-gold" onclick="saveSettings()">Save & Apply</button>
+      <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(223, 177, 91, 0.15); border-radius: 12px; padding: 10px 14px; text-align: left; font-size: 12px; color: var(--text-muted);">
+        <strong style="color: var(--gold-light);">How it works:</strong>
+        <ol style="margin: 4px 0 0 18px; line-height: 1.5;">
+          <li>Point your phone camera at the QR code.</li>
+          <li>Take a photo or choose from your phone gallery.</li>
+          <li>Tap <strong>Send to Dressing Room</strong> — it syncs here automatically!</li>
+        </ol>
       </div>
     </div>
   </div>
+
+  <!-- Toast Notification Pop-up -->
+  <div id="toastNotification" class="toast-notification"></div>
 
   <script>
-    // Configuration & State
+    // State & Config
     const API_HOST = window.location.port === "8000" ? "" : "http://127.0.0.1:8000";
-    const camera = document.getElementById("camera");
-    const canvas = document.getElementById("canvas");
-    const photo = document.getElementById("customerPhoto");
-    const cameraGuide = document.getElementById("cameraGuide");
+    
+    let currentModelId = "userPhoto"; // Default to Customer Portrait (Garden Photo)
+    let currentSareeId = 2; // Peacock Royal Blue default
+    let currentViewMode = "draped"; // "draped", "split", "dual"
+    let currentFittingMode = localStorage.getItem("saree_engine") || "diffusion";
 
-    let customerImage = null;
-    let selectedSaree = null;
-    let cameraStream = null;
-    let currentFittingMode = localStorage.getItem("saree_engine") || "fashn";
+    let customUserImage = null; // Base64 data URL or server URL for custom uploads
+    let customDrapedResults = {}; // saree_id -> result_url
 
+    let isDraggingSlider = false;
+
+    // Mobile Upload Session & QR State
+    const sessionId = "aura_" + Math.random().toString(36).substring(2, 9);
+    let mobileUploadUrl = "";
+    let lastLoadedMobileUrl = null;
+    let pollInterval = null;
+
+    // Studio Models Registry
+    const studioModels = {
+      userPhoto: {
+        id: "userPhoto",
+        name: "My Portrait",
+        desc: "Studio High-Key • Real Fit",
+        originalImg: "images/customer_jeans_model.jpg",
+        drapes: {
+          1: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_1.jpg?v=v3_clean",
+          2: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_2.jpg?v=v3_clean",
+          3: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_3.jpg?v=v3_clean",
+          4: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_4.jpg?v=v3_clean",
+          5: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_5.jpg?v=v3_clean"
+        }
+      },
+      model1: {
+        id: "model1",
+        name: "Priya",
+        desc: "Studio Classic Pose",
+        originalImg: "images/drape_model1_saree1.jpg",
+        drapes: {
+          1: "images/drape_model1_saree1.jpg",
+          2: "images/drape_model1_saree2.jpg",
+          3: "images/drape_model1_saree3.jpg",
+          4: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_4.jpg?v=v3_clean",
+          5: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_5.jpg?v=v3_clean"
+        }
+      },
+      model2: {
+        id: "model2",
+        name: "Ananya",
+        desc: "Studio High-Fashion Pose",
+        originalImg: "images/drape_model2_saree1.jpg",
+        drapes: {
+          1: "images/drape_model2_saree1.jpg",
+          2: "images/drape_model2_saree2.jpg",
+          3: "images/drape_model2_saree3.jpg",
+          4: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_4.jpg?v=v3_clean",
+          5: "outputs/vton_cache_1aeba190155bd0f78f87a4fbf4bf63a0_5.jpg?v=v3_clean"
+        }
+      }
+    };
+
+    // Curated Sarees Catalog
+    const sarees = [
+      {
+        id: 1,
+        name: "Traditional Crimson Silk Saree",
+        fabric: "Banarasi Katan Silk",
+        price: 2499,
+        color: "#9E1B32",
+        image: "images/red-saree.jpg",
+        description: "Timeless crimson pure silk draped with intricate golden floral brocade zari.",
+        occasion: "Bridal & Festive"
+      },
+      {
+        id: 2,
+        name: "Peacock Royal Blue Saree",
+        fabric: "Royal Chiffon Georgette",
+        price: 3299,
+        color: "#1A365D",
+        image: "images/blue-saree.jpg",
+        description: "Lustrous peacock blue saree featuring ornate hand-embroidered silver borders.",
+        occasion: "Reception & Evening"
+      },
+      {
+        id: 3,
+        name: "Heritage Emerald Silk Saree",
+        fabric: "Pure Kanchipuram Silk",
+        price: 4999,
+        color: "#1B4D3E",
+        image: "images/green-saree.jpg",
+        description: "Lustrous emerald green weave with gold temple motifs and rich pallu finish.",
+        occasion: "Ceremony & Gala"
+      },
+      {
+        id: 4,
+        name: "Royal Purple Banarasi Saree",
+        fabric: "Royal Banarasi Silk",
+        price: 3899,
+        color: "#6B21A8",
+        image: "images/purple-saree.jpg",
+        description: "Exquisite royal purple silk adorned with shimmering silver floral bootas and heritage zari border.",
+        occasion: "Royal Gala & Wedding"
+      },
+      {
+        id: 5,
+        name: "Blush Pink Organza Saree",
+        fabric: "Sheer Luxe Organza",
+        price: 2799,
+        color: "#F472B6",
+        image: "images/pink-saree.jpg",
+        description: "Ethereal pastel blush pink organza saree with delicate scalloped pearl beaded border.",
+        occasion: "Cocktail & Day Wedding"
+      }
+    ];
+
+    // Initialization
+    function init() {
+      renderCatalog();
+      updateStageView();
+      setViewMode("draped");
+      updateDressingRoomStatus();
+      setupSliderDrag();
+      checkBackendStatus();
+      initMobileSession();
+
+      // Highlight active model card
+      document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
+      const userCard = document.getElementById("cardModelUserPhoto");
+      if (userCard) userCard.classList.add("active");
+      const activeLabel = document.getElementById("activeModelLabel");
+      if (activeLabel) activeLabel.textContent = "Active: Customer Portrait (Studio High-Key • Looklet Fit)";
+    }
+
+    // Render Saree Cards in Wardrobe
+    function renderCatalog() {
+      const container = document.getElementById("sareesCatalog");
+      container.innerHTML = sarees.map(s => `
+        <div class="saree-card ${s.id === currentSareeId ? 'selected' : ''}" 
+             onclick="selectSaree(${s.id})" 
+             id="saree-card-${s.id}">
+          <div class="saree-img-box">
+            <img src="${s.image}" alt="${s.name}" onerror="this.src='https://placehold.co/400x500/510a22/dfb15b?text=${encodeURIComponent(s.name)}'">
+          </div>
+          <div class="saree-info">
+            <div class="saree-fabric">${s.fabric}</div>
+            <div class="saree-name">${s.name}</div>
+            <div class="saree-price">₹${s.price.toLocaleString("en-IN")}</div>
+            <span class="saree-quality-pill ${[4,5].includes(s.id) ? 'pill-partial' : 'pill-verified'}">
+              ${[4,5].includes(s.id) ? '3/4 Crop Reference' : 'Full-Length Verified'}
+            </span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // Switch Selected Saree (Looklet Wear Engine)
+    function selectSaree(id) {
+      currentSareeId = id;
+      renderCatalog();
+      updateSpecs();
+      updateDressingRoomStatus();
+
+      // Check if custom user image requires API call
+      if (currentModelId === "custom" && customUserImage) {
+        if (!customDrapedResults[currentSareeId]) {
+          triggerServerTryOn(customUserImage, currentSareeId);
+          return;
+        }
+      }
+
+      updateStageView();
+    }
+
+    // Looklet Dressing Room Wardrobe Status
+    function updateDressingRoomStatus() {
+      const activeGarment = document.getElementById("lookletActiveGarment");
+      const emptyMsg = document.getElementById("lookletEmptyMsg");
+      const clearBtn = document.getElementById("lookletBtnClear");
+      const garmentName = document.getElementById("lookletGarmentName");
+
+      if (currentSareeId) {
+        const s = sarees.find(item => item.id === currentSareeId);
+        if (s && garmentName) {
+          garmentName.textContent = s.name.toUpperCase();
+        }
+        if (activeGarment) activeGarment.style.display = "flex";
+        if (clearBtn) clearBtn.style.display = "inline-block";
+        if (emptyMsg) emptyMsg.style.display = "none";
+      } else {
+        if (activeGarment) activeGarment.style.display = "none";
+        if (clearBtn) clearBtn.style.display = "none";
+        if (emptyMsg) emptyMsg.style.display = "block";
+      }
+    }
+
+    // Clear Styling (revert to base human photo, Looklet style)
+    function clearStyling() {
+      currentSareeId = null;
+      renderCatalog();
+      updateStageView();
+      updateDressingRoomStatus();
+      showToast("Styling cleared • Showing base human pose");
+    }
+
+    // Update Specifications Box
+    function updateSpecs() {
+      const s = sarees.find(item => item.id === currentSareeId);
+      if (!s) return;
+      document.getElementById("specSareeName").textContent = s.name;
+      document.getElementById("specSareeDesc").textContent = s.description;
+      document.getElementById("specFabric").textContent = s.fabric;
+      document.getElementById("specPrice").textContent = `₹${s.price.toLocaleString("en-IN")}`;
+      const qStatus = [4, 5].includes(s.id) ? "Ready for Review (3/4 Crop)" : "Ready for Review (Full-Length)";
+      document.getElementById("drapeTag").textContent = `${s.name} • ${qStatus}`;
+      document.getElementById("shareModalSareeText").textContent = `${s.name} • ₹${s.price.toLocaleString("en-IN")}`;
+    }
+
+    // Switch Studio Model
+    function switchModel(modelId) {
+      currentModelId = modelId;
+
+      document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
+      const cardMap = {
+        model1: "cardModel1",
+        model2: "cardModel2",
+        userPhoto: "cardModelUserPhoto",
+        artcraftMuse: "cardModelArtcraft",
+        custom: "cardModelCustom"
+      };
+      const activeCard = document.getElementById(cardMap[modelId]);
+      if (activeCard) activeCard.classList.add("active");
+
+      const model = studioModels[modelId];
+      if (model) {
+        document.getElementById("activeModelLabel").textContent = `Active: ${model.name} (${model.desc})`;
+      }
+
+      updateStageView();
+    }
+
+    // Update Viewport Stage Visuals
+    function updateStageView() {
+      const beforeImg = document.getElementById("beforeImg");
+      const afterImg = document.getElementById("afterImg");
+      const dualBefore = document.getElementById("dualBeforeImg");
+      const dualAfter = document.getElementById("dualAfterImg");
+      const downloadBtn = document.getElementById("btnDownloadLook");
+
+      let originalSrc = "";
+      let drapedSrc = "";
+
+      if (currentModelId === "model1" || currentModelId === "model2" || currentModelId === "userPhoto" || currentModelId === "artcraftMuse") {
+        const m = studioModels[currentModelId];
+        originalSrc = m.originalImg;
+        if (currentSareeId) {
+          if (currentModelId === "userPhoto" && customDrapedResults[currentSareeId]) {
+            drapedSrc = customDrapedResults[currentSareeId];
+          } else {
+            drapedSrc = m.drapes[currentSareeId] || m.originalImg;
+          }
+        } else {
+          drapedSrc = m.originalImg;
+        }
+      } else if (currentModelId === "custom") {
+        originalSrc = customUserImage;
+        if (currentSareeId) {
+          drapedSrc = customDrapedResults[currentSareeId] || customUserImage;
+        } else {
+          drapedSrc = customUserImage;
+        }
+      }
+
+      beforeImg.src = originalSrc;
+      afterImg.src = drapedSrc;
+      dualBefore.src = originalSrc;
+      dualAfter.src = drapedSrc;
+      downloadBtn.href = drapedSrc;
+
+      // Update zoom loupe background
+      const loupe = document.getElementById("zoomLoupe");
+      loupe.style.backgroundImage = `url('${drapedSrc}')`;
+    }
+
+    // View Modes: Split vs Dual vs Draped
+    function setViewMode(mode) {
+      currentViewMode = mode;
+      document.querySelectorAll(".view-btn").forEach(b => b.classList.remove("active"));
+      if (mode === "split") document.getElementById("viewBtnSplit")?.classList.add("active");
+      if (mode === "dual") document.getElementById("viewBtnDual")?.classList.add("active");
+      if (mode === "draped") document.getElementById("viewBtnDraped")?.classList.add("active");
+
+      const splitContainer = document.getElementById("splitSliderContainer");
+      const dualContainer = document.getElementById("dualViewContainer");
+      const beforeWrap = document.getElementById("splitBeforeWrap");
+      const handle = document.getElementById("splitHandle");
+      const tagBefore = document.querySelector(".tag-before");
+
+      if (mode === "split") {
+        splitContainer.style.display = "block";
+        dualContainer.style.display = "none";
+        if (beforeWrap) beforeWrap.style.display = "block";
+        if (handle) handle.style.display = "flex";
+        if (tagBefore) tagBefore.style.display = "block";
+        setSliderPosition(50);
+      } else if (mode === "dual") {
+        splitContainer.style.display = "none";
+        dualContainer.style.display = "grid";
+      } else if (mode === "draped") {
+        splitContainer.style.display = "block";
+        dualContainer.style.display = "none";
+        if (beforeWrap) beforeWrap.style.display = "none";
+        if (handle) handle.style.display = "none";
+        if (tagBefore) tagBefore.style.display = "none";
+      }
+    }
+
+    // Interactive Split Slider Logic
+    function setupSliderDrag() {
+      const container = document.getElementById("splitSliderContainer");
+
+      const onMove = (clientX) => {
+        if (!isDraggingSlider && currentViewMode !== "split") return;
+        const rect = container.getBoundingClientRect();
+        let percent = ((clientX - rect.left) / rect.width) * 100;
+        percent = Math.max(0, Math.min(100, percent));
+        setSliderPosition(percent);
+      };
+
+      container.addEventListener("mousedown", (e) => {
+        isDraggingSlider = true;
+        onMove(e.clientX);
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (isDraggingSlider) onMove(e.clientX);
+      });
+
+      window.addEventListener("mouseup", () => {
+        isDraggingSlider = false;
+      });
+
+      // Touch events
+      container.addEventListener("touchstart", (e) => {
+        isDraggingSlider = true;
+        if (e.touches[0]) onMove(e.touches[0].clientX);
+      }, { passive: true });
+
+      window.addEventListener("touchmove", (e) => {
+        if (isDraggingSlider && e.touches[0]) onMove(e.touches[0].clientX);
+      }, { passive: true });
+
+      window.addEventListener("touchend", () => {
+        isDraggingSlider = false;
+      });
+    }
+
+    function setSliderPosition(percent) {
+      const container = document.getElementById("splitSliderContainer");
+      const beforeWrap = document.getElementById("splitBeforeWrap");
+      const beforeImg = document.getElementById("beforeImg");
+      const handle = document.getElementById("splitHandle");
+      if (!container || !beforeWrap || !handle) return;
+      const width = container.clientWidth;
+      beforeWrap.style.width = `${percent}%`;
+      handle.style.left = `${percent}%`;
+      if (beforeImg && width > 0) {
+        beforeImg.style.width = `${width}px`;
+      }
+    }
+
+    // Fabric Zoom Loupe Inspector Lens
+    // Fabric Zoom Loupe Inspector Lens
+    function handleLoupeMove(e) {
+      const viewport = document.getElementById("viewportBox");
+      const loupe = document.getElementById("zoomLoupe");
+      const afterImg = document.getElementById("afterImg");
+
+      if (currentViewMode === "dual") {
+        loupe.style.display = "none";
+        return;
+      }
+
+      const rect = viewport.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      loupe.style.display = "block";
+      loupe.style.left = `${x - 90}px`;
+      loupe.style.top = `${y - 90}px`;
+
+      // 2.5x Zoom into the draped saree fabric
+      const zoomLevel = 2.5;
+      const bgX = (x / rect.width) * 100;
+      const bgY = (y / rect.height) * 100;
+      loupe.style.backgroundPosition = `${bgX}% ${bgY}%`;
+      loupe.style.backgroundSize = `${rect.width * zoomLevel}px ${rect.height * zoomLevel}px`;
+    }
+
+    function hideLoupe() {
+      document.getElementById("zoomLoupe").style.display = "none";
+    }
+
+    // Lighting Ambiance Presets
+    function setLighting(preset) {
+      const box = document.getElementById("viewportBox");
+      box.className = `viewport-box light-${preset}`;
+      document.querySelectorAll(".light-btn").forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+    }
+
+    // Style Pills Selection
+    function selectDrapeStyle(btn, label) {
+      btn.parentElement.querySelectorAll(".option-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function selectBlouse(btn, label) {
+      btn.parentElement.querySelectorAll(".option-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    function selectJewelry(btn, label) {
+      btn.parentElement.querySelectorAll(".option-pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+    }
+
+    // Custom Photo Upload
+    function triggerCustomUpload() {
+      document.getElementById("userPhotoInput").click();
+    }
+
+    function handleUserPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        customUserImage = e.target.result;
+        currentModelId = "custom";
+        customDrapedResults = {}; // reset cache
+
+        document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
+        document.getElementById("cardModelCustom").classList.add("active");
+        document.getElementById("customAvatarBox").innerHTML = `<img src="${customUserImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+        document.getElementById("customModelName").textContent = "My Photo";
+        document.getElementById("activeModelLabel").textContent = "Active: Custom Photo Upload";
+
+        showToast("✨ Photo loaded! Draping selected saree...");
+        triggerServerTryOn(customUserImage, currentSareeId);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Mobile QR Modal & Sync Engine
+    function openQrModal() {
+      document.getElementById("qrUploadModal").style.display = "flex";
+      if (!mobileUploadUrl) {
+        initMobileSession();
+      }
+    }
+
+    function closeQrModal() {
+      document.getElementById("qrUploadModal").style.display = "none";
+    }
+
+    function copyQrUrl() {
+      const input = document.getElementById("qrDirectUrl");
+      input.select();
+      navigator.clipboard.writeText(input.value).then(() => {
+        showToast("📋 Link copied! Open on your smartphone.");
+      }).catch(() => {
+        showToast("Link: " + input.value);
+      });
+    }
+
+    async function initMobileSession() {
+      try {
+        const res = await fetch(`${API_HOST}/api/network-info`);
+        if (res.ok) {
+          const net = await res.json();
+          mobileUploadUrl = `${net.upload_url}?session=${sessionId}`;
+        } else {
+          mobileUploadUrl = `${window.location.origin}/upload?session=${sessionId}`;
+        }
+      } catch (e) {
+        mobileUploadUrl = `${window.location.origin}/upload?session=${sessionId}`;
+      }
+
+      const qrImg = document.getElementById("qrCodeImage");
+      if (qrImg) {
+        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodeURIComponent(mobileUploadUrl)}`;
+      }
+      const directInput = document.getElementById("qrDirectUrl");
+      if (directInput) {
+        directInput.value = mobileUploadUrl;
+      }
+
+      startSessionPolling();
+    }
+
+    function startSessionPolling() {
+      if (pollInterval) return;
+      pollInterval = setInterval(async () => {
+        try {
+          const res = await fetch(`${API_HOST}/api/session-status?session_id=${sessionId}`);
+          if (!res.ok) return;
+          const data = await res.json();
+
+          if (data.status === "ready" && data.image_url && data.image_url !== lastLoadedMobileUrl) {
+            lastLoadedMobileUrl = data.image_url;
+            customUserImage = data.image_url.startsWith("http") ? data.image_url : `${API_HOST}${data.image_url}`;
+            customDrapedResults = {}; // reset previous drape cache for new photo
+
+            // Set active model to custom
+            currentModelId = "custom";
+            document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
+            document.getElementById("cardModelCustom").classList.add("active");
+            document.getElementById("customAvatarBox").innerHTML = `<img src="${customUserImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            document.getElementById("customModelName").textContent = "Phone Portrait";
+            document.getElementById("activeModelLabel").textContent = "Active: Phone Portrait (Mobile Upload)";
+
+            // Close QR modal
+            closeQrModal();
+
+            // Display toast
+            const curSaree = sarees.find(s => s.id === currentSareeId);
+            showToast(`📸 Mobile photo received! Draping ${curSaree ? curSaree.name : "Saree"}...`);
+
+            // Automatically drape the active saree onto the new portrait
+            triggerServerTryOn(customUserImage, currentSareeId);
+          }
+        } catch (err) {
+          // Silent polling error
+        }
+      }, 1500);
+    }
+
+    // Toast Notification Helper
+    let toastTimer = null;
+    function showToast(message, duration = 3500) {
+      const toast = document.getElementById("toastNotification");
+      if (!toast) return;
+      toast.innerHTML = `<span>${message}</span>`;
+      toast.style.display = "flex";
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+      }, duration);
+    }
+
+    // Call Backend Virtual Try-On API
+    async function triggerServerTryOn(imageDataUrl, sareeId) {
+      const loader = document.getElementById("stageLoader");
+      loader.style.display = "flex";
+
+      try {
+        let blob;
+        if (imageDataUrl.startsWith("data:")) {
+          blob = await (await fetch(imageDataUrl)).blob();
+        } else {
+          const fetchUrl = imageDataUrl.startsWith("http") ? imageDataUrl : `${API_HOST}${imageDataUrl}`;
+          blob = await (await fetch(fetchUrl)).blob();
+        }
+
+        const form = new FormData();
+        form.append("person", blob, "model.jpg");
+
+        const savedFashnKey = localStorage.getItem("fashn_api_key") || "";
+        let targetUrl = `${API_HOST}/api/try-on?saree_id=${sareeId}&fitting_mode=${currentFittingMode}`;
+        if (savedFashnKey) {
+          targetUrl += `&fashn_api_key=${encodeURIComponent(savedFashnKey)}`;
+        }
+
+        const response = await fetch(targetUrl, {
+          method: "POST",
+          body: form
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.detail || "Try-on pipeline error");
+        }
+
+        const resultUrl = data.result_url.startsWith("http") ? data.result_url : `${API_HOST}${data.result_url}`;
+        customDrapedResults[sareeId] = resultUrl;
+        updateStageView();
+        const statusMsg = data.quality_status ? ` (${data.quality_status})` : "";
+        showToast(`✨ Fitted ${data.saree?.name || "Saree"}${statusMsg}`);
+        const drapeTag = document.getElementById("drapeTag");
+        if (drapeTag && data.saree?.name) {
+          drapeTag.textContent = `${data.saree.name} • ${data.quality_status || 'Ready for Review'}`;
+        }
+
+      } catch (err) {
+        alert(`Virtual Drape Error: ${err.message}\nMake sure main.py is running on port 8000.`);
+      } finally {
+        loader.style.display = "none";
+      }
+    }
+
+    function applyCurrentDrape() {
+      if (currentModelId === "custom" && customUserImage) {
+        triggerServerTryOn(customUserImage, currentSareeId);
+      } else if (currentModelId === "userPhoto") {
+        const m = studioModels.userPhoto;
+        triggerServerTryOn(m.originalImg, currentSareeId);
+      } else {
+        updateStageView();
+        const loader = document.getElementById("stageLoader");
+        loader.style.display = "flex";
+        setTimeout(() => {
+          loader.style.display = "none";
+        }, 300);
+      }
+    }
+
+    // Check Backend Server Status
+    async function checkBackendStatus() {
+      const badge = document.getElementById("backendStatus");
+      try {
+        const res = await fetch(`${API_HOST}/api/hardware-status`);
+        if (res.ok) {
+          const data = await res.json();
+          badge.textContent = `Dressing Room Online • ${data.active_engine || 'Neural Drape'}`;
+        } else {
+          badge.textContent = "Dressing Room Standalone";
+        }
+      } catch (e) {
+        badge.textContent = "API Port 8000 Offline";
+      }
+    }
+
+    // Settings Modal
     function openSettingsModal() {
       document.getElementById("settingsModal").style.display = "flex";
       document.getElementById("settingEngineSelect").value = currentFittingMode;
@@ -912,6 +2057,8 @@
 
     function onEngineChange() {
       const engine = document.getElementById("settingEngineSelect").value;
+      const artSection = document.getElementById("artcraftKeySection");
+      if (artSection) artSection.style.display = engine === "artcraft" ? "block" : "none";
       document.getElementById("fashnKeySection").style.display = engine === "fashn" ? "block" : "none";
       document.getElementById("hfTokenSection").style.display = engine === "diffusion" ? "block" : "none";
     }
@@ -920,9 +2067,11 @@
       const engine = document.getElementById("settingEngineSelect").value;
       const fashnKey = document.getElementById("fashnApiKeyInput").value.trim();
       const hfToken = document.getElementById("hfTokenInput").value.trim();
+      const artKey = document.getElementById("artcraftApiKeyInput")?.value.trim();
 
       currentFittingMode = engine;
       localStorage.setItem("saree_engine", engine);
+      if (artKey) localStorage.setItem("artcraft_api_key", artKey);
       if (fashnKey) localStorage.setItem("fashn_api_key", fashnKey);
       else localStorage.removeItem("fashn_api_key");
 
@@ -930,202 +2079,85 @@
 
       closeSettingsModal();
       checkBackendStatus();
-      showStatus(`Engine configured: ${engine.toUpperCase()}`, "success");
+      showToast(`⚙️ Drape engine set to ${engine.toUpperCase()}`);
     }
 
-    function setFittingMode(mode) {
-      currentFittingMode = mode;
-      localStorage.setItem("saree_engine", mode);
-    }
-
-    // Default Catalog (also synced with backend /api/sarees)
-    let sarees = [
-      {
-        id: 1,
-        name: "Traditional Crimson Silk Saree",
-        fabric: "Banarasi Katan Silk",
-        price: 2499,
-        image: "images/red-saree.jpg",
-        description: "Timeless crimson pure silk draped with intricate golden floral brocade zari."
-      },
-      {
-        id: 2,
-        name: "Peacock Royal Blue Saree",
-        fabric: "Royal Chiffon Georgette",
-        price: 3299,
-        image: "images/blue-saree.jpg",
-        description: "Lustrous peacock blue saree featuring ornate hand-embroidered silver borders."
-      },
-      {
-        id: 3,
-        name: "Heritage Emerald Silk Saree",
-        fabric: "Pure Kanchipuram Silk",
-        price: 4999,
-        image: "images/green-saree.jpg",
-        description: "Lustrous emerald green weave with gold temple motifs and rich pallu finish."
-      }
-    ];
-
-    // Initialize Page
-    async function init() {
-      renderCatalog();
-      checkBackendStatus();
-    }
-
-    async function checkBackendStatus() {
-      const badge = document.getElementById("backendStatus");
-      try {
-        const res = await fetch(`${API_HOST}/api/hardware-status`);
-        if (res.ok) {
-          const data = await res.json();
-          badge.textContent = `Kiosk Ready • ${data.active_engine || 'Engine Ready'}`;
-        } else {
-          badge.textContent = "Kiosk Online (Stand-alone)";
-        }
-      } catch (e) {
-        badge.textContent = "API offline (start main.py on port 8000)";
+    // ArtCraft AI Studio Modal & Generator
+    function openArtcraftModal() {
+      document.getElementById("artcraftModal").style.display = "flex";
+      const input = document.getElementById("artcraftPromptInput");
+      if (!input.value.trim()) {
+        setArtcraftPreset(1);
       }
     }
 
-    function showStatus(message, type = "info") {
-      const banner = document.getElementById("statusBanner");
-      banner.className = `status-${type}`;
-      banner.textContent = message;
-      banner.style.display = "block";
+    function closeArtcraftModal() {
+      document.getElementById("artcraftModal").style.display = "none";
     }
 
-    function renderCatalog() {
-      const catalogEl = document.getElementById("catalog");
-      catalogEl.innerHTML = sarees.map(s => `
-        <div class="saree-card ${selectedSaree && selectedSaree.id === s.id ? 'selected' : ''}" 
-             onclick="selectSaree(${s.id})" 
-             id="saree-card-${s.id}">
-          <div class="saree-img-box">
-            <img src="${s.image}" alt="${s.name}" onerror="this.src='https://placehold.co/400x500/510a22/dfb15b?text=${encodeURIComponent(s.name)}'">
-          </div>
-          <div class="saree-details">
-            <div class="saree-fabric">${s.fabric || 'Heritage Silk'}</div>
-            <div class="saree-name">${s.name}</div>
-            <div class="saree-price">₹${s.price.toLocaleString("en-IN")}</div>
-          </div>
-        </div>
-      `).join("");
+    function setArtcraftPreset(num) {
+      const input = document.getElementById("artcraftPromptInput");
+      const presets = {
+        1: "Full body portrait of a graceful Indian woman standing outdoors in a garden, wearing an exquisite traditional Crimson Banarasi silk saree with intricate gold floral zari embroidery, matching red short-sleeved blouse, gold choker necklace, realistic drape, rich silk folds, natural ambient sunlight, 8k fashion photography",
+        2: "Full body portrait of a graceful Indian woman standing outdoors in a garden, wearing an authentic Peacock Royal Blue chiffon georgette saree with glistening ornate silver and gold zari border, matching royal blue blouse, gold temple jewelry, realistic drape, elegant pleats, natural ambient daylight, 8k fashion photography",
+        3: "Full body portrait of a graceful Indian woman standing outdoors in a garden, wearing a luxurious Heritage Emerald Green Kanchipuram silk saree with majestic golden temple zari pallu, matching green silk blouse, elegant gold necklace, photorealistic fabric drape, natural garden ambient lighting, 8k cinematic fashion",
+        4: "Full body portrait of a graceful Indian woman standing in a palace courtyard, draped in a regal Royal Lavender pure silk saree with silver resham embroidery and diamond choker necklace, opulent folds, cinematic ambient sunset lighting, 8k high fashion editorial"
+      };
+      if (presets[num]) {
+        input.value = presets[num];
+      }
     }
 
-    // Step 1: Camera Logic
-    async function startCamera() {
+    async function generateWithArtcraft() {
+      const prompt = document.getElementById("artcraftPromptInput").value.trim();
+      if (!prompt) {
+        alert("Please enter a prompt for ArtCraft image generation.");
+        return;
+      }
+
+      const btn = document.getElementById("btnRunArtcraft");
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner" style="width:14px;height:14px;display:inline-block;border-width:2px;margin-right:6px;vertical-align:middle;"></span> Generating...`;
+
+      showToast("🎨 ArtCraft AI is generating your bespoke saree drape (FLUX.1 Schnell)...");
+
       try {
-        if (cameraStream) {
-          cameraStream.getTracks().forEach(t => t.stop());
-        }
+        const formData = new FormData();
+        formData.append("prompt", prompt);
+        formData.append("model", "flux_1_schnell");
+        formData.append("aspect_ratio", "tall_three_by_four");
 
-        cameraStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "user",
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-          },
-          audio: false
+        const res = await fetch(`${API_HOST}/api/artcraft/generate`, {
+          method: "POST",
+          body: formData
         });
 
-        camera.srcObject = cameraStream;
-        camera.hidden = false;
-        photo.hidden = true;
-        cameraGuide.style.display = "flex";
+        const data = await res.json();
+        if (!res.ok || data.status !== "success") {
+          throw new Error(data.detail || "ArtCraft generation failed");
+        }
 
-        showStatus("Mirror camera activated. Stand straight facing the camera.", "success");
+        const generatedUrl = data.result_url.startsWith("http") ? data.result_url : `${API_HOST}${data.result_url}`;
+
+        // Update ArtCraft studio model and switch to it
+        currentModelId = "artcraftMuse";
+        studioModels.artcraftMuse.originalImg = generatedUrl;
+        studioModels.artcraftMuse.drapes[currentSareeId] = generatedUrl;
+
+        switchModel("artcraftMuse");
+        closeArtcraftModal();
+        showToast("✨ ArtCraft Saree successfully generated and fitted!");
+
       } catch (err) {
-        showStatus("Camera access denied or unavailable. Please use the 'Upload' button to pick a photo.", "error");
+        alert(`ArtCraft Error: ${err.message}\nMake sure your ArtCraft API Key is active.`);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `✨ Generate Image (3s)`;
       }
     }
 
-    function capturePhoto() {
-      if (!camera.srcObject || !camera.videoWidth) {
-        // If camera not yet started, attempt to start it
-        startCamera();
-        showStatus("Camera was not active. Starting now...", "info");
-        return;
-      }
-
-      canvas.width = camera.videoWidth;
-      canvas.height = camera.videoHeight;
-      const ctx = canvas.getContext("2d");
-
-      // Flip horizontal for mirror effect
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
-
-      customerImage = canvas.toDataURL("image/jpeg", 0.92);
-      photo.src = customerImage;
-      photo.hidden = false;
-      camera.hidden = true;
-      cameraGuide.style.display = "none";
-
-      showStatus("Photo captured! Now select a saree on the right.", "success");
-      updateCtaStatus();
-    }
-
-    function uploadPhoto(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        customerImage = e.target.result;
-        photo.src = customerImage;
-        photo.hidden = false;
-        camera.hidden = true;
-        cameraGuide.style.display = "none";
-        showStatus("Photo loaded successfully! Now pick your saree.", "success");
-        updateCtaStatus();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    // Step 2: Saree Selection
-    function selectSaree(id) {
-      selectedSaree = sarees.find(s => s.id === id);
-      renderCatalog();
-
-      const summary = document.getElementById("selectedSummary");
-      document.getElementById("summaryName").textContent = selectedSaree.name;
-      document.getElementById("summaryDesc").textContent = `${selectedSaree.fabric} • ₹${selectedSaree.price.toLocaleString("en-IN")}`;
-      summary.style.display = "block";
-
-      updateCtaStatus();
-    }
-
-    function updateCtaStatus() {
-      const ctaText = document.getElementById("ctaStatus");
-      if (customerImage && selectedSaree) {
-        ctaText.textContent = `Ready! Press 'Try Selected Saree' to see yourself in the ${selectedSaree.name}.`;
-      } else if (!customerImage && selectedSaree) {
-        ctaText.textContent = `Selected: ${selectedSaree.name}. Please capture your photo on the left.`;
-      } else if (customerImage && !selectedSaree) {
-        ctaText.textContent = `Photo ready. Please pick a saree from the catalog.`;
-      }
-    }
-
-    // Step 3: Try-On Execution
-    function confirmTryOn() {
-      if (!customerImage) {
-        alert("Please capture or upload your photo first.");
-        return;
-      }
-      if (!selectedSaree) {
-        alert("Please select a saree from the catalog.");
-        return;
-      }
-      // Display customer consent modal (mall requirement)
-      document.getElementById("consentModal").style.display = "flex";
-    }
-
-    function closeModal() {
-      document.getElementById("consentModal").style.display = "none";
-    }
-
-    function showShareModal() {
+    // Share Modal
+    function openShareModal() {
       document.getElementById("shareModal").style.display = "flex";
     }
 
@@ -1133,82 +2165,11 @@
       document.getElementById("shareModal").style.display = "none";
     }
 
-    async function executeTryOn() {
-      closeModal();
-
-      const loader = document.getElementById("loaderOverlay");
-      const resultContainer = document.getElementById("resultContainer");
-      const btnTryOn = document.getElementById("btnTryOn");
-
-      loader.style.display = "flex";
-      resultContainer.style.display = "none";
-      btnTryOn.disabled = true;
-
-      const loaderMsg = document.getElementById("loaderMsg");
-      loaderMsg.textContent = "Replacing clothing with saree... Preserving 100% exact background, body shape, and face.";
-
-      try {
-        // Convert customer image base64 into Blob
-        const blob = await (await fetch(customerImage)).blob();
-        const form = new FormData();
-        form.append("person", blob, "customer.jpg");
-
-        const savedFashnKey = localStorage.getItem("fashn_api_key") || "";
-        let targetUrl = `${API_HOST}/api/try-on?saree_id=${selectedSaree.id}&fitting_mode=${currentFittingMode}`;
-        if (savedFashnKey) {
-          targetUrl += `&fashn_api_key=${encodeURIComponent(savedFashnKey)}`;
-        }
-
-        const response = await fetch(targetUrl, {
-          method: "POST",
-          body: form
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.detail || "Virtual try-on processing failed.");
-        }
-
-        // Show Results
-        const resultOutput = document.getElementById("resultOutput");
-        const resultOriginal = document.getElementById("resultOriginal");
-        const downloadBtn = document.getElementById("btnDownload");
-
-        const fullImageUrl = data.result_url.startsWith("http") 
-          ? data.result_url 
-          : `${API_HOST}${data.result_url}`;
-
-        resultOutput.src = fullImageUrl;
-        resultOriginal.src = customerImage;
-        downloadBtn.href = fullImageUrl;
-
-        document.getElementById("resultSareeTitle").textContent = selectedSaree.name;
-        const modeLabel = data.mode === 'fashn_vton'
-          ? 'FASHN.ai Ultra-Realistic Diffusion Drape (One-Pieces / Quality)'
-          : (data.mode === 'idm_vton'
-             ? 'Hugging Face IDM-VTON Drape (Broadened 18px Mask)'
-             : 'Neural In-Place Drape (Broadened 18px Mask & Zero-Strap Integration)');
-        document.getElementById("resultSareeMeta").textContent = `${selectedSaree.fabric} • ₹${selectedSaree.price.toLocaleString("en-IN")} • ${modeLabel}`;
-
-        loader.style.display = "none";
-        resultContainer.style.display = "block";
-        resultContainer.scrollIntoView({ behavior: 'smooth' });
-
-      } catch (error) {
-        loader.style.display = "none";
-        alert(`Try-on error: ${error.message}\nMake sure main.py is running.`);
-      } finally {
-        btnTryOn.disabled = false;
-      }
+    function showAddedToCart() {
+      const s = sarees.find(item => item.id === currentSareeId);
+      alert(`✨ Added to Shopping Bag: ${s.name} (${s.fabric})\nPrice: ₹${s.price.toLocaleString("en-IN")}\nProceed to checkout or continue styling.`);
     }
 
-    function resetTryOn() {
-      document.getElementById("resultContainer").style.display = "none";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Start on load
     window.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
