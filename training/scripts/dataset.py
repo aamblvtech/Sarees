@@ -71,10 +71,10 @@ class SareeTryOnDataset(Dataset):
     def __getitem__(self, idx: int) -> Dict[str, torch.Tensor]:
         sample = self.samples[idx]
 
-        person_p = BASE_DIR / sample["person_image"]
-        garment_p = BASE_DIR / sample["garment_reference"]
-        agnostic_p = BASE_DIR / sample["agnostic_image"]
-        mask_p = BASE_DIR / sample["inpaint_mask"]
+        person_p = BASE_DIR / Path(str(sample["person_image"]).replace("\\", "/"))
+        garment_p = BASE_DIR / Path(str(sample["garment_reference"]).replace("\\", "/"))
+        agnostic_p = BASE_DIR / Path(str(sample["agnostic_image"]).replace("\\", "/"))
+        mask_p = BASE_DIR / Path(str(sample["inpaint_mask"]).replace("\\", "/"))
 
         person_img = Image.open(person_p).convert("RGB")
         garment_img = Image.open(garment_p).convert("RGB")

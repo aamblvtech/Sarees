@@ -1,0 +1,24 @@
+{
+  "segmentation_model": "MediaPipe Multiclass Selfie Segmenter (selfie_multiclass_256x256.tflite)",
+  "reference_image": "SAREES/images/pink-saree.jpg",
+  "reference_dimensions": [500, 667],
+  "class_breakdown": {
+    "class_0_background": {"pixels": 238118, "percentage": 71.40},
+    "class_1_hair": {"pixels": 1712, "percentage": 0.51},
+    "class_2_body_skin": {"pixels": 8660, "percentage": 2.60},
+    "class_3_face_skin": {"pixels": 3669, "percentage": 1.10},
+    "class_4_garment_cloth": {"pixels": 81265, "percentage": 24.39},
+    "class_5_others": {"pixels": 76, "percentage": 0.02}
+  },
+  "garment_extraction_status": "SUCCESSFUL_CLEAN_CUTOUT",
+  "background_shadow_contamination_removed": true,
+  "shadow_wall_cloth_pixels": 0,
+  "model_skin_face_excluded": true,
+  "alpha_edge_matting": "5x5 morphological closing + 5x5 Gaussian boundary feathering",
+  "segmentation_limitations": [
+    "MediaPipe category mask is 256x256 internal resolution upsampled to native image resolution; boundary edge transitions are smooth rather than sub-pixel sharp.",
+    "Very thin single-layer sheer fabric hanging in the air next to background wall may experience slight thresholding erosion.",
+    "Model's jewelry (earrings/necklace) and skin are stripped, ensuring pure cloth texture is projected."
+  ],
+  "timestamp": "2026-10-28 14:51:00"
+}

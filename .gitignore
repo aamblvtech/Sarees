@@ -49,9 +49,20 @@ backend/outputs/
 outputs/
 SAREES/outputs/*
 !SAREES/outputs/vton_cache_*.jpg
+SAREES/temp_sessions/
 temp_*
 result_*
 *.tmp
+
+# Large Model Checkpoints & Weights (>100MB binaries)
+*.safetensors
+*.ckpt
+*.pth
+*.pt
+*.bin
+
+# Backup files
+*.bak
 
 # Operating System Files
 .DS_Store

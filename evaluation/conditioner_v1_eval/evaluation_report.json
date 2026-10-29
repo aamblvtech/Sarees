@@ -1,0 +1,35 @@
+{
+  "evaluation_sample": "customer_saree_5",
+  "sample_split": "test (HELD-OUT)",
+  "garment_evaluated": "Blush Pink Organza Saree",
+  "conditioning_method": "Spatial Garment Projection via SareeGarmentConditioner + LoRA",
+  "pipeline_a_settings": {
+    "mask": "Old Mask V1",
+    "canvas": "Unconditioned (img_person)",
+    "strength": 0.99,
+    "seed": 42
+  },
+  "pipeline_b_settings": {
+    "mask": "Corrected Mask V2 (Sleeve Coverage + Skirt Bridging)",
+    "canvas": "Garment-Conditioned Spatial Canvas",
+    "strength": 0.8,
+    "seed": 42
+  },
+  "dhash": {
+    "input_person": "0x240804040c140400",
+    "pipeline_a_original": "0x24080c0c04040000",
+    "pipeline_b_conditioned": "0x24080c0c041c0000"
+  },
+  "execution_time_seconds_pipeline_b": 154.05,
+  "device": "mps",
+  "files": {
+    "input_person": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/01_input_person.png",
+    "garment_reference": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/02_garment_reference.png",
+    "corrected_mask": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/03_corrected_mask.png",
+    "conditioned_canvas": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/04_conditioned_canvas.png",
+    "pipeline_a_output": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/05_pipeline_a_original_output.png",
+    "pipeline_b_output": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/06_pipeline_b_conditioned_output.png",
+    "comparison_triptych": "/Users/rohithnaragoni/Desktop/saree/evaluation/conditioner_v1_eval/07_comparison_triptych.png"
+  },
+  "timestamp": "2026-10-28 14:45:22"
+}

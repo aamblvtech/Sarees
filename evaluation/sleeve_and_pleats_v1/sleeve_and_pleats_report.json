@@ -1,0 +1,59 @@
+{
+  "experiment_name": "Sleeve Correction & Regional Pleat Experiment",
+  "garment": "Blush Pink Organza Saree (held-out test)",
+  "parameters": {
+    "seed": 42,
+    "steps": 20,
+    "guidance_scale": 7.5,
+    "resolution": [
+      1024,
+      1024
+    ],
+    "device": "mps"
+  },
+  "mask_correction": {
+    "old_mask_area_pct": 10.85,
+    "new_mask_area_pct": 10.96,
+    "neck_y": 285,
+    "mid_bicep_y": 366,
+    "waist_y_1024": 327
+  },
+  "run0_baseline": {
+    "description": "Curated pilot adapter + old mask, single-pass strength=0.80",
+    "output_path": "evaluation/sleeve_and_pleats_v1/10_run0_baseline_old_mask.png",
+    "dhash": "0x24080c0c041c0400",
+    "masked_saree_mean_rgb": [
+      225.24,
+      197.41,
+      186.98
+    ]
+  },
+  "run1_sleeve_fix": {
+    "description": "Curated pilot adapter + new sleeve-corrected mask, single-pass strength=0.80",
+    "output_path": "evaluation/sleeve_and_pleats_v1/11_run1_sleeve_fix_single_pass.png",
+    "dhash": "0x24080c0c041c0400",
+    "masked_saree_mean_rgb": [
+      226.35,
+      197.46,
+      186.66
+    ],
+    "inference_time_seconds": 145.07
+  },
+  "run2_regional_pleats": {
+    "description": "Curated pilot adapter + new mask, Pass 1 full@0.80 then Pass 2 skirt@0.88 with pleat prompt",
+    "output_path": "evaluation/sleeve_and_pleats_v1/13_run2_pass2_regional_pleats.png",
+    "dhash": "0x24080c0c040c0000",
+    "masked_saree_mean_rgb": [
+      226.97,
+      198.42,
+      188.35
+    ],
+    "inference_time_seconds": 293.45,
+    "strengths": {
+      "pass1_global": 0.8,
+      "pass2_skirt": 0.88
+    }
+  },
+  "comparison_quad_path": "evaluation/sleeve_and_pleats_v1/14_comparison_quad.png",
+  "timestamp": "2026-10-29 11:01:51"
+}

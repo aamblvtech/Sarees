@@ -1,18 +1,18 @@
 {
   "model_type": "sdxl_inpainting_lora",
   "base_model": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
-  "vae_model": "madebyollin/sdxl-vae-fp16-fix",
-  "dataset_manifest": "training/data/dataset.json",
-  "output_dir": "training/checkpoints/saree_sdxl_lora_v1",
+  "vae_model": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+  "dataset_manifest": "training/data/dataset_curated.json",
+  "output_dir": "training/checkpoints/saree_sdxl_lora_curated_pilot",
   "resolution": 1024,
   "train_batch_size": 1,
-  "gradient_accumulation_steps": 4,
+  "gradient_accumulation_steps": 1,
   "learning_rate": 1e-4,
   "lr_scheduler": "cosine",
-  "lr_warmup_steps": 100,
-  "max_train_steps": 2500,
-  "checkpointing_steps": 500,
-  "validation_steps": 250,
+  "lr_warmup_steps": 10,
+  "max_train_steps": 20,
+  "checkpointing_steps": 10,
+  "validation_steps": 10,
   "lora_rank": 32,
   "lora_alpha": 32,
   "lora_target_modules": [
@@ -23,7 +23,7 @@
   ],
   "mixed_precision": "fp16",
   "gradient_checkpointing": true,
-  "use_8bit_adam": true,
+  "use_8bit_adam": false,
   "seed": 42,
   "snr_gamma": 5.0,
   "garment_conditioning": {
@@ -38,8 +38,7 @@
   ],
   "hardware_requirements": {
     "min_vram_gb": 16,
-    "recommended_gpu": "NVIDIA A10G (24GB) or A100 (40GB/80GB)",
-    "training_time_hours": 3.5,
-    "estimated_cost_usd": 3.50
+    "target_platform": "Apple Silicon MPS (MacBook M4 16GB) / NVIDIA CUDA",
+    "recommended_gpu": "Apple M4 (MPS) or NVIDIA A10G (24GB)"
   }
 }

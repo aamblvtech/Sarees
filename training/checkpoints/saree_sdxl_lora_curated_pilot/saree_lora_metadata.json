@@ -1,0 +1,52 @@
+{
+  "status": "TRAINING_COMPLETED_CHECKPOINT_SAVED",
+  "model_type": "sdxl_inpainting_lora",
+  "base_model": "diffusers/stable-diffusion-xl-1.0-inpainting-0.1",
+  "resolution": 1024,
+  "lora_rank": 32,
+  "lora_alpha": 32,
+  "train_samples_count": 4,
+  "validation_samples_count": 2,
+  "trained_steps": 20,
+  "target_steps": 20,
+  "convergence_metrics": {
+    "initial_loss": 0.09207963198423386,
+    "final_loss": 0.09549961984157562,
+    "step_losses": [
+      0.09207963198423386,
+      0.052060291171073914,
+      0.09710989147424698,
+      0.01776641234755516,
+      0.001835589879192412,
+      0.02025728113949299,
+      0.0010042665526270866,
+      0.11535266041755676,
+      0.001574209425598383,
+      0.058106981217861176,
+      0.10537046194076538,
+      0.07030361890792847,
+      0.021000882610678673,
+      0.09057755768299103,
+      0.01063758134841919,
+      0.0027565755881369114,
+      0.002070934511721134,
+      0.08358897268772125,
+      0.06824144721031189,
+      0.09549961984157562
+    ],
+    "val_losses": [
+      0.03166492469608784,
+      0.03167408052831888,
+      0.031706880778074265
+    ]
+  },
+  "environment_audit": {
+    "device": "mps",
+    "mps_available": true,
+    "cuda_available": false,
+    "trainable_parameters": 46448640,
+    "total_parameters": 2613926724
+  },
+  "checkpoint_file": "saree_lora_weights.safetensors",
+  "timestamp": "2026-10-28 15:31:05"
+}

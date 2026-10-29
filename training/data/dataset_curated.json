@@ -1,0 +1,132 @@
+{
+  "dataset_name": "Saree-VTON-Curated-Clean",
+  "version": "2.0.0",
+  "total_samples": 7,
+  "split_summary": {
+    "train": 4,
+    "val": 2,
+    "test": 1
+  },
+  "description": "Curated Saree VTON dataset where every training and validation target image genuinely depicts the exact saree described in its metadata. Jeans-wearing customer photos are strictly isolated to test inference only.",
+  "samples": [
+    {
+      "sample_id": "model_priya_saree_1",
+      "split": "train",
+      "person_image": "training/data/processed_curated/model_priya_saree_1_person.png",
+      "garment_reference": "training/data/processed_curated/model_priya_saree_1_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_priya_saree_1_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_priya_saree_1_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in an authentic Traditional Crimson Banarasi Silk Saree, intricate golden floral zari embroidery along borders and pallu, matching red blouse, pleated full-length lower saree down to ankles",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "banarasi_silk",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 21.332645416259766
+    },
+    {
+      "sample_id": "model_priya_saree_2",
+      "split": "train",
+      "person_image": "training/data/processed_curated/model_priya_saree_2_person.png",
+      "garment_reference": "training/data/processed_curated/model_priya_saree_2_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_priya_saree_2_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_priya_saree_2_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Peacock Royal Blue chiffon georgette saree with ornate silver zari border, royal blue blouse, pleated full-length lower drape, graceful pallu across shoulder",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "chiffon_georgette",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 20.98846435546875
+    },
+    {
+      "sample_id": "model_priya_saree_3",
+      "split": "train",
+      "person_image": "training/data/processed_curated/model_priya_saree_3_person.png",
+      "garment_reference": "training/data/processed_curated/model_priya_saree_3_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_priya_saree_3_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_priya_saree_3_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Heritage Emerald Green Kanchipuram Silk Saree, golden temple zari motifs, rich pallu, green silk blouse, full-length lower drape to ankles",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "kanchipuram_silk",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 22.29318618774414
+    },
+    {
+      "sample_id": "model_ananya_saree_1",
+      "split": "train",
+      "person_image": "training/data/processed_curated/model_ananya_saree_1_person.png",
+      "garment_reference": "training/data/processed_curated/model_ananya_saree_1_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_ananya_saree_1_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_ananya_saree_1_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in an authentic Traditional Crimson Banarasi Silk Saree, intricate golden floral zari embroidery along borders and pallu, matching red blouse, pleated full-length lower saree down to ankles",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "banarasi_silk",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 34.31844711303711
+    },
+    {
+      "sample_id": "model_ananya_saree_2",
+      "split": "val",
+      "person_image": "training/data/processed_curated/model_ananya_saree_2_person.png",
+      "garment_reference": "training/data/processed_curated/model_ananya_saree_2_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_ananya_saree_2_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_ananya_saree_2_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Peacock Royal Blue chiffon georgette saree with ornate silver zari border, royal blue blouse, pleated full-length lower drape, graceful pallu across shoulder",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "chiffon_georgette",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 23.62823486328125
+    },
+    {
+      "sample_id": "model_ananya_saree_3",
+      "split": "val",
+      "person_image": "training/data/processed_curated/model_ananya_saree_3_person.png",
+      "garment_reference": "training/data/processed_curated/model_ananya_saree_3_garment.png",
+      "agnostic_image": "training/data/processed_curated/model_ananya_saree_3_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/model_ananya_saree_3_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Heritage Emerald Green Kanchipuram Silk Saree, golden temple zari motifs, rich pallu, green silk blouse, full-length lower drape to ankles",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "kanchipuram_silk",
+      "is_sheer": false,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 22.431182861328125
+    },
+    {
+      "sample_id": "customer_saree_5",
+      "split": "test",
+      "person_image": "training/data/processed_curated/customer_saree_5_person.png",
+      "garment_reference": "training/data/processed_curated/customer_saree_5_garment.png",
+      "agnostic_image": "training/data/processed_curated/customer_saree_5_agnostic.png",
+      "inpaint_mask": "training/data/processed_curated/customer_saree_5_mask.png",
+      "caption": "Photorealistic full-body portrait of a woman draped in an ethereal Blush Pink Organza Saree, delicate scalloped pearl and silver beaded border, sheer organza texture, matching blouse, full-length translucent drape",
+      "resolution": [
+        1024,
+        1024
+      ],
+      "fabric_type": "sheer_organza",
+      "is_sheer": true,
+      "draping_style": "nivi_style_full_length",
+      "mask_area_pct": 10.849952697753906
+    }
+  ]
+}

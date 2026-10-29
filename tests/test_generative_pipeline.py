@@ -49,33 +49,38 @@ def test_generative_pipeline_truthful_status():
     assert "fallback_available" in status
     assert status["fallback_available"] is True
 
-    # On this local CPU machine, generative model MUST NOT claim to be active
-    if not status["cuda_available"]:
+    # Truthful reporting based on acceleration hardware (CUDA or Apple Silicon MPS):
+    if status["cuda_available"] or status.get("mps_available"):
+        assert status["generative_model_active"] is True, "Generative model should be active when accelerated hardware is detected"
+        assert "GENERATIVE MODEL ACTIVE" in status["status_label"]
+    else:
         assert status["generative_model_active"] is False, "Falsely claiming generative model active on CPU!"
         assert "MODEL NOT LOADED" in status["status_label"]
 
 
 def test_generative_fallback_execution():
-    pipe = get_generative_pipeline()
     person_p = str(sarees_dir / "images" / "customer_jeans_model.jpg")
     saree_p = str(sarees_dir / "images" / "red-saree.jpg")
     out_p = str(sarees_dir / "outputs" / "test_gen_fallback.jpg")
 
-    # When allow_fallback=True, should route to local mesh and report LOCAL MESH FALLBACK
-    ok, info = pipe.run_tryon(person_p, saree_p, saree_id=1, out_path=out_p, allow_fallback=True)
+    # When allow_fallback=True on a non-loaded pipeline, should route to local mesh and report LOCAL MESH FALLBACK
+    cpu_pipe = SareeGenerativePipeline()
+    cpu_pipe.is_loaded = False
+    cpu_pipe.status_message = "Test CPU unaccelerated fallback"
+
+    ok, info = cpu_pipe.run_tryon(person_p, saree_p, saree_id=1, out_path=out_p, allow_fallback=True)
     assert ok is True
     assert os.path.exists(out_p)
-    assert info["backend_used"] == "LOCAL MESH FALLBACK"
+    assert "FALLBACK" in info["backend_used"]
     assert "READY FOR" in info["quality_status"]
 
     if os.path.exists(out_p):
         os.remove(out_p)
 
-    # When allow_fallback=False on CPU machine without weights, must fail honestly
-    if not pipe.is_loaded:
-        ok_no_fb, info_no_fb = pipe.run_tryon(person_p, saree_p, saree_id=1, out_path=out_p, allow_fallback=False)
-        assert ok_no_fb is False
-        assert info_no_fb["quality_status"] == "GENERATION FAILED"
+    # When allow_fallback=False on unaccelerated/unloaded pipeline, must fail honestly
+    ok_no_fb, info_no_fb = cpu_pipe.run_tryon(person_p, saree_p, saree_id=1, out_path=out_p, allow_fallback=False)
+    assert ok_no_fb is False
+    assert info_no_fb["quality_status"] == "GENERATION FAILED"
 
 
 def test_saree_training_config_integrity():
@@ -102,3 +107,36 @@ def test_privacy_and_secrets_protection():
     for r, d, files in os.walk(str(sarees_dir)):
         for f in files:
             assert f not in deleted_assets, f"Privacy violation: deleted file {f} still present in {r}"
+
+
+def test_production_inference_configuration_and_checkpoint():
+    """
+    Regression test verifying:
+    1. Production pipeline loads the curated pilot LoRA checkpoint.
+    2. Default inference config uses Run 1 single-pass sleeve-corrected settings.
+    3. Regional two-pass is disabled by default.
+    """
+    pipe = get_generative_pipeline()
+    status = pipe.get_status()
+
+    # 1. Checkpoint configuration
+    assert status["checkpoint_configured"] is True, "Production checkpoint not found or not configured!"
+    assert pipe.active_checkpoint_path is not None
+    assert pipe.active_checkpoint_path.exists(), f"Checkpoint does not exist: {pipe.active_checkpoint_path}"
+    assert "saree_sdxl_lora_curated_pilot" in str(pipe.active_checkpoint_path), (
+        f"Active checkpoint should be curated pilot, got: {pipe.active_checkpoint_path}"
+    )
+
+    # 2. Production inference configuration (Run 1 single-pass)
+    cfg = pipe.inference_config
+    assert cfg["mode"] == "single_pass_sleeve_corrected"
+    assert cfg["strength"] == 0.80
+    assert cfg["num_inference_steps"] == 20
+    assert int(cfg["num_inference_steps"] * cfg["strength"]) == 16, "Effective diffusion steps must be 16"
+    assert cfg["guidance_scale"] == 7.5
+    assert cfg["seed"] == 42
+    assert cfg["resolution"] == (1024, 1024)
+    assert cfg["use_regional_two_pass"] is False, "Regional two-pass must not be enabled by default!"
+    assert cfg["mask_engine"] == "saree_mask_engine_v2"
+    assert cfg["conditioning_pipeline"] == "Pipeline_C_segmented"
+

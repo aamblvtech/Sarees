@@ -59,10 +59,10 @@ def validate_dataset(manifest_path: str = None) -> Tuple[bool, Dict]:
         split = sample.get("split", "train")
 
         # 1. Existence Check
-        person_p = BASE_DIR / sample.get("person_image", "")
-        garm_p = BASE_DIR / sample.get("garment_reference", "")
-        agnostic_p = BASE_DIR / sample.get("agnostic_image", "")
-        mask_p = BASE_DIR / sample.get("inpaint_mask", "")
+        person_p = BASE_DIR / Path(str(sample.get("person_image", "")).replace("\\", "/"))
+        garm_p = BASE_DIR / Path(str(sample.get("garment_reference", "")).replace("\\", "/"))
+        agnostic_p = BASE_DIR / Path(str(sample.get("agnostic_image", "")).replace("\\", "/"))
+        mask_p = BASE_DIR / Path(str(sample.get("inpaint_mask", "")).replace("\\", "/"))
 
         for label, p in [("person", person_p), ("garment", garm_p), ("agnostic", agnostic_p), ("mask", mask_p)]:
             if not p.exists():

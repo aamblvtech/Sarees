@@ -1,0 +1,55 @@
+{
+  "evaluation_suite": "AURA Multi-Sample Repeatable Pilot Evaluation",
+  "checkpoint_used": "training/checkpoints/saree_sdxl_lora_curated_pilot/saree_lora_weights.safetensors",
+  "combinations_evaluated_count": 3,
+  "combinations": {
+    "model_ananya_saree_2": {
+      "sample_id": "model_ananya_saree_2",
+      "split": "val",
+      "fabric_type": "chiffon_georgette",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Peacock Royal Blue chiffon georgette saree with ornate silver zari border, royal blue blouse, pleated full-length lower drape, graceful pallu across shoulder",
+      "person_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_2_01_person.png",
+      "garment_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_2_02_garment.png",
+      "canvas_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_2_03_conditioned_canvas.png",
+      "canvas_masked_mean_rgb": [
+        89.18,
+        87.31,
+        103.19
+      ],
+      "mask_area_pct": 23.62823486328125
+    },
+    "model_ananya_saree_3": {
+      "sample_id": "model_ananya_saree_3",
+      "split": "val",
+      "fabric_type": "kanchipuram_silk",
+      "caption": "Photorealistic full-body portrait of a woman draped in a Heritage Emerald Green Kanchipuram Silk Saree, golden temple zari motifs, rich pallu, green silk blouse, full-length lower drape to ankles",
+      "person_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_3_01_person.png",
+      "garment_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_3_02_garment.png",
+      "canvas_path": "evaluation/multi_sample_pilot_eval/model_ananya_saree_3_03_conditioned_canvas.png",
+      "canvas_masked_mean_rgb": [
+        93.44,
+        92.85,
+        68.45
+      ],
+      "mask_area_pct": 22.431182861328125
+    },
+    "customer_saree_5": {
+      "sample_id": "customer_saree_5",
+      "split": "test",
+      "fabric_type": "sheer_organza",
+      "caption": "Photorealistic full-body portrait of a woman draped in an ethereal Blush Pink Organza Saree, delicate scalloped pearl and silver beaded border, sheer organza texture, matching blouse, full-length translucent drape",
+      "person_path": "evaluation/multi_sample_pilot_eval/customer_saree_5_01_person.png",
+      "garment_path": "evaluation/multi_sample_pilot_eval/customer_saree_5_02_garment.png",
+      "canvas_path": "evaluation/multi_sample_pilot_eval/customer_saree_5_03_conditioned_canvas.png",
+      "canvas_masked_mean_rgb": [
+        225.1,
+        202.65,
+        186.39
+      ],
+      "mask_area_pct": 10.849952697753906,
+      "generated_output_path": "evaluation/multi_sample_pilot_eval/customer_saree_5_04_generated_pilot_output.png"
+    }
+  },
+  "device": "mps",
+  "timestamp": "2026-10-28 16:02:33"
+}

@@ -1,0 +1,42 @@
+{
+  "evaluation_name": "Smoke-Test Baseline vs Curated Pilot LoRA",
+  "sample_evaluated": "customer_saree_5 (held-out)",
+  "garment": "Blush Pink Organza Saree",
+  "parameters": {
+    "seed": 42,
+    "steps": 20,
+    "strength": 0.8,
+    "guidance_scale": 7.5,
+    "resolution": [
+      1024,
+      1024
+    ],
+    "device": "mps"
+  },
+  "baseline_smoke_test": {
+    "checkpoint": "training/checkpoints/saree_sdxl_lora_smoke_test/saree_lora_weights.safetensors",
+    "output_path": "evaluation/curated_pilot_eval/03_baseline_smoke_test_output.png",
+    "dhash": "0x24080c0c041c0000",
+    "masked_saree_mean_rgb": [
+      225.42,
+      197.58,
+      187.11
+    ],
+    "outside_mask_mae": 16.5121,
+    "inference_time_seconds": 187.23
+  },
+  "curated_pilot": {
+    "checkpoint": "training/checkpoints/saree_sdxl_lora_curated_pilot/saree_lora_weights.safetensors",
+    "output_path": "evaluation/curated_pilot_eval/04_curated_pilot_output.png",
+    "dhash": "0x24080c0c041c0400",
+    "masked_saree_mean_rgb": [
+      225.24,
+      197.41,
+      186.98
+    ],
+    "outside_mask_mae": 16.4542,
+    "inference_time_seconds": 158.7
+  },
+  "triptych_path": "evaluation/curated_pilot_eval/05_comparison_triptych_baseline_vs_pilot.png",
+  "timestamp": "2026-10-28 15:36:12"
+}

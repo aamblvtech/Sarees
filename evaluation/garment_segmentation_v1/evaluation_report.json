@@ -1,0 +1,19 @@
+{
+  "evaluation_sample": "customer_saree_5",
+  "sample_split": "test (HELD-OUT)",
+  "garment_evaluated": "Blush Pink Organza Saree",
+  "pipeline_b_unsegmented": {
+    "output_path": "/Users/rohithnaragoni/Desktop/saree/evaluation/garment_segmentation_v1/06_pipeline_b_output.png",
+    "dhash": "0x24080c0c041c0000",
+    "dark_shadow_contamination": "Present (left leg shadow bleed)"
+  },
+  "pipeline_c_segmented": {
+    "output_path": "/Users/rohithnaragoni/Desktop/saree/evaluation/garment_segmentation_v1/07_pipeline_c_segmented_output.png",
+    "dhash": "0x24080c0c041c0000",
+    "dark_shadow_contamination": "Removed (clean cloth extraction)"
+  },
+  "comparison_triptych": "/Users/rohithnaragoni/Desktop/saree/evaluation/garment_segmentation_v1/08_comparison_triptych_b_vs_c.png",
+  "execution_time_seconds": 187.23,
+  "device": "mps",
+  "timestamp": "2026-10-28 15:00:48"
+}

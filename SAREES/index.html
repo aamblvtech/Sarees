@@ -1103,6 +1103,32 @@
           <button id="lookletBtnClear" class="looklet-btn-clear" onclick="clearStyling()">CLEAR STYLING</button>
         </div>
 
+        <!-- Customer Privacy & Ephemeral Session Actions Bar -->
+        <div id="sessionPrivacyBar" style="display: none; margin-top: 14px; padding: 14px 18px; background: rgba(18, 14, 20, 0.95); border: 1px solid rgba(212, 175, 55, 0.45); border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 14px; font-weight: 700; color: var(--gold-light);">🔒 Ephemeral Customer Session</span>
+                <span id="sessionStatusBadge" class="slider-tag" style="position: static; font-size: 11px; padding: 2px 10px; border-radius: 12px; background: rgba(59, 130, 246, 0.2); border: 1px solid #3b82f6; color: #93c5fd;">Active Try-On</span>
+              </div>
+              <p id="sessionPrivacyText" style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 0; line-height: 1.4;">
+                Customer photos are treated as private, temporary data. Original uploads and intermediate files are isolated to your temporary session.
+              </p>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button id="btnAcceptResult" class="btn btn-gold" style="padding: 7px 14px; font-size: 12px; font-weight: 600;" onclick="acceptSessionResult()">
+                ✅ Accept Result & Delete Photo
+              </button>
+              <button id="btnTryAnotherSaree" class="btn btn-outline" style="padding: 7px 14px; font-size: 12px;" onclick="tryAnotherSareeAction()">
+                🔄 Try Another Saree
+              </button>
+              <button id="btnDeleteSession" class="btn btn-outline" style="padding: 7px 14px; font-size: 12px; border-color: rgba(239, 68, 68, 0.6); color: #f87171;" onclick="deleteSessionAndReset()">
+                🗑️ Delete Session
+              </button>
+            </div>
+          </div>
+        </div>
+
         <!-- Model Selection Shelf -->
         <div class="models-shelf">
           <div class="shelf-title">
@@ -1238,7 +1264,7 @@
         <div class="action-cta-box">
           <button class="btn btn-gold" id="btnApplyDrape" onclick="applyCurrentDrape()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
-            ✨ Refresh Drape on Active Model
+            ✨ Try Saree On Active Model
           </button>
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1270,8 +1296,9 @@
       <div style="margin-bottom: 16px;">
         <label style="font-size: 13px; color: var(--gold-light); display: block; margin-bottom: 6px; font-weight: 600;">Active Drape Engine:</label>
         <select id="settingEngineSelect" class="btn btn-outline" style="width: 100%; text-align: left; background: #120e14; color: #fff; padding: 10px 14px;" onchange="onEngineChange()">
-          <option value="diffusion">🌟 Looklet IDM-VTON (Genuine Reference Garment Neural Diffusion)</option>
+          <option value="generative" selected>✨ AURA Generative LoRA Studio (Curated SDXL LoRA Single-Pass • Production Engine)</option>
           <option value="inplace">🛡️ Neural In-Place Drape (Local Delaunay Mesh & Bit-Exact Face Lock - Instant)</option>
+          <option value="diffusion">🌟 Looklet IDM-VTON (Remote Diffusion Garment Swap)</option>
           <option value="fashn">✨ FASHN.ai (Cloud Diffusion Try-On)</option>
           <option value="artcraft">🎨 ArtCraft AI (Text-to-Image Concept Generator • Note: No Garment Reference)</option>
         </select>
@@ -1299,6 +1326,34 @@
       <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
         <button class="btn btn-outline" onclick="closeSettingsModal()">Cancel</button>
         <button class="btn btn-gold" onclick="saveSettings()">Save & Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actionable Drape Error Modal -->
+  <div class="modal-backdrop" id="errorModal" style="display: none;">
+    <div class="modal-card" style="max-width: 500px; text-align: left; border: 1px solid rgba(239, 68, 68, 0.6); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+        <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; font-size: 20px;">⚠️</div>
+        <h3 style="margin: 0; color: #f87171; font-family: 'Playfair Display', serif; font-size: 20px;">Virtual Drape Error</h3>
+      </div>
+      
+      <p id="errorMessageText" style="font-size: 14px; color: #f3f4f6; line-height: 1.5; margin-bottom: 14px;">
+        The system could not complete virtual draping.
+      </p>
+
+      <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 18px;">
+        <span style="color: var(--gold-light); font-weight: 600; display: block; margin-bottom: 6px;">Troubleshooting Checklist:</span>
+        <ul id="errorTroubleshootList" style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px;">
+          <li>Ensure backend is running: <code style="color: #93c5fd; background: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 4px;">uvicorn main:app --port 8000</code></li>
+          <li>Confirm photo is a clear full-length or 3/4 standing portrait.</li>
+          <li>Verify network connection to <code style="color: #93c5fd; background: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 4px;">http://127.0.0.1:8000</code>.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-outline" onclick="closeErrorModal()">Dismiss</button>
+        <button class="btn btn-gold" id="btnRetryDrape" onclick="retryLastTryOn()">Try Again</button>
       </div>
     </div>
   </div>
@@ -1409,15 +1464,59 @@
   <div id="toastNotification" class="toast-notification"></div>
 
   <script>
+    // Helper: Safely convert base64 data URLs to Blobs without WebKit DOMException
+    function dataURLtoBlob(dataurl) {
+      try {
+        const parts = dataurl.split(',');
+        const mimeMatch = parts[0].match(/:(.*?);/);
+        const mime = mimeMatch ? mimeMatch[1] : 'image/jpeg';
+        const bstr = atob(parts[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+      } catch (e) {
+        console.error("Failed to decode dataURL into Blob:", e);
+        throw new Error("Invalid image data format. Please choose a valid JPG/PNG file.");
+      }
+    }
+
+    // Dynamic backend URL resolver: handles localhost:8000, 127.0.0.1, and cross-origin safely
+    function getApiBaseUrl() {
+      if (typeof window !== "undefined" && window.location && window.location.protocol.startsWith("http")) {
+        if (window.location.port === "8000" || window.location.host.includes(":8000")) {
+          return "";
+        }
+      }
+      return "http://127.0.0.1:8000";
+    }
+
+    function resolveUrl(path) {
+      if (!path) return "";
+      if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("blob:") || path.startsWith("data:")) {
+        return path;
+      }
+      const base = getApiBaseUrl();
+      const cleanPath = path.startsWith("/") ? path : `/${path}`;
+      return `${base}${cleanPath}`;
+    }
+
     // State & Config
-    const API_HOST = window.location.port === "8000" ? "" : "http://127.0.0.1:8000";
+    const API_HOST = getApiBaseUrl();
     
     let currentModelId = "userPhoto"; // Default to Customer Portrait (Garden Photo)
     let currentSareeId = 2; // Peacock Royal Blue default
     let currentViewMode = "draped"; // "draped", "split", "dual"
-    let currentFittingMode = localStorage.getItem("saree_engine") || "diffusion";
+    // Default to production curated SDXL LoRA generative pipeline
+    let currentFittingMode = localStorage.getItem("saree_engine") || "generative";
 
-    let customUserImage = null; // Base64 data URL or server URL for custom uploads
+    let customUserImage = null; // Base64 or object URL for custom preview
+    let currentUserPhotoFile = null; // Direct File or Blob object to prevent DOMException
+    let currentSessionId = null; // Ephemeral customer privacy session ID
+    let activeObjectUrl = null; // Track browser Object URL for revoking
+    let lastTryOnArgs = null; // For retry functionality
     let customDrapedResults = {}; // saree_id -> result_url
 
     let isDraggingSlider = false;
@@ -1573,9 +1672,9 @@
       updateDressingRoomStatus();
 
       // Check if custom user image requires API call
-      if (currentModelId === "custom" && customUserImage) {
+      if (currentModelId === "custom" && (currentUserPhotoFile || customUserImage)) {
         if (!customDrapedResults[currentSareeId]) {
-          triggerServerTryOn(customUserImage, currentSareeId);
+          triggerServerTryOn(currentUserPhotoFile || customUserImage, currentSareeId);
           return;
         }
       }
@@ -1845,22 +1944,46 @@
       const file = event.target.files[0];
       if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        customUserImage = e.target.result;
-        currentModelId = "custom";
-        customDrapedResults = {}; // reset cache
+      const fileNameLower = file.name.toLowerCase();
+      if (fileNameLower.endsWith(".heic") || fileNameLower.endsWith(".heif") || (file.type && file.type.includes("heic"))) {
+        showActionableError("Unsupported Image Format (HEIC/HEIF)", "iPhone HEIC/HEIF photos are not directly supported by browser canvas rendering. Please upload a standard JPEG or PNG photo.");
+        event.target.value = "";
+        return;
+      }
 
-        document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
-        document.getElementById("cardModelCustom").classList.add("active");
+      // Revoke prior object URL to prevent memory leaks
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+        activeObjectUrl = null;
+      }
+
+      currentUserPhotoFile = file;
+      currentSessionId = "session_" + Date.now() + "_" + Math.random().toString(36).substring(2, 8);
+
+      try {
+        activeObjectUrl = URL.createObjectURL(file);
+        customUserImage = activeObjectUrl;
+      } catch (urlErr) {
+        console.warn("createObjectURL failed:", urlErr);
+        customUserImage = null;
+      }
+
+      currentModelId = "custom";
+      customDrapedResults = {}; // reset cache
+
+      document.querySelectorAll(".model-thumb-card").forEach(c => c.classList.remove("active"));
+      document.getElementById("cardModelCustom").classList.add("active");
+      if (customUserImage) {
         document.getElementById("customAvatarBox").innerHTML = `<img src="${customUserImage}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-        document.getElementById("customModelName").textContent = "My Photo";
-        document.getElementById("activeModelLabel").textContent = "Active: Custom Photo Upload";
+      }
+      document.getElementById("customModelName").textContent = "My Photo";
+      document.getElementById("activeModelLabel").textContent = "Active: Custom Photo Upload (Session Active)";
 
-        showToast("✨ Photo loaded! Draping selected saree...");
-        triggerServerTryOn(customUserImage, currentSareeId);
-      };
-      reader.readAsDataURL(file);
+      // Display original portrait in viewport stage immediately
+      updateStageView();
+      updateSessionPrivacyUI("active");
+      showToast("✨ Photo loaded! Draping selected saree with AURA Production Engine...");
+      triggerServerTryOn(file, currentSareeId);
     }
 
     // Mobile QR Modal & Sync Engine
@@ -1960,42 +2083,234 @@
       }, duration);
     }
 
+    // Actionable Error Modal Functions
+    function showActionableError(message, detail = null) {
+      const modal = document.getElementById("errorModal");
+      const msgText = document.getElementById("errorMessageText");
+      const list = document.getElementById("errorTroubleshootList");
+      if (!modal) {
+        alert(message);
+        return;
+      }
+
+      msgText.textContent = detail ? `${message}: ${detail}` : message;
+      
+      let tipsHtml = `
+        <li>Ensure backend is running: <code style="color: #93c5fd; background: rgba(0,0,0,0.5); padding: 2px 4px; border-radius: 4px;">uvicorn main:app --port 8000</code></li>
+        <li>Verify backend status at <a href="${API_HOST}/docs" target="_blank" style="color: var(--gold-light);">http://127.0.0.1:8000/docs</a></li>
+        <li>Make sure the uploaded image is a clear full-length or 3/4 standing portrait.</li>
+      `;
+      if (message.includes("pattern") || message.includes("Failed to fetch") || message.includes("NetworkError")) {
+        tipsHtml = `
+          <li>Backend is currently unreachable at <code>${API_HOST}</code>.</li>
+          <li>Start the server in terminal: <code>cd SAREES && uvicorn main:app --host 127.0.0.1 --port 8000</code></li>
+          <li>If using Safari/WebKit, verify local host privacy permissions.</li>
+        `;
+      } else if (message.includes("Invalid image") || message.includes("empty")) {
+        tipsHtml = `
+          <li>Upload a standard JPEG or PNG image file under 15MB.</li>
+          <li>Ensure the subject's posture has visible shoulders and torso for realistic saree draping.</li>
+        `;
+      }
+      if (list) list.innerHTML = tipsHtml;
+      modal.style.display = "flex";
+    }
+
+    function closeErrorModal() {
+      const modal = document.getElementById("errorModal");
+      if (modal) modal.style.display = "none";
+    }
+
+    function retryLastTryOn() {
+      closeErrorModal();
+      if (lastTryOnArgs) {
+        triggerServerTryOn(lastTryOnArgs.source, lastTryOnArgs.sareeId);
+      }
+    }
+
+    // Customer Session Privacy Lifecycle Management
+    function updateSessionPrivacyUI(state) {
+      const bar = document.getElementById("sessionPrivacyBar");
+      const badge = document.getElementById("sessionStatusBadge");
+      const text = document.getElementById("sessionPrivacyText");
+      const btnAccept = document.getElementById("btnAcceptResult");
+      if (!bar) return;
+
+      bar.style.display = "block";
+      if (state === "active") {
+        badge.textContent = "Active Try-On";
+        badge.style.borderColor = "#3b82f6";
+        badge.style.color = "#93c5fd";
+        badge.style.background = "rgba(59, 130, 246, 0.2)";
+        text.innerHTML = "Your photo is currently held in an <strong>isolated temporary directory</strong>. Draped output is ready for your review.";
+        if (btnAccept) {
+          btnAccept.style.display = "inline-block";
+          btnAccept.disabled = false;
+        }
+      } else if (state === "accepted") {
+        badge.textContent = "Photo Permanently Deleted";
+        badge.style.borderColor = "#10b981";
+        badge.style.color = "#a7f3d0";
+        badge.style.background = "rgba(16, 185, 129, 0.2)";
+        text.innerHTML = "✅ <strong>Privacy Guaranteed:</strong> Your original uploaded photo and intermediate processing files have been <strong>permanently deleted</strong> from the server. Only the final draped result is kept for this viewing session.";
+        if (btnAccept) {
+          btnAccept.style.display = "none";
+        }
+      }
+    }
+
+    async function acceptSessionResult() {
+      if (!currentSessionId) {
+        showToast("ℹ️ No active custom session to accept.");
+        return;
+      }
+      try {
+        const res = await fetch(resolveUrl("/api/session/accept"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: currentSessionId })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          updateSessionPrivacyUI("accepted");
+          showToast("🔒 Original customer photo permanently erased from server.");
+        } else {
+          showActionableError("Session Accept Error", data.detail);
+        }
+      } catch (err) {
+        showActionableError("Could not reach backend to accept session", err.message);
+      }
+    }
+
+    async function tryAnotherSareeAction() {
+      if (currentSessionId) {
+        try {
+          await fetch(resolveUrl("/api/session/reset-garment"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: currentSessionId })
+          });
+        } catch (e) {
+          console.warn("Garment reset notification error:", e);
+        }
+      }
+      customDrapedResults = {};
+      showToast("🔄 Choose another saree from the luxury wardrobe above.");
+    }
+
+    async function deleteSessionAndReset() {
+      if (currentSessionId) {
+        try {
+          await fetch(resolveUrl("/api/session/cleanup"), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: currentSessionId })
+          });
+        } catch (e) {
+          console.warn("Cleanup error:", e);
+        }
+      }
+
+      if (activeObjectUrl) {
+        URL.revokeObjectURL(activeObjectUrl);
+        activeObjectUrl = null;
+      }
+
+      currentSessionId = null;
+      customUserImage = null;
+      currentUserPhotoFile = null;
+      customDrapedResults = {};
+
+      const bar = document.getElementById("sessionPrivacyBar");
+      if (bar) bar.style.display = "none";
+
+      // Reset UI back to studio portrait
+      switchModel("userPhoto");
+      showToast("🗑️ Session deleted. All customer files permanently removed.");
+    }
+
+    // Browser close / tab unload session cleanup
+    window.addEventListener("beforeunload", () => {
+      if (currentSessionId) {
+        const payload = JSON.stringify({ session_id: currentSessionId });
+        const blob = new Blob([payload], { type: "application/json" });
+        navigator.sendBeacon(resolveUrl("/api/session/cleanup"), blob);
+      }
+    });
+
     // Call Backend Virtual Try-On API
-    async function triggerServerTryOn(imageDataUrl, sareeId) {
+    async function triggerServerTryOn(imageSource, sareeId) {
       const loader = document.getElementById("stageLoader");
-      loader.style.display = "flex";
+      if (loader) loader.style.display = "flex";
+      lastTryOnArgs = { source: imageSource, sareeId: sareeId };
 
       try {
         let blob;
-        if (imageDataUrl.startsWith("data:")) {
-          blob = await (await fetch(imageDataUrl)).blob();
+        if (imageSource instanceof Blob || (typeof File !== "undefined" && imageSource instanceof File)) {
+          blob = imageSource;
+        } else if (typeof imageSource === "string" && imageSource.startsWith("data:")) {
+          blob = dataURLtoBlob(imageSource);
+        } else if (typeof imageSource === "string" && imageSource.startsWith("blob:")) {
+          const res = await fetch(imageSource);
+          if (!res.ok) throw new Error(`Could not access object blob (HTTP ${res.status})`);
+          blob = await res.blob();
+        } else if (typeof imageSource === "string") {
+          const fetchUrl = resolveUrl(imageSource);
+          const res = await fetch(fetchUrl);
+          if (!res.ok) throw new Error(`Could not load reference image from ${fetchUrl} (HTTP ${res.status})`);
+          blob = await res.blob();
         } else {
-          const fetchUrl = imageDataUrl.startsWith("http") ? imageDataUrl : `${API_HOST}${imageDataUrl}`;
-          blob = await (await fetch(fetchUrl)).blob();
+          throw new Error("Invalid image source provided for try-on.");
         }
 
         const form = new FormData();
         form.append("person", blob, "model.jpg");
 
         const savedFashnKey = localStorage.getItem("fashn_api_key") || "";
-        let targetUrl = `${API_HOST}/api/try-on?saree_id=${sareeId}&fitting_mode=${currentFittingMode}`;
+        let targetUrl = resolveUrl(`/api/try-on?saree_id=${sareeId}&fitting_mode=${encodeURIComponent(currentFittingMode)}`);
+        if (currentSessionId) {
+          targetUrl += `&session_id=${encodeURIComponent(currentSessionId)}`;
+        }
         if (savedFashnKey) {
           targetUrl += `&fashn_api_key=${encodeURIComponent(savedFashnKey)}`;
         }
 
-        const response = await fetch(targetUrl, {
-          method: "POST",
-          body: form
-        });
-
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.detail || "Try-on pipeline error");
+        let response;
+        try {
+          response = await fetch(targetUrl, {
+            method: "POST",
+            body: form
+          });
+        } catch (netErr) {
+          console.error("Fetch network error:", netErr);
+          throw new Error(`Cannot connect to backend server at ${targetUrl}. Ensure uvicorn is running on port 8000.`);
         }
 
-        const resultUrl = data.result_url.startsWith("http") ? data.result_url : `${API_HOST}${data.result_url}`;
+        const rawText = await response.text();
+        let data;
+        try {
+          data = JSON.parse(rawText);
+        } catch (jsonErr) {
+          console.error("Failed to parse JSON response:", rawText);
+          throw new Error(`Server returned unexpected response (HTTP ${response.status}): ${rawText.slice(0, 160)}`);
+        }
+
+        if (!response.ok) {
+          throw new Error(data.detail || `Server returned error (HTTP ${response.status})`);
+        }
+
+        if (data.session_id) {
+          currentSessionId = data.session_id;
+        }
+
+        const resultUrl = resolveUrl(data.result_url);
         customDrapedResults[sareeId] = resultUrl;
         updateStageView();
+
+        if (currentModelId === "custom") {
+          updateSessionPrivacyUI("active");
+        }
+
         const statusMsg = data.quality_status ? ` (${data.quality_status})` : "";
         showToast(`✨ Fitted ${data.saree?.name || "Saree"}${statusMsg}`);
         const drapeTag = document.getElementById("drapeTag");
@@ -2004,15 +2319,16 @@
         }
 
       } catch (err) {
-        alert(`Virtual Drape Error: ${err.message}\nMake sure main.py is running on port 8000.`);
+        console.error("Virtual Drape Error:", err);
+        showActionableError("Virtual Drape Error", err.message || String(err));
       } finally {
-        loader.style.display = "none";
+        if (loader) loader.style.display = "none";
       }
     }
 
     function applyCurrentDrape() {
-      if (currentModelId === "custom" && customUserImage) {
-        triggerServerTryOn(customUserImage, currentSareeId);
+      if (currentModelId === "custom" && (currentUserPhotoFile || customUserImage)) {
+        triggerServerTryOn(currentUserPhotoFile || customUserImage, currentSareeId);
       } else if (currentModelId === "userPhoto") {
         const m = studioModels.userPhoto;
         triggerServerTryOn(m.originalImg, currentSareeId);
@@ -2030,7 +2346,7 @@
     async function checkBackendStatus() {
       const badge = document.getElementById("backendStatus");
       try {
-        const res = await fetch(`${API_HOST}/api/hardware-status`);
+        const res = await fetch(resolveUrl("/api/hardware-status"));
         if (res.ok) {
           const data = await res.json();
           badge.textContent = `Dressing Room Online • ${data.active_engine || 'Neural Drape'}`;
