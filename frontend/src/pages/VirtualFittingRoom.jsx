@@ -1,0 +1,1320 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
+import {
+  Upload, Camera, Sparkles, RefreshCw, Check, ArrowRight,
+  Shield, Download, AlertTriangle, AlertCircle, Trash2, Cpu,
+  Smartphone, QrCode, FileUp, CheckCircle2, Sliders, ChevronRight, X
+} from 'lucide-react';
+import productService from '../services/productService';
+import tryOnService from '../services/tryOnService';
+import CameraModal from '../components/CameraModal';
+import QrModal from '../components/QrModal';
+import ProductStatusBadge, { ATELIER_FALLBACK_IMAGE } from '../components/ProductStatusBadge';
+
+export default function VirtualFittingRoom() {
+  const [searchParams] = useSearchParams();
+  const initialProductId = searchParams.get('productId');
+  const initialSize = searchParams.get('size') || 'M';
+
+  // Loading & Error states
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [initError, setInitError] = useState(null);
+
+  // Provider Info
+  const [providerInfo, setProviderInfo] = useState(null);
+
+  // Garment Catalogue State
+  const [allProducts, setAllProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [productCategoryFilter, setProductCategoryFilter] = useState('all');
+  const [selectedSize, setSelectedSize] = useState(initialSize);
+  const [fitPreference, setFitPreference] = useState('tailored');
+
+  // Garment Selection Mode: 'catalogue' | 'custom'
+  const [garmentMode, setGarmentMode] = useState('catalogue');
+
+  // Custom Garment Upload State (Module 2)
+  const [isCustomGarmentDrawerOpen, setIsCustomGarmentDrawerOpen] = useState(false);
+  const [customGarmentUrl, setCustomGarmentUrl] = useState(null);
+  const [customGarmentFilename, setCustomGarmentFilename] = useState(null);
+  const [customGarmentName, setCustomGarmentName] = useState('Bespoke Custom Garment');
+  const [customGarmentCategory, setCustomGarmentCategory] = useState('upper_body');
+  const [isUploadingGarment, setIsUploadingGarment] = useState(false);
+  const [customGarmentError, setCustomGarmentError] = useState(null);
+
+  // Customer Silhouette State (Left "BEFORE" Panel)
+  const [userPhotoUrl, setUserPhotoUrl] = useState(null);
+  const [userPhotoFilename, setUserPhotoFilename] = useState(null);
+  const [userPhotoSource, setUserPhotoSource] = useState(null); // 'upload', 'camera', 'mobile_qr'
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
+
+  // Try-On Generation & Result State (Right "AFTER" Panel)
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationStep, setGenerationStep] = useState('');
+  const [generationError, setGenerationError] = useState(null);
+  const [currentJobId, setCurrentJobId] = useState(null);
+  const [jobStatus, setJobStatus] = useState('idle'); // 'idle' | 'generating' | 'completed' | 'failed'
+  const [tryOnResult, setTryOnResult] = useState(null);
+  const [pendingGeneration, setPendingGeneration] = useState(null);
+
+  const fileInputRef = useRef(null);
+  const replaceFileInputRef = useRef(null);
+  const pollingRef = useRef(null);
+
+  // Initial Data Fetch
+  const init = async () => {
+    setIsPageLoading(true);
+    setInitError(null);
+    try {
+      const [prods, pInfo] = await Promise.all([
+        productService.getProducts().catch((err) => {
+          console.warn('[FittingRoom] Failed to fetch products:', err.message);
+          return [];
+        }),
+        tryOnService.getProviderInfo().catch((err) => {
+          console.warn('[FittingRoom] Failed to fetch provider info:', err.message);
+          return null;
+        })
+      ]);
+
+      const safeProds = Array.isArray(prods) ? prods : [];
+      setAllProducts(safeProds);
+      setProviderInfo(pInfo);
+
+      // Pre-select product if provided in URL or default to first product
+      if (initialProductId && safeProds.length > 0) {
+        const match = safeProds.find((p) => p.id === parseInt(initialProductId, 10));
+        if (match) setSelectedProduct(match);
+        else setSelectedProduct(safeProds[0]);
+      } else if (safeProds.length > 0) {
+        setSelectedProduct(safeProds[0]);
+      }
+
+      // Customer photo starts empty
+      setUserPhotoUrl(null);
+      setUserPhotoFilename(null);
+      setUserPhotoSource(null);
+    } catch (err) {
+      console.error('Failed to initialize fitting room:', err);
+      setInitError('Unable to connect to VESTRA database service. Please retry.');
+    } finally {
+      setIsPageLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    init();
+
+    return () => {
+      if (pollingRef.current) clearInterval(pollingRef.current);
+    };
+  }, [initialProductId]);
+
+  // Polling logic for ongoing asynchronous try-on jobs
+  const startPolling = (jobId, photoUrl) => {
+    if (pollingRef.current) clearInterval(pollingRef.current);
+
+    pollingRef.current = setInterval(async () => {
+      try {
+        const job = await tryOnService.getJobStatus(jobId);
+
+        if (job.status === 'completed' && job.result) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+
+          // Integrity check: Never present unchanged customer photo as an AI result
+          if (job.result.resultImageUrl === photoUrl) {
+            setJobStatus('failed');
+            setIsGenerating(false);
+            setGenerationError('Provider returned unmodified silhouette portrait. Virtual try-on was not synthesized.');
+            return;
+          }
+
+          setTryOnResult(job.result);
+          setJobStatus('completed');
+          setIsGenerating(false);
+          setGenerationStep('Virtual try-on synthesis complete.');
+          tryOnService.getProviderInfo().then((p) => setProviderInfo(p)).catch(() => {});
+        } else if (job.status === 'failed') {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+          setJobStatus('failed');
+          setIsGenerating(false);
+          setGenerationError(job.error || 'Virtual try-on synthesis failed.');
+        } else {
+          setGenerationStep('Genlook cloud engine synthesizing draping mesh...');
+        }
+      } catch (err) {
+        console.warn('Polling error:', err);
+      }
+    }, 2500);
+  };
+
+  // Core Execution Function: Synthesize Try-On
+  const executeTryOn = async (photoUrl, photoFilename, targetGarment, mode = 'catalogue') => {
+    if (!photoUrl) {
+      setGenerationError('Please upload your photograph in the BEFORE panel first.');
+      return;
+    }
+
+    if (mode === 'catalogue') {
+      if (!targetGarment) {
+        setGenerationError('Please select a garment from the clothing collection below.');
+        return;
+      }
+
+      if (targetGarment?.garmentType === 'saree' || targetGarment?.tryonCompatibility === 'awaiting_saree_engine') {
+        setGenerationError(
+          'Saree virtual try-on requires a dedicated multi-layer Saree Drape AI Engine (pleats, pallu drape & blouse synthesis). Genlook standard diffusion try-on does not support 6-yard unstitched sarees. Saree AI integration is currently pending.'
+        );
+        return;
+      }
+
+      if (targetGarment?.garmentType === 'accessory' || targetGarment?.tryonCompatibility === 'unsupported') {
+        setGenerationError(
+          'Accessories (belts, shawls, bags) are unsupported by 2D garment diffusion try-on. 3D AR simulation is required.'
+        );
+        return;
+      }
+    } else {
+      if (!customGarmentUrl) {
+        setGenerationError('Please upload your custom outfit image first.');
+        return;
+      }
+    }
+
+    setIsGenerating(true);
+    setJobStatus('generating');
+    setGenerationError(null);
+    setGenerationStep(
+      mode === 'custom'
+        ? 'Uploading garment to AI provider via Genlook multipart...'
+        : 'Synthesizing drape on your silhouette portrait...'
+    );
+
+    try {
+      const payload = mode === 'catalogue'
+        ? {
+            productId: targetGarment?.id,
+            userPhotoUrl: photoUrl,
+            userPhotoFilename: photoFilename,
+            selectedSize,
+            fitPreference,
+            category: targetGarment?.garmentType || 'upper_body'
+          }
+        : {
+            customGarmentUrl,
+            customGarmentFilename,
+            customGarmentName,
+            userPhotoUrl: photoUrl,
+            userPhotoFilename: photoFilename,
+            selectedSize,
+            fitPreference,
+            category: customGarmentCategory
+          };
+
+      const response = await tryOnService.createTryOnJob(payload);
+      const jobId = response.jobId;
+      setCurrentJobId(jobId);
+
+      if (response.status === 'completed' && response.result) {
+        if (response.result.resultImageUrl === photoUrl) {
+          setIsGenerating(false);
+          setJobStatus('failed');
+          setGenerationError('Provider returned unmodified silhouette portrait without applying garment. No credits deducted.');
+          return;
+        }
+
+        setTryOnResult(response.result);
+        setJobStatus('completed');
+        setIsGenerating(false);
+        tryOnService.getProviderInfo().then((p) => setProviderInfo(p)).catch(() => {});
+      } else {
+        setGenerationStep('Genlook cloud engine synthesizing draping mesh...');
+        startPolling(jobId, photoUrl);
+      }
+    } catch (err) {
+      console.error('Generation dispatch error:', err);
+      setIsGenerating(false);
+      setJobStatus('failed');
+      setGenerationError(err.response?.data?.error || err.message || 'Generation dispatch failed.');
+    }
+  };
+
+  // Catalogue Outfit Selection Handler
+  const handleSelectCatalogueProduct = (product) => {
+    setSelectedProduct(product);
+    setGarmentMode('catalogue');
+    setGenerationError(null);
+
+    if (userPhotoUrl) {
+      if (providerInfo && !providerInfo.isMock) {
+        setPendingGeneration({ garment: product, mode: 'catalogue' });
+      } else {
+        executeTryOn(userPhotoUrl, userPhotoFilename, product, 'catalogue');
+      }
+    }
+  };
+
+  // Silhouette File Upload (from computer)
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingPhoto(true);
+    setUploadError(null);
+    setGenerationError(null);
+
+    try {
+      const uploaded = await tryOnService.uploadSilhouette(file);
+      setUserPhotoUrl(uploaded.url);
+      setUserPhotoFilename(uploaded.filename);
+      setUserPhotoSource('upload');
+      setTryOnResult(null);
+      setJobStatus('idle');
+
+      if (selectedProduct && garmentMode === 'catalogue') {
+        if (providerInfo && !providerInfo.isMock) {
+          setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
+        } else {
+          executeTryOn(uploaded.url, uploaded.filename, selectedProduct, 'catalogue');
+        }
+      } else if (customGarmentUrl && garmentMode === 'custom') {
+        if (providerInfo && !providerInfo.isMock) {
+          setPendingGeneration({ garment: null, mode: 'custom' });
+        } else {
+          executeTryOn(uploaded.url, uploaded.filename, null, 'custom');
+        }
+      }
+    } catch (err) {
+      setUploadError(err.response?.data?.error || err.message);
+    } finally {
+      setIsUploadingPhoto(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      if (replaceFileInputRef.current) replaceFileInputRef.current.value = '';
+    }
+  };
+
+  // Laptop Webcam Capture Handler
+  const handleCameraPhoto = async (capturedFile, dataUrl) => {
+    setIsUploadingPhoto(true);
+    setUploadError(null);
+    setGenerationError(null);
+
+    const instantPreview = dataUrl || (capturedFile instanceof Blob ? URL.createObjectURL(capturedFile) : null);
+    if (instantPreview) {
+      setUserPhotoUrl(instantPreview);
+      setUserPhotoSource('camera');
+    }
+
+    try {
+      let uploaded;
+      if (capturedFile instanceof File || capturedFile instanceof Blob) {
+        uploaded = await tryOnService.uploadSilhouette(capturedFile);
+      } else if (typeof dataUrl === 'string' && dataUrl.startsWith('data:')) {
+        uploaded = await tryOnService.uploadCameraSnapshot(dataUrl);
+      } else {
+        throw new Error('No valid captured photo file provided.');
+      }
+
+      setUserPhotoUrl(uploaded.url);
+      setUserPhotoFilename(uploaded.filename);
+      setUserPhotoSource('camera');
+      setTryOnResult(null);
+      setJobStatus('idle');
+
+      if (selectedProduct && garmentMode === 'catalogue') {
+        if (providerInfo && !providerInfo.isMock) {
+          setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
+        } else {
+          executeTryOn(uploaded.url, uploaded.filename, selectedProduct, 'catalogue');
+        }
+      } else if (customGarmentUrl && garmentMode === 'custom') {
+        if (providerInfo && !providerInfo.isMock) {
+          setPendingGeneration({ garment: null, mode: 'custom' });
+        } else {
+          executeTryOn(uploaded.url, uploaded.filename, null, 'custom');
+        }
+      }
+    } catch (err) {
+      setUploadError(err.response?.data?.error || err.message);
+    } finally {
+      setIsUploadingPhoto(false);
+    }
+  };
+
+  // Mobile QR Upload Handler
+  const handleQrPhotoReceived = (photoUrl, photoFilename) => {
+    setUserPhotoUrl(photoUrl);
+    setUserPhotoFilename(photoFilename);
+    setUserPhotoSource('mobile_qr');
+    setTryOnResult(null);
+    setJobStatus('idle');
+    setUploadError(null);
+
+    if (selectedProduct && garmentMode === 'catalogue') {
+      if (providerInfo && !providerInfo.isMock) {
+        setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
+      } else {
+        executeTryOn(photoUrl, photoFilename, selectedProduct, 'catalogue');
+      }
+    } else if (customGarmentUrl && garmentMode === 'custom') {
+      if (providerInfo && !providerInfo.isMock) {
+        setPendingGeneration({ garment: null, mode: 'custom' });
+      } else {
+        executeTryOn(photoUrl, photoFilename, null, 'custom');
+      }
+    }
+  };
+
+  // Remove/Purge Customer Photo Handler
+  const handleRemoveCustomerPhoto = async () => {
+    if (userPhotoFilename) {
+      const confirm = window.confirm('Remove your photo from this fitting session?');
+      if (!confirm) return;
+      await tryOnService.purgeCustomerPhoto(userPhotoFilename).catch(() => {});
+    }
+    setUserPhotoUrl(null);
+    setUserPhotoFilename(null);
+    setUserPhotoSource(null);
+    setTryOnResult(null);
+    setJobStatus('idle');
+    setGenerationError(null);
+  };
+
+  // Custom Garment Upload Handler
+  const handleCustomGarmentUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingGarment(true);
+    setCustomGarmentError(null);
+
+    try {
+      const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+      setCustomGarmentName(cleanName);
+
+      const uploaded = await tryOnService.uploadCustomGarment(file);
+      setCustomGarmentUrl(uploaded.url);
+      setCustomGarmentFilename(uploaded.filename);
+      setGarmentMode('custom');
+
+      if (userPhotoUrl) {
+        if (providerInfo && !providerInfo.isMock) {
+          setPendingGeneration({ garment: null, mode: 'custom' });
+        } else {
+          executeTryOn(userPhotoUrl, userPhotoFilename, null, 'custom');
+        }
+      }
+    } catch (err) {
+      setCustomGarmentError(err.response?.data?.error || err.message);
+    } finally {
+      setIsUploadingGarment(false);
+    }
+  };
+
+  // Download / Save Generated Image Result
+  const handleSaveResult = () => {
+    if (!tryOnResult?.resultImageUrl) return;
+    const link = document.createElement('a');
+    link.href = tryOnResult.resultImageUrl;
+    link.download = `vestra-tryon-${selectedProduct?.slug || 'bespoke'}-${Date.now()}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  // Filter products by category
+  const filteredProducts = allProducts.filter((product) => {
+    if (productCategoryFilter === 'all') return true;
+    if (productCategoryFilter === 'womens') {
+      return product.categorySlug === 'womens-clothing' || product.gender === 'women' || product.categoryId === 2;
+    }
+    if (productCategoryFilter === 'mens') {
+      return product.categorySlug === 'mens-clothing' || product.gender === 'men' || product.categoryId === 3;
+    }
+    if (productCategoryFilter === 'sarees') {
+      return product.categorySlug === 'sarees' || product.garmentType === 'saree' || product.categoryId === 1;
+    }
+    if (productCategoryFilter === 'accessories') {
+      return product.categorySlug === 'accessories' || product.garmentType === 'accessory' || product.categoryId === 4;
+    }
+    return true;
+  });
+
+  // Render generation badge for AFTER panel
+  const renderAfterBadge = () => {
+    if (jobStatus === 'generating') {
+      return (
+        <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 animate-pulse rounded">
+          <RefreshCw className="w-3 h-3 animate-spin text-[#6366F1]" />
+          <span>SYNTHESIZING</span>
+        </span>
+      );
+    }
+
+    if (jobStatus === 'failed') {
+      return (
+        <span className="bg-rose-50 text-rose-700 dark:bg-rose-950/80 dark:text-rose-200 border border-rose-300 dark:border-rose-800 uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 rounded">
+          <AlertCircle className="w-3 h-3 text-rose-500" />
+          <span>GENERATION FAILED</span>
+        </span>
+      );
+    }
+
+    if (jobStatus === 'completed' && tryOnResult?.resultImageUrl) {
+      return (
+        <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border border-[#6366F1] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 shadow-xs rounded">
+          <Sparkles className="w-3 h-3 text-[#6366F1]" />
+          <span>AI GENERATED</span>
+        </span>
+      );
+    }
+
+    return (
+      <span className="bg-[#FAFAFA] dark:bg-[#0F172A] text-slate-500 border border-[#E2E8F0] dark:border-slate-800 uppercase font-mono text-[10px] px-3 py-1 rounded">
+        AWAITING SELECTION
+      </span>
+    );
+  };
+
+  if (isPageLoading) {
+    return (
+      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-8 text-center space-y-4 shadow-vestra-sm animate-fadeIn">
+          <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#6366F1]" />
+          <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#6366F1] font-semibold">VESTRA Studio</p>
+          <h2 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF]">Opening Virtual Fitting Room</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Connecting to clothing inventory and Genlook cloud AI try-on engine...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (initError) {
+    return (
+      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white dark:bg-[#1E293B] border border-rose-200 dark:border-rose-900 p-8 text-center space-y-4">
+          <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
+          <h2 className="font-serif text-xl">Service Interruption</h2>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{initError}</p>
+          <button
+            onClick={init}
+            className="px-6 py-2.5 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-widest font-semibold hover:bg-slate-900 transition-colors"
+          >
+            Retry Connection
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+      <div className="max-w-7xl mx-auto space-y-8">
+
+        {/* Studio Brand Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-6 gap-4">
+          <div>
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 mb-2 rounded shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#6366F1] pulse-camera" />
+              <span className="text-[10px] tracking-[0.2em] uppercase font-mono font-medium text-slate-700 dark:text-slate-300">
+                Official Genlook Virtual Try-On API (v1)
+              </span>
+            </div>
+            <h1 className="font-serif text-3xl sm:text-4xl text-[#000000] dark:text-[#FFFFFF] font-normal">
+              Virtual Fitting Room
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 tracking-wide mt-1">
+              Upload your full-body portrait, browse our archive, and view neural cloth draping.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
+            {providerInfo && (
+              <div className="px-3.5 py-1.5 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 flex items-center space-x-2 text-[11px] rounded shadow-xs">
+                <span className={`w-2 h-2 rounded-full ${providerInfo.available ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                <span className="text-slate-500">Engine:</span>
+                <strong className="text-[#000000] dark:text-[#FFFFFF] uppercase font-mono">{providerInfo.provider}</strong>
+                {providerInfo.isMock ? (
+                  <span className="text-slate-500 font-mono">&bull; Mock Mode (0 Credits)</span>
+                ) : (
+                  <span className="text-emerald-700 dark:text-emerald-400 font-mono font-semibold">
+                    &bull; Genuine AI ({providerInfo.creditBalance !== null && providerInfo.creditBalance !== undefined ? `${providerInfo.creditBalance} Credits` : 'Active'})
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className="text-slate-600 dark:text-slate-300 font-medium flex items-center space-x-1.5">
+              <Shield className="w-3.5 h-3.5 text-[#6366F1]" />
+              <span className="text-[11px]">Private Atelier Cloud</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Global Error Banner */}
+        {generationError && (
+          <div className="p-4 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-xs text-rose-900 dark:text-rose-200 space-y-1 animate-fadeIn">
+            <div className="flex items-start space-x-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold text-rose-950 dark:text-rose-100">Fitting Studio Notice:</p>
+                <p className="mt-0.5 leading-relaxed">{generationError}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================== */}
+        {/* SECTION 1: SIDE-BY-SIDE VIRTUAL FITTING MIRROR (BEFORE / AFTER) */}
+        {/* ============================================================== */}
+        <section className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+            
+            {/* ------------------------------------------------------------ */}
+            {/* LEFT PANEL: BEFORE — Customer Uploaded Photograph            */}
+            {/* ------------------------------------------------------------ */}
+            <div className="flex flex-col space-y-3">
+              
+              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+                <div className="flex items-center space-x-2">
+                  <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded">
+                    BEFORE
+                  </span>
+                  <span className="text-xs font-serif font-medium text-[#000000] dark:text-[#FFFFFF]">
+                    Customer Silhouette
+                  </span>
+                </div>
+
+                {userPhotoUrl && (
+                  <div className="flex items-center space-x-2">
+                    <label
+                      title="Replace photograph"
+                      className="cursor-pointer text-[11px] uppercase font-mono tracking-wider font-semibold text-slate-600 dark:text-slate-300 hover:text-[#000000] dark:hover:text-[#FFFFFF] flex items-center space-x-1 transition-colors"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      <span>Replace Photo</span>
+                      <input
+                        ref={replaceFileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={handleRemoveCustomerPhoto}
+                      title="Remove photograph"
+                      className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* BEFORE Display / Upload Area */}
+              <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
+                
+                {userPhotoUrl ? (
+                  <>
+                    <img
+                      src={userPhotoUrl}
+                      alt="Customer Portrait (Before)"
+                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.01]"
+                    />
+
+                    {/* Source tag & watermark overlay */}
+                    <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur text-white text-[9px] uppercase font-mono tracking-wider px-2.5 py-1 flex items-center space-x-1.5 shadow">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1]" />
+                      <span>
+                        {userPhotoSource === 'camera'
+                          ? 'Webcam Portrait'
+                          : userPhotoSource === 'mobile_qr'
+                            ? 'Mobile QR Portrait'
+                            : 'Uploaded Portrait'}
+                      </span>
+                    </div>
+
+                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity bg-black/75 backdrop-blur text-white text-[9px] uppercase tracking-wider px-2 py-0.5 font-medium">
+                      Original Preserved
+                    </div>
+                  </>
+                ) : (
+                  /* Upload Call to Action */
+                  <div className="p-6 text-center space-y-5 max-w-sm">
+                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                      <Upload className="w-6 h-6 text-[#6366F1]" />
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF] font-medium">
+                        Upload Your Photo
+                      </h3>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        Upload a front-facing full-body portrait to preview any VESTRA creation.
+                      </p>
+                    </div>
+
+                    {isUploadingPhoto ? (
+                      <div className="p-3 bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center space-x-2 text-xs">
+                        <RefreshCw className="w-4 h-4 animate-spin text-[#6366F1]" />
+                        <span className="font-medium text-[#000000] dark:text-[#FFFFFF]">Calibrating photo...</span>
+                      </div>
+                    ) : (
+                      <div className="space-y-2 pt-1">
+                        <label className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold cursor-pointer flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white">
+                          <FileUp className="w-4 h-4 text-[#6366F1]" />
+                          <span>Upload From Computer</span>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            onChange={handleFileUpload}
+                            className="hidden"
+                          />
+                        </label>
+
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setIsCameraModalOpen(true)}
+                            className="py-2 px-2 bg-[#FAFAFA] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
+                          >
+                            <Camera className="w-3.5 h-3.5 text-[#6366F1]" />
+                            <span>Webcam</span>
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => setIsQrModalOpen(true)}
+                            className="py-2 px-2 bg-[#FAFAFA] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
+                          >
+                            <QrCode className="w-3.5 h-3.5 text-[#6366F1]" />
+                            <span>Mobile QR</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {uploadError && (
+                      <p className="text-[11px] text-rose-600 font-medium">{uploadError}</p>
+                    )}
+
+                    <p className="text-[10px] text-slate-400">
+                      JPEG, PNG, or WebP &bull; Biometrically private
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Status footer for Before Panel */}
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span>
+                  {userPhotoUrl ? (
+                    <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center">
+                      <Check className="w-3 h-3 mr-1" /> Customer photo active & ready
+                    </span>
+                  ) : (
+                    'No photo uploaded yet'
+                  )}
+                </span>
+                <span className="font-mono text-[10px] uppercase text-slate-400">Step A</span>
+              </div>
+
+            </div>
+
+
+            {/* ------------------------------------------------------------ */}
+            {/* RIGHT PANEL: AFTER — AI Virtual Try-On Result               */}
+            {/* ------------------------------------------------------------ */}
+            <div className="flex flex-col space-y-3">
+              
+              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+                <div className="flex items-center space-x-2">
+                  <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded">
+                    AFTER
+                  </span>
+                  <span className="text-xs font-serif font-medium text-[#000000] dark:text-[#FFFFFF]">
+                    AI Virtual Draping
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  {renderAfterBadge()}
+
+                  {tryOnResult?.resultImageUrl && (
+                    <button
+                      type="button"
+                      onClick={handleSaveResult}
+                      className="px-3 py-1 bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase font-mono font-medium hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1.5 transition-colors"
+                      title="Save generated try-on dossier image"
+                    >
+                      <Download className="w-3 h-3 text-[#6366F1]" />
+                      <span>Save Result</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* AFTER Display Area */}
+              <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
+                
+                {isGenerating ? (
+                  /* Generating Synthesis Overlay */
+                  <div className="p-8 text-center space-y-5 max-w-sm z-20">
+                    <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full border-2 border-[#6366F1] border-t-transparent animate-spin" />
+                      <Sparkles className="w-6 h-6 text-[#6366F1] absolute" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF] font-medium">
+                        Synthesizing Neural Drape
+                      </h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                        {generationStep || 'Genlook cloud AI calculating fabric mesh...'}
+                      </p>
+                    </div>
+                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                      Target: <strong className="text-[#000000] dark:text-[#FFFFFF]">
+                        {garmentMode === 'custom' ? customGarmentName : selectedProduct?.name}
+                      </strong>
+                    </div>
+                  </div>
+                ) : tryOnResult?.resultImageUrl ? (
+                  /* Completed Genuine AI Result Display */
+                  <>
+                    <img
+                      src={tryOnResult.resultImageUrl}
+                      alt="Virtual Try-On Output (After)"
+                      className="w-full h-full object-cover object-top"
+                    />
+
+                    {/* Attribution Badge (Required by Genlook AI) */}
+                    <div className="absolute bottom-3 right-3 bg-black/90 backdrop-blur text-white text-[10px] tracking-widest uppercase px-3 py-1 font-semibold flex items-center space-x-1.5 shadow-md z-10 border border-white/10">
+                      <span className="bg-[#6366F1]/20 text-indigo-300 border border-[#6366F1]/40 text-[9px] px-2 py-0.5 rounded font-mono font-bold">
+                        AI GENERATED
+                      </span>
+                      <span>Genlook AI Try-On</span>
+                    </div>
+
+                    {/* Target Garment Tag */}
+                    <div className="absolute bottom-3 left-3 bg-black/85 backdrop-blur text-white text-[9px] uppercase font-mono tracking-wider px-2.5 py-1 z-10 max-w-[60%] truncate shadow-sm">
+                      {garmentMode === 'custom' ? customGarmentName : selectedProduct?.name} &bull; Size {selectedSize}
+                    </div>
+                  </>
+                ) : jobStatus === 'failed' ? (
+                  /* Dedicated Failure Panel (No Mock Fabrications) */
+                  <div className="p-6 text-center space-y-4 max-w-sm">
+                    <div className="w-14 h-14 mx-auto rounded-full bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-900 flex items-center justify-center text-rose-600">
+                      <AlertCircle className="w-6 h-6" />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF] font-medium">Virtual Try-On Interrupted</h3>
+                      <p className="text-[11px] text-rose-700 dark:text-rose-300 leading-relaxed font-sans">
+                        {generationError || 'Genlook AI could not complete this garment synthesis.'}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2 pt-2">
+                      {userPhotoUrl && (selectedProduct || customGarmentUrl) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (providerInfo && !providerInfo.isMock) {
+                              setPendingGeneration({ garment: selectedProduct, mode: garmentMode });
+                            } else {
+                              executeTryOn(userPhotoUrl, userPhotoFilename, selectedProduct, garmentMode);
+                            }
+                          }}
+                          className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white"
+                        >
+                          <RefreshCw className="w-3.5 h-3.5 text-[#6366F1]" />
+                          <span>Retry Generation</span>
+                        </button>
+                      )}
+                      <p className="text-[10px] text-slate-400">
+                        No credits are deducted for failed or rejected generations.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Idle State: Instructions */
+                  <div className="p-6 text-center space-y-4 max-w-sm">
+                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                      <Sparkles className="w-6 h-6 text-[#6366F1]" />
+                    </div>
+
+                    <div className="space-y-1">
+                      <h3 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF] font-medium">
+                        {userPhotoUrl ? 'Select an Outfit Below' : 'Upload Photo to Begin'}
+                      </h3>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                        {userPhotoUrl
+                          ? 'Click any garment from our clothing collection below to preview it on your photo.'
+                          : 'Provide your full-body portrait on the left, then select any garment from the collection to see the try-on.'}
+                      </p>
+                    </div>
+
+                    {userPhotoUrl && (selectedProduct || (garmentMode === 'custom' && customGarmentUrl)) && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (providerInfo && !providerInfo.isMock) {
+                            setPendingGeneration({ garment: selectedProduct, mode: garmentMode });
+                          } else {
+                            executeTryOn(userPhotoUrl, userPhotoFilename, selectedProduct, garmentMode);
+                          }
+                        }}
+                        className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+                        <span>
+                          Try On {((garmentMode === 'custom' ? customGarmentName : selectedProduct?.name) || 'Outfit').toString().split(' ')[0]} Now
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                )}
+
+              </div>
+
+              {/* Status footer for After Panel */}
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+                <span>
+                  {tryOnResult ? (
+                    <span className="text-emerald-700 dark:text-emerald-400 font-medium flex items-center">
+                      <CheckCircle2 className="w-3 h-3 mr-1" /> Try-On dossier generated
+                    </span>
+                  ) : isGenerating ? (
+                    'Synthesizing draping...'
+                  ) : (
+                    'Ready for outfit selection'
+                  )}
+                </span>
+                <span className="font-mono text-[10px] uppercase text-slate-400">Step B</span>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        {/* ============================================================== */}
+        {/* SECTION 2: CLOTHING COLLECTION (PostgreSQL Catalogue)         */}
+        {/* ============================================================== */}
+        <section className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+          
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-4 gap-4">
+            <div>
+              <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#6366F1] font-semibold">
+                Garment Catalogue
+              </p>
+              <h3 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF] font-normal">
+                Select an Outfit from Our Archive
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Click any item to immediately preview it on your uploaded portrait.
+              </p>
+            </div>
+
+            {/* Custom Bespoke Upload Action */}
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={() => setIsCustomGarmentDrawerOpen(!isCustomGarmentDrawerOpen)}
+                className={`px-3 py-1.5 text-xs uppercase tracking-wider font-semibold border transition-all flex items-center space-x-1.5 rounded ${
+                  isCustomGarmentDrawerOpen || garmentMode === 'custom'
+                    ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white'
+                    : 'bg-[#FAFAFA] dark:bg-slate-900 border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                <Upload className="w-3.5 h-3.5 text-[#6366F1]" />
+                <span>Upload Custom Outfit</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Custom Outfit Drawer */}
+          {isCustomGarmentDrawerOpen && (
+            <div className="p-5 bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 space-y-4 animate-fadeIn">
+              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+                <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-[#000000] dark:text-[#FFFFFF]">
+                  Upload Bespoke Customer Outfit (Multipart fileKey)
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setIsCustomGarmentDrawerOpen(false)}
+                  className="text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF]"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                <div className="sm:col-span-2 space-y-2">
+                  <p className="text-xs text-slate-600 dark:text-slate-400">
+                    Upload a shirt, jacket, dress, or trousers from your wardrobe. Transferred securely via Genlook multipart upload.
+                  </p>
+                  
+                  <div className="flex items-center space-x-3">
+                    <label className="px-4 py-2 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold cursor-pointer inline-flex items-center space-x-2 border border-black dark:border-white">
+                      <Upload className="w-3.5 h-3.5 text-[#6366F1]" />
+                      <span>{customGarmentUrl ? 'Change Custom Garment' : 'Select Outfit Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleCustomGarmentUpload}
+                        className="hidden"
+                      />
+                    </label>
+
+                    {customGarmentUrl && (
+                      <span className="text-xs font-serif text-[#000000] dark:text-[#FFFFFF] font-medium truncate">
+                        {customGarmentName}
+                      </span>
+                    )}
+                  </div>
+
+                  {customGarmentError && (
+                    <p className="text-xs text-rose-600 font-medium">{customGarmentError}</p>
+                  )}
+                </div>
+
+                {customGarmentUrl && (
+                  <div className="flex justify-center sm:justify-end">
+                    <div className="w-20 h-24 bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 overflow-hidden shadow">
+                      <img src={customGarmentUrl} alt="Custom Garment" className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Category Filter Pills & Sizing Toolbar */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2">
+            
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {[
+                { id: 'all', label: 'All Garments' },
+                { id: 'womens', label: "Women's Clothing" },
+                { id: 'mens', label: "Men's Clothing" },
+                { id: 'sarees', label: 'Sarees' },
+                { id: 'accessories', label: 'Accessories' }
+              ].map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => setProductCategoryFilter(cat.id)}
+                  className={`px-3 py-1.5 text-[11px] uppercase font-mono tracking-wider font-semibold border transition-all rounded ${
+                    productCategoryFilter === cat.id
+                      ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white shadow-xs'
+                      : 'bg-[#FAFAFA] dark:bg-slate-900 border-[#E2E8F0] dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF]'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Garment Customization (Size & Fit) */}
+            {selectedProduct && (
+              <div className="flex flex-wrap items-center gap-3 p-2 bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 text-xs rounded">
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#6366F1] font-semibold">
+                  Fit Settings:
+                </span>
+
+                <div className="flex items-center space-x-1">
+                  {['XS', 'S', 'M', 'L', 'XL'].map((size) => (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => {
+                        setSelectedSize(size);
+                        if (userPhotoUrl && selectedProduct) {
+                          executeTryOn(userPhotoUrl, userPhotoFilename, selectedProduct, garmentMode);
+                        }
+                      }}
+                      className={`w-7 h-7 text-[10px] font-mono font-bold uppercase transition-all rounded ${
+                        selectedSize === size
+                          ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
+                          : 'bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center space-x-1 pl-2 border-l border-[#E2E8F0] dark:border-slate-800">
+                  {['tailored', 'relaxed'].map((fit) => (
+                    <button
+                      key={fit}
+                      type="button"
+                      onClick={() => {
+                        setFitPreference(fit);
+                        if (userPhotoUrl && selectedProduct) {
+                          executeTryOn(userPhotoUrl, userPhotoFilename, selectedProduct, garmentMode);
+                        }
+                      }}
+                      className={`px-2 py-1 text-[10px] uppercase font-mono font-semibold transition-all rounded ${
+                        fitPreference === fit
+                          ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
+                          : 'bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                      }`}
+                    >
+                      {fit}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+          </div>
+
+          {/* Product Cards Grid from PostgreSQL */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+            {filteredProducts.map((product) => {
+              const isSelected = selectedProduct?.id === product.id && garmentMode === 'catalogue';
+              const priceDisplay = product.price
+                ? new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: product.currency || 'USD',
+                    maximumFractionDigits: 0
+                  }).format(product.price)
+                : '';
+
+              return (
+                <div
+                  key={product.id}
+                  onClick={() => handleSelectCatalogueProduct(product)}
+                  className={`group cursor-pointer bg-white dark:bg-[#1E293B] border transition-all duration-200 flex flex-col justify-between overflow-hidden relative ${
+                    isSelected
+                      ? 'border-[#000000] ring-2 ring-[#000000] dark:border-[#FFFFFF] dark:ring-[#FFFFFF] shadow-md'
+                      : 'border-[#E2E8F0] dark:border-slate-800 hover:border-[#000000] dark:hover:border-[#FFFFFF]'
+                  }`}
+                >
+                  <div>
+                    {/* Product Image Frame */}
+                    <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 overflow-hidden border-b border-[#E2E8F0] dark:border-slate-800">
+                      <img
+                        src={product.primaryImage || product.tryonImage || ATELIER_FALLBACK_IMAGE}
+                        alt={product.name}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = ATELIER_FALLBACK_IMAGE;
+                        }}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+
+                      {/* Status Badges */}
+                      <div className="absolute top-2 left-2 z-10">
+                        <ProductStatusBadge product={product} size="xs" />
+                      </div>
+
+                      {/* Currently Selected Indicator */}
+                      {isSelected && (
+                        <div className="absolute top-2 right-2 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 shadow z-10 flex items-center space-x-1">
+                          <Check className="w-2.5 h-2.5 text-[#6366F1]" />
+                          <span>SELECTED</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Product Details */}
+                    <div className="p-3.5 space-y-1">
+                      <div className="flex items-center justify-between text-[9px] uppercase tracking-wider text-slate-500 font-mono">
+                        <span className="truncate">{product.categoryName || product.categorySlug || 'Couture'}</span>
+                        <span>{product.gender || ''}</span>
+                      </div>
+
+                      <h4 className="font-serif text-xs sm:text-sm font-medium text-[#000000] dark:text-[#FFFFFF] line-clamp-1 group-hover:text-[#6366F1] transition-colors">
+                        {product.name}
+                      </h4>
+
+                      <div className="flex items-center justify-between pt-1">
+                        <span className="text-xs font-mono font-bold text-[#000000] dark:text-[#FFFFFF]">
+                          {priceDisplay}
+                        </span>
+                        <span className="text-[9px] uppercase text-slate-400 font-mono">
+                          {product.garmentType?.replace('_', ' ') || 'Upper body'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Select Outfit Action Button */}
+                  <div className="p-3 pt-0">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectCatalogueProduct(product);
+                      }}
+                      className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded ${
+                        isSelected
+                          ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
+                          : 'bg-[#FAFAFA] dark:bg-slate-900 hover:bg-[#000000] hover:text-[#FFFFFF] dark:hover:bg-[#FFFFFF] dark:hover:text-[#000000] text-[#000000] dark:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-700'
+                      }`}
+                    >
+                      {isSelected ? (
+                        <>
+                          <Check className="w-3 h-3 text-[#6366F1]" />
+                          <span>Outfit Selected</span>
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3 h-3 text-[#6366F1]" />
+                          <span>Select & Try On</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {filteredProducts.length === 0 && (
+            <div className="p-12 text-center text-slate-500 space-y-2">
+              <p className="font-serif text-base">No garments found in this category.</p>
+              <button
+                type="button"
+                onClick={() => setProductCategoryFilter('all')}
+                className="text-xs uppercase tracking-wider font-semibold underline text-[#000000] dark:text-[#FFFFFF]"
+              >
+                View all garments
+              </button>
+            </div>
+          )}
+
+        </section>
+
+      </div>
+
+      {/* Laptop Webcam Capture Modal */}
+      <CameraModal
+        isOpen={isCameraModalOpen}
+        onClose={() => setIsCameraModalOpen(false)}
+        onPhotoCaptured={handleCameraPhoto}
+      />
+
+      {/* Mobile QR Upload Modal */}
+      <QrModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        onPhotoReceived={handleQrPhotoReceived}
+      />
+
+      {/* Live AI Try-On Credit Confirmation Modal */}
+      {pendingGeneration && (
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-[#FAFAFA] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-slate-800 max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+            <div className="flex items-start justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-3">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <Sparkles className="w-4 h-4 text-[#6366F1]" />
+                  <h3 className="font-serif text-lg font-semibold text-[#000000] dark:text-[#FFFFFF]">Confirm AI Virtual Try-On</h3>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Genlook cloud AI engine will synthesize this outfit onto your portrait.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPendingGeneration(null)}
+                className="text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF] transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Outfit & Photo Summary */}
+            <div className="grid grid-cols-2 gap-3 p-3 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800">
+              <div className="space-y-1">
+                <span className="text-[10px] uppercase font-mono text-[#6366F1] block">Your Portrait</span>
+                <div className="w-16 h-20 bg-slate-100 dark:bg-slate-800 overflow-hidden border border-[#E2E8F0] dark:border-slate-700">
+                  <img src={userPhotoUrl} alt="Portrait" className="w-full h-full object-cover" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] uppercase font-mono text-[#6366F1] block">Selected Outfit</span>
+                <p className="text-xs font-serif font-medium text-[#000000] dark:text-[#FFFFFF] line-clamp-1">
+                  {pendingGeneration.mode === 'custom' ? customGarmentName : pendingGeneration.garment?.name}
+                </p>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 block">Size {selectedSize} &bull; {fitPreference} fit</span>
+                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-mono block">1 Garment Only</span>
+              </div>
+            </div>
+
+            {/* Credit & Pricing Breakdown */}
+            <div className="p-3 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 space-y-2 text-xs">
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500">Generation Cost:</span>
+                <span className="font-mono font-bold text-[#000000] dark:text-[#FFFFFF]">1 Genlook Credit</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500">Resolution:</span>
+                <span className="font-mono text-[#000000] dark:text-[#FFFFFF]">Standard (1200px)</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-[#E2E8F0] dark:border-slate-800">
+                <span className="text-slate-500">Available Balance:</span>
+                <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                  {providerInfo?.creditBalance !== null && providerInfo?.creditBalance !== undefined
+                    ? `${providerInfo.creditBalance} Credits`
+                    : '10 Credits'}
+                </span>
+              </div>
+            </div>
+
+            {/* Safety Policy Notice */}
+            <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center space-x-1.5">
+              <Shield className="w-3.5 h-3.5 text-[#6366F1] flex-shrink-0" />
+              <span>Standard resolution &bull; No automatic retries &bull; Zero credit wastage</span>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center space-x-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setPendingGeneration(null)}
+                className="flex-1 py-2.5 px-4 border border-[#E2E8F0] dark:border-slate-700 text-xs uppercase font-mono tracking-wider font-semibold text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={providerInfo?.creditBalance !== null && providerInfo?.creditBalance < 1}
+                onClick={() => {
+                  const { garment, mode } = pendingGeneration;
+                  setPendingGeneration(null);
+                  executeTryOn(userPhotoUrl, userPhotoFilename, garment, mode);
+                }}
+                className="flex-1 py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 shadow-md border border-black dark:border-white"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+                <span>Confirm & Generate</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}

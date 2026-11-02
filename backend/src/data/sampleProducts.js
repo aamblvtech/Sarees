@@ -1,0 +1,667 @@
+/**
+ * VESTRA Premium Fashion Technology
+ * Haute Couture & Ready-to-Wear Catalog Taxonomy
+ * 
+ * Supports:
+ * - Sarees (Handloom, Kanjivaram, Banarasi, Chanderi)
+ * - Women's Clothing (Gowns, Dresses, Kurtis, Salwar Suits, Blazers, Trousers, Jeans, Jackets)
+ * - Men's Clothing (Blazers, Shirts, T-Shirts, Kurtas, Trousers, Jeans, Jackets)
+ * - Accessories (Belts, Shawls / Stoles)
+ */
+
+export const sampleCategories = [
+  {
+    id: 1,
+    name: 'Sarees',
+    slug: 'sarees',
+    description: 'Heritage six-yard handlooms, pure mulberry Kanjivaram silk, antique Banarasi zari, and royal Chanderi weaves.',
+    imageUrl: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 2,
+    name: "Women's Clothing",
+    slug: 'womens-clothing',
+    description: 'Architectural evening gowns, fluid silk dresses, embroidered royal kurtis, bespoke blazers, and tailored trousers.',
+    imageUrl: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 3,
+    name: "Men's Clothing",
+    slug: 'mens-clothing',
+    description: 'Precision Italian wool tailoring, hand-spun linen shirts, heritage silk kurtas, selvedge denim, and outerwear.',
+    imageUrl: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 4,
+    name: 'Accessories',
+    slug: 'accessories',
+    description: 'Handcrafted full-grain leather belts, artisanal pashmina shawls, and bespoke accents designed to complement every silhouette.',
+    imageUrl: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85'
+  }
+];
+
+export const sampleProducts = [
+  // ==========================================
+  // 1. SAREES
+  // ==========================================
+  {
+    id: 1,
+    sku: 'VES-SAR-001',
+    name: 'Kanjivaram Pure Mulberry Silk Saree',
+    slug: 'kanjivaram-pure-mulberry-silk-saree',
+    categoryId: 1,
+    categoryName: 'Sarees',
+    subcategory: 'sarees',
+    gender: 'women',
+    garmentType: 'saree',
+    tryonCompatibility: 'awaiting_saree_engine',
+    stockStatus: 'in_stock',
+    price: 1850,
+    originalPrice: 2200,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: true,
+    isActive: true,
+    description: 'Handwoven in Kanchipuram from pure 3-ply mulberry silk interlocked with 24k gold electroplated silver zari. Features traditional temple borders and a densely woven peacock motif pallu.',
+    material: '100% Pure Mulberry Silk with Certified Silk Mark; 24k Gilt Zari',
+    fit: 'Classic 6-yard unstitched length (5.5m saree + 0.8m unstitched matching blouse piece).',
+    careInstructions: 'Specialist dry clean only. Store wrapped in pure unbleached muslin cloth.',
+    sizes: ['Free Size (6 Yards)'],
+    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 2,
+    sku: 'VES-SAR-002',
+    name: 'Banarasi Antique Zari Handloom Saree',
+    slug: 'banarasi-antique-zari-handloom-saree',
+    categoryId: 1,
+    categoryName: 'Sarees',
+    subcategory: 'sarees',
+    gender: 'women',
+    garmentType: 'saree',
+    tryonCompatibility: 'awaiting_saree_engine',
+    stockStatus: 'in_stock',
+    price: 2150,
+    originalPrice: 2500,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: true,
+    isActive: true,
+    description: 'An heirloom masterwork woven over 220 hours in Varanasi. Features intricate Kadwa jaal floral vine brocade on deep royal crimson katan silk with a sumptuous antique gold pallu.',
+    material: '100% Handloom Katan Silk; Antique Metallic Zari',
+    fit: 'Traditional 6-yard drape with matching unstitched blouse fabric.',
+    careInstructions: 'Specialist dry clean only. Air in shade periodically.',
+    sizes: ['Free Size (6 Yards)'],
+    primaryImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 3,
+    sku: 'VES-SAR-003',
+    name: 'Chanderi Tissue Floral Jamdani Saree',
+    slug: 'chanderi-tissue-floral-jamdani-saree',
+    categoryId: 1,
+    categoryName: 'Sarees',
+    subcategory: 'sarees',
+    gender: 'women',
+    garmentType: 'saree',
+    tryonCompatibility: 'awaiting_saree_engine',
+    stockStatus: 'low_stock',
+    price: 1350,
+    originalPrice: 1550,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'Feather-light Chanderi tissue silk interwoven with gold and silver zari gossamer threads. Features hand-picked Jamdani botanical butis with a shimmering turquoise and champagne border.',
+    material: '70% Chanderi Silk, 30% Metallic Zari Thread',
+    fit: 'Fluid gossamer drape; drapes gracefully with crisp pleated folds.',
+    careInstructions: 'Specialist dry clean only. Do not spray perfume directly on zari.',
+    sizes: ['Free Size (6 Yards)'],
+    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+  },
+
+  // ==========================================
+  // 2. WOMEN'S CLOTHING
+  // ==========================================
+  {
+    id: 4,
+    sku: 'VES-WOM-001',
+    name: 'The Obsidian Sculptural Velvet Gown',
+    slug: 'the-obsidian-sculptural-velvet-gown',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'gowns',
+    gender: 'women',
+    garmentType: 'full_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1850,
+    originalPrice: 2200,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: true,
+    isActive: true,
+    description: 'An architectural evening gown in deep midnight mulberry velvet. Sculpted with an off-shoulder neckline, boned internal corset bodice, and dramatic floor-sweeping column skirt.',
+    material: '100% Silk-Blend Italian Velvet; Silk Charmeuse Lining',
+    fit: 'Precision tailored column silhouette with structured internal waist stay.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['XS', 'S', 'M', 'L'],
+    primaryImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 5,
+    sku: 'VES-WOM-002',
+    name: 'Champagne Bias-Cut Silk Charmeuse Dress',
+    slug: 'champagne-bias-cut-silk-charmeuse-dress',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'dresses',
+    gender: 'women',
+    garmentType: 'full_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1280,
+    originalPrice: 1450,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: true,
+    isActive: true,
+    description: 'Cut on the true 45-degree grain from 22-momme pure mulberry silk charmeuse. Accentuates the natural feminine contour with a cowl neckline and low-plunging back with delicate tie cords.',
+    material: '100% Mulberry Silk Charmeuse (22 momme)',
+    fit: 'Fluid bias-cut drape that skims effortlessly over hips and thighs.',
+    careInstructions: 'Dry clean only or delicate hand wash with silk detergent.',
+    sizes: ['XS', 'S', 'M', 'L'],
+    primaryImage: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 6,
+    sku: 'VES-WOM-003',
+    name: 'Hand-Embroidered Raw Silk Anarkali Kurti',
+    slug: 'hand-embroidered-raw-silk-anarkali-kurti',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'kurtis',
+    gender: 'women',
+    garmentType: 'full_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1100,
+    originalPrice: 1300,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: true,
+    isActive: true,
+    description: 'A sovereign celebratory silhouette in mint seafoam raw silk. Adorned with delicate Resham embroidery, micro-pearls, and French knot accents with high side slits and a flared skirt.',
+    material: '100% Handwoven Raw Bhagalpuri Silk; Cotton Mulmul Lining',
+    fit: 'Fitted empire waistline flowing into a 24-kali flared hemline.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['S', 'M', 'L', 'XL'],
+    primaryImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 7,
+    sku: 'VES-WOM-004',
+    name: 'Chanderi Embroidered Festive Salwar Suit Set',
+    slug: 'chanderi-embroidered-festive-salwar-suit-set',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'salwar_suits',
+    gender: 'women',
+    garmentType: 'full_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 950,
+    originalPrice: 1150,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'A 3-piece festive ensemble featuring a straight-cut Chanderi silk kurta with gota-patti detailing, tailored cigarette salwar pants, and an organza dupatta.',
+    material: 'Chanderi Silk Kurta, Pure Cotton Silk Trousers, Silk Organza Dupatta',
+    fit: 'Straight structured silhouette with side slits.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['S', 'M', 'L', 'XL'],
+    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 8,
+    sku: 'VES-WOM-005',
+    name: 'Ivory Double-Breasted Cashmere Blazer',
+    slug: 'ivory-double-breasted-cashmere-blazer',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'blazers',
+    gender: 'women',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1420,
+    originalPrice: 1650,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: false,
+    isActive: true,
+    description: 'An immaculate tailored jacket woven from virgin Mongolian cashmere in pristine ivory. Features peak lapels, genuine mother-of-pearl buttons, and a tapered waist.',
+    material: '90% Mongolian Cashmere, 10% Mulberry Silk; Silk Cupro Lining',
+    fit: 'Slightly relaxed boyfriend tailoring with sculptured shoulder line.',
+    careInstructions: 'Dry clean only with specialist care.',
+    sizes: ['XS', 'S', 'M', 'L'],
+    primaryImage: 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 9,
+    sku: 'VES-WOM-006',
+    name: 'High-Waisted Silk Crepe Pleated Trousers',
+    slug: 'high-waisted-silk-crepe-pleated-trousers',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'trousers',
+    gender: 'women',
+    garmentType: 'lower_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 780,
+    originalPrice: 920,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'Impeccably tailored trousers rendered in heavy silk crepe de chine. Features deep forward double pleats, clean slash pockets, and an elongated wide leg silhouette.',
+    material: '100% Heavyweight Silk Crepe de Chine',
+    fit: 'High rise, wide leg with gentle drape from hip to floor.',
+    careInstructions: 'Dry clean only.',
+    sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    primaryImage: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 10,
+    sku: 'VES-WOM-007',
+    name: 'Raw Indigo Straight-Leg Tailored Jeans',
+    slug: 'raw-indigo-straight-leg-tailored-jeans',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'jeans',
+    gender: 'women',
+    garmentType: 'lower_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 520,
+    originalPrice: 600,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'Unwashed 13.5oz shuttle-loom Japanese selvedge denim dyed with natural organic indigo. High-rise waist with tailored straight leg and custom copper rivet hardware.',
+    material: '100% Kuroki Mills Japanese Selvedge Cotton Denim',
+    fit: 'High-waisted, straight leg contour with crisp creased drape.',
+    careInstructions: 'Wash inside out in cold water after extensive wear. Hang dry.',
+    sizes: ['24', '25', '26', '27', '28', '29', '30'],
+    primaryImage: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 11,
+    sku: 'VES-WOM-008',
+    name: 'Minimalist Structured Cocoon Wool Jacket',
+    slug: 'minimalist-structured-cocoon-wool-jacket',
+    categoryId: 2,
+    categoryName: "Women's Clothing",
+    subcategory: 'jackets',
+    gender: 'women',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1350,
+    originalPrice: 1550,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'An avant-garde outerwear statement woven from double-faced Australian virgin wool. Features clean hidden magnetic closures, dropped curved shoulders, and a sculpted funnel collar.',
+    material: '100% Double-Faced Australian Merino Wool',
+    fit: 'Oversized cocoon architecture designed for layered draping.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['S', 'M', 'L'],
+    primaryImage: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=1200&q=85'
+  },
+
+  // ==========================================
+  // 3. MEN'S CLOTHING
+  // ==========================================
+  {
+    id: 12,
+    sku: 'VES-MEN-001',
+    name: 'Structured Italian Virgin Wool Blazer',
+    slug: 'structured-italian-virgin-wool-blazer',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'blazers',
+    gender: 'men',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 1650,
+    originalPrice: 1950,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: true,
+    isActive: true,
+    description: 'An enduring evening signature tailored from Super 150s worsted wool from Biella, Italy. Features sculpted roped shoulders, half-canvas chest construction, and real horn buttons.',
+    material: '100% Italian Super 150s Worsted Wool; Bemberg Cupro Lining',
+    fit: 'Sharp Savile Row silhouette with dual back vents.',
+    careInstructions: 'Specialist dry clean only. Steam with distilled water.',
+    sizes: ['38R', '40R', '42R', '44R'],
+    primaryImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 13,
+    sku: 'VES-MEN-002',
+    name: 'Handloom Normandy Linen Button-Down Shirt',
+    slug: 'handloom-normandy-linen-button-down-shirt',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'shirts',
+    gender: 'men',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 450,
+    originalPrice: 520,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: false,
+    isActive: true,
+    description: 'Spun from long-staple French flax cultivated in Normandy. Pre-washed for a supple hand with genuine Australian mother-of-pearl buttons and single-needle tailoring.',
+    material: '100% Pure Certified Normandy Long-Staple Linen',
+    fit: 'Modern tailored fit with gentle chest ease and curved hem.',
+    careInstructions: 'Machine wash delicate at 30°C. Line dry in shade.',
+    sizes: ['S', 'M', 'L', 'XL'],
+    primaryImage: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 14,
+    sku: 'VES-MEN-003',
+    name: 'Supima Heavyweight Minimalist T-Shirt',
+    slug: 'supima-heavyweight-minimalist-t-shirt',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 't-shirts',
+    gender: 'men',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 180,
+    originalPrice: 220,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: false,
+    isActive: true,
+    description: 'An elevated daily staple cut from 280 GSM long-staple American Supima cotton jersey. Features a reinforced binded collar that never sags and blind-stitched cuffs.',
+    material: '100% Certified American Extra-Long Staple Supima Cotton',
+    fit: 'Architectural boxy cut with dropped shoulders.',
+    careInstructions: 'Machine wash cold with like colors. Tumble dry low.',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    primaryImage: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 15,
+    sku: 'VES-MEN-004',
+    name: 'Tussar Raw Silk Festive Bandhgala Kurta',
+    slug: 'tussar-raw-silk-festive-bandhgala-kurta',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'kurtas',
+    gender: 'men',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 890,
+    originalPrice: 1050,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: true,
+    isActive: true,
+    description: 'A sovereign celebratory silhouette handcrafted from hand-reeled wild Tussar silk in a rich golden honey hue. Features a structured mandarin collar and antique brass metal buttons.',
+    material: '100% Handloom Tussar Silk; Fine Cotton Voile Lining',
+    fit: 'Tailored knee-length cut with structured shoulders and deep side vents.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['38', '40', '42', '44', '46'],
+    primaryImage: 'https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 16,
+    sku: 'VES-MEN-005',
+    name: 'Tailored Pleated Flannel Wool Trousers',
+    slug: 'tailored-pleated-flannel-wool-trousers',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'trousers',
+    gender: 'men',
+    garmentType: 'lower_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 740,
+    originalPrice: 880,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'Rendered in 340 GSM Vitale Barberis Canonico melange flannel in charcoal grey. Double forward pleats, extended tab waistband with side adjusters, and 2-inch turn-up cuffs.',
+    material: '100% Italian Wool Flannel by Vitale Barberis Canonico',
+    fit: 'Mid-to-high rise with gentle taper from knee to hem.',
+    careInstructions: 'Specialist dry clean only.',
+    sizes: ['30', '32', '34', '36', '38'],
+    primaryImage: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 17,
+    sku: 'VES-MEN-006',
+    name: 'Selvedge Japanese Denim Slim Taper Jeans',
+    slug: 'selvedge-japanese-denim-slim-taper-jeans',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'jeans',
+    gender: 'men',
+    garmentType: 'lower_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'in_stock',
+    price: 540,
+    originalPrice: 620,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: false,
+    isActive: true,
+    description: 'Woven on vintage Toyoda G9 shuttle looms using long-staple Zimbabwe cotton. 14.5oz unsanforized right-hand twill with red-line selvedge ID and chain-stitched hem.',
+    material: '100% Zimbabwe Cotton Japanese Selvedge Denim',
+    fit: 'Medium rise with comfortable thigh room tapering cleanly to the ankle.',
+    careInstructions: 'Soak in cold water inside out. Hang dry away from direct sunlight.',
+    sizes: ['30', '31', '32', '33', '34', '36'],
+    primaryImage: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 18,
+    sku: 'VES-MEN-007',
+    name: 'Shearling Collar Lambskin Suede Jacket',
+    slug: 'shearling-collar-lambskin-suede-jacket',
+    categoryId: 3,
+    categoryName: "Men's Clothing",
+    subcategory: 'jackets',
+    gender: 'men',
+    garmentType: 'upper_body',
+    tryonCompatibility: 'supported',
+    stockStatus: 'low_stock',
+    price: 2450,
+    originalPrice: 2800,
+    currency: 'USD',
+    isSample: false,
+    isFeatured: true,
+    isActive: true,
+    description: 'Luxurious bomber jacket tailored from supple Spanish lambskin suede in rich cognac brown. Fitted with a detachable plush Merino shearling collar and heavy Swiss RiRi two-way zips.',
+    material: '100% Spanish Lambskin Suede; Collar: 100% Merino Shearling',
+    fit: 'Classic flight jacket silhouette with ribbed wool hem and cuffs.',
+    careInstructions: 'Specialist leather & suede clean only.',
+    sizes: ['S', 'M', 'L', 'XL'],
+    primaryImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=1200&q=85'
+  },
+
+  // ==========================================
+  // 4. ACCESSORIES
+  // ==========================================
+  {
+    id: 19,
+    sku: 'VES-ACC-001',
+    name: 'Handcrafted Full-Grain Calfskin Belt',
+    slug: 'handcrafted-full-grain-calfskin-belt',
+    categoryId: 4,
+    categoryName: 'Accessories',
+    subcategory: 'belts',
+    gender: 'unisex',
+    garmentType: 'accessory',
+    tryonCompatibility: 'unsupported',
+    stockStatus: 'in_stock',
+    price: 360,
+    originalPrice: 420,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: false,
+    isActive: true,
+    description: 'Hand-burnished Italian vegetable-tanned calfskin leather in saddle cognac. Finished with solid brushed palladium hardware, beveled edges, and hand-waxed linen saddle stitching.',
+    material: '100% Tuscan Full-Grain Vegetable-Tanned Calfskin; Solid Brass/Palladium Buckle',
+    fit: '35mm width; 5-hole adjustment range.',
+    careInstructions: 'Treat periodically with natural beeswax leather balm.',
+    sizes: ['85cm', '90cm', '95cm', '100cm', '105cm'],
+    primaryImage: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85'
+  },
+  {
+    id: 20,
+    sku: 'VES-ACC-002',
+    name: 'Pure Hand-Spun Cashmere Pashmina Stole',
+    slug: 'pure-hand-spun-cashmere-pashmina-stole',
+    categoryId: 4,
+    categoryName: 'Accessories',
+    subcategory: 'shawls',
+    gender: 'unisex',
+    garmentType: 'accessory',
+    tryonCompatibility: 'unsupported',
+    stockStatus: 'in_stock',
+    price: 680,
+    originalPrice: 800,
+    currency: 'USD',
+    isSample: true,
+    isFeatured: false,
+    isActive: true,
+    description: 'Spun from the underfleece of Changthangi mountain goats in Ladakh and handwoven on traditional wooden pinewood looms in Kashmir. Finished with hand-knotted eyelash fringes.',
+    material: '100% Grade-A Pure Changthangi Pashmina Cashmere (12-14 microns)',
+    fit: 'Generous 200cm x 70cm wrap dimensions.',
+    careInstructions: 'Specialist dry clean or delicate cold wash with baby shampoo. Dry flat.',
+    sizes: ['One Size (200cm x 70cm)'],
+    primaryImage: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85',
+    images: [
+      'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85'
+    ],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85'
+  }
+];
+
+export const sampleModelSilhouettes = [
+  {
+    id: 'model-1',
+    name: 'Elise (Frontal Standing Portrait)',
+    label: 'Elise (Frontal Standing Portrait)',
+    gender: 'female',
+    imageUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1000&q=80',
+    description: 'Neutral atelier lighting, balanced front-facing stance'
+  },
+  {
+    id: 'model-2',
+    name: 'Marcus (Architectural Tailored Pose)',
+    label: 'Marcus (Architectural Tailored Pose)',
+    gender: 'male',
+    imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1000&q=80',
+    description: 'Clean silhouette contour for menswear tailoring'
+  },
+  {
+    id: 'model-3',
+    name: 'Aria (Editorial Full-Length)',
+    label: 'Aria (Editorial Full-Length)',
+    gender: 'female',
+    imageUrl: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1000&q=80',
+    description: 'Full-length evening silhouette with upright carriage'
+  }
+];
+

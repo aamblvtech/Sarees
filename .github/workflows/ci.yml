@@ -1,0 +1,74 @@
+name: SAJEE CI Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  backend-test:
+    name: Backend Tests & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: backend/package.json
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm install --legacy-peer-deps
+
+      - name: Typecheck Backend
+        working-directory: backend
+        run: npx tsc --noEmit
+
+      - name: Run Backend Tests
+        working-directory: backend
+        run: npm test
+
+  ai-service-test:
+    name: AI Service Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install AI Dependencies
+        working-directory: ai-service
+        run: pip install -r requirements.txt
+
+      - name: Run AI Unit Tests
+        working-directory: ai-service
+        run: python test_ai.py
+
+  frontend-build:
+    name: Frontend Build & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          cache-dependency-path: frontend/package.json
+
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Build Frontend Application
+        working-directory: frontend
+        run: npm run build

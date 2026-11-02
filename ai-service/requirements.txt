@@ -1,0 +1,14 @@
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+python-multipart==0.0.20
+pillow==11.1.0
+requests==2.32.3
+numpy==1.26.4
+# PyTorch and diffusers are loaded when running with CUDA/GPU for IDM-VTON:
+# torch>=2.1.0
+# torchvision>=0.16.0
+# diffusers>=0.28.0
+# transformers>=4.40.0
+# accelerate>=0.30.0
+# einops>=0.7.0

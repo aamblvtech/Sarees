@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: sajee_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-sajee_db}
+      POSTGRES_USER: ${POSTGRES_USER:-sajee_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sajee_pass_2026}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - sajee_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-sajee_user} -d ${POSTGRES_DB:-sajee_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. SAJEE Business REST API (Node.js / Express / TypeScript)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sajee_backend
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-sajee_user}:${POSTGRES_PASSWORD:-sajee_pass_2026}@postgres:5432/${POSTGRES_DB:-sajee_db}
+      JWT_SECRET: ${JWT_SECRET:-sajee_luxury_jwt_secret_drape_your_elegance_2026}
+      AI_SERVICE_URL: http://ai-service:8000
+      CORS_ORIGIN: http://localhost:5173,http://localhost:3000,http://localhost:80
+    ports:
+      - "5000:5000"
+    volumes:
+      - sajee_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # 3. AI Draping Microservice (FastAPI / Python 3.10)
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: sajee_ai_service
+    restart: always
+    environment:
+      PORT: 8000
+      SAJEE_AI_PROVIDER: ${SAJEE_AI_PROVIDER:-mock}
+      IDM_VTON_CHECKPOINT_DIR: /app/checkpoints/idm_vton
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./checkpoints:/app/checkpoints
+
+  # 4. SAJEE Web & Showroom Touch Experience (React / Vite / Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: sajee_frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  sajee_pgdata:
+    driver: local
+  sajee_uploads:
+    driver: local
