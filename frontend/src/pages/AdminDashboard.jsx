@@ -777,20 +777,48 @@ export default function AdminDashboard() {
                     onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
                     className="w-full bg-[#FAFAFA] dark:bg-slate-950 border border-[#E2E8F0] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
-                    <option value="sarees">Saree</option>
-                    <option value="gowns">Gown</option>
-                    <option value="dresses">Dress</option>
-                    <option value="kurtis">Kurti</option>
-                    <option value="salwar_suits">Salwar Suit</option>
-                    <option value="shirts">Shirt</option>
-                    <option value="t-shirts">T-Shirt</option>
-                    <option value="trousers">Trousers</option>
-                    <option value="jeans">Jeans</option>
-                    <option value="kurtas">Kurta</option>
-                    <option value="blazers">Blazer</option>
-                    <option value="jackets">Jacket</option>
-                    <option value="belts">Belt</option>
-                    <option value="shawls">Shawl / Stole</option>
+                    <optgroup label="Saree Weaves">
+                      <option value="kanjivaram">Kanjivaram Saree</option>
+                      <option value="banarasi">Banarasi Saree</option>
+                      <option value="chanderi">Chanderi Saree</option>
+                      <option value="pochampally">Pochampally Saree</option>
+                      <option value="gadwal">Gadwal Saree</option>
+                      <option value="uppada">Uppada Saree</option>
+                      <option value="paithani">Paithani Saree</option>
+                      <option value="organza">Organza Saree</option>
+                      <option value="cotton">Cotton Saree</option>
+                      <option value="bridal">Bridal Saree</option>
+                      <option value="designer_party">Designer Party-Wear Saree</option>
+                      <option value="traditional_handloom">Traditional Handloom Saree</option>
+                    </optgroup>
+                    <optgroup label="Women's Outfits">
+                      <option value="anarkali_suits">Anarkali Suit Set</option>
+                      <option value="salwar_kameez">Salwar Kameez</option>
+                      <option value="churidar_sets">Churidar Set</option>
+                      <option value="kurti_pant_sets">Kurti & Pant Set</option>
+                      <option value="lehenga_choli">Lehenga Choli</option>
+                      <option value="gowns">Gown</option>
+                      <option value="maxi_dresses">Maxi Dress</option>
+                      <option value="evening_dresses">Evening Dress</option>
+                      <option value="party_wear_dresses">Party-Wear Dress</option>
+                      <option value="casual_dresses">Casual Dress</option>
+                      <option value="western_coord_sets">Western Co-ord Set</option>
+                      <option value="jumpsuits">Jumpsuit</option>
+                    </optgroup>
+                    <optgroup label="Men's Outfits">
+                      <option value="formal_suits">Full Formal Suit</option>
+                      <option value="blazer_trouser_sets">Blazer & Trouser Set</option>
+                      <option value="kurta_pyjama_sets">Kurta Pyjama Set</option>
+                      <option value="sherwani_outfits">Sherwani Outfit</option>
+                      <option value="indo_western">Indo-Western Ensemble</option>
+                      <option value="shirt_trouser_combinations">Shirt & Trouser Set</option>
+                      <option value="casual_coords">Casual Co-ord Set</option>
+                      <option value="traditional_outfits">Traditional Ceremonial Set</option>
+                    </optgroup>
+                    <optgroup label="Accessories">
+                      <option value="belts">Leather Belt</option>
+                      <option value="shawls">Pashmina Stole</option>
+                    </optgroup>
                   </select>
                 </div>
 

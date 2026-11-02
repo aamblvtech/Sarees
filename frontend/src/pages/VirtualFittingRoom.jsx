@@ -3,7 +3,8 @@ import { useSearchParams, Link } from 'react-router-dom';
 import {
   Upload, Camera, Sparkles, RefreshCw, Check, ArrowRight,
   Shield, Download, AlertTriangle, AlertCircle, Trash2, Cpu,
-  Smartphone, QrCode, FileUp, CheckCircle2, Sliders, ChevronRight, X
+  Smartphone, QrCode, FileUp, CheckCircle2, Sliders, ChevronRight, X,
+  Layers, EyeOff
 } from 'lucide-react';
 import productService from '../services/productService';
 import tryOnService from '../services/tryOnService';
@@ -1160,30 +1161,59 @@ export default function VirtualFittingRoom() {
 
                   {/* Select Outfit Action Button */}
                   <div className="p-3 pt-0">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectCatalogueProduct(product);
-                      }}
-                      className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded ${
-                        isSelected
-                          ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                          : 'bg-[#FAFAFA] dark:bg-slate-900 hover:bg-[#000000] hover:text-[#FFFFFF] dark:hover:bg-[#FFFFFF] dark:hover:text-[#000000] text-[#000000] dark:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-700'
-                      }`}
-                    >
-                      {isSelected ? (
-                        <>
-                          <Check className="w-3 h-3 text-[#6366F1]" />
-                          <span>Outfit Selected</span>
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-3 h-3 text-[#6366F1]" />
-                          <span>Select & Try On</span>
-                        </>
-                      )}
-                    </button>
+                    {product.tryonCompatibility === 'unsupported' ? (
+                      <button
+                        type="button"
+                        disabled
+                        className="w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-[#E2E8F0] dark:border-slate-800 rounded cursor-not-allowed flex items-center justify-center space-x-1"
+                        title="Accessories cannot be worn as clothing try-on"
+                      >
+                        <EyeOff className="w-3 h-3" />
+                        <span>Catalogue Only</span>
+                      </button>
+                    ) : product.tryonCompatibility === 'awaiting_saree_engine' || product.garmentType === 'saree' ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectCatalogueProduct(product);
+                        }}
+                        className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded border ${
+                          isSelected
+                            ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white'
+                            : 'bg-indigo-50/70 text-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-200 border-indigo-200 dark:border-indigo-800/60 hover:bg-indigo-100'
+                        }`}
+                        title="6-Yard unstitched saree drape awaiting dedicated 3D pleating engine"
+                      >
+                        <Layers className="w-3 h-3 text-[#6366F1]" />
+                        <span>{isSelected ? 'Saree Selected' : 'Saree AI Pending'}</span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleSelectCatalogueProduct(product);
+                        }}
+                        className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded ${
+                          isSelected
+                            ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
+                            : 'bg-[#FAFAFA] dark:bg-slate-900 hover:bg-[#000000] hover:text-[#FFFFFF] dark:hover:bg-[#FFFFFF] dark:hover:text-[#000000] text-[#000000] dark:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-700'
+                        }`}
+                      >
+                        {isSelected ? (
+                          <>
+                            <Check className="w-3 h-3 text-[#6366F1]" />
+                            <span>Outfit Selected</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className="w-3 h-3 text-[#6366F1]" />
+                            <span>Select & Try On</span>
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
                 </div>
               );

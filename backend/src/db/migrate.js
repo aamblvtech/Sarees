@@ -13,13 +13,17 @@ export async function runMigrations() {
 
   // If using external PostgreSQL, execute schema SQL on the pool
   if (dbStatus.engine.includes('PostgreSQL Server')) {
-    const schemaPath = path.join(__dirname, 'migrations', '001_vestra_schema.sql');
-    const sql = fs.readFileSync(schemaPath, 'utf8');
+    const migrationsDir = path.join(__dirname, 'migrations');
+    const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
 
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
-      await client.query(sql);
+      for (const file of files) {
+        const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
+        await client.query(sql);
+        console.log(`[Migration] Executed: ${file}`);
+      }
       await client.query('COMMIT');
     } catch (err) {
       await client.query('ROLLBACK');

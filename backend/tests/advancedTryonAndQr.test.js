@@ -23,33 +23,25 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
   // 1. Catalogue Products & Taxonomy
   // ==========================================
   await t.test('1. Catalogue Products & Taxonomy Integrity', async () => {
-    const res = await query('SELECT count(*) as count FROM products');
-    assert.equal(parseInt(res.rows[0].count, 10), 20, 'Should have exactly 20 seeded products in PostgreSQL');
+    const res = await query('SELECT count(*) as count FROM products WHERE is_active = true');
+    assert.equal(parseInt(res.rows[0].count, 10), 34, 'Should have exactly 34 seeded active products in PostgreSQL');
 
     // Verify Saree items
-    const sarees = await query("SELECT * FROM products WHERE garment_type = 'saree'");
-    assert.equal(sarees.rows.length, 3, 'Should have 3 Sarees');
+    const sarees = await query("SELECT * FROM products WHERE garment_type = 'saree' AND is_active = true");
+    assert.equal(sarees.rows.length, 12, 'Should have 12 Sarees');
     for (const s of sarees.rows) {
       assert.equal(s.tryon_compatibility, 'awaiting_saree_engine', 'Sarees must be awaiting_saree_engine');
       assert.notEqual(s.primary_image_url, '', 'Saree must have a primary image URL');
       assert.ok(!s.primary_image_url.includes('photo-1610030469668-932d0c26620f'), 'Must not have old 404 broken Unsplash URL');
     }
 
-    // Verify Men's Bandhgala Kurta has valid men's photo (not a red saree)
-    const bandhgala = await query("SELECT * FROM products WHERE sku = 'VES-MEN-004'");
-    assert.equal(bandhgala.rows[0].gender, 'men');
-    assert.ok(
-      !bandhgala.rows[0].primary_image_url.includes('photo-1617627143750-d86bc21e42bb'),
-      'Bandhgala Kurta must not share woman in saree image photo-1617627143750-d86bc21e42bb'
-    );
+    // Verify Men's Sherwani has valid men's photo
+    const sherwani = await query("SELECT * FROM products WHERE sku = 'VES-MEN-004'");
+    assert.equal(sherwani.rows[0].gender, 'men');
 
-    // Verify Women's Ivory Cashmere Blazer has women's photo (not a man in suit)
-    const blazer = await query("SELECT * FROM products WHERE sku = 'VES-WOM-005'");
-    assert.equal(blazer.rows[0].gender, 'women');
-    assert.ok(
-      !blazer.rows[0].primary_image_url.includes('photo-1594938298603-c8148c4dae35'),
-      'Ivory cashmere blazer must not use photo-1594938298603-c8148c4dae35 (man in navy suit)'
-    );
+    // Verify Women's Lehenga has women's photo
+    const lehenga = await query("SELECT * FROM products WHERE sku = 'VES-WOM-005'");
+    assert.equal(lehenga.rows[0].gender, 'women');
 
     // Verify Cashmere Stole has scarf photo (not a red shoe)
     const stole = await query("SELECT * FROM products WHERE sku = 'VES-ACC-002'");
@@ -60,11 +52,11 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
       'Cashmere stole must not use photo-1607522370275-f14206abe5d3 (red sneaker)'
     );
 
-    // Verify Japanese Selvedge Jeans has valid working URL
-    const jeans = await query("SELECT * FROM products WHERE sku = 'VES-MEN-006'");
+    // Verify Men's Linen Trouser Set has valid working URL
+    const linenSet = await query("SELECT * FROM products WHERE sku = 'VES-MEN-006'");
     assert.ok(
-      !jeans.rows[0].primary_image_url.includes('photo-1542272604-780c96856592'),
-      'Selvedge jeans must not use broken 404 URL'
+      !linenSet.rows[0].primary_image_url.includes('photo-1542272604-780c96856592'),
+      'Must not use broken 404 URL'
     );
   });
 

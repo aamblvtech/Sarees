@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { Sparkles, ArrowUpRight, Layers } from 'lucide-react';
 import ProductStatusBadge, { ATELIER_FALLBACK_IMAGE } from './ProductStatusBadge';
 
 export default function ProductCard({ product }) {
@@ -64,18 +64,26 @@ export default function ProductCard({ product }) {
           {product.tryonCompatibility === 'unsupported' ? (
             <Link
               to={`/products/${product.id}`}
-              className="w-full py-2.5 px-4 bg-[#FFFFFF] text-[#000000] hover:bg-slate-100 text-xs uppercase tracking-widest font-semibold flex items-center justify-center space-x-2 transition-transform duration-200 shadow-md"
+              className="w-full py-2 px-3 bg-[#FFFFFF] text-[#000000] hover:bg-slate-100 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md"
             >
               <ArrowUpRight className="w-3.5 h-3.5 text-slate-700" />
               <span>Inspect Details</span>
             </Link>
+          ) : product.tryonCompatibility === 'awaiting_saree_engine' || product.garmentType === 'saree' ? (
+            <Link
+              to={`/products/${product.id}`}
+              className="w-full py-2 px-3 bg-slate-900/90 text-[#FFFFFF] hover:bg-slate-900 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-slate-700"
+            >
+              <Layers className="w-3.5 h-3.5 text-[#6366F1]" />
+              <span>Saree AI Pending</span>
+            </Link>
           ) : (
             <button
               onClick={handleTryOn}
-              className="w-full py-2.5 px-4 bg-[#000000] text-[#FFFFFF] hover:bg-slate-900 dark:bg-[#FFFFFF] dark:text-[#000000] dark:hover:bg-slate-100 text-xs uppercase tracking-widest font-semibold flex items-center justify-center space-x-2 transition-transform duration-200 shadow-md border border-black dark:border-white"
+              className="w-full py-2 px-3 bg-[#000000] text-[#FFFFFF] hover:bg-slate-900 dark:bg-[#FFFFFF] dark:text-[#000000] dark:hover:bg-slate-100 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-black dark:border-white"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
-              <span>{product.garmentType === 'saree' ? 'Open Saree Studio' : 'Try It On Now'}</span>
+              <span>Select & Try On</span>
             </button>
           )}
         </div>

@@ -85,17 +85,31 @@ export default function Catalogue() {
   };
 
   const availableSubcategories = React.useMemo(() => {
-    if (selectedCategory === 'sarees') return ['sarees'];
+    if (selectedCategory === 'sarees') {
+      return [
+        'kanjivaram', 'banarasi', 'pochampally', 'gadwal', 'uppada',
+        'chanderi', 'paithani', 'organza', 'cotton', 'bridal', 'designer_party', 'traditional_handloom'
+      ];
+    }
     if (selectedCategory === 'womens-clothing') {
-      return ['gowns', 'dresses', 'kurtis', 'salwar_suits', 'blazers', 'trousers', 'jeans', 'jackets'];
+      return [
+        'anarkali_suits', 'salwar_kameez', 'churidar_sets', 'kurti_pant_sets',
+        'lehenga_choli', 'gowns', 'maxi_dresses', 'evening_dresses',
+        'party_wear_dresses', 'casual_dresses', 'western_coord_sets', 'jumpsuits'
+      ];
     }
     if (selectedCategory === 'mens-clothing') {
-      return ['blazers', 'shirts', 't-shirts', 'kurtas', 'trousers', 'jeans', 'jackets'];
+      return [
+        'formal_suits', 'blazer_trouser_sets', 'kurta_pyjama_sets',
+        'sherwani_outfits', 'indo_western', 'shirt_trouser_combinations',
+        'casual_coords', 'traditional_outfits'
+      ];
     }
     if (selectedCategory === 'accessories') return ['belts', 'shawls'];
     return [
-      'sarees', 'gowns', 'dresses', 'kurtis', 'salwar_suits',
-      'shirts', 't-shirts', 'trousers', 'jeans', 'kurtas', 'blazers', 'jackets', 'belts', 'shawls'
+      'kanjivaram', 'banarasi', 'chanderi', 'anarkali_suits', 'salwar_kameez',
+      'gowns', 'dresses', 'lehenga_choli', 'formal_suits', 'sherwani_outfits',
+      'kurta_pyjama_sets', 'western_coord_sets', 'jumpsuits'
     ];
   }, [selectedCategory]);
 

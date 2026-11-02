@@ -11,61 +11,78 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
     assert.ok(slugs.includes('accessories'), 'Must contain accessories category');
   });
 
-  await t.test('2. Validates saree products taxonomy and compatibility', () => {
+  await t.test('2. Validates saree collection taxonomy, weaves, and compatibility', () => {
     const sarees = sampleProducts.filter((p) => p.garmentType === 'saree');
-    assert.ok(sarees.length >= 3, 'Must have at least 3 curated sarees');
+    assert.strictEqual(sarees.length, 12, 'Must have exactly 12 curated sarees');
+    
+    const expectedSubcategories = [
+      'kanjivaram', 'banarasi', 'chanderi', 'pochampally', 'gadwal',
+      'uppada', 'paithani', 'organza', 'cotton', 'bridal',
+      'designer_party', 'traditional_handloom'
+    ];
+    const actualSubcategories = new Set(sarees.map((s) => s.subcategory));
+
+    for (const expected of expectedSubcategories) {
+      assert.ok(actualSubcategories.has(expected), `Must contain ${expected} saree`);
+    }
+
     for (const saree of sarees) {
       assert.strictEqual(saree.gender, 'women', 'Sarees should target women');
       assert.strictEqual(saree.tryonCompatibility, 'awaiting_saree_engine', 'Sarees must be flagged as awaiting_saree_engine');
-      assert.strictEqual(saree.subcategory, 'sarees');
+      assert.ok(saree.primaryImage && saree.primaryImage.startsWith('https://'), 'Must have valid HTTPS image URL');
+      assert.ok(saree.tryonOverlayImage && saree.tryonOverlayImage.startsWith('https://'), 'Must have valid try-on input image URL');
     }
   });
 
-  await t.test('3. Validates women\'s clothing subcategories and garment types', () => {
+  await t.test('3. Validates complete women\'s wearable outfits and AI Ready status', () => {
     const womens = sampleProducts.filter((p) => p.categoryId === 2);
+    assert.strictEqual(womens.length, 12, 'Must have exactly 12 complete women outfits');
     const subcategories = new Set(womens.map((p) => p.subcategory));
     
-    assert.ok(subcategories.has('gowns'), 'Must contain gowns');
-    assert.ok(subcategories.has('dresses'), 'Must contain dresses');
-    assert.ok(subcategories.has('kurtis'), 'Must contain kurtis');
-    assert.ok(subcategories.has('salwar_suits'), 'Must contain salwar suits');
-    assert.ok(subcategories.has('blazers'), 'Must contain blazers');
-    assert.ok(subcategories.has('trousers'), 'Must contain trousers');
-    assert.ok(subcategories.has('jeans'), 'Must contain jeans');
-    assert.ok(subcategories.has('jackets'), 'Must contain jackets');
+    const requiredWomenOutfits = [
+      'anarkali_suits', 'salwar_kameez', 'churidar_sets', 'kurti_pant_sets',
+      'lehenga_choli', 'gowns', 'maxi_dresses', 'evening_dresses',
+      'party_wear_dresses', 'casual_dresses', 'western_coord_sets', 'jumpsuits'
+    ];
 
-    // Check garment types
+    for (const req of requiredWomenOutfits) {
+      assert.ok(subcategories.has(req), `Must contain ${req} outfit`);
+    }
+
     for (const p of womens) {
-      assert.ok(
-        ['upper_body', 'lower_body', 'full_body'].includes(p.garmentType),
-        `Women product ${p.name} should have valid garmentType`
-      );
-      assert.strictEqual(p.tryonCompatibility, 'supported', 'Stitched apparel must be supported');
+      assert.strictEqual(p.gender, 'women');
+      assert.strictEqual(p.garmentType, 'full_body', 'Women outfits should be complete full_body garments');
+      assert.strictEqual(p.tryonCompatibility, 'supported', 'Complete wearable outfits must be AI Ready (supported)');
+      assert.ok(p.primaryImage && p.primaryImage.startsWith('https://'));
     }
   });
 
-  await t.test('4. Validates men\'s clothing subcategories and garment types', () => {
+  await t.test('4. Validates complete men\'s wearable outfits and AI Ready status', () => {
     const mens = sampleProducts.filter((p) => p.categoryId === 3);
+    assert.strictEqual(mens.length, 8, 'Must have exactly 8 complete men outfits');
     const subcategories = new Set(mens.map((p) => p.subcategory));
     
-    assert.ok(subcategories.has('blazers'), 'Must contain blazers');
-    assert.ok(subcategories.has('shirts'), 'Must contain shirts');
-    assert.ok(subcategories.has('t-shirts'), 'Must contain t-shirts');
-    assert.ok(subcategories.has('kurtas'), 'Must contain kurtas');
-    assert.ok(subcategories.has('trousers'), 'Must contain trousers');
-    assert.ok(subcategories.has('jeans'), 'Must contain jeans');
-    assert.ok(subcategories.has('jackets'), 'Must contain jackets');
+    const requiredMenOutfits = [
+      'formal_suits', 'blazer_trouser_sets', 'kurta_pyjama_sets',
+      'sherwani_outfits', 'indo_western', 'shirt_trouser_combinations',
+      'casual_coords', 'traditional_outfits'
+    ];
+
+    for (const req of requiredMenOutfits) {
+      assert.ok(subcategories.has(req), `Must contain ${req} outfit`);
+    }
 
     for (const p of mens) {
       assert.strictEqual(p.gender, 'men');
-      assert.ok(['upper_body', 'lower_body'].includes(p.garmentType));
-      assert.strictEqual(p.tryonCompatibility, 'supported');
+      assert.ok(['full_body', 'upper_body'].includes(p.garmentType));
+      assert.strictEqual(p.tryonCompatibility, 'supported', 'Complete men outfits must be AI Ready (supported)');
+      assert.ok(p.primaryImage && p.primaryImage.startsWith('https://'));
     }
   });
 
   await t.test('5. Validates accessories taxonomy and non-try-on status', () => {
     const accessories = sampleProducts.filter((p) => p.categoryId === 4);
-    assert.ok(accessories.length >= 2, 'Must have accessories');
+    assert.strictEqual(accessories.length, 2, 'Must have 2 archival accessories');
     for (const acc of accessories) {
       assert.strictEqual(acc.garmentType, 'accessory');
       assert.strictEqual(acc.tryonCompatibility, 'unsupported', 'Accessories must be marked as unsupported for 2D VTON');
@@ -80,4 +97,3 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
     assert.ok(kanjivaram.sizes.includes('Free Size (6 Yards)'));
   });
 });
-
