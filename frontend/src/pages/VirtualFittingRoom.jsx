@@ -575,7 +575,7 @@ export default function VirtualFittingRoom() {
         {/* ============================================================== */}
         {/* SECTION 1: SIDE-BY-SIDE VIRTUAL FITTING MIRROR (BEFORE / AFTER) */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+        <section className="bg-[#FBEFEF] dark:bg-[#181114] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             
@@ -916,7 +916,7 @@ export default function VirtualFittingRoom() {
         {/* ============================================================== */}
         {/* SECTION 2: CLOTHING COLLECTION (PostgreSQL Catalogue)         */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+        <section className="bg-[#FBEFEF] dark:bg-[#181114] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
           
           {/* Section Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-4 gap-4">
@@ -1104,10 +1104,10 @@ export default function VirtualFittingRoom() {
                 <div
                   key={product.id}
                   onClick={() => handleSelectCatalogueProduct(product)}
-                  className={`group cursor-pointer bg-white dark:bg-[#1E293B] border transition-all duration-200 flex flex-col justify-between overflow-hidden relative ${
+                  className={`group cursor-pointer bg-[#FCF8F8] dark:bg-[#181114] border transition-all duration-200 flex flex-col justify-between overflow-hidden relative ${
                     isSelected
-                      ? 'border-[#000000] ring-2 ring-[#000000] dark:border-[#FFFFFF] dark:ring-[#FFFFFF] shadow-md'
-                      : 'border-[#F9DFDF] dark:border-slate-800 hover:border-[#000000] dark:hover:border-[#FFFFFF]'
+                      ? 'border-[#F5AFAF] ring-2 ring-[#F5AFAF] shadow-md'
+                      : 'border-[#F9DFDF] dark:border-slate-800 hover:border-[#F5AFAF]'
                   }`}
                 >
                   <div>
@@ -1275,7 +1275,7 @@ export default function VirtualFittingRoom() {
             </div>
 
             {/* Outfit & Photo Summary */}
-            <div className="grid grid-cols-2 gap-3 p-3 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800">
+            <div className="grid grid-cols-2 gap-3 p-3 bg-[#FCF8F8] dark:bg-[#181114] border border-[#F9DFDF] dark:border-slate-800">
               <div className="space-y-1">
                 <span className="text-[10px] uppercase font-mono text-[#F5AFAF] block">Your Portrait</span>
                 <div className="w-16 h-20 bg-slate-100 dark:bg-slate-800 overflow-hidden border border-[#F9DFDF] dark:border-slate-700">
@@ -1293,7 +1293,7 @@ export default function VirtualFittingRoom() {
             </div>
 
             {/* Credit & Pricing Breakdown */}
-            <div className="p-3 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 space-y-2 text-xs">
+            <div className="p-3 bg-[#FCF8F8] dark:bg-[#181114] border border-[#F9DFDF] dark:border-slate-800 space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-500">Generation Cost:</span>
                 <span className="font-mono font-bold text-[#000000] dark:text-[#FFFFFF]">1 Genlook Credit</span>

@@ -6,10 +6,19 @@
     <title>VESTRA — Experience Fashion Before You Wear It | AI Virtual Try-On</title>
     <meta name="description" content="VESTRA — Luxury fashion technology platform with AI virtual draping. Try before you buy with architectural tailoring, fluid silks, and bespoke fitting." />
     
-    <!-- Instant Theme Bootstrap (Prevents White Flash) -->
+    <!-- Instant Theme Bootstrap (Forces Soft Rose Light Mode by default) -->
     <script>
       (function() {
         try {
+          var v = localStorage.getItem('vestra_rose_palette_v1');
+          if (!v) {
+            localStorage.setItem('vestra_rose_palette_v1', 'true');
+            localStorage.setItem('vestra_theme', 'light');
+            document.documentElement.classList.remove('dark');
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+            return;
+          }
           var t = localStorage.getItem('vestra_theme');
           if (t === 'dark') {
             document.documentElement.classList.add('dark');

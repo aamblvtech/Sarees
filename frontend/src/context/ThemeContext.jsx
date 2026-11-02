@@ -5,9 +5,15 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     try {
+      // Version flag to force-reset stale dark mode from previous sessions to the new soft rose palette
+      const version = localStorage.getItem('vestra_rose_palette_v1');
+      if (!version) {
+        localStorage.setItem('vestra_rose_palette_v1', 'true');
+        localStorage.setItem('vestra_theme', 'light');
+        return 'light';
+      }
       const saved = localStorage.getItem('vestra_theme');
       if (saved === 'dark' || saved === 'light') return saved;
-      // Default to light as specified in VESTRA rose color system (#FCF8F8 primary background)
       return 'light';
     } catch {
       return 'light';
@@ -38,7 +44,7 @@ export function ThemeProvider({ children }) {
       localStorage.setItem('vestra_theme', theme);
     } catch {}
 
-    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0F172A' : '#FCF8F8'})`);
+    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#181114' : '#FCF8F8'})`);
   }, [theme]);
 
   const toggleTheme = () => {
