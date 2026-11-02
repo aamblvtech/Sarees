@@ -66,12 +66,23 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             {/* Theme Toggle Button */}
             <button
+              type="button"
               onClick={toggleTheme}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:text-[#000000] dark:hover:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-800 rounded transition-colors"
+              className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-[#E2E8F0] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-black dark:hover:border-white transition-all shadow-xs"
               title={isDark ? 'Switch to Light Mode (#FAFAFA)' : 'Switch to Dark Mode (#0F172A)'}
               aria-label="Toggle Theme"
             >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+              {isDark ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-[10px] uppercase font-mono tracking-wider font-semibold">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-slate-800" />
+                  <span className="text-[10px] uppercase font-mono tracking-wider font-semibold">Dark</span>
+                </>
+              )}
             </button>
 
             <Link
@@ -93,11 +104,22 @@ export default function Navbar() {
           {/* Mobile Actions */}
           <div className="flex md:hidden items-center space-x-2">
             <button
+              type="button"
               onClick={toggleTheme}
-              className="p-2 text-slate-600 dark:text-slate-300 hover:text-[#000000] dark:hover:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-800 rounded"
+              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-full border border-[#E2E8F0] dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200"
               aria-label="Toggle Theme"
             >
-              {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
+              {isDark ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-[9px] uppercase font-mono font-semibold">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-slate-800" />
+                  <span className="text-[9px] uppercase font-mono font-semibold">Dark</span>
+                </>
+              )}
             </button>
 
             <Link
