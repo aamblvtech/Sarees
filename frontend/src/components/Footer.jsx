@@ -4,18 +4,18 @@ import { Sparkles, Shield, Cpu, ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-[#FFFFFF] dark:bg-[#0F172A] text-slate-600 dark:text-slate-300 pt-16 pb-12 border-t border-[#E2E8F0] dark:border-[#1E293B] transition-colors duration-200">
+    <footer className="bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-600 dark:text-slate-300 pt-16 pb-12 border-t border-[#F9DFDF] dark:border-[#1E293B] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-14 border-b border-[#E2E8F0] dark:border-[#1E293B]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-14 border-b border-[#F9DFDF] dark:border-[#1E293B]">
           
           {/* Brand Column */}
           <div className="md:col-span-1 space-y-4">
             <span className="font-serif text-3xl tracking-[0.24em] text-[#000000] dark:text-[#FFFFFF] font-semibold block">
               VESTRA
             </span>
-            <p className="text-xs tracking-[0.18em] text-slate-500 dark:text-slate-400 uppercase font-medium">
+            <p className="text-xs tracking-[0.18em] text-[#F5AFAF] uppercase font-semibold">
               Virtual Fitting Studio
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pt-1">
@@ -66,7 +66,7 @@ export default function Footer() {
               <li>
                 <Link to="/try-on" className="hover:text-[#000000] dark:hover:text-white transition-colors inline-flex items-center space-x-1">
                   <span>Virtual Fitting Room</span>
-                  <Sparkles className="w-3 h-3 text-[#6366F1]" />
+                  <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
                 </Link>
               </li>
               <li>
@@ -76,7 +76,7 @@ export default function Footer() {
               </li>
               <li>
                 <span className="inline-flex items-center space-x-1.5 text-slate-500 dark:text-slate-400">
-                  <Cpu className="w-3 h-3 text-[#6366F1]" />
+                  <Cpu className="w-3 h-3 text-[#F5AFAF]" />
                   <span>Genlook Cloud AI Engine</span>
                 </span>
               </li>
@@ -98,7 +98,7 @@ export default function Footer() {
               Customer photographs remain strictly confidential. Temporary sessions can be deleted with one click.
             </p>
             <div className="pt-2 flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
-              <Shield className="w-4 h-4 text-[#6366F1]" />
+              <Shield className="w-4 h-4 text-[#F5AFAF]" />
               <span>Isolated Private Cloud &bull; GDPR Compliant</span>
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function Footer() {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 dark:text-slate-500 gap-4">
           <p>&copy; {new Date().getFullYear()} VESTRA Atelier Inc. All rights reserved.</p>
           <div className="flex items-center space-x-6">
-            <span>Palette: #FAFAFA / #0F172A / #E2E8F0 / #6366F1</span>
+            <span>Rose Palette: #F5AFAF / #F9DFDF / #FBEFEF / #FCF8F8</span>
           </div>
         </div>
 

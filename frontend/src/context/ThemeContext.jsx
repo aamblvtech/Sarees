@@ -7,7 +7,7 @@ export function ThemeProvider({ children }) {
     try {
       const saved = localStorage.getItem('vestra_theme');
       if (saved === 'dark' || saved === 'light') return saved;
-      // Default to light as specified in VESTRA color system (#FAFAFA primary background)
+      // Default to light as specified in VESTRA rose color system (#FCF8F8 primary background)
       return 'light';
     } catch {
       return 'light';
@@ -38,7 +38,7 @@ export function ThemeProvider({ children }) {
       localStorage.setItem('vestra_theme', theme);
     } catch {}
 
-    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0F172A' : '#FAFAFA'})`);
+    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0F172A' : '#FCF8F8'})`);
   }, [theme]);
 
   const toggleTheme = () => {

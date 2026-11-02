@@ -46,9 +46,9 @@ export default function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
+      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
         <div className="text-center space-y-3">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#6366F1]" />
+          <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#F5AFAF]" />
           <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Retrieving Garment Dossier...</p>
         </div>
       </div>
@@ -57,8 +57,8 @@ export default function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
-        <div className="text-center space-y-4 max-w-md bg-white dark:bg-slate-900 p-8 border border-[#E2E8F0] dark:border-slate-800 shadow-sm">
+      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
+        <div className="text-center space-y-4 max-w-md bg-white dark:bg-slate-900 p-8 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
           <h2 className="font-serif text-2xl text-slate-900 dark:text-white">Garment Unavailable</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">{error || 'Unable to locate this garment in the archive.'}</p>
           <Link
@@ -93,7 +93,7 @@ export default function ProductDetails() {
   const availableSizes = product.sizes || ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-7xl mx-auto">
         
         {/* Back Link */}
@@ -114,7 +114,7 @@ export default function ProductDetails() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* Main Stage Image */}
-            <div className="relative aspect-[3/4] bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 overflow-hidden group shadow-sm">
+            <div className="relative aspect-[3/4] bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden group shadow-sm">
               <img
                 src={selectedImage || ATELIER_FALLBACK_IMAGE}
                 alt={product.name}
@@ -127,7 +127,7 @@ export default function ProductDetails() {
                 onClick={handleLaunchTryOn}
                 className="absolute top-4 right-4 bg-[#000000]/90 dark:bg-[#FFFFFF]/90 backdrop-blur text-white dark:text-black hover:bg-[#000000] dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-lg transition-all"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
                 <span>Virtual Try-On</span>
               </button>
 
@@ -136,7 +136,7 @@ export default function ProductDetails() {
               </div>
 
               {product.isSample && (
-                <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border border-[#E2E8F0] dark:border-slate-800 px-3 py-1 text-[10px] tracking-widest uppercase text-slate-600 dark:text-slate-300 font-semibold">
+                <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border border-[#F9DFDF] dark:border-slate-800 px-3 py-1 text-[10px] tracking-widest uppercase text-slate-600 dark:text-slate-300 font-semibold">
                   Sample Inventory Model
                 </div>
               )}
@@ -152,7 +152,7 @@ export default function ProductDetails() {
                     className={`relative w-20 aspect-[3/4] border-2 overflow-hidden transition-all flex-shrink-0 ${
                       selectedImage === imgUrl
                         ? 'border-[#000000] dark:border-[#FFFFFF]'
-                        : 'border-[#E2E8F0] dark:border-slate-800 opacity-70 hover:opacity-100'
+                        : 'border-[#F9DFDF] dark:border-slate-800 opacity-70 hover:opacity-100'
                     }`}
                   >
                     <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
@@ -167,7 +167,7 @@ export default function ProductDetails() {
           <div className="lg:col-span-5 space-y-8">
             
             {/* Header info */}
-            <div className="space-y-3 pb-6 border-b border-[#E2E8F0] dark:border-slate-800">
+            <div className="space-y-3 pb-6 border-b border-[#F9DFDF] dark:border-slate-800">
               <div className="flex items-center justify-between">
                 <span className="text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 font-semibold">
                   {product.categoryName || 'Couture Silhouette'}
@@ -211,7 +211,7 @@ export default function ProductDetails() {
                 </label>
                 <button
                   onClick={handleLaunchTryOn}
-                  className="text-xs text-[#6366F1] hover:underline inline-flex items-center space-x-1"
+                  className="text-xs text-[#F5AFAF] hover:underline inline-flex items-center space-x-1"
                 >
                   <Scissors className="w-3 h-3" />
                   <span>Unsure about fit? Try virtually</span>
@@ -226,7 +226,7 @@ export default function ProductDetails() {
                     className={`py-3 text-xs uppercase tracking-wider font-semibold border transition-all ${
                       selectedSize === size
                         ? 'bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black border-[#000000] dark:border-[#FFFFFF]'
-                        : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-[#E2E8F0] dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
+                        : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-[#F9DFDF] dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
                     }`}
                   >
                     {size}
@@ -243,7 +243,7 @@ export default function ProductDetails() {
                 onClick={handleLaunchTryOn}
                 className="w-full py-4 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-md group"
               >
-                <Sparkles className="w-4 h-4 text-[#6366F1] transition-transform group-hover:rotate-12" />
+                <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
                 <span>Try It On in Virtual Fitting Room</span>
               </button>
 
@@ -258,9 +258,9 @@ export default function ProductDetails() {
             </div>
 
             {/* Accordion Specification Tabs */}
-            <div className="pt-6 border-t border-[#E2E8F0] dark:border-slate-800 space-y-4">
+            <div className="pt-6 border-t border-[#F9DFDF] dark:border-slate-800 space-y-4">
               
-              <div className="flex border-b border-[#E2E8F0] dark:border-slate-800">
+              <div className="flex border-b border-[#F9DFDF] dark:border-slate-800">
                 <button
                   onClick={() => setActiveTab('details')}
                   className={`pb-2.5 text-xs uppercase tracking-wider font-semibold mr-6 transition-colors ${

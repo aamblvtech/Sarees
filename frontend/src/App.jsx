@@ -36,7 +36,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] transition-colors duration-200">
+    <div className="flex flex-col min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] transition-colors duration-200">
       <Navbar />
       <main className="flex-grow">
         <ErrorBoundary>

@@ -102,7 +102,7 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#FAFAFA] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-slate-800 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+      <div className="bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-800 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
         
         {/* Close Button */}
         <button
@@ -115,8 +115,8 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
 
         {/* Modal Header */}
         <div className="text-center space-y-2 pt-1">
-          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] uppercase font-mono tracking-widest font-semibold">
-            <Smartphone className="w-3 h-3 text-[#6366F1]" />
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-[#FBEFEF] dark:bg-slate-800 text-slate-900 dark:text-[#FFFFFF] border border-[#F9DFDF] dark:border-slate-700 text-[9px] uppercase font-mono tracking-widest font-semibold">
+            <Smartphone className="w-3 h-3 text-[#F5AFAF]" />
             <span>Mobile Silhouette Link</span>
           </div>
           <h3 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF]">
@@ -139,7 +139,7 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                 Synchronizing with fitting room session...
               </p>
             </div>
-            <div className="w-20 h-28 mx-auto bg-slate-100 border border-[#E2E8F0] overflow-hidden shadow">
+            <div className="w-20 h-28 mx-auto bg-slate-100 border border-[#F9DFDF] overflow-hidden shadow">
               <img src={uploadedPhotoUrl} alt="Synchronized Photo" className="w-full h-full object-cover" />
             </div>
           </div>
@@ -147,14 +147,14 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
           /* Active QR Display Screen */
           <div className="space-y-5">
             {isLoading ? (
-              <div className="aspect-square max-w-[260px] mx-auto bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 flex flex-col items-center justify-center p-6 space-y-3">
-                <RefreshCw className="w-7 h-7 animate-spin text-[#6366F1]" />
+              <div className="aspect-square max-w-[260px] mx-auto bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 flex flex-col items-center justify-center p-6 space-y-3">
+                <RefreshCw className="w-7 h-7 animate-spin text-[#F5AFAF]" />
                 <span className="text-xs font-mono uppercase tracking-wider text-slate-500">
                   Generating Token...
                 </span>
               </div>
             ) : error ? (
-              <div className="p-6 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/40 text-center space-y-3">
+              <div className="p-6 bg-rose-50 dark:bg-rose-950/40 border border-[#F9DFDF] dark:border-rose-800/40 text-center space-y-3">
                 <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
                 <p className="text-xs text-rose-800 dark:text-rose-200 leading-relaxed">{error}</p>
                 <button
@@ -189,13 +189,13 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                 </div>
 
                 {/* Session countdown and security badge */}
-                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-3 py-2 bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800">
+                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-3 py-2 bg-[#FBEFEF] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800">
                   <div className="flex items-center space-x-1.5 font-mono">
-                    <Clock className="w-3.5 h-3.5 text-[#6366F1]" />
+                    <Clock className="w-3.5 h-3.5 text-[#F5AFAF]" />
                     <span>Expires: <strong className="text-[#000000] dark:text-[#FFFFFF]">{formattedCountdown}</strong></span>
                   </div>
                   <div className="flex items-center space-x-1 text-[10px] text-slate-500">
-                    <Shield className="w-3 h-3 text-[#6366F1]" />
+                    <Shield className="w-3 h-3 text-[#F5AFAF]" />
                     <span>Isolated Token</span>
                   </div>
                 </div>
@@ -208,7 +208,7 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
             ) : null}
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-[#E2E8F0] dark:border-slate-800">
+            <div className="flex items-center justify-between pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
               <button
                 type="button"
                 onClick={initSession}
@@ -221,7 +221,7 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 transition-all"
+                className="px-5 py-2 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-xs uppercase tracking-widest font-semibold hover:bg-[#FBEFEF] dark:hover:bg-slate-800 transition-all"
               >
                 Cancel
               </button>

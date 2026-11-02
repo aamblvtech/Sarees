@@ -119,7 +119,7 @@ export default function MobileUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 transition-colors">
+    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 transition-colors">
       
       {/* Hidden File Inputs */}
       <input
@@ -139,9 +139,9 @@ export default function MobileUpload() {
       />
 
       {/* Header Bar */}
-      <header className="max-w-md mx-auto w-full pt-4 pb-6 text-center border-b border-[#E2E8F0] dark:border-slate-800">
+      <header className="max-w-md mx-auto w-full pt-4 pb-6 text-center border-b border-[#F9DFDF] dark:border-slate-800">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-[9px] uppercase tracking-[0.25em] font-semibold mb-2">
-          <Sparkles className="w-2.5 h-2.5 text-[#6366F1]" />
+          <Sparkles className="w-2.5 h-2.5 text-[#F5AFAF]" />
           <span>VESTRA HAUTE ATELIER</span>
         </div>
         <h1 className="font-serif text-2xl text-slate-900 dark:text-white font-normal">
@@ -157,9 +157,9 @@ export default function MobileUpload() {
 
         {/* State 1: Loading Session */}
         {isLoadingSession && (
-          <div className="bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 p-8 text-center space-y-4 shadow-sm">
-            <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#6366F1]" />
-            <p className="text-xs uppercase tracking-widest text-[#6366F1] font-semibold">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 p-8 text-center space-y-4 shadow-sm">
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#F5AFAF]" />
+            <p className="text-xs uppercase tracking-widest text-[#F5AFAF] font-semibold">
               Connecting to Atelier Kiosk
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -183,7 +183,7 @@ export default function MobileUpload() {
                 onClick={() => window.location.reload()}
                 className="w-full py-3 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold flex items-center justify-center space-x-2 transition-all shadow"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-[#6366F1]" />
+                <RefreshCw className="w-3.5 h-3.5 text-[#F5AFAF]" />
                 <span>Retry Connection</span>
               </button>
             </div>
@@ -209,7 +209,7 @@ export default function MobileUpload() {
               </p>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-[#E2E8F0] dark:border-slate-800 text-left text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
+            <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-left text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
               <div className="flex items-center space-x-2 text-slate-900 dark:text-white font-semibold text-[11px] uppercase tracking-wider">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 <span>Next Step on Display</span>
@@ -223,11 +223,11 @@ export default function MobileUpload() {
 
         {/* State 4: Capture & Upload Form */}
         {!isLoadingSession && !sessionError && !uploadSuccess && (
-          <div className="bg-white dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-6">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-7 shadow-sm space-y-6">
 
             {/* Step Guidance */}
             <div className="space-y-1 text-center">
-              <span className="text-[10px] uppercase tracking-widest text-[#6366F1] font-semibold">
+              <span className="text-[10px] uppercase tracking-widest text-[#F5AFAF] font-semibold">
                 Single-Use Authorization
               </span>
               <h2 className="font-serif text-xl text-slate-900 dark:text-white">
@@ -246,20 +246,20 @@ export default function MobileUpload() {
                   onClick={() => cameraInputRef.current?.click()}
                   className="w-full py-4 px-4 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all shadow-md group"
                 >
-                  <Camera className="w-4 h-4 text-[#6366F1] transition-transform group-hover:scale-110" />
+                  <Camera className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:scale-110" />
                   <span>Take Photo with Camera</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => galleryInputRef.current?.click()}
-                  className="w-full py-3.5 px-4 bg-[#FAFAFA] dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-800 text-slate-900 dark:text-white text-xs uppercase tracking-[0.15em] font-semibold flex items-center justify-center space-x-3 transition-all"
+                  className="w-full py-3.5 px-4 bg-[#FCF8F8] dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 text-slate-900 dark:text-white text-xs uppercase tracking-[0.15em] font-semibold flex items-center justify-center space-x-3 transition-all"
                 >
-                  <ImageIcon className="w-4 h-4 text-[#6366F1]" />
+                  <ImageIcon className="w-4 h-4 text-[#F5AFAF]" />
                   <span>Choose from Photo Gallery</span>
                 </button>
 
-                <div className="p-3 bg-slate-50 dark:bg-slate-950 border border-[#E2E8F0] dark:border-slate-800 text-[10px] text-slate-500 dark:text-slate-400 text-center">
+                <div className="p-3 bg-slate-50 dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-[10px] text-slate-500 dark:text-slate-400 text-center">
                   Accepts JPEG, PNG, and WebP up to 10MB.
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function MobileUpload() {
                 <button
                   type="button"
                   onClick={handleResetPhoto}
-                  className="text-xs uppercase tracking-wider font-semibold text-[#6366F1] hover:underline transition-colors block mx-auto"
+                  className="text-xs uppercase tracking-wider font-semibold text-[#F5AFAF] hover:underline transition-colors block mx-auto"
                 >
                   Take or Choose a Different Photo
                 </button>
@@ -303,13 +303,13 @@ export default function MobileUpload() {
             )}
 
             {/* Consent & Privacy Notice */}
-            <div className="pt-2 border-t border-[#E2E8F0] dark:border-slate-800 space-y-3">
+            <div className="pt-2 border-t border-[#F9DFDF] dark:border-slate-800 space-y-3">
               <label className="flex items-start space-x-2.5 cursor-pointer select-none text-left">
                 <input
                   type="checkbox"
                   checked={consentChecked}
                   onChange={(e) => setConsentChecked(e.target.checked)}
-                  className="mt-0.5 w-4 h-4 text-[#000000] focus:ring-[#6366F1] border-[#E2E8F0] dark:border-slate-800"
+                  className="mt-0.5 w-4 h-4 text-[#000000] focus:ring-[#F5AFAF] border-[#F9DFDF] dark:border-slate-800"
                 />
                 <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
                   I consent to uploading this photograph for VESTRA virtual try-on processing. Photos are stored in a private directory and deleted automatically after use.
@@ -325,12 +325,12 @@ export default function MobileUpload() {
               >
                 {isUploading ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin text-[#6366F1]" />
+                    <RefreshCw className="w-4 h-4 animate-spin text-[#F5AFAF]" />
                     <span>Synchronizing with Atelier...</span>
                   </>
                 ) : (
                   <>
-                    <ShieldCheck className="w-4 h-4 text-[#6366F1]" />
+                    <ShieldCheck className="w-4 h-4 text-[#F5AFAF]" />
                     <span>Transfer to Fitting Room &rarr;</span>
                   </>
                 )}
@@ -343,7 +343,7 @@ export default function MobileUpload() {
       </main>
 
       {/* Footer */}
-      <footer className="max-w-md mx-auto w-full pt-4 pb-2 text-center text-[10px] text-slate-400 dark:text-slate-500 border-t border-[#E2E8F0] dark:border-slate-800">
+      <footer className="max-w-md mx-auto w-full pt-4 pb-2 text-center text-[10px] text-slate-400 dark:text-slate-500 border-t border-[#F9DFDF] dark:border-slate-800">
         <p>VESTRA Atelier &bull; Zero credentials or personal data exposed</p>
       </footer>
 

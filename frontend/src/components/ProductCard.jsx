@@ -32,10 +32,10 @@ export default function ProductCard({ product }) {
     : product.primaryImage || product.images?.[0] || ATELIER_FALLBACK_IMAGE;
 
   return (
-    <div className="group relative bg-[#FFFFFF] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 rounded-none overflow-hidden transition-all duration-300 hover:shadow-vestra flex flex-col">
+    <div className="group relative bg-[#FCF8F8] dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 rounded-none overflow-hidden transition-all duration-300 hover:shadow-vestra flex flex-col hover:border-[#F5AFAF]">
       
       {/* Product Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-[#FAFAFA] dark:bg-slate-900 border-b border-[#E2E8F0] dark:border-slate-800">
+      <div className="relative aspect-[3/4] overflow-hidden bg-[#FCF8F8] dark:bg-slate-900 border-b border-[#F9DFDF] dark:border-slate-800">
         <Link
           to={`/products/${product.id}`}
           className="block w-full h-full"
@@ -64,7 +64,7 @@ export default function ProductCard({ product }) {
           {product.tryonCompatibility === 'unsupported' ? (
             <Link
               to={`/products/${product.id}`}
-              className="w-full py-2 px-3 bg-[#FFFFFF] text-[#000000] hover:bg-slate-100 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md"
+              className="w-full py-2 px-3 bg-[#FFFFFF] text-[#000000] hover:bg-[#FBEFEF] text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-[#F9DFDF]"
             >
               <ArrowUpRight className="w-3.5 h-3.5 text-slate-700" />
               <span>Inspect Details</span>
@@ -74,7 +74,7 @@ export default function ProductCard({ product }) {
               to={`/products/${product.id}`}
               className="w-full py-2 px-3 bg-slate-900/90 text-[#FFFFFF] hover:bg-slate-900 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-slate-700"
             >
-              <Layers className="w-3.5 h-3.5 text-[#6366F1]" />
+              <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
               <span>Saree AI Pending</span>
             </Link>
           ) : (
@@ -82,7 +82,7 @@ export default function ProductCard({ product }) {
               onClick={handleTryOn}
               className="w-full py-2 px-3 bg-[#000000] text-[#FFFFFF] hover:bg-slate-900 dark:bg-[#FFFFFF] dark:text-[#000000] dark:hover:bg-slate-100 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-black dark:border-white"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+              <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
               <span>Select & Try On</span>
             </button>
           )}
@@ -90,24 +90,24 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Product Details Section */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-[#FFFFFF] dark:bg-[#1E293B]">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-[#FBEFEF]/35 dark:bg-[#1E293B]">
         <div>
           {/* Category Tag */}
-          <p className="text-[10px] uppercase tracking-widest text-slate-500 dark:text-slate-400 font-mono mb-1">
+          <p className="text-[10px] uppercase tracking-widest text-[#F5AFAF] font-mono font-semibold mb-1">
             {product.categoryName || 'Collection'}
           </p>
 
           {/* Product Title */}
           <Link
             to={`/products/${product.id}`}
-            className="block text-sm font-medium text-[#000000] dark:text-[#FFFFFF] hover:text-[#6366F1] dark:hover:text-[#6366F1] transition-colors leading-snug font-serif"
+            className="block text-sm font-medium text-[#000000] dark:text-[#FFFFFF] hover:text-[#F5AFAF] dark:hover:text-[#F5AFAF] transition-colors leading-snug font-serif"
           >
             {product.name}
           </Link>
         </div>
 
         {/* Price and Garment Type Meta */}
-        <div className="pt-2 border-t border-[#E2E8F0] dark:border-slate-800 flex items-center justify-between">
+        <div className="pt-2 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-baseline space-x-2">
             <span className="text-sm font-semibold text-[#000000] dark:text-[#FFFFFF] font-mono">
               {formattedPrice}
@@ -119,13 +119,20 @@ export default function ProductCard({ product }) {
             )}
           </div>
 
-          <span className="text-[10px] uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono">
-            {product.garmentType ? product.garmentType.replace('_', ' ') : 'Ready to Wear'}
+          <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400">
+            {product.garmentType === 'upper_body'
+              ? 'Top'
+              : product.garmentType === 'lower_body'
+              ? 'Bottom'
+              : product.garmentType === 'saree'
+              ? '6-Yd Saree'
+              : product.garmentType === 'accessory'
+              ? 'Accessory'
+              : 'Full Outfit'}
           </span>
         </div>
 
       </div>
-
     </div>
   );
 }

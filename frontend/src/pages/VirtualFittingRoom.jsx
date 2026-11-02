@@ -451,7 +451,7 @@ export default function VirtualFittingRoom() {
     if (jobStatus === 'generating') {
       return (
         <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 animate-pulse rounded">
-          <RefreshCw className="w-3 h-3 animate-spin text-[#6366F1]" />
+          <RefreshCw className="w-3 h-3 animate-spin text-[#F5AFAF]" />
           <span>SYNTHESIZING</span>
         </span>
       );
@@ -468,15 +468,15 @@ export default function VirtualFittingRoom() {
 
     if (jobStatus === 'completed' && tryOnResult?.resultImageUrl) {
       return (
-        <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border border-[#6366F1] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 shadow-xs rounded">
-          <Sparkles className="w-3 h-3 text-[#6366F1]" />
+        <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border border-[#F5AFAF] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 shadow-xs rounded">
+          <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
           <span>AI GENERATED</span>
         </span>
       );
     }
 
     return (
-      <span className="bg-[#FAFAFA] dark:bg-[#0F172A] text-slate-500 border border-[#E2E8F0] dark:border-slate-800 uppercase font-mono text-[10px] px-3 py-1 rounded">
+      <span className="bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-500 border border-[#F9DFDF] dark:border-slate-800 uppercase font-mono text-[10px] px-3 py-1 rounded">
         AWAITING SELECTION
       </span>
     );
@@ -484,10 +484,10 @@ export default function VirtualFittingRoom() {
 
   if (isPageLoading) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
-        <div className="max-w-md w-full bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-8 text-center space-y-4 shadow-vestra-sm animate-fadeIn">
-          <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#6366F1]" />
-          <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#6366F1] font-semibold">VESTRA Studio</p>
+      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-8 text-center space-y-4 shadow-vestra-sm animate-fadeIn">
+          <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#F5AFAF]" />
+          <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-semibold">VESTRA Studio</p>
           <h2 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF]">Opening Virtual Fitting Room</h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             Connecting to clothing inventory and Genlook cloud AI try-on engine...
@@ -499,7 +499,7 @@ export default function VirtualFittingRoom() {
 
   if (initError) {
     return (
-      <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-20 px-4 flex items-center justify-center">
         <div className="max-w-md w-full bg-white dark:bg-[#1E293B] border border-rose-200 dark:border-rose-900 p-8 text-center space-y-4">
           <AlertCircle className="w-8 h-8 text-rose-500 mx-auto" />
           <h2 className="font-serif text-xl">Service Interruption</h2>
@@ -516,14 +516,14 @@ export default function VirtualFittingRoom() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-7xl mx-auto space-y-8">
 
         {/* Studio Brand Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-6 gap-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-6 gap-4">
           <div>
-            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 mb-2 rounded shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#6366F1] pulse-camera" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 mb-2 rounded shadow-xs">
+              <span className="w-2 h-2 rounded-full bg-[#F5AFAF] pulse-camera" />
               <span className="text-[10px] tracking-[0.2em] uppercase font-mono font-medium text-slate-700 dark:text-slate-300">
                 Official Genlook Virtual Try-On API (v1)
               </span>
@@ -538,7 +538,7 @@ export default function VirtualFittingRoom() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
             {providerInfo && (
-              <div className="px-3.5 py-1.5 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 flex items-center space-x-2 text-[11px] rounded shadow-xs">
+              <div className="px-3.5 py-1.5 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 flex items-center space-x-2 text-[11px] rounded shadow-xs">
                 <span className={`w-2 h-2 rounded-full ${providerInfo.available ? 'bg-emerald-500' : 'bg-amber-500'}`} />
                 <span className="text-slate-500">Engine:</span>
                 <strong className="text-[#000000] dark:text-[#FFFFFF] uppercase font-mono">{providerInfo.provider}</strong>
@@ -553,7 +553,7 @@ export default function VirtualFittingRoom() {
             )}
 
             <div className="text-slate-600 dark:text-slate-300 font-medium flex items-center space-x-1.5">
-              <Shield className="w-3.5 h-3.5 text-[#6366F1]" />
+              <Shield className="w-3.5 h-3.5 text-[#F5AFAF]" />
               <span className="text-[11px]">Private Atelier Cloud</span>
             </div>
           </div>
@@ -575,7 +575,7 @@ export default function VirtualFittingRoom() {
         {/* ============================================================== */}
         {/* SECTION 1: SIDE-BY-SIDE VIRTUAL FITTING MIRROR (BEFORE / AFTER) */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+        <section className="bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             
@@ -584,7 +584,7 @@ export default function VirtualFittingRoom() {
             {/* ------------------------------------------------------------ */}
             <div className="flex flex-col space-y-3">
               
-              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F9DFDF] dark:border-slate-800">
                 <div className="flex items-center space-x-2">
                   <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded">
                     BEFORE
@@ -624,7 +624,7 @@ export default function VirtualFittingRoom() {
               </div>
 
               {/* BEFORE Display / Upload Area */}
-              <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
+              <div className="relative aspect-[3/4] bg-[#FCF8F8] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
                 
                 {userPhotoUrl ? (
                   <>
@@ -636,7 +636,7 @@ export default function VirtualFittingRoom() {
 
                     {/* Source tag & watermark overlay */}
                     <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur text-white text-[9px] uppercase font-mono tracking-wider px-2.5 py-1 flex items-center space-x-1.5 shadow">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#6366F1]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#F5AFAF]" />
                       <span>
                         {userPhotoSource === 'camera'
                           ? 'Webcam Portrait'
@@ -653,8 +653,8 @@ export default function VirtualFittingRoom() {
                 ) : (
                   /* Upload Call to Action */
                   <div className="p-6 text-center space-y-5 max-w-sm">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
-                      <Upload className="w-6 h-6 text-[#6366F1]" />
+                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                      <Upload className="w-6 h-6 text-[#F5AFAF]" />
                     </div>
 
                     <div className="space-y-1">
@@ -667,14 +667,14 @@ export default function VirtualFittingRoom() {
                     </div>
 
                     {isUploadingPhoto ? (
-                      <div className="p-3 bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center space-x-2 text-xs">
-                        <RefreshCw className="w-4 h-4 animate-spin text-[#6366F1]" />
+                      <div className="p-3 bg-white dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 flex items-center justify-center space-x-2 text-xs">
+                        <RefreshCw className="w-4 h-4 animate-spin text-[#F5AFAF]" />
                         <span className="font-medium text-[#000000] dark:text-[#FFFFFF]">Calibrating photo...</span>
                       </div>
                     ) : (
                       <div className="space-y-2 pt-1">
                         <label className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold cursor-pointer flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white">
-                          <FileUp className="w-4 h-4 text-[#6366F1]" />
+                          <FileUp className="w-4 h-4 text-[#F5AFAF]" />
                           <span>Upload From Computer</span>
                           <input
                             ref={fileInputRef}
@@ -689,18 +689,18 @@ export default function VirtualFittingRoom() {
                           <button
                             type="button"
                             onClick={() => setIsCameraModalOpen(true)}
-                            className="py-2 px-2 bg-[#FAFAFA] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
+                            className="py-2 px-2 bg-[#FCF8F8] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
                           >
-                            <Camera className="w-3.5 h-3.5 text-[#6366F1]" />
+                            <Camera className="w-3.5 h-3.5 text-[#F5AFAF]" />
                             <span>Webcam</span>
                           </button>
 
                           <button
                             type="button"
                             onClick={() => setIsQrModalOpen(true)}
-                            className="py-2 px-2 bg-[#FAFAFA] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
+                            className="py-2 px-2 bg-[#FCF8F8] dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-all"
                           >
-                            <QrCode className="w-3.5 h-3.5 text-[#6366F1]" />
+                            <QrCode className="w-3.5 h-3.5 text-[#F5AFAF]" />
                             <span>Mobile QR</span>
                           </button>
                         </div>
@@ -740,7 +740,7 @@ export default function VirtualFittingRoom() {
             {/* ------------------------------------------------------------ */}
             <div className="flex flex-col space-y-3">
               
-              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F9DFDF] dark:border-slate-800">
                 <div className="flex items-center space-x-2">
                   <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded">
                     AFTER
@@ -757,10 +757,10 @@ export default function VirtualFittingRoom() {
                     <button
                       type="button"
                       onClick={handleSaveResult}
-                      className="px-3 py-1 bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase font-mono font-medium hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1.5 transition-colors"
+                      className="px-3 py-1 bg-white dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-[10px] uppercase font-mono font-medium hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1.5 transition-colors"
                       title="Save generated try-on dossier image"
                     >
-                      <Download className="w-3 h-3 text-[#6366F1]" />
+                      <Download className="w-3 h-3 text-[#F5AFAF]" />
                       <span>Save Result</span>
                     </button>
                   )}
@@ -768,14 +768,14 @@ export default function VirtualFittingRoom() {
               </div>
 
               {/* AFTER Display Area */}
-              <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
+              <div className="relative aspect-[3/4] bg-[#FCF8F8] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
                 
                 {isGenerating ? (
                   /* Generating Synthesis Overlay */
                   <div className="p-8 text-center space-y-5 max-w-sm z-20">
                     <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
-                      <div className="w-16 h-16 rounded-full border-2 border-[#6366F1] border-t-transparent animate-spin" />
-                      <Sparkles className="w-6 h-6 text-[#6366F1] absolute" />
+                      <div className="w-16 h-16 rounded-full border-2 border-[#F5AFAF] border-t-transparent animate-spin" />
+                      <Sparkles className="w-6 h-6 text-[#F5AFAF] absolute" />
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF] font-medium">
@@ -802,7 +802,7 @@ export default function VirtualFittingRoom() {
 
                     {/* Attribution Badge (Required by Genlook AI) */}
                     <div className="absolute bottom-3 right-3 bg-black/90 backdrop-blur text-white text-[10px] tracking-widest uppercase px-3 py-1 font-semibold flex items-center space-x-1.5 shadow-md z-10 border border-white/10">
-                      <span className="bg-[#6366F1]/20 text-indigo-300 border border-[#6366F1]/40 text-[9px] px-2 py-0.5 rounded font-mono font-bold">
+                      <span className="bg-[#F5AFAF]/20 text-indigo-300 border border-[#F5AFAF]/40 text-[9px] px-2 py-0.5 rounded font-mono font-bold">
                         AI GENERATED
                       </span>
                       <span>Genlook AI Try-On</span>
@@ -840,7 +840,7 @@ export default function VirtualFittingRoom() {
                           }}
                           className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white"
                         >
-                          <RefreshCw className="w-3.5 h-3.5 text-[#6366F1]" />
+                          <RefreshCw className="w-3.5 h-3.5 text-[#F5AFAF]" />
                           <span>Retry Generation</span>
                         </button>
                       )}
@@ -852,8 +852,8 @@ export default function VirtualFittingRoom() {
                 ) : (
                   /* Idle State: Instructions */
                   <div className="p-6 text-center space-y-4 max-w-sm">
-                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
-                      <Sparkles className="w-6 h-6 text-[#6366F1]" />
+                    <div className="w-14 h-14 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-slate-300">
+                      <Sparkles className="w-6 h-6 text-[#F5AFAF]" />
                     </div>
 
                     <div className="space-y-1">
@@ -879,7 +879,7 @@ export default function VirtualFittingRoom() {
                         }}
                         className="w-full py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border border-black dark:border-white"
                       >
-                        <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+                        <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
                         <span>
                           Try On {((garmentMode === 'custom' ? customGarmentName : selectedProduct?.name) || 'Outfit').toString().split(' ')[0]} Now
                         </span>
@@ -916,12 +916,12 @@ export default function VirtualFittingRoom() {
         {/* ============================================================== */}
         {/* SECTION 2: CLOTHING COLLECTION (PostgreSQL Catalogue)         */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
+        <section className="bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-6 sm:p-8 shadow-vestra space-y-6">
           
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-4 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-4 gap-4">
             <div>
-              <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#6366F1] font-semibold">
+              <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-semibold">
                 Garment Catalogue
               </p>
               <h3 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF] font-normal">
@@ -940,10 +940,10 @@ export default function VirtualFittingRoom() {
                 className={`px-3 py-1.5 text-xs uppercase tracking-wider font-semibold border transition-all flex items-center space-x-1.5 rounded ${
                   isCustomGarmentDrawerOpen || garmentMode === 'custom'
                     ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white'
-                    : 'bg-[#FAFAFA] dark:bg-slate-900 border-[#E2E8F0] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800'
+                    : 'bg-[#FCF8F8] dark:bg-slate-900 border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
-                <Upload className="w-3.5 h-3.5 text-[#6366F1]" />
+                <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
                 <span>Upload Custom Outfit</span>
               </button>
             </div>
@@ -951,8 +951,8 @@ export default function VirtualFittingRoom() {
 
           {/* Custom Outfit Drawer */}
           {isCustomGarmentDrawerOpen && (
-            <div className="p-5 bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-700 space-y-4 animate-fadeIn">
-              <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0] dark:border-slate-800">
+            <div className="p-5 bg-[#FCF8F8] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-700 space-y-4 animate-fadeIn">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F9DFDF] dark:border-slate-800">
                 <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-[#000000] dark:text-[#FFFFFF]">
                   Upload Bespoke Customer Outfit (Multipart fileKey)
                 </h4>
@@ -973,7 +973,7 @@ export default function VirtualFittingRoom() {
                   
                   <div className="flex items-center space-x-3">
                     <label className="px-4 py-2 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-wider font-semibold cursor-pointer inline-flex items-center space-x-2 border border-black dark:border-white">
-                      <Upload className="w-3.5 h-3.5 text-[#6366F1]" />
+                      <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
                       <span>{customGarmentUrl ? 'Change Custom Garment' : 'Select Outfit Image'}</span>
                       <input
                         type="file"
@@ -997,7 +997,7 @@ export default function VirtualFittingRoom() {
 
                 {customGarmentUrl && (
                   <div className="flex justify-center sm:justify-end">
-                    <div className="w-20 h-24 bg-slate-100 dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 overflow-hidden shadow">
+                    <div className="w-20 h-24 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 overflow-hidden shadow">
                       <img src={customGarmentUrl} alt="Custom Garment" className="w-full h-full object-cover" />
                     </div>
                   </div>
@@ -1025,7 +1025,7 @@ export default function VirtualFittingRoom() {
                   className={`px-3 py-1.5 text-[11px] uppercase font-mono tracking-wider font-semibold border transition-all rounded ${
                     productCategoryFilter === cat.id
                       ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white shadow-xs'
-                      : 'bg-[#FAFAFA] dark:bg-slate-900 border-[#E2E8F0] dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF]'
+                      : 'bg-[#FCF8F8] dark:bg-slate-900 border-[#F9DFDF] dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF]'
                   }`}
                 >
                   {cat.label}
@@ -1035,8 +1035,8 @@ export default function VirtualFittingRoom() {
 
             {/* Selected Garment Customization (Size & Fit) */}
             {selectedProduct && (
-              <div className="flex flex-wrap items-center gap-3 p-2 bg-[#FAFAFA] dark:bg-slate-900 border border-[#E2E8F0] dark:border-slate-800 text-xs rounded">
-                <span className="text-[10px] uppercase font-mono tracking-widest text-[#6366F1] font-semibold">
+              <div className="flex flex-wrap items-center gap-3 p-2 bg-[#FCF8F8] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 text-xs rounded">
+                <span className="text-[10px] uppercase font-mono tracking-widest text-[#F5AFAF] font-semibold">
                   Fit Settings:
                 </span>
 
@@ -1054,7 +1054,7 @@ export default function VirtualFittingRoom() {
                       className={`w-7 h-7 text-[10px] font-mono font-bold uppercase transition-all rounded ${
                         selectedSize === size
                           ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                          : 'bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                          : 'bg-white dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-slate-600 dark:text-slate-300'
                       }`}
                     >
                       {size}
@@ -1062,7 +1062,7 @@ export default function VirtualFittingRoom() {
                   ))}
                 </div>
 
-                <div className="flex items-center space-x-1 pl-2 border-l border-[#E2E8F0] dark:border-slate-800">
+                <div className="flex items-center space-x-1 pl-2 border-l border-[#F9DFDF] dark:border-slate-800">
                   {['tailored', 'relaxed'].map((fit) => (
                     <button
                       key={fit}
@@ -1076,7 +1076,7 @@ export default function VirtualFittingRoom() {
                       className={`px-2 py-1 text-[10px] uppercase font-mono font-semibold transition-all rounded ${
                         fitPreference === fit
                           ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                          : 'bg-white dark:bg-slate-800 border border-[#E2E8F0] dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                          : 'bg-white dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-slate-600 dark:text-slate-300'
                       }`}
                     >
                       {fit}
@@ -1107,12 +1107,12 @@ export default function VirtualFittingRoom() {
                   className={`group cursor-pointer bg-white dark:bg-[#1E293B] border transition-all duration-200 flex flex-col justify-between overflow-hidden relative ${
                     isSelected
                       ? 'border-[#000000] ring-2 ring-[#000000] dark:border-[#FFFFFF] dark:ring-[#FFFFFF] shadow-md'
-                      : 'border-[#E2E8F0] dark:border-slate-800 hover:border-[#000000] dark:hover:border-[#FFFFFF]'
+                      : 'border-[#F9DFDF] dark:border-slate-800 hover:border-[#000000] dark:hover:border-[#FFFFFF]'
                   }`}
                 >
                   <div>
                     {/* Product Image Frame */}
-                    <div className="relative aspect-[3/4] bg-[#FAFAFA] dark:bg-slate-900 overflow-hidden border-b border-[#E2E8F0] dark:border-slate-800">
+                    <div className="relative aspect-[3/4] bg-[#FCF8F8] dark:bg-slate-900 overflow-hidden border-b border-[#F9DFDF] dark:border-slate-800">
                       <img
                         src={product.primaryImage || product.tryonImage || ATELIER_FALLBACK_IMAGE}
                         alt={product.name}
@@ -1131,7 +1131,7 @@ export default function VirtualFittingRoom() {
                       {/* Currently Selected Indicator */}
                       {isSelected && (
                         <div className="absolute top-2 right-2 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] uppercase font-mono font-bold tracking-wider px-2 py-0.5 shadow z-10 flex items-center space-x-1">
-                          <Check className="w-2.5 h-2.5 text-[#6366F1]" />
+                          <Check className="w-2.5 h-2.5 text-[#F5AFAF]" />
                           <span>SELECTED</span>
                         </div>
                       )}
@@ -1144,7 +1144,7 @@ export default function VirtualFittingRoom() {
                         <span>{product.gender || ''}</span>
                       </div>
 
-                      <h4 className="font-serif text-xs sm:text-sm font-medium text-[#000000] dark:text-[#FFFFFF] line-clamp-1 group-hover:text-[#6366F1] transition-colors">
+                      <h4 className="font-serif text-xs sm:text-sm font-medium text-[#000000] dark:text-[#FFFFFF] line-clamp-1 group-hover:text-[#F5AFAF] transition-colors">
                         {product.name}
                       </h4>
 
@@ -1165,7 +1165,7 @@ export default function VirtualFittingRoom() {
                       <button
                         type="button"
                         disabled
-                        className="w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-[#E2E8F0] dark:border-slate-800 rounded cursor-not-allowed flex items-center justify-center space-x-1"
+                        className="w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-[#F9DFDF] dark:border-slate-800 rounded cursor-not-allowed flex items-center justify-center space-x-1"
                         title="Accessories cannot be worn as clothing try-on"
                       >
                         <EyeOff className="w-3 h-3" />
@@ -1185,7 +1185,7 @@ export default function VirtualFittingRoom() {
                         }`}
                         title="6-Yard unstitched saree drape awaiting dedicated 3D pleating engine"
                       >
-                        <Layers className="w-3 h-3 text-[#6366F1]" />
+                        <Layers className="w-3 h-3 text-[#F5AFAF]" />
                         <span>{isSelected ? 'Saree Selected' : 'Saree AI Pending'}</span>
                       </button>
                     ) : (
@@ -1198,17 +1198,17 @@ export default function VirtualFittingRoom() {
                         className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded ${
                           isSelected
                             ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                            : 'bg-[#FAFAFA] dark:bg-slate-900 hover:bg-[#000000] hover:text-[#FFFFFF] dark:hover:bg-[#FFFFFF] dark:hover:text-[#000000] text-[#000000] dark:text-[#FFFFFF] border border-[#E2E8F0] dark:border-slate-700'
+                            : 'bg-[#FCF8F8] dark:bg-slate-900 hover:bg-[#000000] hover:text-[#FFFFFF] dark:hover:bg-[#FFFFFF] dark:hover:text-[#000000] text-[#000000] dark:text-[#FFFFFF] border border-[#F9DFDF] dark:border-slate-700'
                         }`}
                       >
                         {isSelected ? (
                           <>
-                            <Check className="w-3 h-3 text-[#6366F1]" />
+                            <Check className="w-3 h-3 text-[#F5AFAF]" />
                             <span>Outfit Selected</span>
                           </>
                         ) : (
                           <>
-                            <Sparkles className="w-3 h-3 text-[#6366F1]" />
+                            <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
                             <span>Select & Try On</span>
                           </>
                         )}
@@ -1254,11 +1254,11 @@ export default function VirtualFittingRoom() {
       {/* Live AI Try-On Credit Confirmation Modal */}
       {pendingGeneration && (
         <div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-[#FAFAFA] dark:bg-[#0F172A] border border-[#E2E8F0] dark:border-slate-800 max-w-md w-full p-6 space-y-5 shadow-2xl relative">
-            <div className="flex items-start justify-between border-b border-[#E2E8F0] dark:border-slate-800 pb-3">
+          <div className="bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-800 max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+            <div className="flex items-start justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-3">
               <div>
                 <div className="flex items-center space-x-2">
-                  <Sparkles className="w-4 h-4 text-[#6366F1]" />
+                  <Sparkles className="w-4 h-4 text-[#F5AFAF]" />
                   <h3 className="font-serif text-lg font-semibold text-[#000000] dark:text-[#FFFFFF]">Confirm AI Virtual Try-On</h3>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1275,15 +1275,15 @@ export default function VirtualFittingRoom() {
             </div>
 
             {/* Outfit & Photo Summary */}
-            <div className="grid grid-cols-2 gap-3 p-3 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800">
+            <div className="grid grid-cols-2 gap-3 p-3 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800">
               <div className="space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[#6366F1] block">Your Portrait</span>
-                <div className="w-16 h-20 bg-slate-100 dark:bg-slate-800 overflow-hidden border border-[#E2E8F0] dark:border-slate-700">
+                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] block">Your Portrait</span>
+                <div className="w-16 h-20 bg-slate-100 dark:bg-slate-800 overflow-hidden border border-[#F9DFDF] dark:border-slate-700">
                   <img src={userPhotoUrl} alt="Portrait" className="w-full h-full object-cover" />
                 </div>
               </div>
               <div className="space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[#6366F1] block">Selected Outfit</span>
+                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] block">Selected Outfit</span>
                 <p className="text-xs font-serif font-medium text-[#000000] dark:text-[#FFFFFF] line-clamp-1">
                   {pendingGeneration.mode === 'custom' ? customGarmentName : pendingGeneration.garment?.name}
                 </p>
@@ -1293,7 +1293,7 @@ export default function VirtualFittingRoom() {
             </div>
 
             {/* Credit & Pricing Breakdown */}
-            <div className="p-3 bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-slate-800 space-y-2 text-xs">
+            <div className="p-3 bg-white dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 space-y-2 text-xs">
               <div className="flex justify-between items-center">
                 <span className="text-slate-500">Generation Cost:</span>
                 <span className="font-mono font-bold text-[#000000] dark:text-[#FFFFFF]">1 Genlook Credit</span>
@@ -1302,7 +1302,7 @@ export default function VirtualFittingRoom() {
                 <span className="text-slate-500">Resolution:</span>
                 <span className="font-mono text-[#000000] dark:text-[#FFFFFF]">Standard (1200px)</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-[#E2E8F0] dark:border-slate-800">
+              <div className="flex justify-between items-center pt-2 border-t border-[#F9DFDF] dark:border-slate-800">
                 <span className="text-slate-500">Available Balance:</span>
                 <span className="font-mono font-bold text-emerald-700 dark:text-emerald-400">
                   {providerInfo?.creditBalance !== null && providerInfo?.creditBalance !== undefined
@@ -1314,7 +1314,7 @@ export default function VirtualFittingRoom() {
 
             {/* Safety Policy Notice */}
             <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center space-x-1.5">
-              <Shield className="w-3.5 h-3.5 text-[#6366F1] flex-shrink-0" />
+              <Shield className="w-3.5 h-3.5 text-[#F5AFAF] flex-shrink-0" />
               <span>Standard resolution &bull; No automatic retries &bull; Zero credit wastage</span>
             </div>
 
@@ -1323,7 +1323,7 @@ export default function VirtualFittingRoom() {
               <button
                 type="button"
                 onClick={() => setPendingGeneration(null)}
-                className="flex-1 py-2.5 px-4 border border-[#E2E8F0] dark:border-slate-700 text-xs uppercase font-mono tracking-wider font-semibold text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                className="flex-1 py-2.5 px-4 border border-[#F9DFDF] dark:border-slate-700 text-xs uppercase font-mono tracking-wider font-semibold text-[#000000] dark:text-[#FFFFFF] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
               >
                 Cancel
               </button>
@@ -1337,7 +1337,7 @@ export default function VirtualFittingRoom() {
                 }}
                 className="flex-1 py-2.5 px-4 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 shadow-md border border-black dark:border-white"
               >
-                <Sparkles className="w-3.5 h-3.5 text-[#6366F1]" />
+                <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
                 <span>Confirm & Generate</span>
               </button>
             </div>

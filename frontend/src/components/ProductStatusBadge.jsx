@@ -3,9 +3,9 @@ import { Sparkles, Layers, AlertCircle, EyeOff } from 'lucide-react';
 
 /**
  * Modern Minimalist Fallback Image (data URI SVG)
- * Using approved palette: #FAFAFA background, #E2E8F0 borders, #0F172A text
+ * Using approved palette: #FCF8F8 background, #F9DFDF borders, #000000 text
  */
-export const ATELIER_FALLBACK_IMAGE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800"><rect width="100%" height="100%" fill="%23FAFAFA"/><circle cx="300" cy="180" r="45" fill="%23F1F5F9" stroke="%23CBD5E1" stroke-width="2"/><path d="M255 240 Q300 220 345 240 L370 380 Q300 410 230 380 Z" fill="%23F1F5F9" stroke="%23CBD5E1" stroke-width="2"/><path d="M230 380 Q300 410 370 380 L400 600 Q300 630 200 600 Z" fill="%23E2E8F0" stroke="%23CBD5E1" stroke-width="2"/><line x1="300" y1="620" x2="300" y2="720" stroke="%2394A3B8" stroke-width="2.5"/><line x1="220" y1="720" x2="380" y2="720" stroke="%2394A3B8" stroke-width="2.5"/><text x="300" y="760" font-family="sans-serif" font-weight="600" font-size="13" fill="%230F172A" text-anchor="middle" letter-spacing="4">VESTRA STUDIO</text></svg>`;
+export const ATELIER_FALLBACK_IMAGE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800"><rect width="100%" height="100%" fill="%23FCF8F8"/><circle cx="300" cy="180" r="45" fill="%23FBEFEF" stroke="%23F9DFDF" stroke-width="2"/><path d="M255 240 Q300 220 345 240 L370 380 Q300 410 230 380 Z" fill="%23FBEFEF" stroke="%23F9DFDF" stroke-width="2"/><path d="M230 380 Q300 410 370 380 L400 600 Q300 630 200 600 Z" fill="%23F9DFDF" stroke="%23F5AFAF" stroke-width="2"/><line x1="300" y1="620" x2="300" y2="720" stroke="%23F5AFAF" stroke-width="2.5"/><line x1="220" y1="720" x2="380" y2="720" stroke="%23F5AFAF" stroke-width="2.5"/><text x="300" y="760" font-family="sans-serif" font-weight="600" font-size="13" fill="%23000000" text-anchor="middle" letter-spacing="4">VESTRA STUDIO</text></svg>`;
 
 /**
  * Resolves accurate status labels:
@@ -19,7 +19,7 @@ export function getProductStatus(product, isImageMissing = false) {
   if (product?.isActive === false) {
     return {
       label: 'Inactive',
-      badgeClass: 'bg-slate-900 text-slate-300 border-[#E2E8F0] dark:border-slate-800',
+      badgeClass: 'bg-slate-900 text-slate-300 border-[#F9DFDF] dark:border-slate-800',
       icon: EyeOff,
       description: 'Archived from current collection'
     };
@@ -37,7 +37,7 @@ export function getProductStatus(product, isImageMissing = false) {
   if (product?.garmentType === 'saree' || product?.tryonCompatibility === 'awaiting_saree_engine') {
     return {
       label: 'Saree AI Pending',
-      badgeClass: 'bg-indigo-50 text-indigo-900 border-indigo-200 dark:bg-indigo-950/70 dark:text-indigo-200 dark:border-indigo-800/50',
+      badgeClass: 'bg-[#FBEFEF] text-slate-900 border-[#F5AFAF] dark:bg-slate-800 dark:text-[#F5AFAF] dark:border-slate-700',
       icon: Layers,
       description: 'Awaiting dedicated Saree Pleating & Drape AI Engine'
     };
@@ -46,7 +46,7 @@ export function getProductStatus(product, isImageMissing = false) {
   if (product?.garmentType === 'accessory' || product?.tryonCompatibility === 'unsupported') {
     return {
       label: 'Catalogue Only',
-      badgeClass: 'bg-slate-100 text-slate-700 border-[#E2E8F0] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+      badgeClass: 'bg-[#FCF8F8] text-slate-700 border-[#F9DFDF] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
       icon: EyeOff,
       description: 'Accessories require 3D AR mesh simulation'
     };
@@ -63,7 +63,7 @@ export function getProductStatus(product, isImageMissing = false) {
 
   return {
     label: 'Catalogue Only',
-    badgeClass: 'bg-slate-100 text-slate-700 border-[#E2E8F0] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
+    badgeClass: 'bg-[#FCF8F8] text-slate-700 border-[#F9DFDF] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
     icon: EyeOff,
     description: 'Catalog garment'
   };
