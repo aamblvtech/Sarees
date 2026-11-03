@@ -126,9 +126,9 @@ export const sampleProducts = [
     fit: 'Fluid gossamer drape; folds into crisp geometric pleats.',
     careInstructions: 'Specialist dry clean only. Roll in cotton rolls.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 4,
@@ -180,9 +180,9 @@ export const sampleProducts = [
     fit: 'Lightweight body with substantial weighted borders for perfect pallu drop.',
     careInstructions: 'Specialist dry clean only.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 6,
@@ -207,9 +207,9 @@ export const sampleProducts = [
     fit: 'Gossamer weight with ultra-refined sheer elegance.',
     careInstructions: 'Dry clean only in specialized archival preservation bag.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1621784563330-caee0b138a00?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1621784563330-caee0b138a00?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1621784563330-caee0b138a00?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 7,
@@ -234,9 +234,9 @@ export const sampleProducts = [
     fit: 'Rich, opulent drape with rigid zari pallu drape.',
     careInstructions: 'Specialist dry clean only. Air out every 6 months.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 8,
@@ -315,9 +315,9 @@ export const sampleProducts = [
     fit: 'Heavily weighted bridal drape requiring dedicated pleat pinning.',
     careInstructions: 'Specialist bridal couture dry clean only.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 11,
@@ -369,9 +369,9 @@ export const sampleProducts = [
     fit: 'Featherlight airy drape with effortless fluid movement.',
     careInstructions: 'Specialist dry clean only.',
     sizes: ['Free Size (6 Yards)'],
-    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1611042553365-9b101441c135?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1611042553365-9b101441c135?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1611042553365-9b101441c135?auto=format&fit=crop&w=1200&q=85'
   },
 
   // =========================================================================
@@ -400,9 +400,9 @@ export const sampleProducts = [
     fit: 'Fitted bodice opening into a sweeping 5-meter flare.',
     careInstructions: 'Specialist dry clean only.',
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    primaryImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 14,
@@ -427,9 +427,9 @@ export const sampleProducts = [
     fit: 'Relaxed straight kurta silhouette with tailored salwar.',
     careInstructions: 'Dry clean only.',
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    primaryImage: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 15,
@@ -454,9 +454,9 @@ export const sampleProducts = [
     fit: 'Structured tailored silhouette with gathered ankle taper.',
     careInstructions: 'Dry clean only.',
     sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    primaryImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 16,
@@ -508,9 +508,9 @@ export const sampleProducts = [
     fit: 'Fitted corset choli with high-volume can-can lehenga flare.',
     careInstructions: 'Specialist bridal preservation dry clean only.',
     sizes: ['XS', 'S', 'M', 'L'],
-    primaryImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 18,
@@ -535,9 +535,9 @@ export const sampleProducts = [
     fit: 'Hourglass contour with internal boned corset and fluid train.',
     careInstructions: 'Specialist dry clean only.',
     sizes: ['XS', 'S', 'M', 'L'],
-    primaryImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85',
-    images: ['https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85'],
-    tryonOverlayImage: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=1200&q=85'
+    primaryImage: 'https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85',
+    images: ['https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85'],
+    tryonOverlayImage: 'https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85'
   },
   {
     id: 19,
