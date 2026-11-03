@@ -85,13 +85,14 @@ export default function VirtualFittingRoom() {
       setAllProducts(safeProds);
       setProviderInfo(pInfo);
 
-      // Pre-select product if provided in URL or default to first product
+      // Pre-select product: prefer first AI-ready product if not specified
+      const firstReady = safeProds.find((p) => p.tryonCompatibility === 'supported') || safeProds[0];
       if (initialProductId && safeProds.length > 0) {
         const match = safeProds.find((p) => p.id === parseInt(initialProductId, 10));
         if (match) setSelectedProduct(match);
-        else setSelectedProduct(safeProds[0]);
+        else setSelectedProduct(firstReady);
       } else if (safeProds.length > 0) {
-        setSelectedProduct(safeProds[0]);
+        setSelectedProduct(firstReady);
       }
 
       // Customer photo starts empty
@@ -241,7 +242,8 @@ export default function VirtualFittingRoom() {
       console.error('Generation dispatch error:', err);
       setIsGenerating(false);
       setJobStatus('failed');
-      setGenerationError(err.response?.data?.error || err.message || 'Generation dispatch failed.');
+      const errorMsg = err.response?.data?.error || (err.message === 'Network Error' ? 'Cannot connect to VESTRA backend server (port 5000). Please ensure backend is running.' : err.message) || 'Generation dispatch failed.';
+      setGenerationError(errorMsg);
     }
   };
 
