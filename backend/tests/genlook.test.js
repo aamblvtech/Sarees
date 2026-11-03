@@ -9,6 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 import { GenlookTryOnAdapter } from '../src/adapters/tryon/genlookAdapter.js';
+import imageValidationService from '../src/services/imageValidationService.js';
 import {
   Genlook,
   InsufficientCreditsError,
@@ -406,6 +407,98 @@ test('Genlook Try-On Integration Suite', async (t) => {
     );
 
     if (fs.existsSync(largePath)) fs.unlinkSync(largePath);
+  });
+
+  // 16. Identity Preservation: Customer photo inspector detects close-ups and low resolution
+  await t.test('16. Customer photo inspector detects close-up selfies and evaluates framing', () => {
+    // Construct a minimal 800x600 (landscape/close-up, ratio 0.75) JPEG buffer
+    const landscapeBuf = Buffer.from([
+      0xFF, 0xD8, 0xFF, 0xC0, 0x00, 0x11, 0x08,
+      0x02, 0x58, // height: 600
+      0x03, 0x20, // width: 800
+      0x03, 0x01, 0x11, 0x00, 0x02, 0x11, 0x01, 0x03, 0x11, 0x01, 0xFF, 0xD9
+    ]);
+
+    const result = imageValidationService.inspectCustomerPhoto(landscapeBuf, 'selfie.jpg');
+    assert.equal(result.framing, 'close_up');
+    assert.equal(result.aspectRatio < 1.1, true);
+    assert.equal(result.warnings.some(w => w.includes('close-up')), true);
+    assert.equal(result.recommendations.some(r => r.includes('standing portrait')), true);
+
+    // Construct a minimal 600x1200 (portrait, ratio 2.0) JPEG buffer
+    const portraitBuf = Buffer.from([
+      0xFF, 0xD8, 0xFF, 0xC0, 0x00, 0x11, 0x08,
+      0x04, 0xB0, // height: 1200
+      0x02, 0x58, // width: 600
+      0x03, 0x01, 0x11, 0x00, 0x02, 0x11, 0x01, 0x03, 0x11, 0x01, 0xFF, 0xD9
+    ]);
+    const portraitResult = imageValidationService.inspectCustomerPhoto(portraitBuf, 'standing.jpg');
+    assert.equal(portraitResult.framing, 'full_body');
+    assert.equal(portraitResult.aspectRatio >= 1.35, true);
+    assert.equal(portraitResult.suitabilityScore >= 80, true);
+    assert.equal(portraitResult.identityPreservationGrade, 'HIGH');
+  });
+
+  // 17. Identity Preservation: Customer upload sets crop: false to preserve framing
+  await t.test('17. Customer upload sets crop: false to preserve framing', async () => {
+    let capturedOptions = null;
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: {
+        upload: async (buf, opts) => {
+          capturedOptions = opts;
+          return { imageId: 'img_test_123', imageUrl: 'https://example.com/cust.jpg' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+    const dummyPath = path.join(uploadsDir, 'test_crop_customer.jpg');
+    fs.writeFileSync(dummyPath, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    await adapter.uploadCustomerPhoto(dummyPath, 'vestra_test_user');
+    assert.equal(capturedOptions.crop, false, 'crop must be false to avoid cutting body/face/framing');
+
+    if (fs.existsSync(dummyPath)) fs.unlinkSync(dummyPath);
+  });
+
+  // 18. Garment Accuracy: submitTryOnJob includes orientation and on_model classifications
+  await t.test('18. submitTryOnJob includes orientation and on_model classifications', async () => {
+    let submittedPayload = null;
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: {
+        upload: async () => ({ imageId: 'img_pers_456', imageUrl: 'https://example.com/p.jpg' })
+      },
+      tryOn: {
+        create: async (payload) => {
+          submittedPayload = payload;
+          return { generationId: 'gen_test_789', status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyCust = path.join(uploadsDir, 'test_cust_class.jpg');
+    fs.writeFileSync(dummyCust, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyCust,
+      garmentImageUrl: 'https://example.com/suit.jpg',
+      garment: { id: 10, name: 'Wool Suit', primary_image_url: 'https://example.com/suit.jpg' },
+      productId: 10,
+      category: 'full_body'
+    });
+
+    assert.ok(submittedPayload);
+    assert.equal(submittedPayload.products[0].images[0].classifications.orientation, 'front');
+    assert.equal(submittedPayload.products[0].images[0].classifications.on_model, 'true');
+
+    if (fs.existsSync(dummyCust)) fs.unlinkSync(dummyCust);
   });
 
   // Restore env

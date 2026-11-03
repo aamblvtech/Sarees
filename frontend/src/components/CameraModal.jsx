@@ -207,23 +207,35 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
                 onCanPlay={() => setIsVideoReady(true)}
               />
               
-              {/* Electric Indigo #F5AFAF Framing Overlay Guide */}
-              <div className="absolute inset-6 border border-dashed border-[#F5AFAF]/50 pointer-events-none flex flex-col justify-between p-4 z-10">
-                {/* Corner Accents */}
+              {/* High-Precision Full-Body Silhouette Framing Guide Overlay */}
+              <div className="absolute inset-4 border border-dashed border-[#F5AFAF]/60 pointer-events-none flex flex-col justify-between p-3 z-10">
+                {/* Header Instruction */}
                 <div className="flex justify-between items-start">
-                  <span className="w-3 h-3 border-t-2 border-l-2 border-[#F5AFAF]" />
-                  <span className="text-[9px] uppercase font-mono tracking-widest text-[#FFFFFF] bg-black/70 px-2 py-0.5 border border-[#F5AFAF]/40">
-                    Center Torso & Face
+                  <span className="w-3.5 h-3.5 border-t-2 border-l-2 border-[#F5AFAF]" />
+                  <span className="text-[9px] uppercase font-mono tracking-widest text-white bg-black/80 px-2.5 py-1 border border-[#F5AFAF]/40 shadow-xs">
+                    Align Full Standing Silhouette
                   </span>
-                  <span className="w-3 h-3 border-t-2 border-r-2 border-[#F5AFAF]" />
+                  <span className="w-3.5 h-3.5 border-t-2 border-r-2 border-[#F5AFAF]" />
                 </div>
 
+                {/* Center Silhouette Frame Graphic */}
+                <div className="mx-auto w-40 sm:w-48 h-64 sm:h-72 border-2 border-[#F5AFAF]/30 rounded-3xl flex flex-col items-center justify-between p-3 bg-[#F5AFAF]/5 backdrop-blur-[1px]">
+                  <div className="w-12 h-14 rounded-full border border-dashed border-[#F5AFAF]/60 mt-1" />
+                  <div className="text-[8px] uppercase font-mono tracking-wider text-white/90 bg-black/60 px-2 py-0.5 rounded">
+                    Torso & Shoulders
+                  </div>
+                  <div className="text-[8px] uppercase font-mono tracking-wider text-white/90 bg-black/60 px-2 py-0.5 rounded mb-1">
+                    Waist & Hips
+                  </div>
+                </div>
+
+                {/* Bottom Distance & Identity Preservation Guideline */}
                 <div className="flex justify-between items-end">
-                  <span className="w-3 h-3 border-b-2 border-l-2 border-[#F5AFAF]" />
-                  <span className="text-[9px] uppercase font-mono tracking-widest text-slate-300 bg-black/70 px-2 py-0.5 border border-slate-700">
-                    Optimal Distance: 4–6 ft
+                  <span className="w-3.5 h-3.5 border-b-2 border-l-2 border-[#F5AFAF]" />
+                  <span className="text-[9px] uppercase font-mono tracking-widest text-slate-200 bg-black/80 px-2.5 py-1 border border-slate-700 shadow-xs">
+                    Step Back 5–7 ft &bull; Preserves Facial Features
                   </span>
-                  <span className="w-3 h-3 border-b-2 border-r-2 border-[#F5AFAF]" />
+                  <span className="w-3.5 h-3.5 border-b-2 border-r-2 border-[#F5AFAF]" />
                 </div>
               </div>
             </>

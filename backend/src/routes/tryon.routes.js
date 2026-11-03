@@ -105,6 +105,15 @@ router.post('/upload', uploadSilhouette.single('photo'), (req, res) => {
   }
 
   const fileUrl = `${req.protocol}://${req.get('host')}/uploads/customer_silhouettes/${req.file.filename}`;
+  const filePath = path.join(customerUploadsDir, req.file.filename);
+  let qualityAssessment = null;
+
+  try {
+    const fileBuffer = fs.readFileSync(filePath);
+    qualityAssessment = imageValidationService.inspectCustomerPhoto(fileBuffer, req.file.filename);
+  } catch (err) {
+    console.warn('[Quality Inspector] Analysis notice:', err.message);
+  }
 
   return res.json({
     success: true,
@@ -114,7 +123,8 @@ router.post('/upload', uploadSilhouette.single('photo'), (req, res) => {
       url: fileUrl,
       size: req.file.size,
       mimetype: req.file.mimetype
-    }
+    },
+    qualityAssessment
   });
 });
 
@@ -139,6 +149,7 @@ router.post('/upload-base64', (req, res) => {
   try {
     fs.writeFileSync(filePath, validation.buffer);
     const fileUrl = `${req.protocol}://${req.get('host')}/uploads/customer_silhouettes/${filename}`;
+    const qualityAssessment = imageValidationService.inspectCustomerPhoto(validation.buffer, filename);
 
     return res.json({
       success: true,
@@ -148,10 +159,41 @@ router.post('/upload-base64', (req, res) => {
         url: fileUrl,
         size: validation.buffer.length,
         mimetype: validation.mime
-      }
+      },
+      qualityAssessment
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: 'Failed to save camera snapshot: ' + err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/inspect-photo
+ * Inspects a customer photo to evaluate full-body visibility, framing, and identity preservation potential
+ */
+router.post('/inspect-photo', async (req, res) => {
+  const { photoUrl, filename } = req.body;
+  if (!photoUrl && !filename) {
+    return res.status(400).json({ success: false, error: 'photoUrl or filename is required.' });
+  }
+
+  try {
+    const targetFile = filename || path.basename(photoUrl.split('?')[0]);
+    const filePath = path.join(customerUploadsDir, targetFile);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, error: 'Photograph file not found on server.' });
+    }
+
+    const buffer = fs.readFileSync(filePath);
+    const qualityAssessment = imageValidationService.inspectCustomerPhoto(buffer, targetFile);
+
+    res.json({
+      success: true,
+      data: qualityAssessment
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 

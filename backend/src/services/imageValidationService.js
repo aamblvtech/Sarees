@@ -96,6 +96,153 @@ export const imageValidationService = {
   },
 
   /**
+   * Fast zero-dependency parser for image dimensions from Buffer headers
+   * Supports JPEG (SOF0/SOF2), PNG (IHDR), and WebP (VP8/VP8L/VP8X)
+   */
+  parseImageDimensions(buffer) {
+    if (!Buffer.isBuffer(buffer) || buffer.length < 12) {
+      return null;
+    }
+
+    try {
+      // 1. JPEG Check (FF D8)
+      if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
+        let offset = 2;
+        while (offset < buffer.length - 8) {
+          if (buffer[offset] !== 0xFF) {
+            offset++;
+            continue;
+          }
+          const marker = buffer[offset + 1];
+          // SOF0 (0xC0), SOF1 (0xC1), SOF2 (0xC2)
+          if ([0xC0, 0xC1, 0xC2].includes(marker)) {
+            const height = buffer.readUInt16BE(offset + 5);
+            const width = buffer.readUInt16BE(offset + 7);
+            if (width > 0 && height > 0) {
+              return { format: 'jpeg', width, height };
+            }
+          }
+          if (marker === 0xDA || marker === 0xD9) break; // SOS or EOI
+          const length = buffer.readUInt16BE(offset + 2);
+          if (length <= 2) break;
+          offset += 2 + length;
+        }
+      }
+
+      // 2. PNG Check (89 50 4E 47 0D 0A 1A 0A)
+      if (
+        buffer[0] === 0x89 &&
+        buffer[1] === 0x50 &&
+        buffer[2] === 0x4E &&
+        buffer[3] === 0x47
+      ) {
+        // IHDR chunk starts at byte 12 (length: 4, type 'IHDR': 4, width: 4, height: 4)
+        if (buffer.length >= 24) {
+          const width = buffer.readUInt32BE(16);
+          const height = buffer.readUInt32BE(20);
+          return { format: 'png', width, height };
+        }
+      }
+
+      // 3. WebP Check (RIFF ... WEBP)
+      if (
+        buffer.toString('ascii', 0, 4) === 'RIFF' &&
+        buffer.toString('ascii', 8, 12) === 'WEBP'
+      ) {
+        const type = buffer.toString('ascii', 12, 16);
+        if (type === 'VP8 ' && buffer.length >= 30) {
+          const width = buffer.readUInt16LE(26) & 0x3fff;
+          const height = buffer.readUInt16LE(28) & 0x3fff;
+          return { format: 'webp', width, height };
+        } else if (type === 'VP8L' && buffer.length >= 25) {
+          const b1 = buffer[21];
+          const b2 = buffer[22];
+          const b3 = buffer[23];
+          const b4 = buffer[24];
+          const width = 1 + (((b2 & 0x3f) << 8) | b1);
+          const height = 1 + (((b4 & 0x0f) << 10) | (b3 << 2) | ((b2 & 0xc0) >> 6));
+          return { format: 'webp', width, height };
+        } else if (type === 'VP8X' && buffer.length >= 30) {
+          const width = 1 + buffer.readUIntLE(24, 3);
+          const height = 1 + buffer.readUIntLE(27, 3);
+          return { format: 'webp', width, height };
+        }
+      }
+    } catch (err) {
+      console.warn('[Image Inspector] Header parse notice:', err.message);
+    }
+
+    return null;
+  },
+
+  /**
+   * Comprehensive Customer Photo Quality & Identity Preservation Inspector
+   * Analyzes resolution, aspect ratio, and body framing to prevent AI facial distortion.
+   */
+  inspectCustomerPhoto(buffer, filename = '') {
+    const dims = this.parseImageDimensions(buffer);
+    const fileSize = buffer.length;
+
+    const warnings = [];
+    const recommendations = [];
+    let suitabilityScore = 100;
+    let framing = 'unknown';
+    let width = dims?.width || null;
+    let height = dims?.height || null;
+    let aspectRatio = width && height ? height / width : 1.0;
+
+    if (!dims) {
+      suitabilityScore -= 20;
+      warnings.push('Image format header could not be fully verified.');
+    } else {
+      // 1. Resolution Check
+      if (width < 400 || height < 500) {
+        suitabilityScore -= 35;
+        warnings.push(`Low resolution (${width}x${height}px). Recommended minimum is 720x1080px.`);
+        recommendations.push('Upload a higher resolution photograph to preserve facial details and fabric textures.');
+      } else if (width < 600 || height < 800) {
+        suitabilityScore -= 15;
+        recommendations.push('Resolution is acceptable, but 1080p standing photos provide highest identity preservation.');
+      }
+
+      // 2. Framing & Aspect Ratio Analysis
+      // Standing portraits typically have aspect ratio (H/W) between 1.25 and 2.2
+      if (aspectRatio < 1.1) {
+        framing = 'close_up';
+        suitabilityScore -= 40;
+        warnings.push('Framing Notice: Image appears to be a close-up selfie or landscape photo.');
+        recommendations.push(
+          'For accurate body proportions and natural draping, please upload a standing portrait showing your torso and body. Close-up selfies force AI to guess missing body parts, which can alter facial structure and proportions.'
+        );
+      } else if (aspectRatio < 1.35) {
+        framing = 'three_quarter';
+        suitabilityScore -= 10;
+        recommendations.push('Upper-body / 3/4 portrait detected. Full standing portraits yield highest realism.');
+      } else {
+        framing = 'full_body';
+        recommendations.push('Optimal portrait aspect ratio detected for virtual garment draping.');
+      }
+    }
+
+    suitabilityScore = Math.max(10, Math.min(100, suitabilityScore));
+    const suitable = suitabilityScore >= 50;
+
+    return {
+      suitable,
+      suitabilityScore,
+      framing,
+      width,
+      height,
+      aspectRatio: Number(aspectRatio.toFixed(2)),
+      fileSize,
+      fileSizeBytes: fileSize,
+      warnings,
+      recommendations,
+      identityPreservationGrade: suitabilityScore >= 80 ? 'HIGH' : suitabilityScore >= 55 ? 'MODERATE' : 'POOR_FRAMING'
+    };
+  },
+
+  /**
    * Securely delete a customer photo from disk (Privacy requirement)
    */
   deleteCustomerPhoto(filename) {

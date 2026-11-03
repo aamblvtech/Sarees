@@ -40,7 +40,10 @@ export const tryOnService = {
     const response = await apiClient.post('/tryon/upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
-    return response.data?.file;
+    return {
+      ...response.data?.file,
+      qualityAssessment: response.data?.qualityAssessment
+    };
   },
 
   /**
@@ -48,7 +51,22 @@ export const tryOnService = {
    */
   async uploadCameraSnapshot(dataUri) {
     const response = await apiClient.post('/tryon/upload-base64', { dataUri });
-    return response.data?.file;
+    return {
+      ...response.data?.file,
+      qualityAssessment: response.data?.qualityAssessment
+    };
+  },
+
+  /**
+   * Inspect customer photo quality and framing suitability
+   */
+  async inspectPhoto(photoUrl, filename) {
+    try {
+      const response = await apiClient.post('/tryon/inspect-photo', { photoUrl, filename });
+      return response.data?.data;
+    } catch (err) {
+      return null;
+    }
   },
 
   /**

@@ -350,9 +350,12 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
     }
 
     try {
+      // CRITICAL IDENTITY & PROPORTION PRESERVATION:
+      // Pass crop: false so Genlook does NOT apply its default 4:5 center crop.
+      // Preserves original camera framing, background, body proportions, posture, hands, and feet.
       const uploadResp = await this.client.images.upload(buffer, {
         mimeType,
-        crop: true,
+        crop: false,
         externalUserId: externalUserId || `vestra_cust_${Date.now()}`,
         keepForDays: 7
       });
@@ -455,17 +458,26 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       };
     }
 
-    // Build try-on payload adhering to Genlook OpenAPI schema
+    // Enhance description with identity & garment fidelity guidance within schema limits
+    const garmentDetailsPrompt = description
+      ? `${description.slice(0, 180)}. Maintain exact base color, pattern, and drape fidelity.`
+      : `${title}. Maintain exact base color, pattern, and drape fidelity.`;
+
+    // Build try-on payload adhering to official Genlook OpenAPI / SDK schema
     const payload = {
       mock: isMock,
       products: [
         {
           externalId,
           title,
-          description: description.slice(0, 250),
+          description: garmentDetailsPrompt.slice(0, 250),
           images: [
             {
-              source: productImageSource
+              source: productImageSource,
+              classifications: {
+                orientation: 'front',
+                on_model: (!isCustomGarment && garment?.primary_image_url) ? 'true' : 'false'
+              }
             }
           ]
         }
