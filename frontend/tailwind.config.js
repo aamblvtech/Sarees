@@ -9,17 +9,20 @@ export default {
     extend: {
       colors: {
         app: {
-          bg: '#FCF8F8',
-          card: '#FBEFEF',
-          border: '#F9DFDF',
+          bg: '#FFFFFF',
+          card: '#FFFFFF',
+          surface: '#F8FAFC',
+          border: '#E2E8F0',
+          borderLight: '#F1F5F9',
           accent: '#F5AFAF',
+          accentSoft: '#FBEFEF',
           darkBg: '#0F172A',
           darkBorder: '#1E293B',
-          activeLight: '#000000',
+          activeLight: '#1E293B',
           activeDark: '#FFFFFF',
         },
         rose: {
-          lightest: '#FCF8F8',
+          lightest: '#FFFFFF',
           soft: '#FBEFEF',
           border: '#F9DFDF',
           accent: '#F5AFAF',
@@ -31,9 +34,10 @@ export default {
         mono: ['"JetBrains Mono"', 'Menlo', 'monospace']
       },
       boxShadow: {
-        'vestra-sm': '0 1px 3px 0 rgba(245, 175, 175, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'vestra': '0 4px 20px -2px rgba(245, 175, 175, 0.12), 0 2px 6px -1px rgba(0, 0, 0, 0.03)',
-        'vestra-lg': '0 12px 36px -4px rgba(245, 175, 175, 0.18), 0 4px 12px -2px rgba(0, 0, 0, 0.04)',
+        'vestra-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+        'vestra-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
+        'vestra': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+        'vestra-lg': '0 12px 36px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03)',
         'scanner': '0 0 25px rgba(245, 175, 175, 0.65)',
       }
     },

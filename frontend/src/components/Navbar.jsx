@@ -20,13 +20,13 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FCF8F8]/95 dark:bg-[#0F172A]/95 backdrop-blur-md border-b border-[#F9DFDF] dark:border-slate-800 transition-colors duration-200">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
           {/* Brand Identity */}
           <Link to="/" className="flex flex-col group">
-            <span className="font-serif text-2xl sm:text-3xl tracking-[0.24em] text-[#000000] dark:text-[#FFFFFF] font-semibold transition-opacity group-hover:opacity-85">
+            <span className="font-serif text-2xl sm:text-3xl tracking-[0.24em] text-slate-900 dark:text-[#FFFFFF] font-semibold transition-opacity group-hover:opacity-85">
               VESTRA
             </span>
             <span className="text-[9px] tracking-[0.2em] text-[#F5AFAF] uppercase font-semibold">
@@ -44,13 +44,13 @@ export default function Navbar() {
                   to={link.path}
                   className={`text-xs tracking-[0.15em] uppercase transition-all py-1.5 relative ${
                     active
-                      ? 'text-[#000000] dark:text-[#FFFFFF] font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF]'
+                      ? 'text-slate-900 dark:text-[#FFFFFF] font-semibold'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF]'
                   }`}
                 >
                   <span>{link.name}</span>
                   {link.badge && (
-                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 text-[8px] font-mono font-semibold tracking-normal bg-[#FBEFEF] text-slate-800 border border-[#F9DFDF] dark:bg-slate-800 dark:text-[#F5AFAF] dark:border-slate-700 rounded">
+                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 text-[8px] font-mono font-semibold tracking-normal bg-rose-50 text-rose-800 border border-rose-200/80 dark:bg-slate-800 dark:text-[#F5AFAF] dark:border-slate-700 rounded">
                       {link.badge}
                     </span>
                   )}
@@ -68,8 +68,8 @@ export default function Navbar() {
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-[#F9DFDF] dark:border-slate-700 bg-[#FBEFEF] dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-[#F5AFAF] dark:hover:border-white transition-all shadow-xs"
-              title={isDark ? 'Switch to Light Mode (#FCF8F8)' : 'Switch to Dark Mode (#0F172A)'}
+              className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-white transition-all shadow-xs"
+              title={isDark ? 'Switch to Pure White Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle Theme"
             >
               {isDark ? (
@@ -87,14 +87,14 @@ export default function Navbar() {
 
             <Link
               to="/admin/dashboard"
-              className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
+              className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
             >
               Admin Portal
             </Link>
 
             <Link
               to="/try-on"
-              className="inline-flex items-center space-x-2 bg-[#000000] text-[#FFFFFF] hover:bg-slate-900 dark:bg-[#FFFFFF] dark:text-[#000000] dark:hover:bg-slate-100 px-5 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all duration-200 border border-[#000000] dark:border-[#FFFFFF] shadow-xs group"
+              className="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-rose-50/50 hover:border-rose-300 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 px-5 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all duration-200 border border-slate-300 dark:border-white shadow-xs group"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
               <span>Try Virtual Fitting</span>
@@ -106,7 +106,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-full border border-[#F9DFDF] dark:border-slate-700 bg-[#FBEFEF] dark:bg-slate-800 text-slate-700 dark:text-slate-200"
+              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200"
               aria-label="Toggle Theme"
             >
               {isDark ? (
@@ -124,7 +124,7 @@ export default function Navbar() {
 
             <Link
               to="/try-on"
-              className="p-2 text-[#000000] dark:text-[#FFFFFF]"
+              className="p-2 text-slate-900 dark:text-[#FFFFFF]"
               title="Virtual Fitting"
             >
               <Sparkles className="w-5 h-5 text-[#F5AFAF]" />
@@ -132,7 +132,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#000000] dark:text-[#FFFFFF] border border-[#F9DFDF] dark:border-slate-800 rounded"
+              className="p-2 text-slate-900 dark:text-[#FFFFFF] border border-slate-200 dark:border-slate-800 rounded"
               aria-label="Toggle Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -144,7 +144,7 @@ export default function Navbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-[#F9DFDF] dark:border-slate-800 bg-[#FCF8F8] dark:bg-[#0F172A] px-4 pt-4 pb-6 space-y-3 animate-fadeIn">
+        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-4 pb-6 space-y-3 animate-fadeIn">
           {navLinks.map((link) => {
             const active = isActive(link.path);
             return (
@@ -154,8 +154,8 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`block text-xs uppercase tracking-widest py-2.5 px-3 rounded transition-colors ${
                   active
-                    ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] font-semibold'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-[#FBEFEF] dark:hover:bg-slate-800'
+                    ? 'bg-rose-50 text-slate-900 border border-rose-200 dark:bg-white dark:text-[#000000] font-semibold'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                 }`}
               >
                 <div className="flex items-center justify-between">

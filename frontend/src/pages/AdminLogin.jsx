@@ -31,8 +31,8 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-[85vh] bg-[#FCF8F8] dark:bg-[#0F172A] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-md w-full space-y-8 bg-white dark:bg-slate-900 p-8 sm:p-10 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+    <div className="min-h-[85vh] bg-white dark:bg-[#0F172A] flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8 transition-colors">
+      <div className="max-w-md w-full space-y-8 bg-white dark:bg-slate-900 p-8 sm:p-10 border border-slate-200/90 dark:border-slate-800 shadow-sm">
         
         {/* Brand Header */}
         <div className="text-center space-y-2">
@@ -102,7 +102,7 @@ export default function AdminLogin() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-2 transition-all shadow-sm disabled:opacity-50"
+              className="w-full py-3 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 dark:bg-white dark:text-black text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border-2 border-slate-900 disabled:opacity-50"
             >
               {loading ? (
                 <>

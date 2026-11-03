@@ -6,13 +6,13 @@
     <title>VESTRA — Experience Fashion Before You Wear It | AI Virtual Try-On</title>
     <meta name="description" content="VESTRA — Luxury fashion technology platform with AI virtual draping. Try before you buy with architectural tailoring, fluid silks, and bespoke fitting." />
     
-    <!-- Instant Theme Bootstrap (Forces Soft Rose Light Mode by default) -->
+    <!-- Instant Theme Bootstrap (Forces Pure White Light Mode by default) -->
     <script>
       (function() {
         try {
-          var v = localStorage.getItem('vestra_rose_palette_v1');
+          var v = localStorage.getItem('vestra_pure_white_v1');
           if (!v) {
-            localStorage.setItem('vestra_rose_palette_v1', 'true');
+            localStorage.setItem('vestra_pure_white_v1', 'true');
             localStorage.setItem('vestra_theme', 'light');
             document.documentElement.classList.remove('dark');
             document.documentElement.setAttribute('data-theme', 'light');
@@ -37,7 +37,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] transition-colors duration-200 antialiased selection:bg-[#F9DFDF] selection:text-[#000000] dark:selection:bg-slate-800 dark:selection:text-[#FFFFFF]">
+  <body class="bg-[#FFFFFF] dark:bg-[#0F172A] text-slate-800 dark:text-[#FFFFFF] transition-colors duration-200 antialiased selection:bg-rose-100 selection:text-slate-900 dark:selection:bg-slate-800 dark:selection:text-[#FFFFFF]">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

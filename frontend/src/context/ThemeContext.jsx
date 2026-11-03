@@ -5,10 +5,10 @@ const ThemeContext = createContext();
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     try {
-      // Version flag to force-reset stale dark mode from previous sessions to the new soft rose palette
-      const version = localStorage.getItem('vestra_rose_palette_v1');
+      // Version flag to force-reset stale dark mode from previous sessions to the new pure white light palette
+      const version = localStorage.getItem('vestra_pure_white_v1');
       if (!version) {
-        localStorage.setItem('vestra_rose_palette_v1', 'true');
+        localStorage.setItem('vestra_pure_white_v1', 'true');
         localStorage.setItem('vestra_theme', 'light');
         return 'light';
       }
@@ -44,7 +44,7 @@ export function ThemeProvider({ children }) {
       localStorage.setItem('vestra_theme', theme);
     } catch {}
 
-    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#181114' : '#FCF8F8'})`);
+    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0F172A' : '#FFFFFF'})`);
   }, [theme]);
 
   const toggleTheme = () => {

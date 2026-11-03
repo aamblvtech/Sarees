@@ -132,23 +132,23 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-800 max-w-xl w-full shadow-2xl relative overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-slate-800 max-w-xl w-full shadow-2xl relative overflow-hidden flex flex-col">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F9DFDF] dark:border-slate-800 bg-[#FBEFEF] dark:bg-[#0F172A]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#0F172A]">
           <div className="flex items-center space-x-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#F5AFAF] pulse-camera" />
-            <h3 className="font-serif text-lg font-semibold text-[#000000] dark:text-[#FFFFFF]">
+            <h3 className="font-serif text-lg font-semibold text-slate-900 dark:text-[#FFFFFF]">
               Live Silhouette Capture
             </h3>
-            <span className="text-[9px] uppercase font-mono tracking-wider px-1.5 py-0.5 rounded bg-white dark:bg-slate-800 text-[#000000] dark:text-[#F5AFAF] border border-[#F9DFDF] dark:border-slate-700">
+            <span className="text-[9px] uppercase font-mono tracking-wider px-1.5 py-0.5 rounded bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-[#F5AFAF] border border-slate-200 dark:border-slate-700">
               HD Feed
             </span>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-500 hover:text-[#000000] dark:hover:text-[#FFFFFF] transition-colors"
+            className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -247,7 +247,7 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
         </div>
 
         {/* Controls Footer */}
-        <div className="px-6 py-4 bg-[#FBEFEF] dark:bg-[#0F172A] border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-4 bg-white dark:bg-[#0F172A] border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           {!capturedPhoto ? (
             <>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -256,7 +256,7 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
               <button
                 onClick={handleCapture}
                 disabled={isInitializing || isCapturing}
-                className="px-6 py-2.5 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-widest font-semibold flex items-center space-x-2 transition-all disabled:opacity-50 shadow border border-black dark:border-white"
+                className="px-6 py-2.5 bg-white hover:bg-slate-50 text-slate-900 dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-widest font-semibold flex items-center space-x-2 transition-all disabled:opacity-50 shadow-xs border border-slate-300"
               >
                 {isCapturing ? (
                   <>
@@ -275,14 +275,14 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
             <div className="w-full flex items-center justify-between gap-3">
               <button
                 onClick={handleRetake}
-                className="px-4 py-2 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-xs uppercase tracking-widest font-medium hover:bg-white dark:hover:bg-slate-800 flex items-center space-x-2 transition-colors"
+                className="px-4 py-2 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-[#FFFFFF] text-xs uppercase tracking-widest font-medium hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center space-x-2 transition-colors shadow-xs"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Retake</span>
               </button>
               <button
                 onClick={handleConfirm}
-                className="px-6 py-2 bg-[#000000] hover:bg-slate-900 text-[#FFFFFF] dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-widest font-semibold flex items-center space-x-2 transition-all shadow border border-black dark:border-white"
+                className="px-6 py-2 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-widest font-semibold flex items-center space-x-2 transition-all shadow-sm border-2 border-slate-900"
               >
                 <Check className="w-4 h-4 text-[#F5AFAF]" />
                 <span>Apply Silhouette</span>

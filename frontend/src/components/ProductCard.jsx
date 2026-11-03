@@ -32,10 +32,10 @@ export default function ProductCard({ product }) {
     : product.primaryImage || product.images?.[0] || ATELIER_FALLBACK_IMAGE;
 
   return (
-    <div className="group relative bg-[#FCF8F8] dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 rounded-none overflow-hidden transition-all duration-300 hover:shadow-vestra flex flex-col hover:border-[#F5AFAF]">
+    <div className="group relative bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 rounded-none overflow-hidden transition-all duration-300 hover:shadow-vestra flex flex-col hover:border-slate-300">
       
       {/* Product Image Container */}
-      <div className="relative aspect-[3/4] overflow-hidden bg-[#FCF8F8] dark:bg-slate-900 border-b border-[#F9DFDF] dark:border-slate-800">
+      <div className="relative aspect-[3/4] overflow-hidden bg-slate-50 dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
         <Link
           to={`/products/${product.id}`}
           className="block w-full h-full"
@@ -52,7 +52,7 @@ export default function ProductCard({ product }) {
         {/* Floating Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
           {product.isFeatured && (
-            <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-[9px] tracking-widest uppercase px-2 py-0.5 font-mono font-medium rounded shadow-xs">
+            <span className="bg-white/95 text-slate-800 border border-slate-200/80 dark:bg-white dark:text-[#000000] text-[9px] tracking-widest uppercase px-2 py-0.5 font-mono font-medium rounded shadow-xs">
               Featured
             </span>
           )}
@@ -60,11 +60,11 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Hover Quick Action Overlay Bar */}
-        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-10">
+        <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-white/95 via-white/80 to-transparent dark:from-black/80 dark:via-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-10">
           {product.tryonCompatibility === 'unsupported' ? (
             <Link
               to={`/products/${product.id}`}
-              className="w-full py-2 px-3 bg-[#FFFFFF] text-[#000000] hover:bg-[#FBEFEF] text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-[#F9DFDF]"
+              className="w-full py-2 px-3 bg-white text-slate-800 hover:bg-slate-50 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-sm border border-slate-200"
             >
               <ArrowUpRight className="w-3.5 h-3.5 text-slate-700" />
               <span>Inspect Details</span>
@@ -72,7 +72,7 @@ export default function ProductCard({ product }) {
           ) : product.tryonCompatibility === 'awaiting_saree_engine' || product.garmentType === 'saree' ? (
             <Link
               to={`/products/${product.id}`}
-              className="w-full py-2 px-3 bg-slate-900/90 text-[#FFFFFF] hover:bg-slate-900 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-slate-700"
+              className="w-full py-2 px-3 bg-white text-slate-800 hover:bg-slate-50 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-sm border border-slate-200"
             >
               <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
               <span>Saree AI Pending</span>
@@ -80,7 +80,7 @@ export default function ProductCard({ product }) {
           ) : (
             <button
               onClick={handleTryOn}
-              className="w-full py-2 px-3 bg-[#000000] text-[#FFFFFF] hover:bg-slate-900 dark:bg-[#FFFFFF] dark:text-[#000000] dark:hover:bg-slate-100 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-md border border-black dark:border-white"
+              className="w-full py-2 px-3 bg-white text-slate-900 hover:bg-rose-50/50 hover:border-rose-300 dark:bg-white dark:text-slate-900 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-sm border border-slate-300"
             >
               <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
               <span>Select & Try On</span>
@@ -90,7 +90,7 @@ export default function ProductCard({ product }) {
       </div>
 
       {/* Product Details Section */}
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-[#FBEFEF]/35 dark:bg-[#1E293B]">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3 bg-white dark:bg-slate-800">
         <div>
           {/* Category Tag */}
           <p className="text-[10px] uppercase tracking-widest text-[#F5AFAF] font-mono font-semibold mb-1">
@@ -100,16 +100,16 @@ export default function ProductCard({ product }) {
           {/* Product Title */}
           <Link
             to={`/products/${product.id}`}
-            className="block text-sm font-medium text-[#000000] dark:text-[#FFFFFF] hover:text-[#F5AFAF] dark:hover:text-[#F5AFAF] transition-colors leading-snug font-serif"
+            className="block text-sm font-medium text-slate-900 dark:text-[#FFFFFF] hover:text-[#F5AFAF] dark:hover:text-[#F5AFAF] transition-colors leading-snug font-serif"
           >
             {product.name}
           </Link>
         </div>
 
         {/* Price and Garment Type Meta */}
-        <div className="pt-2 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between">
+        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-baseline space-x-2">
-            <span className="text-sm font-semibold text-[#000000] dark:text-[#FFFFFF] font-mono">
+            <span className="text-sm font-semibold text-slate-900 dark:text-[#FFFFFF] font-mono">
               {formattedPrice}
             </span>
             {formattedOriginalPrice && (

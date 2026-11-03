@@ -101,13 +101,13 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-800 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF] transition-colors"
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] transition-colors"
           title="Close"
         >
           <X className="w-5 h-5" />
@@ -115,11 +115,11 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
 
         {/* Modal Header */}
         <div className="text-center space-y-2 pt-1">
-          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-[#FBEFEF] dark:bg-slate-800 text-slate-900 dark:text-[#FFFFFF] border border-[#F9DFDF] dark:border-slate-700 text-[9px] uppercase font-mono tracking-widest font-semibold">
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-[#FFFFFF] border border-slate-200 dark:border-slate-700 text-[9px] uppercase font-mono tracking-widest font-semibold shadow-xs">
             <Smartphone className="w-3 h-3 text-[#F5AFAF]" />
             <span>Mobile Silhouette Link</span>
           </div>
-          <h3 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF]">
+          <h3 className="font-serif text-2xl text-slate-900 dark:text-[#FFFFFF]">
             Scan with Your Phone Camera
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">

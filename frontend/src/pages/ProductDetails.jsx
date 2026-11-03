@@ -93,7 +93,7 @@ export default function ProductDetails() {
   const availableSizes = product.sizes || ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
-    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-7xl mx-auto">
         
         {/* Back Link */}
@@ -114,7 +114,7 @@ export default function ProductDetails() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* Main Stage Image */}
-            <div className="relative aspect-[3/4] bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden group shadow-sm">
+            <div className="relative aspect-[3/4] bg-slate-50 dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 overflow-hidden group shadow-xs">
               <img
                 src={selectedImage || ATELIER_FALLBACK_IMAGE}
                 alt={product.name}
@@ -125,7 +125,7 @@ export default function ProductDetails() {
               {/* Try On Quick Floating Pill */}
               <button
                 onClick={handleLaunchTryOn}
-                className="absolute top-4 right-4 bg-[#000000]/90 dark:bg-[#FFFFFF]/90 backdrop-blur text-white dark:text-black hover:bg-[#000000] dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-lg transition-all"
+                className="absolute top-4 right-4 bg-white/95 dark:bg-[#FFFFFF]/90 backdrop-blur-md text-slate-900 dark:text-black hover:bg-slate-50 dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-sm border border-slate-200 transition-all"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
                 <span>Virtual Try-On</span>
@@ -223,10 +223,10 @@ export default function ProductDetails() {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`py-3 text-xs uppercase tracking-wider font-semibold border transition-all ${
+                    className={`py-3 text-xs uppercase tracking-wider font-semibold border transition-all rounded ${
                       selectedSize === size
-                        ? 'bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black border-[#000000] dark:border-[#FFFFFF]'
-                        : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-[#F9DFDF] dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
+                        ? 'bg-slate-900 dark:bg-[#FFFFFF] text-white dark:text-black border-slate-900 dark:border-[#FFFFFF] shadow-xs'
+                        : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
                     }`}
                   >
                     {size}
@@ -241,7 +241,7 @@ export default function ProductDetails() {
               {/* PRIMARY: Try It On Button */}
               <button
                 onClick={handleLaunchTryOn}
-                className="w-full py-4 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-md group"
+                className="w-full py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 dark:bg-[#FFFFFF] text-slate-900 dark:text-black text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-sm border-2 border-slate-900 dark:border-white group"
               >
                 <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
                 <span>Try It On in Virtual Fitting Room</span>
@@ -250,7 +250,7 @@ export default function ProductDetails() {
               {/* SECONDARY: Add to Bag */}
               <button
                 onClick={() => alert(`Added ${product.name} (Size: ${selectedSize}) to your luxury shopping bag.`)}
-                className="w-full py-3.5 bg-transparent hover:bg-slate-100 dark:hover:bg-slate-800 border border-[#000000] dark:border-white text-slate-900 dark:text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors"
+                className="w-full py-3.5 bg-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-white text-slate-900 dark:text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors shadow-xs"
               >
                 Add Size {selectedSize} to Bag &bull; {formattedPrice}
               </button>

@@ -119,7 +119,7 @@ export default function MobileUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 sm:p-6 transition-colors">
       
       {/* Hidden File Inputs */}
       <input

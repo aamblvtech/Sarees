@@ -164,7 +164,7 @@ export default function Catalogue() {
   const headerInfo = getCategoryHeader();
 
   return (
-    <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] text-[#000000] dark:text-[#FFFFFF] py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-[#FFFFFF] py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Page Title & Breadcrumb */}
@@ -172,7 +172,7 @@ export default function Catalogue() {
           <p className="text-[10px] uppercase font-mono tracking-[0.25em] text-[#F5AFAF] font-bold">
             {headerInfo.tag}
           </p>
-          <h1 className="font-serif text-4xl sm:text-5xl font-normal text-[#000000] dark:text-[#FFFFFF]">
+          <h1 className="font-serif text-4xl sm:text-5xl font-normal text-slate-900 dark:text-[#FFFFFF]">
             {headerInfo.title}
           </h1>
           <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
@@ -181,16 +181,16 @@ export default function Catalogue() {
         </div>
 
         {/* Filter and Control Bar */}
-        <div className="bg-[#FBEFEF] dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 p-5 space-y-4 shadow-vestra-sm">
+        <div className="bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 p-5 space-y-4 shadow-xs">
           
           {/* Main Category Tabs */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#F9DFDF] dark:border-slate-800">
+          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-100 dark:border-slate-800">
             <button
               onClick={() => handleCategoryChange('all')}
               className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-colors rounded ${
                 selectedCategory === 'all'
-                  ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                  : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 hover:border-[#F5AFAF] border border-[#F9DFDF] dark:border-slate-700'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
               }`}
             >
               All Garments
@@ -201,8 +201,8 @@ export default function Catalogue() {
                 onClick={() => handleCategoryChange(cat.slug)}
                 className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-colors rounded ${
                   selectedCategory === cat.slug
-                    ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                    : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 hover:border-[#F5AFAF] border border-[#F9DFDF] dark:border-slate-700'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                    : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
                 }`}
               >
                 {cat.name}
@@ -219,8 +219,8 @@ export default function Catalogue() {
               onClick={() => handleSubcategoryChange('all')}
               className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
                 selectedSubcategory === 'all'
-                  ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                  : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 border border-[#F9DFDF] dark:border-slate-700 hover:border-[#F5AFAF]'
+                  ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
               }`}
             >
               All
@@ -231,8 +231,8 @@ export default function Catalogue() {
                 onClick={() => handleSubcategoryChange(sub)}
                 className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
                   selectedSubcategory === sub
-                    ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                    : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 border border-[#F9DFDF] dark:border-slate-700 hover:border-[#F5AFAF]'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
                 }`}
               >
                 {sub.replace('_', ' ')}
@@ -241,7 +241,7 @@ export default function Catalogue() {
           </div>
 
           {/* Search, Gender, Try-On Toggle & Sort Controls */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2 border-t border-[#F9DFDF] dark:border-slate-800">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2 border-t border-slate-100 dark:border-slate-800">
             
             {/* Gender Audience Pills */}
             <div className="flex items-center space-x-2">
@@ -254,8 +254,8 @@ export default function Catalogue() {
                   onClick={() => handleGenderChange(g)}
                   className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium rounded transition-colors ${
                     selectedGender === g
-                      ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000]'
-                      : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 border border-[#F9DFDF] dark:border-slate-700 hover:border-[#F5AFAF]'
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
                   }`}
                 >
                   {g}
@@ -267,11 +267,11 @@ export default function Catalogue() {
                 onClick={() => setOnlyTryOnReady(!onlyTryOnReady)}
                 className={`ml-2 px-3 py-1 text-[10px] uppercase font-mono tracking-wider font-semibold border rounded flex items-center space-x-1.5 transition-all ${
                   onlyTryOnReady
-                    ? 'bg-[#F5AFAF] text-black border-[#F5AFAF]'
-                    : 'bg-[#FCF8F8] dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 border-[#F9DFDF] dark:border-slate-700 hover:border-[#F5AFAF]'
+                    ? 'bg-rose-50 text-rose-900 border-rose-300 shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-rose-300'
                 }`}
               >
-                <Sparkles className="w-3 h-3 text-[#F5AFAF] dark:text-white" />
+                <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
                 <span>AI Try-On Ready</span>
               </button>
             </div>
@@ -287,7 +287,7 @@ export default function Catalogue() {
                   placeholder="Search kurti, saree, blazer..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-700 text-xs text-[#000000] dark:text-[#FFFFFF] pl-8 pr-3 py-2 rounded focus:outline-none focus:border-[#F5AFAF]"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-[#FFFFFF] pl-8 pr-3 py-2 rounded focus:outline-none focus:border-[#F5AFAF] shadow-xs"
                 />
               </div>
 
@@ -295,7 +295,7 @@ export default function Catalogue() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-[#FCF8F8] dark:bg-[#0F172A] border border-[#F9DFDF] dark:border-slate-700 text-xs text-[#000000] dark:text-[#FFFFFF] px-3 py-2 uppercase font-mono tracking-wider font-medium rounded focus:outline-none focus:border-[#F5AFAF]"
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-[#FFFFFF] px-3 py-2 uppercase font-mono tracking-wider font-medium rounded focus:outline-none focus:border-[#F5AFAF] shadow-xs"
               >
                 <option value="featured">Featured First</option>
                 <option value="price-low">Price: Low to High</option>
@@ -308,11 +308,11 @@ export default function Catalogue() {
           </div>
 
           {/* Results count & status */}
-          <div className="pt-2 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
             <span className="font-mono">
               Showing {sortedProducts.length} items
             </span>
-            <span className="text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center space-x-1">
+            <span className="text-[11px] font-mono text-slate-600 dark:text-slate-300 flex items-center space-x-1">
               <span className="w-2 h-2 rounded-full bg-[#F5AFAF] inline-block mr-1"></span>
               <span>Calibrated for Genlook virtual try-on</span>
             </span>
