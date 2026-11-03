@@ -30,7 +30,7 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
     const sarees = await query("SELECT * FROM products WHERE garment_type = 'saree' AND is_active = true");
     assert.equal(sarees.rows.length, 12, 'Should have 12 Sarees');
     for (const s of sarees.rows) {
-      assert.equal(s.tryon_compatibility, 'awaiting_saree_engine', 'Sarees must be awaiting_saree_engine');
+      assert.equal(s.tryon_compatibility, 'supported', 'Sarees must be supported');
       assert.notEqual(s.primary_image_url, '', 'Saree must have a primary image URL');
       assert.ok(!s.primary_image_url.includes('photo-1610030469668-932d0c26620f'), 'Must not have old 404 broken Unsplash URL');
     }
@@ -202,9 +202,9 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
     const balance = await adapter.getCreditBalance();
     assert.ok(balance === null || balance >= 0, 'Balance should either be a non-negative number or null if offline');
 
-    // Verify Saree product rejection
+    // Verify Saree product is supported for virtual try-on
     const saree = await query("SELECT * FROM products WHERE garment_type = 'saree' LIMIT 1");
-    assert.equal(saree.rows[0].tryon_compatibility, 'awaiting_saree_engine');
+    assert.equal(saree.rows[0].tryon_compatibility, 'supported');
 
     // Verify Accessory product rejection
     const belt = await query("SELECT * FROM products WHERE garment_type = 'accessory' LIMIT 1");

@@ -69,14 +69,6 @@ export default function ProductCard({ product }) {
               <ArrowUpRight className="w-3.5 h-3.5 text-slate-700" />
               <span>Inspect Details</span>
             </Link>
-          ) : product.tryonCompatibility === 'awaiting_saree_engine' || product.garmentType === 'saree' ? (
-            <Link
-              to={`/products/${product.id}`}
-              className="w-full py-2 px-3 bg-white text-slate-800 hover:bg-slate-50 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-sm border border-slate-200"
-            >
-              <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
-              <span>Saree AI Pending</span>
-            </Link>
           ) : (
             <button
               onClick={handleTryOn}

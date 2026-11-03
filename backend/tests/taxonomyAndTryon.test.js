@@ -28,7 +28,7 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
 
     for (const saree of sarees) {
       assert.strictEqual(saree.gender, 'women', 'Sarees should target women');
-      assert.strictEqual(saree.tryonCompatibility, 'awaiting_saree_engine', 'Sarees must be flagged as awaiting_saree_engine');
+      assert.strictEqual(saree.tryonCompatibility, 'supported', 'Sarees are enabled as AI Ready');
       assert.ok(saree.primaryImage && saree.primaryImage.startsWith('https://'), 'Must have valid HTTPS image URL');
       assert.ok(saree.tryonOverlayImage && saree.tryonOverlayImage.startsWith('https://'), 'Must have valid try-on input image URL');
     }

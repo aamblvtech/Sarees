@@ -357,15 +357,7 @@ router.post('/jobs', async (req, res) => {
 
       garment = prodResult.rows[0];
 
-      // Check Try-On Compatibility
-      if (garment.tryon_compatibility === 'awaiting_saree_engine' || garment.garment_type === 'saree') {
-        return res.status(400).json({
-          success: false,
-          error: 'Saree virtual try-on requires a dedicated multi-layer draping AI engine (pleats, pallu drape, and blouse synthesis). Genlook standard diffusion try-on does not support unstitched 6-yard sarees. Saree AI integration is currently pending.',
-          compatibilityStatus: 'awaiting_saree_engine'
-        });
-      }
-
+      // Check Try-On Compatibility: block only unsupported items (e.g. accessories)
       if (garment.tryon_compatibility === 'unsupported' || garment.garment_type === 'accessory') {
         return res.status(400).json({
           success: false,
@@ -378,10 +370,14 @@ router.post('/jobs', async (req, res) => {
       garmentDescription = garment.name + (garment.description ? ` - ${garment.description.slice(0, 150)}` : '');
       garmentCategory = garment.garment_type || 'upper_body';
 
+      if (garmentCategory === 'saree') {
+        garmentCategory = 'full_body';
+      }
+
       if (!['upper_body', 'lower_body', 'full_body'].includes(garmentCategory)) {
         if (['trousers', 'jeans', 'skirts', 'pants'].includes(garment.subcategory)) {
           garmentCategory = 'lower_body';
-        } else if (['gowns', 'dresses', 'salwar_suits'].includes(garment.subcategory)) {
+        } else if (['gowns', 'dresses', 'salwar_suits', 'sarees'].includes(garment.subcategory)) {
           garmentCategory = 'full_body';
         } else {
           garmentCategory = 'upper_body';
@@ -397,20 +393,16 @@ router.post('/jobs', async (req, res) => {
 
       if (!['upper_body', 'lower_body', 'full_body'].includes(garmentCategory)) {
         if (garmentCategory === 'saree') {
-          return res.status(400).json({
-            success: false,
-            error: 'Custom sarees cannot be draped with 2D clothing diffusion models. Multi-layer pleating engine required.',
-            compatibilityStatus: 'awaiting_saree_engine'
-          });
-        }
-        if (garmentCategory === 'accessory') {
+          garmentCategory = 'full_body';
+        } else if (garmentCategory === 'accessory') {
           return res.status(400).json({
             success: false,
             error: 'Accessories are unsupported by 2D garment diffusion try-on.',
             compatibilityStatus: 'unsupported'
           });
+        } else {
+          garmentCategory = 'upper_body';
         }
-        garmentCategory = 'upper_body';
       }
 
       garment = {

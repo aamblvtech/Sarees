@@ -34,9 +34,9 @@ export function getProductStatus(product, isImageMissing = false) {
     };
   }
 
-  if (product?.garmentType === 'saree' || product?.tryonCompatibility === 'awaiting_saree_engine') {
+  if (product?.tryonCompatibility === 'awaiting_saree_engine') {
     return {
-      label: 'Saree AI Pending',
+      label: 'Awaiting Saree AI',
       badgeClass: 'bg-[#FBEFEF] text-slate-900 border-[#F5AFAF] dark:bg-slate-800 dark:text-[#F5AFAF] dark:border-slate-700',
       icon: Layers,
       description: 'Awaiting dedicated Saree Pleating & Drape AI Engine'
@@ -52,7 +52,7 @@ export function getProductStatus(product, isImageMissing = false) {
     };
   }
 
-  if (product?.tryonCompatibility === 'supported' && ['upper_body', 'lower_body', 'full_body'].includes(product?.garmentType)) {
+  if (product?.tryonCompatibility === 'supported' && ['upper_body', 'lower_body', 'full_body', 'saree'].includes(product?.garmentType)) {
     return {
       label: 'AI Ready',
       badgeClass: 'bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-200 dark:border-emerald-800/50',

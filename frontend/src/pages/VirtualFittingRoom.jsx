@@ -169,13 +169,6 @@ export default function VirtualFittingRoom() {
         return;
       }
 
-      if (targetGarment?.garmentType === 'saree' || targetGarment?.tryonCompatibility === 'awaiting_saree_engine') {
-        setGenerationError(
-          'Saree virtual try-on requires a dedicated multi-layer Saree Drape AI Engine (pleats, pallu drape & blouse synthesis). Genlook standard diffusion try-on does not support 6-yard unstitched sarees. Saree AI integration is currently pending.'
-        );
-        return;
-      }
-
       if (targetGarment?.garmentType === 'accessory' || targetGarment?.tryonCompatibility === 'unsupported') {
         setGenerationError(
           'Accessories (belts, shawls, bags) are unsupported by 2D garment diffusion try-on. 3D AR simulation is required.'
@@ -1270,23 +1263,6 @@ export default function VirtualFittingRoom() {
                       >
                         <EyeOff className="w-3 h-3" />
                         <span>Catalogue Only</span>
-                      </button>
-                    ) : product.tryonCompatibility === 'awaiting_saree_engine' || product.garmentType === 'saree' ? (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelectCatalogueProduct(product);
-                        }}
-                        className={`w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold transition-all flex items-center justify-center space-x-1 rounded border ${
-                          isSelected
-                            ? 'bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border-black dark:border-white'
-                            : 'bg-indigo-50/70 text-indigo-900 dark:bg-indigo-950/40 dark:text-indigo-200 border-indigo-200 dark:border-indigo-800/60 hover:bg-indigo-100'
-                        }`}
-                        title="6-Yard unstitched saree drape awaiting dedicated 3D pleating engine"
-                      >
-                        <Layers className="w-3 h-3 text-[#F5AFAF]" />
-                        <span>{isSelected ? 'Saree Selected' : 'Saree AI Pending'}</span>
                       </button>
                     ) : (
                       <button
