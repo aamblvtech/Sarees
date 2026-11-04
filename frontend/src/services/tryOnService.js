@@ -37,9 +37,7 @@ export const tryOnService = {
     const formData = new FormData();
     formData.append('photo', file);
 
-    const response = await apiClient.post('/tryon/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await apiClient.post('/tryon/upload', formData);
     return {
       ...response.data?.file,
       qualityAssessment: response.data?.qualityAssessment
@@ -76,9 +74,7 @@ export const tryOnService = {
     const formData = new FormData();
     formData.append('garment', file);
 
-    const response = await apiClient.post('/tryon/upload-garment', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await apiClient.post('/tryon/upload-garment', formData);
     return response.data?.file;
   },
 
@@ -106,9 +102,7 @@ export const tryOnService = {
     formData.append('photo', file);
     formData.append('consent', String(consent));
 
-    const response = await apiClient.post(`/tryon/qr-sessions/${token}/upload`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await apiClient.post(`/tryon/qr-sessions/${token}/upload`, formData);
     return response.data;
   },
 

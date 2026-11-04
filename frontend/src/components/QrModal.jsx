@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Smartphone, RefreshCw, CheckCircle2, AlertCircle, X, Shield, Clock } from 'lucide-react';
+import { Smartphone, RefreshCw, CheckCircle2, AlertCircle, X, Shield, Clock, ExternalLink, Copy, Check, Wifi } from 'lucide-react';
 import tryOnService from '../services/tryOnService';
 
 export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
@@ -8,6 +8,7 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
   const [error, setError] = useState(null);
   const [countdown, setCountdown] = useState(300);
   const [uploadedPhotoUrl, setUploadedPhotoUrl] = useState(null);
+  const [copied, setCopied] = useState(false);
 
   const pollIntervalRef = useRef(null);
   const countdownIntervalRef = useRef(null);
@@ -200,8 +201,40 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                   </div>
                 </div>
 
-                <div className="text-center text-[10px] text-slate-500 dark:text-slate-400 space-y-1">
-                  <p>Open default camera app on iOS or Android and tap notification.</p>
+                {/* Wi-Fi & Network Notice */}
+                <div className="flex items-center space-x-2 p-2 bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded text-[10px] text-amber-800 dark:text-amber-200">
+                  <Wifi className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+                  <span>Ensure your phone is connected to the same Wi-Fi network (IP: <strong>{session.lanIp}</strong>)</span>
+                </div>
+
+                <div className="text-center text-[10px] text-slate-500 dark:text-slate-400 space-y-2">
+                  <p>Scan with your phone's default Camera app to upload.</p>
+                  
+                  {/* Direct link helper */}
+                  <div className="flex items-center justify-center space-x-2 pt-1 border-t border-slate-100 dark:border-slate-800 text-[10px]">
+                    <a
+                      href={session.mobileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white underline font-mono flex items-center space-x-1"
+                    >
+                      <span>Open mobile page in tab</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                    <span className="text-slate-300">&bull;</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard?.writeText(session.mobileUrl);
+                        setCopied(true);
+                        setTimeout(() => setCopied(false), 2000);
+                      }}
+                      className="text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white font-mono flex items-center space-x-1"
+                    >
+                      {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                      <span>{copied ? 'Copied' : 'Copy Link'}</span>
+                    </button>
+                  </div>
                 </div>
 
               </div>

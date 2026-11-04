@@ -65,9 +65,13 @@ export default function MobileUpload() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate type
-    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!validTypes.includes(file.mimetype || file.type)) {
+    // Validate type including mobile camera image/jpg and extension checks
+    const fileType = (file.mimetype || file.type || '').toLowerCase();
+    const ext = file.name ? file.name.split('.').pop().toLowerCase() : '';
+    const validMimes = ['image/jpeg', 'image/jpg', 'image/pjpeg', 'image/png', 'image/webp'];
+    const validExts = ['jpg', 'jpeg', 'png', 'webp'];
+
+    if (!validMimes.includes(fileType) && !validExts.includes(ext)) {
       setUploadError('Please select a JPEG, PNG, or WebP photo.');
       return;
     }

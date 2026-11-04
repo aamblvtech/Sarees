@@ -33,8 +33,14 @@ export const imageValidationService = {
       return { valid: false, error: 'No image file was provided.' };
     }
 
-    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    if (!allowedMimeTypes.includes(file.mimetype)) {
+    const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/pjpeg', 'image/png', 'image/webp'];
+    const ext = path.extname(file.originalname || file.filename || '').toLowerCase();
+    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
+
+    const mimeValid = allowedMimeTypes.includes(file.mimetype);
+    const extValid = ext && validExtensions.includes(ext);
+
+    if (!mimeValid && !extValid) {
       return {
         valid: false,
         error: `Invalid file format (${file.mimetype}). Only JPEG, PNG, and WebP are supported for virtual try-on.`
@@ -49,8 +55,6 @@ export const imageValidationService = {
       };
     }
 
-    const ext = path.extname(file.originalname || file.filename || '').toLowerCase();
-    const validExtensions = ['.jpg', '.jpeg', '.png', '.webp'];
     if (ext && !validExtensions.includes(ext)) {
       return {
         valid: false,
