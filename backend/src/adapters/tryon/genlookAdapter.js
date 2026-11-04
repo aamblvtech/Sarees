@@ -41,7 +41,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
   }
 
   get apiKey() {
-    return process.env.GENLOOK_API_KEY || '';
+    return (process.env.GENLOOK_API_KEY || '').trim();
   }
 
   get client() {
