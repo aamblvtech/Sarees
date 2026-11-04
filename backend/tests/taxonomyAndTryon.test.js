@@ -13,12 +13,13 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
 
   await t.test('2. Validates saree collection taxonomy, weaves, and compatibility', () => {
     const sarees = sampleProducts.filter((p) => p.garmentType === 'saree');
-    assert.strictEqual(sarees.length, 12, 'Must have exactly 12 curated sarees');
+    assert.strictEqual(sarees.length, 18, 'Must have exactly 18 curated sarees');
     
     const expectedSubcategories = [
       'kanjivaram', 'banarasi', 'chanderi', 'pochampally', 'gadwal',
       'uppada', 'paithani', 'organza', 'cotton', 'bridal',
-      'designer_party', 'traditional_handloom'
+      'designer_party', 'traditional_handloom',
+      'patola', 'kalamkari', 'kota_doria', 'bandhani', 'mysore_silk', 'tussar'
     ];
     const actualSubcategories = new Set(sarees.map((s) => s.subcategory));
 
