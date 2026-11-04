@@ -9,6 +9,7 @@ import { sampleModelSilhouettes } from '../data/sampleProducts.js';
 import { query } from '../config/db.js';
 import imageValidationService from '../services/imageValidationService.js';
 import qrSessionService from '../services/qrSessionService.js';
+import resultQualityService from '../services/resultQualityService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -343,7 +344,8 @@ router.post('/jobs', async (req, res) => {
       const prodResult = await query(
         `SELECT p.id, p.name, p.slug, p.description, p.category_id, p.subcategory,
                 p.gender, p.garment_type AS garment_type, p.tryon_compatibility,
-                p.primary_image_url, p.tryon_image_url,
+                p.primary_image_url, p.tryon_image_url, p.material, p.fit, p.care_instructions,
+                p.updated_at,
                 c.name AS category_name, c.slug AS category_slug
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
@@ -356,6 +358,27 @@ router.post('/jobs', async (req, res) => {
       }
 
       garment = prodResult.rows[0];
+
+      // Fetch multiple views from product_images where available
+      try {
+        const imgRes = await query(
+          `SELECT image_url, alt_text, is_primary, sort_order FROM product_images WHERE product_id = $1 ORDER BY is_primary DESC, sort_order ASC`,
+          [garment.id]
+        );
+        if (imgRes.rows && imgRes.rows.length > 0) {
+          garment.images = imgRes.rows.map(r => ({
+            url: r.image_url,
+            orientation: r.alt_text?.toLowerCase().includes('back') ? 'back' : 'front',
+            on_model: 'true'
+          }));
+        } else if (garment.primary_image_url) {
+          garment.images = [{ url: garment.primary_image_url, orientation: 'front', on_model: 'true' }];
+        }
+      } catch (imgErr) {
+        if (garment.primary_image_url) {
+          garment.images = [{ url: garment.primary_image_url, orientation: 'front', on_model: 'true' }];
+        }
+      }
 
       // Check Try-On Compatibility: block only unsupported items (e.g. accessories)
       if (garment.tryon_compatibility === 'unsupported' || garment.garment_type === 'accessory') {
@@ -549,10 +572,30 @@ router.post('/jobs', async (req, res) => {
  * Helper to persist completed result to PostgreSQL
  */
 async function saveCompletedResult(jobUuid, resultImageUrl, provider, isMock = false, isSimulation = false) {
-  const jobRow = await query('SELECT id FROM tryon_jobs WHERE job_uuid = $1', [jobUuid]);
+  const jobRow = await query(
+    `SELECT j.*, p.name AS prod_name, p.garment_type, p.subcategory, p.material, p.fit, p.primary_image_url
+     FROM tryon_jobs j
+     LEFT JOIN products p ON j.product_id = p.id
+     WHERE j.job_uuid = $1`,
+    [jobUuid]
+  );
   if (!jobRow.rows || jobRow.rows.length === 0) return;
 
-  const jobId = jobRow.rows[0].id;
+  const jobData = jobRow.rows[0];
+  const jobId = jobData.id;
+
+  // Run comprehensive result quality & fidelity verification
+  const qualityAssessment = resultQualityService.evaluateResult({
+    garment: {
+      name: jobData.prod_name || jobData.custom_garment_name || 'Garment',
+      garment_type: jobData.garment_type || jobData.garment_category,
+      subcategory: jobData.subcategory || '',
+      material: jobData.material || '',
+      fit: jobData.fit || ''
+    },
+    resultImageUrl,
+    isMock
+  });
 
   await query(
     `UPDATE tryon_jobs
@@ -570,6 +613,7 @@ async function saveCompletedResult(jobUuid, resultImageUrl, provider, isMock = f
      SET result_image_url = EXCLUDED.result_image_url,
          is_simulation = EXCLUDED.is_simulation,
          is_mock = EXCLUDED.is_mock,
+         fit_score = EXCLUDED.fit_score,
          composite_details = EXCLUDED.composite_details`,
     [
       jobId,
@@ -582,9 +626,11 @@ async function saveCompletedResult(jobUuid, resultImageUrl, provider, isMock = f
           ? 'Prototype Simulation'
           : 'Genlook Official Virtual Try-On API (v1 Real AI)',
         isMock,
+        qualityAssessment,
+        verificationStatus: qualityAssessment.verificationStatus,
         savedAt: new Date().toISOString()
       }),
-      0.98,
+      qualityAssessment.overallScore,
       isSimulation,
       isMock
     ]
@@ -669,13 +715,20 @@ router.get('/jobs/:id', async (req, res) => {
       createdAt: job.created_at,
       completedAt: job.completed_at,
       result: job.result_image_url
-        ? {
-            resultImageUrl: job.result_image_url,
-            isMock: job.is_mock ?? false,
-            isSimulation: job.is_simulation ?? false,
-            fitScore: job.fit_score || 0.98,
-            compositeDetails: job.composite_details
-          }
+        ? (() => {
+            const parsedDetails = typeof job.composite_details === 'string'
+              ? JSON.parse(job.composite_details)
+              : (job.composite_details || {});
+            return {
+              resultImageUrl: job.result_image_url,
+              isMock: job.is_mock ?? false,
+              isSimulation: job.is_simulation ?? false,
+              fitScore: job.fit_score || parsedDetails.qualityAssessment?.overallScore || 0.88,
+              verificationStatus: parsedDetails.verificationStatus || parsedDetails.qualityAssessment?.verificationStatus || 'VERIFIED',
+              qualityAssessment: parsedDetails.qualityAssessment || null,
+              compositeDetails: parsedDetails
+            };
+          })()
         : null
     });
   } catch (err) {

@@ -501,6 +501,321 @@ test('Genlook Try-On Integration Suite', async (t) => {
     if (fs.existsSync(dummyCust)) fs.unlinkSync(dummyCust);
   });
 
+  // 19. Test Dress Product: Generates accurate structured prompt and versioned externalId
+  await t.test('19. Accurately maps dress product with silhouette, neckline, and versioned externalId', async () => {
+    let submittedPayload = null;
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: { upload: async () => ({ imageId: 'img_dress_cust' }) },
+      tryOn: {
+        create: async (payload) => {
+          submittedPayload = payload;
+          return { generationId: 'gen_dress_1', status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_dress_photo.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    const dressGarment = {
+      id: 18,
+      sku: 'VES-WOM-006',
+      name: 'The Obsidian Sculptural Evening Gown',
+      slug: 'the-obsidian-sculptural-evening-gown',
+      garment_type: 'dress',
+      subcategory: 'gowns',
+      material: '82% Viscose Velvet, 18% Silk Satin Lining',
+      fit: 'Hourglass contour with internal boned corset and fluid train',
+      description: 'Floor-length couture evening gown cut from midnight obsidian velvet with architectural off-shoulder neckline and flowing fishtail train.',
+      primary_image_url: 'https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f'
+    };
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyPhoto,
+      garmentImageUrl: dressGarment.primary_image_url,
+      garment: dressGarment,
+      productId: dressGarment.id
+    });
+
+    assert.ok(submittedPayload);
+    const prod = submittedPayload.products[0];
+    assert.equal(prod.title, dressGarment.name);
+    assert.ok(prod.externalId.startsWith('vestra-the-obsidian-sculptural-evening-gown-v'));
+    assert.ok(prod.description.includes('Floor-length'));
+    assert.ok(prod.description.includes('off-shoulder'));
+    assert.ok(prod.description.includes('Viscose Velvet'));
+    assert.equal(prod.images[0].classifications.orientation, 'front');
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 20. Test Saree Product: Generates accurate 6-yard unstitched drape specification and zari details
+  await t.test('20. Accurately maps saree product with 6-yard drape specification and border details', async () => {
+    let submittedPayload = null;
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: { upload: async () => ({ imageId: 'img_saree_cust' }) },
+      tryOn: {
+        create: async (payload) => {
+          submittedPayload = payload;
+          return { generationId: 'gen_saree_1', status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_saree_photo.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    const sareeGarment = {
+      id: 1,
+      sku: 'VES-SAR-001',
+      name: 'Kanjivaram Pure Mulberry Silk Saree',
+      slug: 'kanjivaram-pure-mulberry-silk-saree',
+      garment_type: 'saree',
+      subcategory: 'kanjivaram',
+      material: '100% Grade 6A Pure Mulberry Silk & 24K Gold Plated Zari',
+      fit: 'Classic 6-yard unstitched handloom drape with 0.8m contrast blouse',
+      description: 'Woven with three-ply high-twist pure mulberry silk and electroplated gold zari in Kanchipuram. Displays temple korvai borders with traditional motifs.',
+      primary_image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c'
+    };
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyPhoto,
+      garmentImageUrl: sareeGarment.primary_image_url,
+      garment: sareeGarment,
+      productId: sareeGarment.id
+    });
+
+    assert.ok(submittedPayload);
+    const prod = submittedPayload.products[0];
+    assert.equal(prod.title, sareeGarment.name);
+    assert.ok(prod.externalId.startsWith('vestra-kanjivaram-pure-mulberry-silk-saree-v'));
+    assert.ok(prod.description.includes('6-yard Indian handloom saree drape'));
+    assert.ok(prod.description.includes('pleats and diagonal pallu'));
+    assert.ok(prod.description.includes('Pure Mulberry Silk'));
+    assert.ok(prod.description.includes('contrast blouse'));
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 21. Test Men's Outfit: Generates accurate 3-piece formal suit tailoring details
+  await t.test('21. Accurately maps men outfit with tailoring and wool specifications', async () => {
+    let submittedPayload = null;
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: { upload: async () => ({ imageId: 'img_men_cust' }) },
+      tryOn: {
+        create: async (payload) => {
+          submittedPayload = payload;
+          return { generationId: 'gen_men_1', status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_men_photo.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    const menGarment = {
+      id: 25,
+      sku: 'VES-MEN-001',
+      name: 'Bespoke Charcoal Italian Wool 3-Piece Formal Suit',
+      slug: 'bespoke-charcoal-italian-wool-3-piece-formal-suit',
+      garment_type: 'suit',
+      subcategory: 'formal_suits',
+      gender: 'men',
+      material: '100% Super 150s Italian Merino Virgin Wool',
+      fit: 'Savile Row inspired tailored architectural fit with clean drape',
+      description: 'Complete formal 3-piece sartorial suit: structured two-button peak lapel jacket, matching tailored waistcoat, and flat-front trousers.',
+      primary_image_url: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf'
+    };
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyPhoto,
+      garmentImageUrl: menGarment.primary_image_url,
+      garment: menGarment,
+      productId: menGarment.id
+    });
+
+    assert.ok(submittedPayload);
+    const prod = submittedPayload.products[0];
+    assert.equal(prod.title, menGarment.name);
+    assert.ok(prod.externalId.startsWith('vestra-bespoke-charcoal-italian-wool-3-piece-formal-suit-v'));
+    assert.ok(prod.description.includes('3-piece formal suit'));
+    assert.ok(prod.description.includes('Merino Virgin Wool'));
+    assert.ok(prod.description.includes('lapel roll'));
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 22. Test Product Image Updates: Changing garment image produces new versioned externalId
+  await t.test('22. Product image update generates a new versioned externalId to prevent stale cloud cache reuse', async () => {
+    let capturedPayloads = [];
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: { upload: async () => ({ imageId: 'img_ver_cust' }) },
+      tryOn: {
+        create: async (payload) => {
+          capturedPayloads.push(payload);
+          return { generationId: 'gen_ver_' + capturedPayloads.length, status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_ver_photo.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    const originalGarment = {
+      id: 15,
+      slug: 'raw-silk-churidar-kurta-ensemble',
+      name: 'Raw Silk Churidar Kurta Ensemble',
+      primary_image_url: 'https://images.unsplash.com/photo-old-saree-duplicate-1111'
+    };
+
+    const updatedGarment = {
+      id: 15,
+      slug: 'raw-silk-churidar-kurta-ensemble',
+      name: 'Raw Silk Churidar Kurta Ensemble',
+      primary_image_url: 'https://images.unsplash.com/photo-new-authentic-churidar-2222'
+    };
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyPhoto,
+      garmentImageUrl: originalGarment.primary_image_url,
+      garment: originalGarment,
+      productId: originalGarment.id
+    });
+
+    await adapter.submitTryOnJob({
+      userPhotoUrl: dummyPhoto,
+      garmentImageUrl: updatedGarment.primary_image_url,
+      garment: updatedGarment,
+      productId: updatedGarment.id
+    });
+
+    assert.equal(capturedPayloads.length, 2);
+    const id1 = capturedPayloads[0].products[0].externalId;
+    const id2 = capturedPayloads[1].products[0].externalId;
+
+    assert.notEqual(id1, id2, 'Updated product image MUST generate a new versioned externalId');
+    assert.ok(id1.includes('raw-silk-churidar-kurta-ensemble-v'));
+    assert.ok(id2.includes('raw-silk-churidar-kurta-ensemble-v'));
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 23. Test Distinct ExternalIds: Different products never collide
+  await t.test('23. Different products have strictly distinct externalIds', async () => {
+    let capturedPayloads = [];
+    process.env.GENLOOK_ENABLED = 'true';
+    process.env.GENLOOK_MOCK = 'true';
+
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: { upload: async () => ({ imageId: 'img_distinct_cust' }) },
+      tryOn: {
+        create: async (payload) => {
+          capturedPayloads.push(payload);
+          return { generationId: 'gen_distinct_' + capturedPayloads.length, status: 'pending' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_distinct_photo.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    const prodA = { id: 1, slug: 'saree-a', name: 'Saree A', primary_image_url: 'https://example.com/a.jpg' };
+    const prodB = { id: 2, slug: 'saree-b', name: 'Saree B', primary_image_url: 'https://example.com/b.jpg' };
+
+    await adapter.submitTryOnJob({ userPhotoUrl: dummyPhoto, garmentImageUrl: prodA.primary_image_url, garment: prodA, productId: prodA.id });
+    await adapter.submitTryOnJob({ userPhotoUrl: dummyPhoto, garmentImageUrl: prodB.primary_image_url, garment: prodB, productId: prodB.id });
+
+    assert.equal(capturedPayloads.length, 2);
+    assert.notEqual(capturedPayloads[0].products[0].externalId, capturedPayloads[1].products[0].externalId);
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 24. Test Customer Photo Reuse: Reuses imageId without re-uploading and preserves crop: false
+  await t.test('24. Reuses customer imageId across multiple generations without re-upload', async () => {
+    let uploadCount = 0;
+    const adapter = new GenlookTryOnAdapter();
+    adapter.client = {
+      images: {
+        upload: async (buf, opts) => {
+          uploadCount++;
+          assert.equal(opts.crop, false);
+          return { imageId: 'img_reusable_123' };
+        }
+      }
+    };
+
+    const uploadsDir = path.join(__dirname, '..', 'uploads', 'customer_silhouettes');
+    const dummyPhoto = path.join(uploadsDir, 'test_reuse_cust.jpg');
+    fs.writeFileSync(dummyPhoto, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+
+    // First upload
+    const res1 = await adapter.uploadCustomerPhoto(dummyPhoto, 'cust_reuse');
+    assert.equal(res1.imageId, 'img_reusable_123');
+    assert.equal(uploadCount, 1);
+
+    if (fs.existsSync(dummyPhoto)) fs.unlinkSync(dummyPhoto);
+  });
+
+  // 25. Test Result Quality Verification Service: Flags selfie and saree constraints correctly
+  await t.test('25. Result quality verifier assigns NEEDS_REVIEW for sarees and FIDELITY_FLAGGED for selfies', async () => {
+    const { resultQualityService } = await import('../src/services/resultQualityService.js');
+
+    // Case A: Full-body dress
+    const fullBodyDressResult = resultQualityService.evaluateResult({
+      customerPhotoQuality: { framing: 'full_body', suitabilityScore: 90 },
+      garment: { name: 'Evening Gown', garment_type: 'dress', subcategory: 'gowns' },
+      resultImageUrl: 'https://example.com/out1.jpg',
+      isMock: false
+    });
+    assert.equal(fullBodyDressResult.verificationStatus, 'VERIFIED');
+    assert.ok(fullBodyDressResult.overallScore >= 0.85);
+
+    // Case B: 6-yard unstitched Saree
+    const sareeResult = resultQualityService.evaluateResult({
+      customerPhotoQuality: { framing: 'full_body', suitabilityScore: 90 },
+      garment: { name: 'Kanjivaram Saree', garment_type: 'saree', subcategory: 'sarees' },
+      resultImageUrl: 'https://example.com/out2.jpg',
+      isMock: false
+    });
+    assert.equal(sareeResult.verificationStatus, 'NEEDS_REVIEW');
+    assert.ok(sareeResult.flags.includes('UNSTITCHED_SAREE_DRAPE_NOTICE'));
+    assert.ok(sareeResult.summary.includes('6-yard unstitched saree'));
+
+    // Case C: Close-up selfie
+    const selfieResult = resultQualityService.evaluateResult({
+      customerPhotoQuality: { framing: 'close_up', suitabilityScore: 40 },
+      garment: { name: 'Evening Gown', garment_type: 'dress', subcategory: 'gowns' },
+      resultImageUrl: 'https://example.com/out3.jpg',
+      isMock: false
+    });
+    assert.equal(selfieResult.verificationStatus, 'FIDELITY_FLAGGED');
+    assert.ok(selfieResult.flags.includes('SELFIE_PROPORTION_RISK'));
+    assert.ok(selfieResult.overallScore < 0.65);
+  });
+
   // Restore env
   process.env.GENLOOK_API_KEY = originalKey;
   process.env.GENLOOK_ENABLED = originalEnabled;

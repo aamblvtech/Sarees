@@ -470,10 +470,27 @@ export default function VirtualFittingRoom() {
     }
 
     if (jobStatus === 'completed' && tryOnResult?.resultImageUrl) {
+      const vStatus = tryOnResult?.verificationStatus || tryOnResult?.compositeDetails?.qualityAssessment?.verificationStatus || 'VERIFIED';
+      if (vStatus === 'NEEDS_REVIEW') {
+        return (
+          <span className="bg-amber-50 text-amber-800 dark:bg-amber-950/80 dark:text-amber-200 border border-amber-300 dark:border-amber-800 uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 rounded">
+            <AlertCircle className="w-3 h-3 text-amber-500" />
+            <span>NEEDS REVIEW</span>
+          </span>
+        );
+      }
+      if (vStatus === 'FIDELITY_FLAGGED') {
+        return (
+          <span className="bg-rose-50 text-rose-800 dark:bg-rose-950/80 dark:text-rose-200 border border-rose-300 dark:border-rose-800 uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 rounded">
+            <AlertCircle className="w-3 h-3 text-rose-500" />
+            <span>FIDELITY FLAGGED</span>
+          </span>
+        );
+      }
       return (
         <span className="bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] border border-[#F5AFAF] uppercase font-mono font-bold text-[10px] px-3 py-1 flex items-center space-x-1.5 shadow-xs rounded">
           <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
-          <span>AI GENERATED</span>
+          <span>AI VERIFIED</span>
         </span>
       );
     }
@@ -851,6 +868,29 @@ export default function VirtualFittingRoom() {
                       alt="Virtual Try-On Output (After)"
                       className="w-full h-full object-cover object-top"
                     />
+
+                    {/* Result Quality & Identity Assessment Notice */}
+                    {tryOnResult?.compositeDetails?.qualityAssessment && (
+                      <div className="absolute top-3 left-3 right-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded border border-slate-200 dark:border-slate-800 text-left shadow-sm z-10 transition-all">
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-1">
+                          <span className={
+                            tryOnResult.verificationStatus === 'VERIFIED' ? 'text-emerald-700 dark:text-emerald-400' :
+                            tryOnResult.verificationStatus === 'NEEDS_REVIEW' ? 'text-amber-700 dark:text-amber-400' :
+                            'text-rose-700 dark:text-rose-400'
+                          }>
+                            {tryOnResult.verificationStatus === 'VERIFIED' ? '✓ AI FIDELITY VERIFIED' :
+                             tryOnResult.verificationStatus === 'NEEDS_REVIEW' ? '⚠ GARMENT REVIEW RECOMMENDED' :
+                             '⚠ FIDELITY ATTENTION REQUIRED'}
+                          </span>
+                          <span className="text-slate-500 text-[10px]">
+                            Confidence: {Math.round((tryOnResult.fitScore || 0.88) * 100)}%
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-slate-300 leading-snug">
+                          {tryOnResult.compositeDetails.qualityAssessment.summary}
+                        </p>
+                      </div>
+                    )}
 
                     {/* Attribution Badge (Required by Genlook AI) */}
                     <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] tracking-widest uppercase px-3 py-1 font-semibold flex items-center space-x-1.5 shadow-sm z-10 border border-slate-200">

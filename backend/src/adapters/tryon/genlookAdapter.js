@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import crypto from 'crypto';
 import {
   Genlook,
   InsufficientCreditsError,
@@ -14,6 +15,8 @@ import {
 } from '@genlook/api';
 import { BaseTryOnAdapter } from './baseAdapter.js';
 import imageValidationService from '../../services/imageValidationService.js';
+import garmentPromptGenerator from '../../services/garmentPromptGenerator.js';
+import resultQualityService from '../../services/resultQualityService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -417,11 +420,13 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
     const uploadResult = await this.uploadCustomerPhoto(userPhotoUrl, externalUserId);
     const imageId = uploadResult.imageId;
 
-    // 2. Prepare product spec with stable externalId
+    // 2. Prepare structured description and versioned externalId
     const resolvedProductId = (garment && garment.id) || productId || 'garment-1';
-    const externalId = (garment && garment.slug) ? `vestra-${garment.slug}` : `vestra-prod-${resolvedProductId}`;
+    const rawSlug = (garment && garment.slug) ? garment.slug : `prod-${resolvedProductId}`;
     const title = (garment && garment.name) || 'VESTRA Luxury Apparel';
-    const description = (garment && garment.description) || garmentDescription || title;
+    
+    // Generate domain-accurate prompt using actual garment attributes
+    const detailedPrompt = garmentPromptGenerator.generatePrompt(garment || { name: title, description: garmentDescription });
 
     // 3. Determine garment image source strategy:
     // If custom garment or garment URL is local/private (e.g. localhost/127.0.0.1/filename):
@@ -432,6 +437,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
 
     let productImageSource;
     let filesPayload = null;
+    let productImages = [];
 
     if (isCustomGarment) {
       // Resolve the uploaded garment file from backend storage
@@ -445,6 +451,14 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       filesPayload = {
         [multipart.fileKey]: multipart.file
       };
+
+      productImages.push({
+        source: productImageSource,
+        classifications: {
+          orientation: 'front',
+          on_model: 'false'
+        }
+      });
     } else {
       // Validate that the remote URL is a legitimate public URL
       if (!this.isRemotePublicUrl(garmentImageUrl)) {
@@ -456,12 +470,46 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       productImageSource = {
         url: garmentImageUrl
       };
+
+      // Support multi-image inputs (front, back, on-model) where available in catalogue
+      const candidateList = [];
+      candidateList.push({
+        url: garmentImageUrl,
+        orientation: 'front',
+        on_model: 'true'
+      });
+
+      if (Array.isArray(garment?.images)) {
+        for (const item of garment.images) {
+          const itemUrl = typeof item === 'string' ? item : item?.url;
+          if (itemUrl && this.isRemotePublicUrl(itemUrl) && !candidateList.some(c => c.url === itemUrl)) {
+            candidateList.push({
+              url: itemUrl,
+              orientation: (typeof item === 'object' && item.orientation) || 'front',
+              on_model: (typeof item === 'object' && item.on_model) || 'true'
+            });
+          }
+        }
+      }
+
+      // Convert candidates to Genlook ProductImage shape
+      for (const c of candidateList) {
+        productImages.push({
+          source: { url: c.url },
+          classifications: {
+            orientation: c.orientation,
+            on_model: c.on_model
+          }
+        });
+      }
     }
 
-    // Enhance description with identity & garment fidelity guidance within schema limits
-    const garmentDetailsPrompt = description
-      ? `${description.slice(0, 180)}. Maintain exact base color, pattern, and drape fidelity.`
-      : `${title}. Maintain exact base color, pattern, and drape fidelity.`;
+    // CRITICAL CACHE INVALIDATION & VERSIONING:
+    // Generate deterministic hash of image URL, title, and prompt so any catalogue
+    // update creates a fresh, unpolluted externalId in Genlook cloud.
+    const versionBasis = `${garmentImageUrl}|${title}|${detailedPrompt}|${garment?.updated_at || garment?.updatedAt || 'v1'}`;
+    const versionHash = crypto.createHash('md5').update(versionBasis).digest('hex').slice(0, 8);
+    const externalId = `vestra-${rawSlug}-v${versionHash}`;
 
     // Build try-on payload adhering to official Genlook OpenAPI / SDK schema
     const payload = {
@@ -470,16 +518,8 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
         {
           externalId,
           title,
-          description: garmentDetailsPrompt.slice(0, 250),
-          images: [
-            {
-              source: productImageSource,
-              classifications: {
-                orientation: 'front',
-                on_model: (!isCustomGarment && garment?.primary_image_url) ? 'true' : 'false'
-              }
-            }
-          ]
+          description: detailedPrompt.slice(0, 480),
+          images: productImages
         }
       ],
       person: {
@@ -595,17 +635,26 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
   async processTryOn(params) {
     const submission = await this.submitTryOnJob(params);
 
-    if (submission.status === 'completed' && submission.output) {
+    if (submission.status === 'completed' && (submission.output || submission.resultImageUrl)) {
+      const outUrl = submission.resultImageUrl || submission.output;
+      const qualityAssessment = resultQualityService.evaluateResult({
+        garment: params.garment,
+        resultImageUrl: outUrl,
+        isMock: submission.isMock
+      });
+
       return {
         success: true,
-        resultImageUrl: submission.output,
+        resultImageUrl: outUrl,
         compositeDetails: {
           provider: 'genlook',
           isMock: submission.isMock,
           generationId: submission.providerJobId,
-          customerImageId: submission.customerImageId
+          customerImageId: submission.customerImageId,
+          qualityAssessment
         },
-        fitScore: 0.98,
+        fitScore: qualityAssessment.overallScore,
+        verificationStatus: qualityAssessment.verificationStatus,
         provider: 'genlook',
         isSimulation: submission.isMock,
         isMock: submission.isMock
@@ -625,6 +674,12 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
         }
       }
 
+      const qualityAssessment = resultQualityService.evaluateResult({
+        garment: params.garment,
+        resultImageUrl: terminal.resultImageUrl,
+        isMock: submission.isMock
+      });
+
       return {
         success: true,
         resultImageUrl: terminal.resultImageUrl,
@@ -633,9 +688,11 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
           isMock: submission.isMock,
           generationId: submission.providerJobId,
           customerImageId: submission.customerImageId,
-          createdAt: terminal.createdAt
+          createdAt: terminal.createdAt,
+          qualityAssessment
         },
-        fitScore: 0.98,
+        fitScore: qualityAssessment.overallScore,
+        verificationStatus: qualityAssessment.verificationStatus,
         provider: 'genlook',
         isSimulation: submission.isMock,
         isMock: submission.isMock
