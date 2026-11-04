@@ -308,6 +308,11 @@ router.post('/qr-sessions/:token/consume', async (req, res) => {
 router.post('/jobs', async (req, res) => {
   const {
     productId,
+    productTitle,
+    productSku,
+    productImageUrl,
+    sessionId,
+    customerSessionId,
     customGarmentUrl,
     customGarmentFilename,
     customGarmentName,
@@ -317,6 +322,8 @@ router.post('/jobs', async (req, res) => {
     fitPreference = 'tailored',
     category
   } = req.body;
+
+  const activeSessionId = sessionId || customerSessionId || `sess_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
 
   if (!userPhotoUrl) {
     return res.status(400).json({ success: false, error: 'userPhotoUrl is required.' });
@@ -338,26 +345,109 @@ router.post('/jobs', async (req, res) => {
     let resolvedGarmentFilename = customGarmentFilename || null;
     let garmentDescription = '';
     let garmentCategory = category || 'upper_body';
+    let imageHash = '';
+    let externalId = '';
 
     if (productId) {
       // 1. Fetch garment details from PostgreSQL database
+      const parsedId = parseInt(productId, 10);
+      if (isNaN(parsedId)) {
+        return res.status(400).json({
+          success: false,
+          error: `Invalid product ID '${productId}'. Must be a valid integer.`,
+          code: 'INVALID_PRODUCT_ID'
+        });
+      }
+
       const prodResult = await query(
-        `SELECT p.id, p.name, p.slug, p.description, p.category_id, p.subcategory,
+        `SELECT p.id, p.sku, p.name, p.slug, p.description, p.category_id, p.subcategory,
                 p.gender, p.garment_type AS garment_type, p.tryon_compatibility,
                 p.primary_image_url, p.tryon_image_url, p.material, p.fit, p.care_instructions,
-                p.updated_at,
+                p.is_active, p.updated_at,
                 c.name AS category_name, c.slug AS category_slug
          FROM products p
          LEFT JOIN categories c ON p.category_id = c.id
          WHERE p.id = $1 LIMIT 1`,
-        [parseInt(productId, 10)]
+        [parsedId]
       );
 
       if (!prodResult.rows || prodResult.rows.length === 0) {
-        return res.status(404).json({ success: false, error: 'Garment not found in database.' });
+        return res.status(404).json({
+          success: false,
+          error: `Product with ID ${parsedId} does not exist in the catalogue.`,
+          code: 'PRODUCT_NOT_FOUND'
+        });
       }
 
       garment = prodResult.rows[0];
+
+      // Check active availability
+      if (garment.is_active === false) {
+        return res.status(400).json({
+          success: false,
+          error: `Product '${garment.name}' (ID: ${garment.id}) is archived and unavailable for virtual try-on.`,
+          code: 'PRODUCT_INACTIVE'
+        });
+      }
+
+      // Title validation against database record
+      if (productTitle && typeof productTitle === 'string') {
+        const cleanSubmitted = productTitle.trim().toLowerCase();
+        const cleanDbTitle = garment.name.trim().toLowerCase();
+        if (cleanSubmitted !== cleanDbTitle && !cleanDbTitle.includes(cleanSubmitted) && !cleanSubmitted.includes(cleanDbTitle)) {
+          return res.status(400).json({
+            success: false,
+            error: `Product title mismatch: Submitted title '${productTitle}' does not match catalogue record '${garment.name}' for ID ${garment.id}.`,
+            code: 'PRODUCT_TITLE_MISMATCH',
+            expectedTitle: garment.name,
+            receivedTitle: productTitle
+          });
+        }
+      }
+
+      // Check Try-On Compatibility: block only unsupported items (e.g. accessories)
+      if (garment.tryon_compatibility === 'unsupported' || garment.garment_type === 'accessory') {
+        return res.status(400).json({
+          success: false,
+          error: 'Accessories cannot be rendered with clothing diffusion try-on models. 3D AR mesh overlay is required for jewelry, belts, and accessories.',
+          compatibilityStatus: 'unsupported'
+        });
+      }
+
+      // Garment image validation: MUST have valid image, never fallback to user photo
+      garmentImageUrl = garment.tryon_image_url || garment.primary_image_url;
+      if (!garmentImageUrl || typeof garmentImageUrl !== 'string' || garmentImageUrl.trim() === '') {
+        return res.status(400).json({
+          success: false,
+          error: `Product '${garment.name}' (ID: ${garment.id}) does not have a valid garment photograph. Cannot proceed with try-on.`,
+          code: 'MISSING_GARMENT_IMAGE'
+        });
+      }
+
+      // Product Image URL validation against database record if submitted by frontend
+      if (productImageUrl && typeof productImageUrl === 'string') {
+        const cleanSubmittedImg = productImageUrl.split('?')[0];
+        const cleanDbPrimary = (garment.primary_image_url || '').split('?')[0];
+        const cleanDbTryon = (garment.tryon_image_url || '').split('?')[0];
+        
+        let matchesDbImage = (cleanSubmittedImg === cleanDbPrimary || cleanSubmittedImg === cleanDbTryon);
+
+        if (!matchesDbImage) {
+          const checkImages = await query(
+            'SELECT image_url FROM product_images WHERE product_id = $1',
+            [garment.id]
+          );
+          matchesDbImage = checkImages.rows.some(r => r.image_url?.split('?')[0] === cleanSubmittedImg);
+        }
+
+        if (!matchesDbImage) {
+          return res.status(400).json({
+            success: false,
+            error: `Product image mismatch: The submitted image URL does not belong to product '${garment.name}' (ID: ${garment.id}).`,
+            code: 'PRODUCT_IMAGE_MISMATCH'
+          });
+        }
+      }
 
       // Fetch multiple views from product_images where available
       try {
@@ -380,16 +470,6 @@ router.post('/jobs', async (req, res) => {
         }
       }
 
-      // Check Try-On Compatibility: block only unsupported items (e.g. accessories)
-      if (garment.tryon_compatibility === 'unsupported' || garment.garment_type === 'accessory') {
-        return res.status(400).json({
-          success: false,
-          error: 'Accessories cannot be rendered with clothing diffusion try-on models. 3D AR mesh overlay is required for jewelry, belts, and accessories.',
-          compatibilityStatus: 'unsupported'
-        });
-      }
-
-      garmentImageUrl = garment.tryon_image_url || garment.primary_image_url || userPhotoUrl;
       garmentDescription = garment.name + (garment.description ? ` - ${garment.description.slice(0, 150)}` : '');
       garmentCategory = garment.garment_type || 'upper_body';
 
@@ -406,6 +486,10 @@ router.post('/jobs', async (req, res) => {
           garmentCategory = 'upper_body';
         }
       }
+
+      imageHash = crypto.createHash('sha256').update(garmentImageUrl).digest('hex').slice(0, 16);
+      const rawSlug = garment.slug || `prod-${garment.id}`;
+      externalId = `vestra-${rawSlug}-v${imageHash.slice(0, 8)}`;
     } else {
       // 2. Custom Customer Garment Flow
       garmentImageUrl = customGarmentUrl;
@@ -428,6 +512,9 @@ router.post('/jobs', async (req, res) => {
         }
       }
 
+      imageHash = crypto.createHash('sha256').update(garmentImageUrl || resolvedGarmentFilename || 'custom').digest('hex').slice(0, 16);
+      externalId = `vestra-custom-${imageHash.slice(0, 8)}`;
+
       garment = {
         id: null,
         name: customGarmentName || 'Custom Outfit Garment',
@@ -438,23 +525,35 @@ router.post('/jobs', async (req, res) => {
       };
     }
 
+    console.log(`[TryOn Pipeline: Stage 7 Validated] Product ID: ${garment.id} | External ID: ${externalId} | Title: "${garment.name}" | Image URL: ${garmentImageUrl} | Image Hash: ${imageHash} | Category: ${garmentCategory} | Session ID: ${activeSessionId} | Job UUID: ${jobUuid}`);
+
     // 3. Insert initial job record into PostgreSQL
     await query(
       `INSERT INTO tryon_jobs (
-         job_uuid, product_id, custom_garment_url, custom_garment_name,
+         job_uuid, session_id, customer_session_id, product_id,
+         product_title, product_external_id, product_image_hash,
+         custom_garment_url, custom_garment_name,
          user_photo_url, garment_image_url, garment_category,
-         selected_size, status, provider, created_at
+         selected_size, fit_preference, credits_used,
+         status, provider, created_at
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, CURRENT_TIMESTAMP)`,
       [
         jobUuid,
+        null,
+        activeSessionId,
         garment.id || null,
+        garment.name,
+        externalId,
+        imageHash,
         customGarmentUrl || null,
         customGarmentName || null,
         userPhotoUrl,
         garmentImageUrl,
         garmentCategory,
         selectedSize,
+        fitPreference,
+        adapter.isMockMode ? 0 : 1,
         'processing',
         adapter.name
       ]
@@ -473,7 +572,8 @@ router.post('/jobs', async (req, res) => {
           garmentDescription,
           category: garmentCategory,
           selectedSize,
-          fitPreference
+          fitPreference,
+          externalUserId: activeSessionId
         });
 
         // Update provider_job_id & customer_image_id in PostgreSQL
@@ -495,11 +595,22 @@ router.post('/jobs', async (req, res) => {
               jobId: jobUuid,
               status: 'completed',
               provider: adapter.name,
+              productId: garment.id || null,
+              productTitle: garment.name,
+              productExternalId: externalId,
+              productImageHash: imageHash,
+              garmentImageUrl,
+              customerSessionId: activeSessionId,
+              selectedSize,
+              fitPreference,
+              creditsUsed: submission.isMock ? 0 : 1,
               result: {
                 resultImageUrl: outUrl,
                 provider: adapter.name,
                 isMock: !!submission.isMock,
-                isSimulation: false
+                isSimulation: false,
+                productTitle: garment.name,
+                productId: garment.id || null
               }
             });
           }
@@ -513,6 +624,15 @@ router.post('/jobs', async (req, res) => {
           customerImageId: submission.customerImageId,
           status: 'processing',
           provider: adapter.name,
+          productId: garment.id || null,
+          productTitle: garment.name,
+          productExternalId: externalId,
+          productImageHash: imageHash,
+          garmentImageUrl,
+          customerSessionId: activeSessionId,
+          selectedSize,
+          fitPreference,
+          creditsUsed: submission.isMock ? 0 : 1,
           isMock: !!submission.isMock,
           message: submission.isMock
             ? 'Genlook mock try-on job submitted (Zero credits consumed).'
@@ -535,6 +655,13 @@ router.post('/jobs', async (req, res) => {
           jobId: jobUuid,
           status: 'completed',
           provider: adapter.name,
+          productId: garment.id || null,
+          productTitle: garment.name,
+          productExternalId: externalId,
+          productImageHash: imageHash,
+          garmentImageUrl,
+          customerSessionId: activeSessionId,
+          creditsUsed: result.isMock ? 0 : 1,
           result
         });
       }
@@ -587,7 +714,7 @@ async function saveCompletedResult(jobUuid, resultImageUrl, provider, isMock = f
   // Run comprehensive result quality & fidelity verification
   const qualityAssessment = resultQualityService.evaluateResult({
     garment: {
-      name: jobData.prod_name || jobData.custom_garment_name || 'Garment',
+      name: jobData.product_title || jobData.prod_name || jobData.custom_garment_name || 'Garment',
       garment_type: jobData.garment_type || jobData.garment_category,
       subcategory: jobData.subcategory || '',
       material: jobData.material || '',
@@ -598,56 +725,126 @@ async function saveCompletedResult(jobUuid, resultImageUrl, provider, isMock = f
   });
 
   await query(
+    `INSERT INTO tryon_results (
+       job_id, result_image_url, composite_details, fit_score, is_mock, is_simulation, created_at
+     )
+     VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+     ON CONFLICT (job_id) DO UPDATE
+     SET result_image_url = EXCLUDED.result_image_url, composite_details = EXCLUDED.composite_details, fit_score = EXCLUDED.fit_score`,
+    [
+      jobId,
+      resultImageUrl,
+      JSON.stringify({ qualityAssessment }),
+      qualityAssessment.overallScore,
+      isMock,
+      isSimulation
+    ]
+  );
+
+  await query(
     `UPDATE tryon_jobs
      SET status = 'completed', completed_at = CURRENT_TIMESTAMP
      WHERE id = $1`,
     [jobId]
   );
-
-  await query(
-    `INSERT INTO tryon_results (
-       job_id, result_image_url, composite_details, fit_score, is_simulation, is_mock
-     )
-     VALUES ($1, $2, $3, $4, $5, $6)
-     ON CONFLICT (job_id) DO UPDATE
-     SET result_image_url = EXCLUDED.result_image_url,
-         is_simulation = EXCLUDED.is_simulation,
-         is_mock = EXCLUDED.is_mock,
-         fit_score = EXCLUDED.fit_score,
-         composite_details = EXCLUDED.composite_details`,
-    [
-      jobId,
-      resultImageUrl,
-      JSON.stringify({
-        provider,
-        engine: isMock
-          ? 'Genlook Official Virtual Try-On API (v1 Mock Mode)'
-          : isSimulation
-          ? 'Prototype Simulation'
-          : 'Genlook Official Virtual Try-On API (v1 Real AI)',
-        isMock,
-        qualityAssessment,
-        verificationStatus: qualityAssessment.verificationStatus,
-        savedAt: new Date().toISOString()
-      }),
-      qualityAssessment.overallScore,
-      isSimulation,
-      isMock
-    ]
-  );
 }
 
 /**
+ * GET /api/tryon/history
+ * Retrieve generation history with guaranteed product-mapping integrity
+ */
+router.get('/history', async (req, res) => {
+  const { sessionId, productId, limit = 20 } = req.query;
+
+  try {
+    let sql = `
+      SELECT 
+        j.id,
+        j.job_uuid AS "jobId",
+        j.customer_session_id AS "sessionId",
+        j.product_id AS "productId",
+        COALESCE(j.product_title, p.name, j.custom_garment_name, 'Bespoke Garment') AS "productTitle",
+        j.product_external_id AS "productExternalId",
+        j.product_image_hash AS "productImageHash",
+        j.garment_image_url AS "garmentImageUrl",
+        j.garment_category AS "garmentCategory",
+        j.selected_size AS "selectedSize",
+        j.fit_preference AS "fitPreference",
+        j.credits_used AS "creditsUsed",
+        j.status,
+        j.provider,
+        j.provider_job_id AS "providerJobId",
+        j.error_message AS "errorMessage",
+        j.created_at AS "createdAt",
+        j.completed_at AS "completedAt",
+        r.result_image_url AS "resultImageUrl",
+        r.fit_score AS "fitScore",
+        r.composite_details AS "compositeDetails"
+      FROM tryon_jobs j
+      LEFT JOIN products p ON j.product_id = p.id
+      LEFT JOIN tryon_results r ON j.id = r.job_id
+      WHERE 1=1
+    `;
+
+    const params = [];
+    let paramIndex = 1;
+
+    if (sessionId) {
+      sql += ` AND j.customer_session_id = $${paramIndex}`;
+      params.push(sessionId);
+      paramIndex++;
+    }
+
+    if (productId) {
+      sql += ` AND j.product_id = $${paramIndex}`;
+      params.push(parseInt(productId, 10));
+      paramIndex++;
+    }
+
+    sql += ` ORDER BY j.created_at DESC LIMIT $${paramIndex}`;
+    params.push(parseInt(limit, 10));
+
+    const result = await query(sql, params);
+
+    const history = result.rows.map(row => {
+      let parsedComposite = null;
+      if (typeof row.compositeDetails === 'string') {
+        try { parsedComposite = JSON.parse(row.compositeDetails); } catch (_) {}
+      } else if (row.compositeDetails) {
+        parsedComposite = row.compositeDetails;
+      }
+
+      return {
+        ...row,
+        verificationStatus: parsedComposite?.qualityAssessment?.verificationStatus || (row.status === 'completed' ? 'VERIFIED' : row.status.toUpperCase()),
+        compositeDetails: parsedComposite
+      };
+    });
+
+    res.json({
+      success: true,
+      count: history.length,
+      history
+    });
+  } catch (err) {
+    console.error('[Get TryOn History Error]:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
  * GET /api/tryon/jobs/:id
- * Retrieve job status and generated result directly from PostgreSQL
+ * Retrieve job status and generated result directly from PostgreSQL with full product dossier
  */
 router.get('/jobs/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
     const jobResult = await query(
-      `SELECT j.*, r.result_image_url, r.is_simulation, r.is_mock, r.composite_details, r.fit_score
+      `SELECT j.*, r.result_image_url, r.is_simulation, r.is_mock, r.composite_details, r.fit_score,
+              p.name AS live_prod_name, p.primary_image_url AS live_prod_img
        FROM tryon_jobs j
+       LEFT JOIN products p ON j.product_id = p.id
        LEFT JOIN tryon_results r ON j.id = r.job_id
        WHERE j.job_uuid = $1 OR j.id::text = $1
        LIMIT 1`,
@@ -703,11 +900,24 @@ router.get('/jobs/:id', async (req, res) => {
       }
     }
 
+    const parsedDetails = typeof job.composite_details === 'string'
+      ? JSON.parse(job.composite_details)
+      : (job.composite_details || {});
+
     return res.json({
       success: true,
       jobId: job.job_uuid,
       providerJobId: job.provider_job_id,
       customerImageId: job.customer_image_id,
+      productId: job.product_id,
+      productTitle: job.product_title || job.live_prod_name || job.custom_garment_name,
+      productExternalId: job.product_external_id,
+      productImageHash: job.product_image_hash,
+      garmentImageUrl: job.garment_image_url,
+      customerSessionId: job.customer_session_id,
+      selectedSize: job.selected_size,
+      fitPreference: job.fit_preference,
+      creditsUsed: job.credits_used || 0,
       status: job.status,
       provider: job.provider,
       error: job.error_message,
@@ -715,20 +925,18 @@ router.get('/jobs/:id', async (req, res) => {
       createdAt: job.created_at,
       completedAt: job.completed_at,
       result: job.result_image_url
-        ? (() => {
-            const parsedDetails = typeof job.composite_details === 'string'
-              ? JSON.parse(job.composite_details)
-              : (job.composite_details || {});
-            return {
-              resultImageUrl: job.result_image_url,
-              isMock: job.is_mock ?? false,
-              isSimulation: job.is_simulation ?? false,
-              fitScore: job.fit_score || parsedDetails.qualityAssessment?.overallScore || 0.88,
-              verificationStatus: parsedDetails.verificationStatus || parsedDetails.qualityAssessment?.verificationStatus || 'VERIFIED',
-              qualityAssessment: parsedDetails.qualityAssessment || null,
-              compositeDetails: parsedDetails
-            };
-          })()
+        ? {
+            resultImageUrl: job.result_image_url,
+            isMock: job.is_mock ?? false,
+            isSimulation: job.is_simulation ?? false,
+            fitScore: job.fit_score || parsedDetails.qualityAssessment?.overallScore || 0.88,
+            verificationStatus: parsedDetails.verificationStatus || parsedDetails.qualityAssessment?.verificationStatus || 'VERIFIED',
+            qualityAssessment: parsedDetails.qualityAssessment || null,
+            compositeDetails: parsedDetails,
+            productTitle: job.product_title || job.live_prod_name || job.custom_garment_name,
+            productId: job.product_id,
+            garmentImageUrl: job.garment_image_url
+          }
         : null
     });
   } catch (err) {

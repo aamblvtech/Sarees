@@ -124,6 +124,11 @@ export const tryOnService = {
    */
   async createTryOnJob({
     productId,
+    productTitle,
+    productSku,
+    productImageUrl,
+    sessionId,
+    customerSessionId,
     customGarmentUrl,
     customGarmentFilename,
     customGarmentName,
@@ -135,6 +140,11 @@ export const tryOnService = {
   }) {
     const response = await apiClient.post('/tryon/jobs', {
       productId,
+      productTitle,
+      productSku,
+      productImageUrl,
+      sessionId,
+      customerSessionId,
       customGarmentUrl,
       customGarmentFilename,
       customGarmentName,
@@ -152,6 +162,19 @@ export const tryOnService = {
    */
   async getJobStatus(jobId) {
     const response = await apiClient.get(`/tryon/jobs/${jobId}`);
+    return response.data;
+  },
+
+  /**
+   * Fetch customer generation history with guaranteed product metadata
+   */
+  async getHistory({ sessionId, productId, limit = 20 } = {}) {
+    const params = new URLSearchParams();
+    if (sessionId) params.append('sessionId', sessionId);
+    if (productId) params.append('productId', productId);
+    if (limit) params.append('limit', limit);
+
+    const response = await apiClient.get(`/tryon/history?${params.toString()}`);
     return response.data;
   },
 

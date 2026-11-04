@@ -88,13 +88,19 @@ CREATE TABLE IF NOT EXISTS tryon_jobs (
   id SERIAL PRIMARY KEY,
   job_uuid VARCHAR(64) NOT NULL UNIQUE,
   session_id INTEGER REFERENCES tryon_sessions(id) ON DELETE SET NULL,
+  customer_session_id VARCHAR(128),
   product_id INTEGER REFERENCES products(id) ON DELETE SET NULL,
+  product_title VARCHAR(255),
+  product_external_id VARCHAR(128),
+  product_image_hash VARCHAR(64),
   custom_garment_url TEXT,
   custom_garment_name VARCHAR(255),
   user_photo_url TEXT NOT NULL,
   garment_image_url TEXT NOT NULL,
   garment_category VARCHAR(64) DEFAULT 'upper_body',
   selected_size VARCHAR(16) DEFAULT 'M',
+  fit_preference VARCHAR(32) DEFAULT 'tailored',
+  credits_used INTEGER DEFAULT 0,
   status VARCHAR(32) NOT NULL DEFAULT 'pending', -- pending, processing, completed, failed
   provider VARCHAR(64) NOT NULL DEFAULT 'genlook',
   provider_job_id VARCHAR(128),
@@ -104,6 +110,13 @@ CREATE TABLE IF NOT EXISTS tryon_jobs (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   completed_at TIMESTAMP WITH TIME ZONE
 );
+
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS customer_session_id VARCHAR(128);
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS product_title VARCHAR(255);
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS product_external_id VARCHAR(128);
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS product_image_hash VARCHAR(64);
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS fit_preference VARCHAR(32) DEFAULT 'tailored';
+ALTER TABLE tryon_jobs ADD COLUMN IF NOT EXISTS credits_used INTEGER DEFAULT 0;
 
 -- 7. Try-on Results Table
 CREATE TABLE IF NOT EXISTS tryon_results (

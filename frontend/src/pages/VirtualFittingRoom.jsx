@@ -61,6 +61,22 @@ export default function VirtualFittingRoom() {
   const [jobStatus, setJobStatus] = useState('idle'); // 'idle' | 'generating' | 'completed' | 'failed'
   const [tryOnResult, setTryOnResult] = useState(null);
   const [pendingGeneration, setPendingGeneration] = useState(null);
+  const [activeGenerationProduct, setActiveGenerationProduct] = useState(null);
+
+  // Customer Session ID for persistent tracking across generations
+  const [sessionId] = useState(() => {
+    let s = sessionStorage.getItem('vestra_customer_session_id');
+    if (!s) {
+      s = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+      sessionStorage.setItem('vestra_customer_session_id', s);
+    }
+    return s;
+  });
+
+  // Generation History State
+  const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
+  const [generationHistory, setGenerationHistory] = useState([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const fileInputRef = useRef(null);
   const replaceFileInputRef = useRef(null);
@@ -90,8 +106,18 @@ export default function VirtualFittingRoom() {
       const firstReady = safeProds.find((p) => p.tryonCompatibility === 'supported') || safeProds[0];
       if (initialProductId && safeProds.length > 0) {
         const match = safeProds.find((p) => p.id === parseInt(initialProductId, 10));
-        if (match) setSelectedProduct(match);
-        else setSelectedProduct(firstReady);
+        if (match) {
+          setSelectedProduct(match);
+          console.log('[TryOn Flow Stage 1 & 2: Initial Selected Product]', {
+            id: match.id,
+            sku: match.sku,
+            name: match.name,
+            primaryImage: match.primaryImage,
+            sessionId
+          });
+        } else {
+          setSelectedProduct(firstReady);
+        }
       } else if (safeProds.length > 0) {
         setSelectedProduct(firstReady);
       }
@@ -116,13 +142,58 @@ export default function VirtualFittingRoom() {
     };
   }, [initialProductId]);
 
-  // Polling logic for ongoing asynchronous try-on jobs
-  const startPolling = (jobId, photoUrl) => {
+  // Helper to create an immutable snapshot of a product selection
+  const createProductSnapshot = (prod, mode = 'catalogue') => {
+    if (mode === 'custom') {
+      return {
+        id: null,
+        name: customGarmentName || 'Bespoke Custom Garment',
+        sku: 'CUSTOM-GARMENT',
+        primaryImage: customGarmentUrl,
+        slug: 'custom-outfit',
+        garmentType: customGarmentCategory,
+        size: selectedSize,
+        fitPreference: fitPreference,
+        mode: 'custom',
+        timestamp: Date.now()
+      };
+    }
+    if (!prod) return null;
+    return {
+      id: prod.id,
+      name: prod.name,
+      sku: prod.sku,
+      primaryImage: prod.primaryImage || prod.images?.[0] || prod.tryonImage,
+      slug: prod.slug,
+      garmentType: prod.garmentType,
+      subcategory: prod.subcategory,
+      price: prod.price,
+      currency: prod.currency,
+      categoryName: prod.categoryName,
+      size: selectedSize,
+      fitPreference: fitPreference,
+      mode: 'catalogue',
+      timestamp: Date.now()
+    };
+  };
+
+  // Polling logic for ongoing asynchronous try-on jobs with strict product verification
+  const startPolling = (jobId, photoUrl, expectedSnapshot) => {
     if (pollingRef.current) clearInterval(pollingRef.current);
 
     pollingRef.current = setInterval(async () => {
       try {
         const job = await tryOnService.getJobStatus(jobId);
+
+        // Verification: Ensure the polled job belongs to the expected product
+        if (job.productId && expectedSnapshot?.id && job.productId !== expectedSnapshot.id) {
+          clearInterval(pollingRef.current);
+          pollingRef.current = null;
+          setJobStatus('failed');
+          setIsGenerating(false);
+          setGenerationError(`Integrity Alert: Generated job returned product ID ${job.productId} ("${job.productTitle}") which does not match requested outfit "${expectedSnapshot.name}" (ID: ${expectedSnapshot.id}).`);
+          return;
+        }
 
         if (job.status === 'completed' && job.result) {
           clearInterval(pollingRef.current);
@@ -136,7 +207,14 @@ export default function VirtualFittingRoom() {
             return;
           }
 
-          setTryOnResult(job.result);
+          setTryOnResult({
+            ...job.result,
+            generatingProduct: expectedSnapshot,
+            jobId,
+            productId: job.productId || expectedSnapshot?.id,
+            productTitle: job.productTitle || expectedSnapshot?.name,
+            productExternalId: job.productExternalId
+          });
           setJobStatus('completed');
           setIsGenerating(false);
           setGenerationStep('Virtual try-on synthesis complete.');
@@ -156,15 +234,20 @@ export default function VirtualFittingRoom() {
     }, 2500);
   };
 
-  // Core Execution Function: Synthesize Try-On
+  // Core Execution Function: Synthesize Try-On with Immutable Product Snapshot
   const executeTryOn = async (photoUrl, photoFilename, targetGarment, mode = 'catalogue') => {
+    if (isGenerating) {
+      console.warn('[TryOn] Blocked duplicate submission while job is in progress.');
+      return;
+    }
+
     if (!photoUrl) {
       setGenerationError('Please upload your photograph in the BEFORE panel first.');
       return;
     }
 
     if (mode === 'catalogue') {
-      if (!targetGarment) {
+      if (!targetGarment || !targetGarment.id) {
         setGenerationError('Please select a garment from the clothing collection below.');
         return;
       }
@@ -182,39 +265,65 @@ export default function VirtualFittingRoom() {
       }
     }
 
+    const immutableSnapshot = createProductSnapshot(targetGarment, mode);
+    setActiveGenerationProduct(immutableSnapshot);
+
     setIsGenerating(true);
     setJobStatus('generating');
     setGenerationError(null);
     setGenerationStep(
       mode === 'custom'
-        ? 'Uploading garment to AI provider via Genlook multipart...'
-        : 'Synthesizing drape on your silhouette portrait...'
+        ? 'Uploading custom garment to Genlook multipart engine...'
+        : `Synthesizing ${immutableSnapshot.name} on your silhouette portrait...`
     );
+
+    console.log('[TryOn Flow Stage 5 & 6: Transmitting Try-On Request]', {
+      id: immutableSnapshot.id,
+      title: immutableSnapshot.name,
+      sku: immutableSnapshot.sku,
+      image: immutableSnapshot.primaryImage,
+      mode,
+      sessionId
+    });
 
     try {
       const payload = mode === 'catalogue'
         ? {
-            productId: targetGarment?.id,
+            productId: immutableSnapshot.id,
+            productTitle: immutableSnapshot.name,
+            productSku: immutableSnapshot.sku,
+            productImageUrl: immutableSnapshot.primaryImage,
             userPhotoUrl: photoUrl,
             userPhotoFilename: photoFilename,
-            selectedSize,
-            fitPreference,
-            category: targetGarment?.garmentType || 'upper_body'
+            sessionId,
+            selectedSize: immutableSnapshot.size || selectedSize,
+            fitPreference: immutableSnapshot.fitPreference || fitPreference,
+            category: immutableSnapshot.garmentType || 'upper_body'
           }
         : {
             customGarmentUrl,
             customGarmentFilename,
-            customGarmentName,
+            customGarmentName: immutableSnapshot.name,
             userPhotoUrl: photoUrl,
             userPhotoFilename: photoFilename,
-            selectedSize,
-            fitPreference,
+            sessionId,
+            selectedSize: immutableSnapshot.size || selectedSize,
+            fitPreference: immutableSnapshot.fitPreference || fitPreference,
             category: customGarmentCategory
           };
 
       const response = await tryOnService.createTryOnJob(payload);
       const jobId = response.jobId;
       setCurrentJobId(jobId);
+
+      // Backend Integrity Check: Validate returned job product matches requested product
+      if (response.productId && immutableSnapshot.id && response.productId !== immutableSnapshot.id) {
+        console.error('[TryOn Integrity Alert] Product ID mismatch in response:', response.productId, 'vs requested:', immutableSnapshot.id);
+        setIsGenerating(false);
+        setJobStatus('failed');
+        setGenerationError(`Product Mismatch Alert: Server returned job for product ID ${response.productId} instead of ${immutableSnapshot.id}.`);
+        return;
+      }
 
       if (response.status === 'completed' && response.result) {
         if (response.result.resultImageUrl === photoUrl) {
@@ -224,13 +333,20 @@ export default function VirtualFittingRoom() {
           return;
         }
 
-        setTryOnResult(response.result);
+        setTryOnResult({
+          ...response.result,
+          generatingProduct: immutableSnapshot,
+          jobId,
+          productId: response.productId || immutableSnapshot.id,
+          productTitle: response.productTitle || immutableSnapshot.name,
+          productExternalId: response.productExternalId
+        });
         setJobStatus('completed');
         setIsGenerating(false);
         tryOnService.getProviderInfo().then((p) => setProviderInfo(p)).catch(() => {});
       } else {
         setGenerationStep('Genlook cloud engine synthesizing draping mesh...');
-        startPolling(jobId, photoUrl);
+        startPolling(jobId, photoUrl, immutableSnapshot);
       }
     } catch (err) {
       console.error('Generation dispatch error:', err);
@@ -241,22 +357,56 @@ export default function VirtualFittingRoom() {
     }
   };
 
-  // Catalogue Outfit Selection Handler
+  // Catalogue Outfit Selection Handler (Captures immutable snapshot and updates confirmation)
   const handleSelectCatalogueProduct = (product) => {
     setSelectedProduct(product);
     setGarmentMode('catalogue');
     setGenerationError(null);
 
+    const snapshot = createProductSnapshot(product, 'catalogue');
+    console.log('[TryOn Flow Stage 1 & 2: User Selected Catalogue Outfit]', {
+      id: snapshot.id,
+      title: snapshot.name,
+      sku: snapshot.sku,
+      image: snapshot.primaryImage,
+      sessionId
+    });
+
     if (userPhotoUrl) {
-      if (providerInfo && !providerInfo.isMock) {
-        setPendingGeneration({ garment: product, mode: 'catalogue' });
-      } else {
-        executeTryOn(userPhotoUrl, userPhotoFilename, product, 'catalogue');
-      }
+      // If photo is already present, open or dynamically update confirmation modal with this exact outfit
+      setPendingGeneration(snapshot);
     }
   };
 
-  // Silhouette File Upload (from computer)
+  // Open Confirmation Modal with guaranteed product snapshot
+  const handleOpenConfirmationModal = (targetProd = selectedProduct, mode = garmentMode) => {
+    if (!userPhotoUrl) {
+      setGenerationError('Please upload your portrait in the BEFORE panel first.');
+      return;
+    }
+
+    if (mode === 'catalogue') {
+      if (!targetProd || !targetProd.id) {
+        setGenerationError('Please select a garment from the catalogue below.');
+        return;
+      }
+      if (targetProd.garmentType === 'accessory' || targetProd.tryonCompatibility === 'unsupported') {
+        setGenerationError('Accessories are unsupported by 2D garment diffusion try-on.');
+        return;
+      }
+      const snapshot = createProductSnapshot(targetProd, 'catalogue');
+      setPendingGeneration(snapshot);
+    } else {
+      if (!customGarmentUrl) {
+        setGenerationError('Please upload your custom outfit image first.');
+        return;
+      }
+      const snapshot = createProductSnapshot(null, 'custom');
+      setPendingGeneration(snapshot);
+    }
+  };
+
+  // Silhouette File Upload (from computer) — DOES NOT auto-dispatch to prevent stale product try-on
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -274,19 +424,13 @@ export default function VirtualFittingRoom() {
       setTryOnResult(null);
       setJobStatus('idle');
 
-      if (selectedProduct && garmentMode === 'catalogue') {
-        if (providerInfo && !providerInfo.isMock) {
-          setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
-        } else {
-          executeTryOn(uploaded.url, uploaded.filename, selectedProduct, 'catalogue');
-        }
-      } else if (customGarmentUrl && garmentMode === 'custom') {
-        if (providerInfo && !providerInfo.isMock) {
-          setPendingGeneration({ garment: null, mode: 'custom' });
-        } else {
-          executeTryOn(uploaded.url, uploaded.filename, null, 'custom');
-        }
-      }
+      console.log('[TryOn Flow Stage 4: Customer Photo Uploaded]', {
+        photoUrl: uploaded.url,
+        filename: uploaded.filename,
+        sessionId
+      });
+      // Notice: Do NOT automatically trigger try-on of pre-selected default product!
+      // Let customer review their portrait and explicitly confirm their selected outfit.
     } catch (err) {
       setUploadError(err.response?.data?.error || err.message);
     } finally {
@@ -296,7 +440,7 @@ export default function VirtualFittingRoom() {
     }
   };
 
-  // Laptop Webcam Capture Handler
+  // Laptop Webcam Capture Handler — DOES NOT auto-dispatch to prevent stale product try-on
   const handleCameraPhoto = async (capturedFile, dataUrl) => {
     setIsUploadingPhoto(true);
     setUploadError(null);
@@ -325,19 +469,11 @@ export default function VirtualFittingRoom() {
       setTryOnResult(null);
       setJobStatus('idle');
 
-      if (selectedProduct && garmentMode === 'catalogue') {
-        if (providerInfo && !providerInfo.isMock) {
-          setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
-        } else {
-          executeTryOn(uploaded.url, uploaded.filename, selectedProduct, 'catalogue');
-        }
-      } else if (customGarmentUrl && garmentMode === 'custom') {
-        if (providerInfo && !providerInfo.isMock) {
-          setPendingGeneration({ garment: null, mode: 'custom' });
-        } else {
-          executeTryOn(uploaded.url, uploaded.filename, null, 'custom');
-        }
-      }
+      console.log('[TryOn Flow Stage 4: Customer Webcam Snapshot]', {
+        photoUrl: uploaded.url,
+        filename: uploaded.filename,
+        sessionId
+      });
     } catch (err) {
       setUploadError(err.response?.data?.error || err.message);
     } finally {
@@ -345,7 +481,7 @@ export default function VirtualFittingRoom() {
     }
   };
 
-  // Mobile QR Upload Handler
+  // Mobile QR Upload Handler — DOES NOT auto-dispatch to prevent stale product try-on
   const handleQrPhotoReceived = (photoUrl, photoFilename) => {
     setUserPhotoUrl(photoUrl);
     setUserPhotoFilename(photoFilename);
@@ -358,19 +494,11 @@ export default function VirtualFittingRoom() {
       if (q) setPhotoQuality(q);
     }).catch(() => {});
 
-    if (selectedProduct && garmentMode === 'catalogue') {
-      if (providerInfo && !providerInfo.isMock) {
-        setPendingGeneration({ garment: selectedProduct, mode: 'catalogue' });
-      } else {
-        executeTryOn(photoUrl, photoFilename, selectedProduct, 'catalogue');
-      }
-    } else if (customGarmentUrl && garmentMode === 'custom') {
-      if (providerInfo && !providerInfo.isMock) {
-        setPendingGeneration({ garment: null, mode: 'custom' });
-      } else {
-        executeTryOn(photoUrl, photoFilename, null, 'custom');
-      }
-    }
+    console.log('[TryOn Flow Stage 4: Customer QR Photo Received]', {
+      photoUrl,
+      filename: photoFilename,
+      sessionId
+    });
   };
 
   // Remove/Purge Customer Photo Handler
@@ -387,6 +515,20 @@ export default function VirtualFittingRoom() {
     setTryOnResult(null);
     setJobStatus('idle');
     setGenerationError(null);
+  };
+
+  // Fetch & open Generation History drawer
+  const handleOpenHistoryDrawer = async () => {
+    setIsHistoryDrawerOpen(true);
+    setIsLoadingHistory(true);
+    try {
+      const data = await tryOnService.getHistory({ sessionId, limit: 30 });
+      setGenerationHistory(data.history || []);
+    } catch (err) {
+      console.warn('Failed to fetch generation history:', err.message);
+    } finally {
+      setIsLoadingHistory(false);
+    }
   };
 
   // Custom Garment Upload Handler
@@ -425,7 +567,7 @@ export default function VirtualFittingRoom() {
     if (!tryOnResult?.resultImageUrl) return;
     const link = document.createElement('a');
     link.href = tryOnResult.resultImageUrl;
-    link.download = `vestra-tryon-${selectedProduct?.slug || 'bespoke'}-${Date.now()}.jpg`;
+    link.download = `vestra-tryon-${tryOnResult?.generatingProduct?.slug || selectedProduct?.slug || 'bespoke'}-${Date.now()}.jpg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -822,6 +964,16 @@ export default function VirtualFittingRoom() {
                 <div className="flex items-center space-x-2">
                   {renderAfterBadge()}
 
+                  <button
+                    type="button"
+                    onClick={handleOpenHistoryDrawer}
+                    className="px-2.5 py-1 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-[10px] uppercase font-mono font-medium hover:bg-slate-100 dark:hover:bg-slate-700 flex items-center space-x-1 transition-colors shadow-xs"
+                    title="View Try-On Generation History"
+                  >
+                    <Layers className="w-3 h-3 text-[#F5AFAF]" />
+                    <span>History</span>
+                  </button>
+
                   {tryOnResult?.resultImageUrl && (
                     <button
                       type="button"
@@ -856,7 +1008,7 @@ export default function VirtualFittingRoom() {
                     </div>
                     <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
                       Target: <strong className="text-slate-900 dark:text-[#FFFFFF]">
-                        {garmentMode === 'custom' ? customGarmentName : selectedProduct?.name}
+                        {activeGenerationProduct?.name || (garmentMode === 'custom' ? customGarmentName : selectedProduct?.name)}
                       </strong>
                     </div>
                   </div>
@@ -901,8 +1053,11 @@ export default function VirtualFittingRoom() {
                     </div>
 
                     {/* Target Garment Tag */}
-                    <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200 text-[9px] uppercase font-mono tracking-wider px-2.5 py-1 z-10 max-w-[60%] truncate shadow-sm font-medium">
-                      {garmentMode === 'custom' ? customGarmentName : selectedProduct?.name} &bull; Size {selectedSize}
+                    <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md text-slate-800 border border-slate-200 text-[9px] uppercase font-mono tracking-wider px-2.5 py-1 z-10 max-w-[70%] truncate shadow-sm font-medium flex items-center space-x-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></span>
+                      <span className="truncate">
+                        {tryOnResult.generatingProduct?.name || selectedProduct?.name} &bull; Size {tryOnResult.generatingProduct?.size || selectedSize}
+                      </span>
                     </div>
                   </>
                 ) : jobStatus === 'failed' ? (
@@ -962,13 +1117,7 @@ export default function VirtualFittingRoom() {
                     {userPhotoUrl && (selectedProduct || (garmentMode === 'custom' && customGarmentUrl)) && (
                       <button
                         type="button"
-                        onClick={() => {
-                          if (providerInfo && !providerInfo.isMock) {
-                            setPendingGeneration({ garment: selectedProduct, mode: garmentMode });
-                          } else {
-                            executeTryOn(userPhotoUrl, userPhotoFilename, selectedProduct, garmentMode);
-                          }
-                        }}
+                        onClick={() => handleOpenConfirmationModal(selectedProduct, garmentMode)}
                         className="w-full py-2.5 px-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-xs uppercase tracking-wider font-semibold flex items-center justify-center space-x-2 transition-all shadow-xs border-2 border-slate-900 dark:border-white"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
@@ -1367,10 +1516,10 @@ export default function VirtualFittingRoom() {
         onPhotoReceived={handleQrPhotoReceived}
       />
 
-      {/* Live AI Try-On Credit Confirmation Modal */}
+      {/* Live AI Try-On Credit Confirmation Modal with Side-by-Side Images */}
       {pendingGeneration && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-slate-800 max-w-lg w-full p-6 space-y-5 shadow-2xl relative">
             <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <div className="flex items-center space-x-2">
@@ -1378,33 +1527,49 @@ export default function VirtualFittingRoom() {
                   <h3 className="font-serif text-lg font-semibold text-slate-900 dark:text-[#FFFFFF]">Confirm AI Virtual Try-On</h3>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Genlook cloud AI engine will synthesize this outfit onto your portrait.
+                  Verify your portrait and selected outfit before synthesizing drape.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setPendingGeneration(null)}
-                className="text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] transition-colors"
+                className="text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] transition-colors p-1"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Outfit & Photo Summary */}
-            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800">
-              <div className="space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] block">Your Portrait</span>
-                <div className="w-16 h-20 bg-white dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs">
+            {/* Outfit & Photo Summary with Side-by-Side Images */}
+            <div className="grid grid-cols-2 gap-4 p-3.5 bg-slate-50 dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 rounded">
+              {/* Left Column: Customer Portrait */}
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] font-bold block">1. Your Portrait</span>
+                <div className="w-full aspect-[3/4] bg-white dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs">
                   <img src={userPhotoUrl} alt="Portrait" className="w-full h-full object-cover" />
                 </div>
-              </div>
-              <div className="space-y-1">
-                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] block">Selected Outfit</span>
-                <p className="text-xs font-serif font-medium text-slate-900 dark:text-[#FFFFFF] line-clamp-1">
-                  {pendingGeneration.mode === 'custom' ? customGarmentName : pendingGeneration.garment?.name}
+                <p className="text-[10px] text-slate-500 font-mono truncate">
+                  {userPhotoSource === 'camera' ? 'Webcam Snapshot' : userPhotoSource === 'mobile_qr' ? 'Mobile QR Upload' : 'Uploaded Portrait'}
                 </p>
-                <span className="text-[10px] text-slate-500 dark:text-slate-400 block">Size {selectedSize} &bull; {fitPreference} fit</span>
-                <span className="text-[9px] uppercase tracking-wider text-slate-400 font-mono block">1 Garment Only</span>
+              </div>
+
+              {/* Right Column: Selected Garment */}
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-mono text-[#F5AFAF] font-bold block">2. Selected Outfit</span>
+                <div className="w-full aspect-[3/4] bg-white dark:bg-slate-800 overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs">
+                  <img
+                    src={pendingGeneration.primaryImage || ATELIER_FALLBACK_IMAGE}
+                    alt={pendingGeneration.name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.src = ATELIER_FALLBACK_IMAGE; }}
+                  />
+                </div>
+                <p className="text-xs font-serif font-semibold text-slate-900 dark:text-[#FFFFFF] line-clamp-1" title={pendingGeneration.name}>
+                  {pendingGeneration.name}
+                </p>
+                <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                  <span>{pendingGeneration.sku || 'CUSTOM'}</span>
+                  <span>Size {pendingGeneration.size || selectedSize}</span>
+                </div>
               </div>
             </div>
 
@@ -1431,7 +1596,7 @@ export default function VirtualFittingRoom() {
             {/* Safety Policy Notice */}
             <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center space-x-1.5">
               <Shield className="w-3.5 h-3.5 text-[#F5AFAF] flex-shrink-0" />
-              <span>Standard resolution &bull; No automatic retries &bull; Zero credit wastage</span>
+              <span>Standard resolution &bull; Strict outfit lock &bull; Zero credit wastage</span>
             </div>
 
             {/* Actions */}
@@ -1445,11 +1610,11 @@ export default function VirtualFittingRoom() {
               </button>
               <button
                 type="button"
-                disabled={providerInfo?.creditBalance !== null && providerInfo?.creditBalance < 1}
+                disabled={isGenerating || (providerInfo?.creditBalance !== null && providerInfo?.creditBalance < 1)}
                 onClick={() => {
-                  const { garment, mode } = pendingGeneration;
+                  const targetSnap = { ...pendingGeneration };
                   setPendingGeneration(null);
-                  executeTryOn(userPhotoUrl, userPhotoFilename, garment, mode);
+                  executeTryOn(userPhotoUrl, userPhotoFilename, targetSnap, targetSnap.mode);
                 }}
                 className="flex-1 py-2.5 px-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 shadow-sm border-2 border-slate-900 dark:border-white"
               >
@@ -1461,6 +1626,134 @@ export default function VirtualFittingRoom() {
         </div>
       )}
 
+      {/* Generation History Drawer / Modal */}
+      {isHistoryDrawerOpen && (
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl relative">
+            <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
+              <div className="flex items-center space-x-2.5">
+                <Layers className="w-5 h-5 text-[#F5AFAF]" />
+                <div>
+                  <h3 className="font-serif text-lg font-semibold text-slate-900 dark:text-white">
+                    Try-On Generation Dossier & History
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Audit trail of virtual try-ons and verified garment mappings recorded in PostgreSQL.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsHistoryDrawerOpen(false)}
+                className="text-slate-400 hover:text-slate-900 dark:hover:text-white p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 flex-1 overflow-y-auto space-y-3">
+              {isLoadingHistory ? (
+                <div className="p-10 text-center space-y-2">
+                  <RefreshCw className="w-6 h-6 animate-spin mx-auto text-[#F5AFAF]" />
+                  <p className="text-xs text-slate-500 font-mono">Loading generation audit history...</p>
+                </div>
+              ) : generationHistory.length === 0 ? (
+                <div className="p-10 text-center space-y-2 border border-dashed border-slate-200 dark:border-slate-800">
+                  <p className="font-serif text-sm text-slate-600 dark:text-slate-400">No try-on generations recorded in this session yet.</p>
+                  <p className="text-xs text-slate-400">Select an outfit and confirm try-on to create an audit record.</p>
+                </div>
+              ) : (
+                generationHistory.map((item) => (
+                  <div
+                    key={item.jobId}
+                    className="p-3.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex items-center justify-between space-x-4 hover:border-slate-300 transition-colors"
+                  >
+                    <div className="flex items-center space-x-3.5 min-w-0">
+                      <div className="w-12 h-16 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden shrink-0 shadow-xs">
+                        <img
+                          src={item.garmentImageUrl || ATELIER_FALLBACK_IMAGE}
+                          alt={item.productTitle}
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.target.src = ATELIER_FALLBACK_IMAGE; }}
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-[9px] font-mono uppercase px-1.5 py-0.2 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold">
+                            ID: {item.productId || 'Custom'}
+                          </span>
+                          <span className="text-[10px] text-slate-400 font-mono truncate max-w-[200px]" title={item.productExternalId}>
+                            {item.productExternalId || item.jobId}
+                          </span>
+                        </div>
+                        <h5 className="font-serif text-xs font-semibold text-slate-900 dark:text-white truncate mt-0.5">
+                          {item.productTitle}
+                        </h5>
+                        <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-mono mt-0.5">
+                          <span>Size: {item.selectedSize}</span>
+                          <span>&bull;</span>
+                          <span>{new Date(item.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          <span>&bull;</span>
+                          <span className="text-slate-400">{item.creditsUsed || 0} Credits</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-3 shrink-0">
+                      <span className={`px-2 py-0.5 text-[9px] font-mono font-bold uppercase border ${
+                        item.status === 'completed'
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-300 dark:bg-emerald-950/60 dark:text-emerald-300'
+                          : item.status === 'failed'
+                          ? 'bg-rose-50 text-rose-800 border-rose-300 dark:bg-rose-950/60 dark:text-rose-300'
+                          : 'bg-amber-50 text-amber-800 border-amber-300 dark:bg-amber-950/60 dark:text-amber-300'
+                      }`}>
+                        {item.status}
+                      </span>
+
+                      {item.resultImageUrl && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setTryOnResult({
+                              resultImageUrl: item.resultImageUrl,
+                              generatingProduct: {
+                                id: item.productId,
+                                name: item.productTitle,
+                                primaryImage: item.garmentImageUrl,
+                                sku: item.productExternalId
+                              },
+                              jobId: item.jobId,
+                              verificationStatus: item.verificationStatus,
+                              fitScore: item.fitScore,
+                              compositeDetails: item.compositeDetails
+                            });
+                            setJobStatus('completed');
+                            setIsHistoryDrawerOpen(false);
+                          }}
+                          className="px-2.5 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white text-[10px] font-mono uppercase font-semibold hover:bg-slate-100 transition-colors shadow-xs"
+                        >
+                          View Result
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 flex justify-between items-center text-xs text-slate-500">
+              <span className="font-mono text-[10px]">Session: {sessionId}</span>
+              <button
+                type="button"
+                onClick={() => setIsHistoryDrawerOpen(false)}
+                className="px-4 py-1.5 bg-slate-900 text-white dark:bg-white dark:text-slate-900 text-xs font-semibold uppercase tracking-wider font-mono hover:opacity-90"
+              >
+                Close Dossier
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

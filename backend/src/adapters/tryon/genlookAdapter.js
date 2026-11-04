@@ -386,7 +386,8 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
     garment,
     productId,
     garmentDescription,
-    category
+    category,
+    externalUserId
   }) {
     if (!this.apiKey) {
       throw new Error('GENLOOK_API_KEY is not configured in backend/.env.');
@@ -416,8 +417,8 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
     }
 
     // 1. Upload customer silhouette to Genlook to obtain imageId (Preserved Customer Flow)
-    const externalUserId = `vestra_user_${Date.now()}`;
-    const uploadResult = await this.uploadCustomerPhoto(userPhotoUrl, externalUserId);
+    const resolvedUserId = externalUserId || `vestra_user_${Date.now()}`;
+    const uploadResult = await this.uploadCustomerPhoto(userPhotoUrl, resolvedUserId);
     const imageId = uploadResult.imageId;
 
     // 2. Prepare structured description and versioned externalId
@@ -529,7 +530,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
           }
         }
       },
-      externalUserId,
+      externalUserId: resolvedUserId,
       output: {
         resolution: 'default', // Standard resolution: 1 credit (no 2K)
         watermark: false,
