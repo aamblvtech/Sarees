@@ -158,8 +158,12 @@ test('Genlook Try-On Integration Suite', async (t) => {
     const balanceBefore = await adapter.getCreditBalance();
     assert.ok(balanceBefore === null || balanceBefore >= 0, 'Credit balance must be non-negative or null when offline');
 
-    // Run end-to-end mock try-on using the sample silhouette photo in uploads
-    const samplePhotoPath = 'd:/AAMBLV/tryon/backend/uploads/tryon_user_1793428699933_8cbaf66cbe9e.jpg';
+    // Run end-to-end mock try-on using a temporary sample silhouette photo
+    const uploadsDir = imageValidationService.getUploadsDir();
+    const samplePhotoPath = path.join(uploadsDir, 'tryon_test_sample.jpg');
+    if (!fs.existsSync(samplePhotoPath)) {
+      fs.writeFileSync(samplePhotoPath, Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]));
+    }
     
     // Only attempt live API if network is available
     if (balanceBefore !== null) {
@@ -187,6 +191,9 @@ test('Genlook Try-On Integration Suite', async (t) => {
       // Verify credits were NOT consumed
       const balanceAfter = await adapter.getCreditBalance();
       assert.equal(balanceAfter, balanceBefore, 'Mock mode MUST NOT consume credits');
+    }
+    if (fs.existsSync(samplePhotoPath)) {
+      try { fs.unlinkSync(samplePhotoPath); } catch {}
     }
   });
 

@@ -12,6 +12,11 @@ import { initializeDatabase, query } from '../src/config/db.js';
 import { runSeed } from '../src/db/seed.js';
 import { GenlookTryOnAdapter } from '../src/adapters/tryon/genlookAdapter.js';
 
+// Ensure consistent mock configuration in all environments including CI
+process.env.GENLOOK_API_KEY = process.env.GENLOOK_API_KEY || 'gk_mock_test_key_123';
+process.env.GENLOOK_MOCK = 'true';
+process.env.GENLOOK_ENABLED = 'false';
+
 test('Product Mapping Integrity and Generation History Suite', async (t) => {
   await initializeDatabase();
   await runSeed();

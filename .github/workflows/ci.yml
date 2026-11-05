@@ -10,6 +10,12 @@ jobs:
   backend-test:
     name: Backend Tests & Typecheck
     runs-on: ubuntu-latest
+    env:
+      NODE_ENV: test
+      GENLOOK_MOCK: 'true'
+      GENLOOK_ENABLED: 'false'
+      GENLOOK_API_KEY: 'gk_mock_ci_test_key'
+      JWT_SECRET: 'ci_jwt_secret_test_key_2026'
     steps:
       - uses: actions/checkout@v4
 
