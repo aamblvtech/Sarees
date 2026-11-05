@@ -66,11 +66,13 @@ router.get('/products', async (req, res) => {
         p.discount_percent AS "discountPercent",
         p.image_width AS "imageWidth",
         p.image_height AS "imageHeight",
+        p.approval_status AS "approvalStatus",
+        p.myntra_url AS "myntraUrl",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
-      WHERE p.is_active = true
+      WHERE p.is_active = true AND (p.approval_status IN ('APPROVED', 'AI_READY') OR p.approval_status IS NULL)
     `;
 
     const sqlParams = [];
@@ -217,6 +219,8 @@ router.get('/products/:id', async (req, res) => {
         p.discount_percent AS "discountPercent",
         p.image_width AS "imageWidth",
         p.image_height AS "imageHeight",
+        p.approval_status AS "approvalStatus",
+        p.myntra_url AS "myntraUrl",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p

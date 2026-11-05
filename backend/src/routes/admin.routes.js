@@ -9,6 +9,7 @@ import crypto from 'crypto';
 import { query } from '../config/db.js';
 import { requireAdminAuth } from '../middleware/auth.middleware.js';
 import imageValidationService from '../services/imageValidationService.js';
+import myntraImportService from '../services/myntraImportService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,12 +36,12 @@ const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    const allowed = /jpeg|jpg|png|webp/;
+    const allowed = /jpeg|jpg|png|webp|csv|text\/csv/;
     const ext = path.extname(file.originalname).toLowerCase().replace('.', '');
     if (allowed.test(ext) || allowed.test(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only JPG, PNG, and WebP images are supported.'));
+      cb(new Error('Only JPG, PNG, WebP, and CSV files are supported.'));
     }
   }
 });
@@ -207,6 +208,18 @@ router.get('/products', requireAdminAuth, async (req, res) => {
         p.color,
         p.needs_admin_review AS "needsAdminReview",
         p.discount_percent AS "discountPercent",
+        p.image_width AS "imageWidth",
+        p.image_height AS "imageHeight",
+        p.myntra_url AS "myntraUrl",
+        p.approval_status AS "approvalStatus",
+        p.permission_status AS "permissionStatus",
+        p.permission_notes AS "permissionNotes",
+        p.front_image_url AS "frontImageUrl",
+        p.back_image_url AS "backImageUrl",
+        p.side_image_url AS "sideImageUrl",
+        p.model_image_url AS "modelImageUrl",
+        p.import_source AS "importSource",
+        p.import_batch_id AS "importBatchId",
         p.created_at AS "createdAt",
         p.updated_at AS "updatedAt"
       FROM products p
@@ -214,10 +227,29 @@ router.get('/products', requireAdminAuth, async (req, res) => {
       ORDER BY p.id DESC
     `);
 
+    const enriched = result.rows.map((p) => {
+      const width = p.imageWidth;
+      const height = p.imageHeight;
+      const isAiReady = Boolean(width && height && width >= 250 && height >= 250);
+      let qualityStatus = 'standard';
+      if (!isAiReady) {
+        qualityStatus = 'too_small';
+      } else if (width >= 1024 && height >= 1024) {
+        qualityStatus = 'high_resolution';
+      }
+
+      return {
+        ...p,
+        isAiReady,
+        qualityStatus,
+        dimensionLabel: width && height ? `${width} × ${height} px` : 'Unresolved'
+      };
+    });
+
     res.json({
       success: true,
-      count: result.rows.length,
-      data: result.rows
+      count: enriched.length,
+      data: enriched
     });
   } catch (err) {
     console.error('[Admin Get Products Error]:', err.message);
@@ -601,6 +633,239 @@ router.post('/categories', requireAdminAuth, async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/admin/import/myntra/single
+ * Protected: Manually import a single fashion garment referenced from Myntra
+ */
+router.post(
+  '/import/myntra/single',
+  requireAdminAuth,
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'frontImage', maxCount: 1 },
+    { name: 'backImage', maxCount: 1 },
+    { name: 'sideImage', maxCount: 1 },
+    { name: 'modelImage', maxCount: 1 }
+  ]),
+  async (req, res) => {
+    try {
+      const files = req.files || {};
+      const primaryFile = files['image']?.[0] || files['frontImage']?.[0];
+      const frontFile = files['frontImage']?.[0];
+      const backFile = files['backImage']?.[0];
+      const sideFile = files['sideImage']?.[0];
+      const modelFile = files['modelImage']?.[0];
+
+      const productData = {
+        brand: req.body.brand,
+        productTitle: req.body.productTitle || req.body.name,
+        myntraUrl: req.body.myntraUrl,
+        sellingPrice: req.body.sellingPrice || req.body.price,
+        originalPrice: req.body.originalPrice,
+        categoryId: req.body.categoryId,
+        subcategory: req.body.subcategory,
+        gender: req.body.gender,
+        garmentType: req.body.garmentType,
+        colour: req.body.colour || req.body.color,
+        fabric: req.body.fabric || req.body.material,
+        primaryImageUrl: primaryFile ? `/uploads/${primaryFile.filename}` : req.body.primaryImageUrl,
+        frontImageUrl: frontFile ? `/uploads/${frontFile.filename}` : req.body.frontImageUrl,
+        backImageUrl: backFile ? `/uploads/${backFile.filename}` : req.body.backImageUrl,
+        sideImageUrl: sideFile ? `/uploads/${sideFile.filename}` : req.body.sideImageUrl,
+        modelImageUrl: modelFile ? `/uploads/${modelFile.filename}` : req.body.modelImageUrl,
+        permissionStatus: req.body.permissionStatus || 'authorized',
+        permissionNotes: req.body.permissionNotes || ''
+      };
+
+      const newProduct = await myntraImportService.createSingleReferenceProduct(
+        productData,
+        req.admin?.name || 'admin'
+      );
+
+      return res.status(201).json({
+        success: true,
+        message: `Product "${newProduct.name}" saved as draft for review.`,
+        data: newProduct
+      });
+    } catch (err) {
+      console.error('[Admin Single Myntra Import Error]:', err.message);
+      const status = err.statusCode || 400;
+      return res.status(status).json({ success: false, error: err.message });
+    }
+  }
+);
+
+/**
+ * POST /api/admin/import/myntra/csv-preview
+ * Protected: Parse and validate CSV rows without committing to database
+ */
+router.post('/import/myntra/csv-preview', requireAdminAuth, upload.single('csvFile'), async (req, res) => {
+  try {
+    let csvText = req.body.csvText;
+    if (req.file) {
+      csvText = fs.readFileSync(path.join(uploadsDir, req.file.filename), 'utf8');
+      try { fs.unlinkSync(path.join(uploadsDir, req.file.filename)); } catch {}
+    }
+
+    if (!csvText || typeof csvText !== 'string' || csvText.trim().length === 0) {
+      return res.status(400).json({ success: false, error: 'CSV file or csvText is required.' });
+    }
+
+    const previewResult = await myntraImportService.previewCsv(csvText);
+    return res.json(previewResult);
+  } catch (err) {
+    console.error('[CSV Preview Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/admin/import/myntra/csv-commit
+ * Protected: Commit validated CSV rows into PostgreSQL
+ */
+router.post('/import/myntra/csv-commit', requireAdminAuth, async (req, res) => {
+  try {
+    const { validatedRows } = req.body;
+    if (!validatedRows || !Array.isArray(validatedRows) || validatedRows.length === 0) {
+      return res.status(400).json({ success: false, error: 'Validated rows array is required to commit import.' });
+    }
+
+    const commitResult = await myntraImportService.commitImport(validatedRows, req.admin?.name || 'admin');
+    return res.json(commitResult);
+  } catch (err) {
+    console.error('[CSV Commit Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * PUT /api/admin/products/:id/approval-status
+ * Protected: Update product approval status (DRAFT, NEEDS_IMAGE, NEEDS_PERMISSION_REVIEW, NEEDS_ADMIN_REVIEW, APPROVED, AI_READY)
+ */
+router.put('/products/:id/approval-status', requireAdminAuth, async (req, res) => {
+  const { id } = req.params;
+  const { status, notes } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ success: false, error: 'Approval status is required.' });
+  }
+
+  try {
+    const updated = await myntraImportService.updateApprovalStatus(
+      parseInt(id, 10),
+      status.trim().toUpperCase(),
+      notes || ''
+    );
+
+    return res.json({
+      success: true,
+      message: `Product #${id} status updated to ${status}.`,
+      data: updated
+    });
+  } catch (err) {
+    console.error('[Update Approval Status Error]:', err.message);
+    const statusCode = err.statusCode || 400;
+    return res.status(statusCode).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/admin/import/template
+ * Protected: Download standard 12-column CSV template for Myntra bulk import
+ */
+router.get('/import/template', requireAdminAuth, (req, res) => {
+  const csvHeaders = 'Brand,Product name,Myntra product URL,Selling price,Original price,Category,Subcategory,Gender,Colour,Fabric,Image filename,Image usage permission status\n';
+  const sampleRow1 = 'Sangria,"Sangria Women Printed Pure Silk Saree","https://www.myntra.com/sarees/sangria/sangria-women-printed-pure-silk-saree/12345/buy",1320,1749,Sarees,Sarees,women,"Red & Gold","Pure Silk",saree_41_sangria_printed_silk_hires.jpg,authorized\n';
+  const sampleRow2 = 'nevash fashion,"nevash fashion Art Silk Saree","https://www.myntra.com/sarees/nevash-fashion/nevash-art-silk-saree/12346/buy",1399,1849,Sarees,Sarees,women,Blue,"Art Silk",saree_42_nevash_art_silk_blue_hires.jpg,authorized\n';
+  const sampleRow3 = 'Anouk Rustic,"Anouk Rustic Women Chanderi Cotton Saree","https://www.myntra.com/sarees/anouk-rustic/anouk-rustic-chanderi/12347/buy",981,3999,Sarees,Sarees,women,White,"Chanderi Cotton",saree_43_anouk_rustic_chanderi_hires.jpg,commercial_license\n';
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="myntra_import_template.csv"');
+  return res.send(csvHeaders + sampleRow1 + sampleRow2 + sampleRow3);
+});
+
+/**
+ * DELETE /api/admin/products/all
+ * Protected: Remove all products from catalogue with safety confirmation query ?confirm=true
+ */
+router.delete('/products/all', requireAdminAuth, async (req, res) => {
+  const { confirm } = req.query;
+  if (confirm !== 'true') {
+    return res.status(400).json({
+      success: false,
+      error: 'Confirmation required. Pass query parameter ?confirm=true to delete all products.'
+    });
+  }
+
+  try {
+    const countRes = await query('SELECT count(*) FROM products');
+    const totalCount = countRes.rows[0]?.count || 0;
+
+    await query('DELETE FROM tryon_job_items');
+    await query('DELETE FROM tryon_jobs');
+    await query('DELETE FROM product_images');
+    await query('DELETE FROM products');
+
+    return res.json({
+      success: true,
+      message: `All ${totalCount} products removed from catalogue.`,
+      deletedCount: parseInt(totalCount, 10)
+    });
+  } catch (err) {
+    console.error('[Delete All Products Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * DELETE /api/admin/products/bulk
+ * Protected: Delete multiple products by IDs array
+ */
+router.delete('/products/bulk', requireAdminAuth, async (req, res) => {
+  const { ids } = req.body;
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ success: false, error: 'Product IDs array is required.' });
+  }
+
+  try {
+    const intIds = ids.map((id) => parseInt(id, 10)).filter((id) => !isNaN(id));
+    if (intIds.length === 0) {
+      return res.status(400).json({ success: false, error: 'No valid numeric product IDs provided.' });
+    }
+
+    await query('DELETE FROM tryon_job_items WHERE product_id = ANY($1)', [intIds]);
+    await query('DELETE FROM product_images WHERE product_id = ANY($1)', [intIds]);
+    const delRes = await query('DELETE FROM products WHERE id = ANY($1) RETURNING id', [intIds]);
+
+    return res.json({
+      success: true,
+      message: `${delRes.rows.length} products deleted successfully.`,
+      deletedIds: delRes.rows.map((r) => r.id)
+    });
+  } catch (err) {
+    console.error('[Bulk Delete Products Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/admin/catalogue/reset-seed
+ * Protected: Reseed catalogue with default luxury collection
+ */
+router.post('/catalogue/reset-seed', requireAdminAuth, async (req, res) => {
+  try {
+    const { runSeed } = await import('../db/seed.js');
+    await runSeed();
+    return res.json({
+      success: true,
+      message: 'Catalogue reset and reseeded with default luxury collection successfully.'
+    });
+  } catch (err) {
+    console.error('[Reset Seed Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
 
