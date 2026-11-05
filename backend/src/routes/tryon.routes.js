@@ -299,44 +299,47 @@ router.post('/qr-sessions/:token/consume', async (req, res) => {
 });
 
 /**
- * POST /api/tryon/jobs
- * Creates and submits a virtual try-on job to the AI engine
- * Supports:
- *  - Existing catalogue product (via productId)
- *  - Custom customer-uploaded outfit (via customGarmentUrl)
+ * Helper: Execute a single try-on job independently
+ * Ensures strict 1:1 product-to-job mapping, isolated database records, and separate error handling.
  */
-router.post('/jobs', async (req, res) => {
-  const {
-    productId,
-    productTitle,
-    productSku,
-    productImageUrl,
-    sessionId,
-    customerSessionId,
-    customGarmentUrl,
-    customGarmentFilename,
-    customGarmentName,
-    userPhotoUrl,
-    userPhotoFilename,
-    selectedSize = 'M',
-    fitPreference = 'tailored',
-    category
-  } = req.body;
-
+export async function executeSingleTryOnJob({
+  jobUuidOverride,
+  existingJobId,
+  productId,
+  productTitle,
+  productSku,
+  productImageUrl,
+  sessionId,
+  customerSessionId,
+  customGarmentUrl,
+  customGarmentFilename,
+  customGarmentName,
+  userPhotoUrl,
+  userPhotoFilename,
+  selectedSize = 'M',
+  fitPreference = 'tailored',
+  category
+}) {
   const activeSessionId = sessionId || customerSessionId || `sess_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
 
   if (!userPhotoUrl) {
-    return res.status(400).json({ success: false, error: 'userPhotoUrl is required.' });
+    return {
+      httpStatus: 400,
+      body: { success: false, error: 'userPhotoUrl is required.' }
+    };
   }
 
   if (!productId && !customGarmentUrl) {
-    return res.status(400).json({
-      success: false,
-      error: 'Either productId (catalogue item) or customGarmentUrl (custom outfit) is required.'
-    });
+    return {
+      httpStatus: 400,
+      body: {
+        success: false,
+        error: 'Either productId (catalogue item) or customGarmentUrl (custom outfit) is required.'
+      }
+    };
   }
 
-  const jobUuid = `job_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+  const jobUuid = jobUuidOverride || `job_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
   const adapter = getTryOnAdapter();
 
   try {
@@ -352,11 +355,14 @@ router.post('/jobs', async (req, res) => {
       // 1. Fetch garment details from PostgreSQL database
       const parsedId = parseInt(productId, 10);
       if (isNaN(parsedId)) {
-        return res.status(400).json({
-          success: false,
-          error: `Invalid product ID '${productId}'. Must be a valid integer.`,
-          code: 'INVALID_PRODUCT_ID'
-        });
+        return {
+          httpStatus: 400,
+          body: {
+            success: false,
+            error: `Invalid product ID '${productId}'. Must be a valid integer.`,
+            code: 'INVALID_PRODUCT_ID'
+          }
+        };
       }
 
       const prodResult = await query(
@@ -372,22 +378,28 @@ router.post('/jobs', async (req, res) => {
       );
 
       if (!prodResult.rows || prodResult.rows.length === 0) {
-        return res.status(404).json({
-          success: false,
-          error: `Product with ID ${parsedId} does not exist in the catalogue.`,
-          code: 'PRODUCT_NOT_FOUND'
-        });
+        return {
+          httpStatus: 404,
+          body: {
+            success: false,
+            error: `Product with ID ${parsedId} does not exist in the catalogue.`,
+            code: 'PRODUCT_NOT_FOUND'
+          }
+        };
       }
 
       garment = prodResult.rows[0];
 
       // Check active availability
       if (garment.is_active === false) {
-        return res.status(400).json({
-          success: false,
-          error: `Product '${garment.name}' (ID: ${garment.id}) is archived and unavailable for virtual try-on.`,
-          code: 'PRODUCT_INACTIVE'
-        });
+        return {
+          httpStatus: 400,
+          body: {
+            success: false,
+            error: `Product '${garment.name}' (ID: ${garment.id}) is archived and unavailable for virtual try-on.`,
+            code: 'PRODUCT_INACTIVE'
+          }
+        };
       }
 
       // Title validation against database record
@@ -395,33 +407,42 @@ router.post('/jobs', async (req, res) => {
         const cleanSubmitted = productTitle.trim().toLowerCase();
         const cleanDbTitle = garment.name.trim().toLowerCase();
         if (cleanSubmitted !== cleanDbTitle && !cleanDbTitle.includes(cleanSubmitted) && !cleanSubmitted.includes(cleanDbTitle)) {
-          return res.status(400).json({
-            success: false,
-            error: `Product title mismatch: Submitted title '${productTitle}' does not match catalogue record '${garment.name}' for ID ${garment.id}.`,
-            code: 'PRODUCT_TITLE_MISMATCH',
-            expectedTitle: garment.name,
-            receivedTitle: productTitle
-          });
+          return {
+            httpStatus: 400,
+            body: {
+              success: false,
+              error: `Product title mismatch: Submitted title '${productTitle}' does not match catalogue record '${garment.name}' for ID ${garment.id}.`,
+              code: 'PRODUCT_TITLE_MISMATCH',
+              expectedTitle: garment.name,
+              receivedTitle: productTitle
+            }
+          };
         }
       }
 
       // Check Try-On Compatibility: block only unsupported items (e.g. accessories)
       if (garment.tryon_compatibility === 'unsupported' || garment.garment_type === 'accessory') {
-        return res.status(400).json({
-          success: false,
-          error: 'Accessories cannot be rendered with clothing diffusion try-on models. 3D AR mesh overlay is required for jewelry, belts, and accessories.',
-          compatibilityStatus: 'unsupported'
-        });
+        return {
+          httpStatus: 400,
+          body: {
+            success: false,
+            error: 'Accessories cannot be rendered with clothing diffusion try-on models. 3D AR mesh overlay is required for jewelry, belts, and accessories.',
+            compatibilityStatus: 'unsupported'
+          }
+        };
       }
 
       // Garment image validation: MUST have valid image, never fallback to user photo
       garmentImageUrl = garment.tryon_image_url || garment.primary_image_url;
       if (!garmentImageUrl || typeof garmentImageUrl !== 'string' || garmentImageUrl.trim() === '') {
-        return res.status(400).json({
-          success: false,
-          error: `Product '${garment.name}' (ID: ${garment.id}) does not have a valid garment photograph. Cannot proceed with try-on.`,
-          code: 'MISSING_GARMENT_IMAGE'
-        });
+        return {
+          httpStatus: 400,
+          body: {
+            success: false,
+            error: `Product '${garment.name}' (ID: ${garment.id}) does not have a valid garment photograph. Cannot proceed with try-on.`,
+            code: 'MISSING_GARMENT_IMAGE'
+          }
+        };
       }
 
       // Product Image URL validation against database record if submitted by frontend
@@ -441,11 +462,14 @@ router.post('/jobs', async (req, res) => {
         }
 
         if (!matchesDbImage) {
-          return res.status(400).json({
-            success: false,
-            error: `Product image mismatch: The submitted image URL does not belong to product '${garment.name}' (ID: ${garment.id}).`,
-            code: 'PRODUCT_IMAGE_MISMATCH'
-          });
+          return {
+            httpStatus: 400,
+            body: {
+              success: false,
+              error: `Product image mismatch: The submitted image URL does not belong to product '${garment.name}' (ID: ${garment.id}).`,
+              code: 'PRODUCT_IMAGE_MISMATCH'
+            }
+          };
         }
       }
 
@@ -502,11 +526,14 @@ router.post('/jobs', async (req, res) => {
         if (garmentCategory === 'saree') {
           garmentCategory = 'full_body';
         } else if (garmentCategory === 'accessory') {
-          return res.status(400).json({
-            success: false,
-            error: 'Accessories are unsupported by 2D garment diffusion try-on.',
-            compatibilityStatus: 'unsupported'
-          });
+          return {
+            httpStatus: 400,
+            body: {
+              success: false,
+              error: 'Accessories are unsupported by 2D garment diffusion try-on.',
+              compatibilityStatus: 'unsupported'
+            }
+          };
         } else {
           garmentCategory = 'upper_body';
         }
@@ -527,37 +554,47 @@ router.post('/jobs', async (req, res) => {
 
     console.log(`[TryOn Pipeline: Stage 7 Validated] Product ID: ${garment.id} | External ID: ${externalId} | Title: "${garment.name}" | Image URL: ${garmentImageUrl} | Image Hash: ${imageHash} | Category: ${garmentCategory} | Session ID: ${activeSessionId} | Job UUID: ${jobUuid}`);
 
-    // 3. Insert initial job record into PostgreSQL
-    await query(
-      `INSERT INTO tryon_jobs (
-         job_uuid, session_id, customer_session_id, product_id,
-         product_title, product_external_id, product_image_hash,
-         custom_garment_url, custom_garment_name,
-         user_photo_url, garment_image_url, garment_category,
-         selected_size, fit_preference, credits_used,
-         status, provider, created_at
-       )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, CURRENT_TIMESTAMP)`,
-      [
-        jobUuid,
-        null,
-        activeSessionId,
-        garment.id || null,
-        garment.name,
-        externalId,
-        imageHash,
-        customGarmentUrl || null,
-        customGarmentName || null,
-        userPhotoUrl,
-        garmentImageUrl,
-        garmentCategory,
-        selectedSize,
-        fitPreference,
-        adapter.isMockMode ? 0 : 1,
-        'processing',
-        adapter.name
-      ]
-    );
+    // 3. Insert or update initial job record into PostgreSQL
+    if (existingJobId) {
+      await query(
+        `UPDATE tryon_jobs
+         SET status = 'processing', error_message = NULL, error_code = NULL,
+             user_photo_url = $1, garment_image_url = $2, fit_preference = $3, selected_size = $4
+         WHERE id = $5`,
+        [userPhotoUrl, garmentImageUrl, fitPreference, selectedSize, existingJobId]
+      );
+    } else {
+      await query(
+        `INSERT INTO tryon_jobs (
+           job_uuid, session_id, customer_session_id, product_id,
+           product_title, product_external_id, product_image_hash,
+           custom_garment_url, custom_garment_name,
+           user_photo_url, garment_image_url, garment_category,
+           selected_size, fit_preference, credits_used,
+           status, provider, created_at
+         )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, CURRENT_TIMESTAMP)`,
+        [
+          jobUuid,
+          null,
+          activeSessionId,
+          garment.id || null,
+          garment.name,
+          externalId,
+          imageHash,
+          customGarmentUrl || null,
+          customGarmentName || null,
+          userPhotoUrl,
+          garmentImageUrl,
+          garmentCategory,
+          selectedSize,
+          fitPreference,
+          adapter.isMockMode ? 0 : 1,
+          'processing',
+          adapter.name
+        ]
+      );
+    }
 
     // 4. Initiate job with provider
     try {
@@ -590,54 +627,61 @@ router.post('/jobs', async (req, res) => {
             const outUrl = submission.resultImageUrl || (Array.isArray(submission.output) ? submission.output[0] : submission.output);
             await saveCompletedResult(jobUuid, outUrl, adapter.name, !!submission.isMock, false);
 
-            return res.status(201).json({
-              success: true,
-              jobId: jobUuid,
-              status: 'completed',
-              provider: adapter.name,
-              productId: garment.id || null,
-              productTitle: garment.name,
-              productExternalId: externalId,
-              productImageHash: imageHash,
-              garmentImageUrl,
-              customerSessionId: activeSessionId,
-              selectedSize,
-              fitPreference,
-              creditsUsed: submission.isMock ? 0 : 1,
-              result: {
-                resultImageUrl: outUrl,
+            return {
+              httpStatus: 201,
+              body: {
+                success: true,
+                jobId: jobUuid,
+                status: 'completed',
                 provider: adapter.name,
-                isMock: !!submission.isMock,
-                isSimulation: false,
+                productId: garment.id || null,
                 productTitle: garment.name,
-                productId: garment.id || null
+                productExternalId: externalId,
+                productImageHash: imageHash,
+                garmentImageUrl,
+                customerSessionId: activeSessionId,
+                selectedSize,
+                fitPreference,
+                creditsUsed: submission.isMock ? 0 : 1,
+                result: {
+                  resultImageUrl: outUrl,
+                  provider: adapter.name,
+                  isMock: !!submission.isMock,
+                  isSimulation: false,
+                  productTitle: garment.name,
+                  productId: garment.id || null,
+                  garmentImageUrl
+                }
               }
-            });
+            };
           }
         }
 
         // Return processing job for client polling
-        return res.status(202).json({
-          success: true,
-          jobId: jobUuid,
-          providerJobId: submission.providerJobId,
-          customerImageId: submission.customerImageId,
-          status: 'processing',
-          provider: adapter.name,
-          productId: garment.id || null,
-          productTitle: garment.name,
-          productExternalId: externalId,
-          productImageHash: imageHash,
-          garmentImageUrl,
-          customerSessionId: activeSessionId,
-          selectedSize,
-          fitPreference,
-          creditsUsed: submission.isMock ? 0 : 1,
-          isMock: !!submission.isMock,
-          message: submission.isMock
-            ? 'Genlook mock try-on job submitted (Zero credits consumed).'
-            : 'Genlook AI try-on job submitted to cloud worker.'
-        });
+        return {
+          httpStatus: 202,
+          body: {
+            success: true,
+            jobId: jobUuid,
+            providerJobId: submission.providerJobId,
+            customerImageId: submission.customerImageId,
+            status: 'processing',
+            provider: adapter.name,
+            productId: garment.id || null,
+            productTitle: garment.name,
+            productExternalId: externalId,
+            productImageHash: imageHash,
+            garmentImageUrl,
+            customerSessionId: activeSessionId,
+            selectedSize,
+            fitPreference,
+            creditsUsed: submission.isMock ? 0 : 1,
+            isMock: !!submission.isMock,
+            message: submission.isMock
+              ? 'Genlook mock try-on job submitted (Zero credits consumed).'
+              : 'Genlook AI try-on job submitted to cloud worker.'
+          }
+        };
       } else {
         const result = await adapter.processTryOn({
           userPhotoUrl,
@@ -650,20 +694,28 @@ router.post('/jobs', async (req, res) => {
 
         await saveCompletedResult(jobUuid, result.resultImageUrl, adapter.name, !!result.isMock, result.isSimulation);
 
-        return res.status(201).json({
-          success: true,
-          jobId: jobUuid,
-          status: 'completed',
-          provider: adapter.name,
-          productId: garment.id || null,
-          productTitle: garment.name,
-          productExternalId: externalId,
-          productImageHash: imageHash,
-          garmentImageUrl,
-          customerSessionId: activeSessionId,
-          creditsUsed: result.isMock ? 0 : 1,
-          result
-        });
+        return {
+          httpStatus: 201,
+          body: {
+            success: true,
+            jobId: jobUuid,
+            status: 'completed',
+            provider: adapter.name,
+            productId: garment.id || null,
+            productTitle: garment.name,
+            productExternalId: externalId,
+            productImageHash: imageHash,
+            garmentImageUrl,
+            customerSessionId: activeSessionId,
+            creditsUsed: result.isMock ? 0 : 1,
+            result: {
+              ...result,
+              productTitle: garment.name,
+              productId: garment.id || null,
+              garmentImageUrl
+            }
+          }
+        };
       }
     } catch (providerErr) {
       const errorCode = providerErr.code || 'PROVIDER_ERROR';
@@ -677,21 +729,178 @@ router.post('/jobs', async (req, res) => {
       console.error('[TryOn Job Failed]:', providerErr.message);
 
       const httpStatus = providerErr.status || 502;
-      return res.status(httpStatus).json({
-        success: false,
-        jobId: jobUuid,
-        status: 'failed',
-        provider: adapter.name,
-        error: providerErr.message,
-        code: errorCode
-      });
+      return {
+        httpStatus,
+        body: {
+          success: false,
+          jobId: jobUuid,
+          status: 'failed',
+          provider: adapter.name,
+          error: providerErr.message,
+          code: errorCode,
+          productId: garment?.id || null,
+          productTitle: garment?.name || null,
+          garmentImageUrl
+        }
+      };
     }
   } catch (err) {
     console.error('[TryOn Job Error]:', err.message);
-    return res.status(500).json({
-      success: false,
-      error: 'Failed to process try-on job: ' + err.message
+    return {
+      httpStatus: 500,
+      body: {
+        success: false,
+        error: 'Failed to process try-on job: ' + err.message
+      }
+    };
+  }
+}
+
+/**
+ * POST /api/tryon/jobs
+ * Creates and submits a single virtual try-on job to the AI engine
+ */
+router.post('/jobs', async (req, res) => {
+  try {
+    const outcome = await executeSingleTryOnJob(req.body);
+    return res.status(outcome.httpStatus).json(outcome.body);
+  } catch (err) {
+    console.error('[TryOn Route Error]:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to process try-on job: ' + err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/batch-jobs
+ * Creates and submits multiple independent virtual try-on jobs (one per selected outfit).
+ * Reuses the same customer silhouette photo across all requests.
+ * Each job gets its own job_uuid, product ID, and independent database record.
+ */
+router.post('/batch-jobs', async (req, res) => {
+  try {
+    const {
+      productIds = [],
+      products = [],
+      userPhotoUrl,
+      userPhotoFilename,
+      sessionId,
+      customerSessionId,
+      selectedSize = 'M',
+      fitPreference = 'tailored'
+    } = req.body;
+
+    const activeSessionId = sessionId || customerSessionId || `sess_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
+
+    if (!userPhotoUrl) {
+      return res.status(400).json({ success: false, error: 'userPhotoUrl is required.' });
+    }
+
+    // Determine target product items: either array of IDs or array of product objects
+    let targetIds = [];
+    if (Array.isArray(productIds) && productIds.length > 0) {
+      targetIds = productIds;
+    } else if (Array.isArray(products) && products.length > 0) {
+      targetIds = products.map(p => (typeof p === 'object' ? p.id : p));
+    }
+
+    if (targetIds.length === 0) {
+      return res.status(400).json({ success: false, error: 'At least one productId is required for batch try-on.' });
+    }
+
+    // Prevent duplicate product selections in the batch
+    const uniqueIds = Array.from(new Set(targetIds.map(id => parseInt(id, 10)).filter(id => !isNaN(id))));
+
+    if (uniqueIds.length === 0) {
+      return res.status(400).json({ success: false, error: 'No valid numeric product IDs provided.' });
+    }
+
+    // Process each outfit independently: each gets its own tryon_jobs row and Genlook request
+    const results = [];
+    for (const pid of uniqueIds) {
+      const outcome = await executeSingleTryOnJob({
+        productId: pid,
+        userPhotoUrl,
+        userPhotoFilename,
+        sessionId: activeSessionId,
+        selectedSize,
+        fitPreference
+      });
+      results.push({
+        ...outcome.body,
+        httpStatus: outcome.httpStatus
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      count: results.length,
+      sessionId: activeSessionId,
+      jobs: results
     });
+  } catch (err) {
+    console.error('[Batch TryOn Error]:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to process batch try-on: ' + err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/jobs/:id/retry
+ * Retries a failed try-on job without re-running successful jobs.
+ */
+router.post('/jobs/:id/retry', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const jobResult = await query(
+      `SELECT j.*, r.result_image_url
+       FROM tryon_jobs j
+       LEFT JOIN tryon_results r ON j.id = r.job_id
+       WHERE j.job_uuid = $1 OR j.id::text = $1
+       LIMIT 1`,
+      [id]
+    );
+
+    if (!jobResult.rows || jobResult.rows.length === 0) {
+      return res.status(404).json({ success: false, error: `Try-on job '${id}' not found in database.` });
+    }
+
+    const job = jobResult.rows[0];
+
+    // If job was already completed successfully, return the result without deducting credits
+    if (job.status === 'completed' && job.result_image_url) {
+      return res.json({
+        success: true,
+        jobId: job.job_uuid,
+        status: 'completed',
+        message: 'Job was already completed successfully.',
+        result: {
+          resultImageUrl: job.result_image_url,
+          productId: job.product_id,
+          productTitle: job.product_title,
+          garmentImageUrl: job.garment_image_url
+        }
+      });
+    }
+
+    // Re-execute generation for this single job
+    const outcome = await executeSingleTryOnJob({
+      jobUuidOverride: job.job_uuid,
+      existingJobId: job.id,
+      productId: job.product_id,
+      productTitle: job.product_title,
+      userPhotoUrl: job.user_photo_url,
+      customGarmentUrl: job.custom_garment_url,
+      customGarmentName: job.custom_garment_name,
+      sessionId: job.customer_session_id,
+      selectedSize: job.selected_size,
+      fitPreference: job.fit_preference,
+      category: job.garment_category
+    });
+
+    return res.status(outcome.httpStatus).json(outcome.body);
+  } catch (err) {
+    console.error('[Retry TryOn Job Error]:', err.message);
+    return res.status(500).json({ success: false, error: 'Failed to retry try-on job: ' + err.message });
   }
 });
 

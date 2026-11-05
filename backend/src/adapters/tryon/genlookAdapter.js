@@ -208,13 +208,24 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
 
     // If genuine remote public HTTP(S) URL, fetch bytes
     if (this.isRemotePublicUrl(imageInput)) {
-      const resp = await fetch(imageInput);
-      if (!resp.ok) {
-        throw new Error(`Failed to fetch image from ${imageInput}: ${resp.statusText}`);
+      try {
+        const resp = await fetch(imageInput);
+        if (!resp.ok) {
+          throw new Error(`Failed to fetch image from ${imageInput}: ${resp.statusText}`);
+        }
+        const arrayBuffer = await resp.arrayBuffer();
+        const mimeType = resp.headers.get('content-type') || 'image/jpeg';
+        return { buffer: Buffer.from(arrayBuffer), mimeType, filename: basename };
+      } catch (err) {
+        if (this.isMockMode) {
+          return {
+            buffer: Buffer.from([0xFF, 0xD8, 0xFF, 0xD9]),
+            mimeType: 'image/jpeg',
+            filename: basename
+          };
+        }
+        throw err;
       }
-      const arrayBuffer = await resp.arrayBuffer();
-      const mimeType = resp.headers.get('content-type') || 'image/jpeg';
-      return { buffer: Buffer.from(arrayBuffer), mimeType, filename: basename };
     }
 
     throw new Error(`Unable to locate image file or valid public URL: ${imageInput}`);
@@ -368,6 +379,12 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
         imageUrl: uploadResp.imageUrl
       };
     } catch (err) {
+      if (this.isMockMode) {
+        return {
+          imageId: `mock_img_${Date.now()}`,
+          imageUrl: userPhotoUrl
+        };
+      }
       this.handleGenlookError(err, 'Customer photo upload');
     }
   }
@@ -565,11 +582,27 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
         customerImageId: imageId,
         status: (response.status || 'pending').toLowerCase(),
         isMock,
+        output: response.output,
+        resultImageUrl: response.resultImageUrl,
         productExternalId: response.productExternalId || externalId,
         usedMultipart: isCustomGarment,
         garmentFileKey: isCustomGarment ? productImageSource.fileKey : null
       };
     } catch (err) {
+      if (this.isMockMode) {
+        const mockResultImg = `https://images.unsplash.com/mock-tryon-result-${Date.now()}.jpg`;
+        return {
+          providerJobId: `mock_gen_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`,
+          customerImageId: imageId,
+          status: 'completed',
+          isMock: true,
+          output: [mockResultImg],
+          resultImageUrl: mockResultImg,
+          productExternalId: externalId,
+          usedMultipart: isCustomGarment,
+          garmentFileKey: isCustomGarment ? productImageSource.fileKey : null
+        };
+      }
       this.handleGenlookError(err, isCustomGarment ? 'Custom Garment Multipart Try-On submission' : 'Catalogue Try-On submission');
     }
   }

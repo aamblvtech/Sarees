@@ -4,6 +4,10 @@ import { GenlookTryOnAdapter } from './genlookAdapter.js';
 
 let currentAdapter = null;
 
+export function setTryOnAdapter(adapter) {
+  currentAdapter = adapter;
+}
+
 export function getTryOnAdapter() {
   const providerType = (process.env.TRYON_PROVIDER || 'genlook').toLowerCase();
 

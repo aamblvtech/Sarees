@@ -158,6 +158,41 @@ export const tryOnService = {
   },
 
   /**
+   * Submit multiple independent try-on jobs for selected outfits (Batch Try-On)
+   * Reuses the same customer photo across all outfits without repeated uploads.
+   */
+  async createBatchTryOnJobs({
+    productIds,
+    products,
+    userPhotoUrl,
+    userPhotoFilename,
+    sessionId,
+    customerSessionId,
+    selectedSize = 'M',
+    fitPreference = 'tailored'
+  }) {
+    const response = await apiClient.post('/tryon/batch-jobs', {
+      productIds,
+      products,
+      userPhotoUrl,
+      userPhotoFilename,
+      sessionId,
+      customerSessionId,
+      selectedSize,
+      fitPreference
+    });
+    return response.data;
+  },
+
+  /**
+   * Retry a failed try-on job without re-running successful generations
+   */
+  async retryJob(jobId) {
+    const response = await apiClient.post(`/tryon/jobs/${jobId}/retry`);
+    return response.data;
+  },
+
+  /**
    * Poll status of an ongoing try-on job in PostgreSQL
    */
   async getJobStatus(jobId) {
