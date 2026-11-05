@@ -61,7 +61,7 @@ export default function ProductCard({ product }) {
 
         {/* Hover Quick Action Overlay Bar */}
         <div className="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-white/95 via-white/80 to-transparent dark:from-black/80 dark:via-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-10">
-          {product.tryonCompatibility === 'unsupported' ? (
+          {product.tryonCompatibility === 'unsupported' || product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? (
             <Link
               to={`/products/${product.id}`}
               className="w-full py-2 px-3 bg-white text-slate-800 hover:bg-slate-50 text-[11px] uppercase font-mono tracking-wider font-semibold flex items-center justify-center space-x-1.5 transition-transform duration-200 shadow-sm border border-slate-200"

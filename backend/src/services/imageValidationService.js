@@ -180,36 +180,62 @@ export const imageValidationService = {
   },
 
   /**
-   * Validate garment image dimensions and format for virtual try-on.
-   * Enforces minimum size of 250x250px required by Genlook AI engine.
-   * @param {Buffer|string} bufferOrPath - Image buffer or path to image file
-   * @returns {{ valid: boolean, width: number|null, height: number|null, format: string|null, error: string|null }}
+   * Helper to resolve buffer and file info from path or buffer
    */
-  validateGarmentDimensions(bufferOrPath) {
-    let buffer = null;
+  _resolveBuffer(bufferOrPath) {
     if (Buffer.isBuffer(bufferOrPath)) {
-      buffer = bufferOrPath;
-    } else if (typeof bufferOrPath === 'string') {
-      try {
-        let p = bufferOrPath;
-        if (!path.isAbsolute(p)) {
-          p = path.join(__dirname, '..', '..', p.replace(/^\//, ''));
+      return { buffer: bufferOrPath, sizeBytes: bufferOrPath.length, filename: 'buffer' };
+    }
+    if (typeof bufferOrPath === 'string') {
+      const clean = bufferOrPath.split('?')[0].replace(/^\//, '');
+      const candidatePaths = [
+        bufferOrPath,
+        path.join(__dirname, '..', '..', clean),
+        path.join(__dirname, '..', '..', 'uploads', path.basename(clean)),
+        path.join(__dirname, '..', '..', 'uploads', 'catalogue_sarees', path.basename(clean)),
+        path.join(__dirname, '..', '..', 'uploads', 'custom_garments', path.basename(clean))
+      ];
+
+      for (const p of candidatePaths) {
+        if (typeof p === 'string' && fs.existsSync(p) && fs.statSync(p).isFile()) {
+          const buf = fs.readFileSync(p);
+          return { buffer: buf, sizeBytes: buf.length, filename: path.basename(p), resolvedPath: p };
         }
-        if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-          buffer = fs.readFileSync(p);
-        }
-      } catch (e) {
-        // file reading error
       }
     }
+    return null;
+  },
 
-    if (!buffer) {
+  /**
+   * 1. Technical Dimension & Format Validation Gate
+   * Enforces strict technical limits: minimum 250x250px, valid JPEG/PNG/WebP, and 15MB size limit.
+   * @param {Buffer|string} bufferOrPath - Image buffer or path to image file
+   * @returns {{ valid: boolean, width: number|null, height: number|null, format: string|null, sizeBytes: number, error: string|null }}
+   */
+  validateTechnicalDimensions(bufferOrPath) {
+    const resolved = this._resolveBuffer(bufferOrPath);
+    if (!resolved || !resolved.buffer) {
       return {
         valid: false,
         width: null,
         height: null,
         format: null,
-        error: 'Unable to read garment image data for dimension inspection.'
+        sizeBytes: 0,
+        error: 'Unable to read garment image data for technical validation.'
+      };
+    }
+
+    const { buffer, sizeBytes } = resolved;
+
+    // Check size limit (15MB Genlook provider maximum)
+    if (sizeBytes > 15 * 1024 * 1024) {
+      return {
+        valid: false,
+        width: null,
+        height: null,
+        format: null,
+        sizeBytes,
+        error: `Garment image exceeds the 15MB limit (${(sizeBytes / (1024 * 1024)).toFixed(1)}MB).`
       };
     }
 
@@ -220,19 +246,21 @@ export const imageValidationService = {
         width: null,
         height: null,
         format: null,
+        sizeBytes,
         error: 'Invalid or unsupported image format. Only JPEG, PNG, and WebP are supported for virtual try-on.'
       };
     }
 
     const { width, height, format } = dims;
 
-    // Minimum size required by Genlook AI virtual try-on engine
+    // Technical gate: Minimum 250x250 required by Genlook AI virtual try-on engine
     if (width < 250 || height < 250) {
       return {
         valid: false,
         width,
         height,
         format,
+        sizeBytes,
         error: 'Product image is too small for try-on. Minimum size is 250x250px.'
       };
     }
@@ -242,8 +270,162 @@ export const imageValidationService = {
       width,
       height,
       format,
+      sizeBytes,
       error: null
     };
+  },
+
+  /**
+   * 2. Visual Quality & Clarity Assessment Engine
+   * Separates technical limits from visual fidelity: evaluates longer side (>=1024px preferred),
+   * aspect ratio framing (full drape, pallu, pleats, border), and sharpness/compression density.
+   * @param {Buffer|string} bufferOrPath - Image buffer or path to image file
+   */
+  assessVisualQuality(bufferOrPath) {
+    const resolved = this._resolveBuffer(bufferOrPath);
+    if (!resolved || !resolved.buffer) {
+      return {
+        grade: 'UNREADABLE',
+        longerSide: 0,
+        aspectRatio: 0,
+        aspectRatioLabel: 'Unknown',
+        isPreferredResolution: false,
+        isSharp: false,
+        isBlurryOrPixelated: true,
+        clarity: 'Image unreadable or missing from storage',
+        qualityScore: 0,
+        warnings: ['Unable to read image bytes.'],
+        recommendations: ['Upload a valid JPEG/PNG studio photograph.']
+      };
+    }
+
+    const { buffer, sizeBytes } = resolved;
+    const dims = this.parseImageDimensions(buffer);
+    if (!dims) {
+      return {
+        grade: 'INVALID_FORMAT',
+        longerSide: 0,
+        aspectRatio: 0,
+        aspectRatioLabel: 'Invalid',
+        isPreferredResolution: false,
+        isSharp: false,
+        isBlurryOrPixelated: true,
+        clarity: 'Invalid format header',
+        qualityScore: 0,
+        warnings: ['Header cannot be parsed.'],
+        recommendations: ['Provide standard JPEG, PNG or WebP image.']
+      };
+    }
+
+    const { width, height } = dims;
+    const longerSide = Math.max(width, height);
+    const shorterSide = Math.min(width, height);
+    const aspectRatio = width > 0 ? Number((height / width).toFixed(2)) : 1.0;
+    const totalPixels = width * height;
+    const byteDensity = totalPixels > 0 ? sizeBytes / totalPixels : 0;
+
+    const warnings = [];
+    const recommendations = [];
+    let qualityScore = 100;
+
+    // A. Longer side check: Preferred 1024px or higher
+    const isPreferredResolution = longerSide >= 1024;
+    if (longerSide < 250 || shorterSide < 250) {
+      qualityScore -= 60;
+      warnings.push(`Low-resolution thumbnail crop (${width}×${height}px). Far below 250×250 minimum.`);
+      recommendations.push('Replace with authentic high-resolution studio photograph of at least 1024px on longer side.');
+    } else if (!isPreferredResolution) {
+      qualityScore -= 20;
+      warnings.push(`Resolution is ${width}×${height}px (longer side: ${longerSide}px). Below luxury atelier standard of 1024px.`);
+      recommendations.push('Prefer studio imagery with >= 1024px longer side to maximize garment drape fidelity.');
+    }
+
+    // B. Framing & Aspect Ratio Analysis (Full saree visibility: pallu, pleats, border)
+    let aspectRatioLabel = 'Portrait';
+    if (aspectRatio < 1.0) {
+      aspectRatioLabel = 'Landscape';
+      qualityScore -= 25;
+      warnings.push('Landscape aspect ratio detected. May clip top pallu or lower saree pleats.');
+      recommendations.push('Use 3:4 or 2:3 vertical portrait orientation to show complete 6-yard saree drape.');
+    } else if (aspectRatio >= 1.2 && aspectRatio <= 1.6) {
+      aspectRatioLabel = 'Optimal Saree Drape (3:4 Portrait)';
+    } else if (aspectRatio > 1.6) {
+      aspectRatioLabel = 'Tall Narrow Portrait';
+    }
+
+    // C. Sharpness & Compression Clarity Assessment
+    // Very low byte density on tiny images indicates extreme compression artifacts or pixelated crops
+    let isSharp = false;
+    let isBlurryOrPixelated = false;
+    let clarity = '';
+
+    if (longerSide < 250 || shorterSide < 250) {
+      isBlurryOrPixelated = true;
+      isSharp = false;
+      clarity = 'Blurry / Pixelated Thumbnail (<250px screenshot crop)';
+    } else if (isPreferredResolution && byteDensity >= 0.10) {
+      isSharp = true;
+      isBlurryOrPixelated = false;
+      clarity = 'Sharp High-Resolution Studio Photography (Crisp pallu, pleats & border details)';
+    } else {
+      isSharp = true;
+      isBlurryOrPixelated = false;
+      clarity = 'Standard Resolution (Passes technical dimension gate)';
+    }
+
+    qualityScore = Math.max(0, Math.min(100, qualityScore));
+
+    const grade = isBlurryOrPixelated
+      ? 'LOW_RES_BLURRY'
+      : isPreferredResolution
+      ? 'STUDIO_HIGH_RES'
+      : 'STANDARD_QUALITY';
+
+    return {
+      grade,
+      longerSide,
+      width,
+      height,
+      aspectRatio,
+      aspectRatioLabel,
+      isPreferredResolution,
+      isSharp,
+      isBlurryOrPixelated,
+      clarity,
+      qualityScore,
+      byteDensity: Number(byteDensity.toFixed(3)),
+      sizeKb: Number((sizeBytes / 1024).toFixed(1)),
+      warnings,
+      recommendations
+    };
+  },
+
+  /**
+   * 3. Comprehensive Dual-Stage Garment Validation
+   * Evaluates both technical gate and visual quality assessment.
+   */
+  validateGarment(bufferOrPath) {
+    const technical = this.validateTechnicalDimensions(bufferOrPath);
+    const visualQuality = this.assessVisualQuality(bufferOrPath);
+
+    const isAiReady = technical.valid && !visualQuality.isBlurryOrPixelated;
+    const status = isAiReady ? 'AI_READY' : 'IMAGE_NEEDS_REPLACEMENT';
+    const statusLabel = isAiReady ? 'AI Ready' : 'Image Needs Replacement';
+
+    return {
+      isAiReady,
+      status,
+      statusLabel,
+      technical,
+      visualQuality
+    };
+  },
+
+  /**
+   * Backward-compatible validator alias for genlookAdapter and route guards
+   */
+  validateGarmentDimensions(bufferOrPath) {
+    return this.validateTechnicalDimensions(bufferOrPath);
   },
 
   /**
@@ -254,84 +436,45 @@ export const imageValidationService = {
       return {
         width: null,
         height: null,
+        longerSide: null,
         format: null,
         sizeBytes: 0,
+        sizeKb: 0,
         isAiReady: false,
         qualityStatus: 'missing_image',
-        dimensionLabel: 'No Image'
+        dimensionLabel: 'No Image',
+        clarity: 'No image provided'
       };
     }
 
-    let buffer = null;
-    let sizeBytes = 0;
+    const technical = this.validateTechnicalDimensions(imageInput);
+    const visual = this.assessVisualQuality(imageInput);
 
-    if (Buffer.isBuffer(imageInput)) {
-      buffer = imageInput;
-      sizeBytes = buffer.length;
-    } else if (typeof imageInput === 'string') {
-      // Local path candidate checks
-      const clean = imageInput.split('?')[0].replace(/^\//, '');
-      const candidatePaths = [
-        imageInput,
-        path.join(__dirname, '..', '..', clean),
-        path.join(__dirname, '..', '..', 'uploads', path.basename(clean)),
-        path.join(__dirname, '..', '..', 'uploads', 'catalogue_sarees', path.basename(clean)),
-        path.join(__dirname, '..', '..', 'uploads', 'custom_garments', path.basename(clean))
-      ];
-
-      for (const p of candidatePaths) {
-        if (typeof p === 'string' && fs.existsSync(p) && fs.statSync(p).isFile()) {
-          buffer = fs.readFileSync(p);
-          sizeBytes = buffer.length;
-          break;
-        }
-      }
-    }
-
-    if (!buffer) {
-      return {
-        width: null,
-        height: null,
-        format: null,
-        sizeBytes: 0,
-        isAiReady: false,
-        qualityStatus: 'remote_or_unresolved',
-        dimensionLabel: 'External / CDN'
-      };
-    }
-
-    const dims = this.parseImageDimensions(buffer);
-    if (!dims) {
-      return {
-        width: null,
-        height: null,
-        format: 'unknown',
-        sizeBytes,
-        isAiReady: false,
-        qualityStatus: 'invalid_format',
-        dimensionLabel: 'Invalid Format'
-      };
-    }
-
-    const isAiReady = dims.width >= 250 && dims.height >= 250;
-    const isHighRes = dims.width >= 1024 && dims.height >= 1024;
-
-    let qualityStatus = 'ai_ready';
-    if (!isAiReady) {
+    const isAiReady = technical.valid && !visual.isBlurryOrPixelated;
+    let qualityStatus = 'standard';
+    if (visual.isBlurryOrPixelated || !technical.valid) {
       qualityStatus = 'too_small';
-    } else if (isHighRes) {
+    } else if (visual.isPreferredResolution) {
       qualityStatus = 'high_resolution';
     }
 
+    const width = technical.width;
+    const height = technical.height;
+
     return {
-      width: dims.width,
-      height: dims.height,
-      format: dims.format,
-      sizeBytes,
-      sizeKb: parseFloat((sizeBytes / 1024).toFixed(1)),
+      width,
+      height,
+      longerSide: visual.longerSide,
+      aspectRatio: visual.aspectRatio,
+      aspectRatioLabel: visual.aspectRatioLabel,
+      format: technical.format,
+      sizeBytes: technical.sizeBytes,
+      sizeKb: visual.sizeKb,
       isAiReady,
       qualityStatus,
-      dimensionLabel: `${dims.width} × ${dims.height} px`
+      clarity: visual.clarity,
+      qualityScore: visual.qualityScore,
+      dimensionLabel: width && height ? `${width} × ${height} px` : 'Unresolved'
     };
   },
 

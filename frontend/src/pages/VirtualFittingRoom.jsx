@@ -736,6 +736,10 @@ export default function VirtualFittingRoom() {
       setGenerationError('Accessories (shawls, belts, shoes) cannot be selected for garment try-on.');
       return;
     }
+    if (product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false) {
+      setGenerationError(`Product "${product.name}" image is too small for try-on (<250px). Marked as Catalogue Only until high-resolution studio photography is uploaded.`);
+      return;
+    }
 
     setSelectedProducts((prev) => {
       const exists = prev.some((p) => p.id === product.id);
@@ -2194,15 +2198,15 @@ export default function VirtualFittingRoom() {
 
                   {/* Select / Selected Outfit Controls */}
                   <div className="p-3 pt-0">
-                    {product.tryonCompatibility === 'unsupported' ? (
+                    {product.tryonCompatibility === 'unsupported' || product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? (
                       <button
                         type="button"
                         disabled
-                        className="w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-[#F9DFDF] dark:border-slate-800 rounded cursor-not-allowed flex items-center justify-center space-x-1"
-                        title="Accessories cannot be worn as clothing try-on"
+                        className="w-full py-2 text-[10px] uppercase font-mono tracking-wider font-semibold bg-amber-50/70 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/60 rounded cursor-not-allowed flex items-center justify-center space-x-1"
+                        title={product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? "Garment image is below 250px minimum required for AI try-on (Catalogue Only)" : "Accessories cannot be worn as clothing try-on"}
                       >
-                        <EyeOff className="w-3 h-3" />
-                        <span>Catalogue Only</span>
+                        <EyeOff className="w-3 h-3 text-amber-600 dark:text-amber-400" />
+                        <span>{product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? 'Needs Image Replacement' : 'Catalogue Only'}</span>
                       </button>
                     ) : (
                       <div className="grid grid-cols-2 gap-1.5">

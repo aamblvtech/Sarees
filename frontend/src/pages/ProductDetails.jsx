@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Sparkles, ArrowLeft, RefreshCw, Scissors, ShieldCheck, Check } from 'lucide-react';
+import { Sparkles, ArrowLeft, RefreshCw, Scissors, ShieldCheck, Check, AlertCircle } from 'lucide-react';
 import productService from '../services/productService';
 import ProductStatusBadge, { ATELIER_FALLBACK_IMAGE } from '../components/ProductStatusBadge';
 
@@ -123,13 +123,15 @@ export default function ProductDetails() {
               />
               
               {/* Try On Quick Floating Pill */}
-              <button
-                onClick={handleLaunchTryOn}
-                className="absolute top-4 right-4 bg-white/95 dark:bg-[#FFFFFF]/90 backdrop-blur-md text-slate-900 dark:text-black hover:bg-slate-50 dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-sm border border-slate-200 transition-all"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                <span>Virtual Try-On</span>
-              </button>
+              {product.tryonCompatibility !== 'needs_image_replacement' && product.isAiReady !== false && product.tryonCompatibility !== 'unsupported' && (
+                <button
+                  onClick={handleLaunchTryOn}
+                  className="absolute top-4 right-4 bg-white/95 dark:bg-[#FFFFFF]/90 backdrop-blur-md text-slate-900 dark:text-black hover:bg-slate-50 dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-sm border border-slate-200 transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                  <span>Virtual Try-On</span>
+                </button>
+              )}
 
               <div className="absolute top-4 left-4">
                 <ProductStatusBadge product={product} size="sm" />
@@ -239,13 +241,23 @@ export default function ProductDetails() {
             <div className="space-y-3 pt-4">
               
               {/* PRIMARY: Try It On Button */}
-              <button
-                onClick={handleLaunchTryOn}
-                className="w-full py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 dark:bg-[#FFFFFF] text-slate-900 dark:text-black text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-sm border-2 border-slate-900 dark:border-white group"
-              >
-                <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
-                <span>Try It On in Virtual Fitting Room</span>
-              </button>
+              {product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? (
+                <div className="w-full py-3.5 px-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200 flex items-center space-x-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold uppercase tracking-wider text-[11px]">Catalogue Only (Image Needs Replacement)</p>
+                    <p className="text-[10px] text-amber-700 dark:text-amber-300">This garment requires high-resolution studio photography (&ge;250px) before virtual try-on can be rendered.</p>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={handleLaunchTryOn}
+                  className="w-full py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 dark:bg-[#FFFFFF] text-slate-900 dark:text-black text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-sm border-2 border-slate-900 dark:border-white group"
+                >
+                  <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
+                  <span>Try It On in Virtual Fitting Room</span>
+                </button>
+              )}
 
               {/* SECONDARY: Add to Bag */}
               <button

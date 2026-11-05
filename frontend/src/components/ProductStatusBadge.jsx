@@ -43,6 +43,15 @@ export function getProductStatus(product, isImageMissing = false) {
     };
   }
 
+  if (product?.tryonCompatibility === 'needs_image_replacement' || product?.qualityStatus === 'too_small') {
+    return {
+      label: 'Image Needs Replacement',
+      badgeClass: 'bg-amber-50 text-amber-900 border-amber-300 dark:bg-amber-950/80 dark:text-amber-200 dark:border-amber-800/50',
+      icon: AlertCircle,
+      description: 'Image resolution is below 250px – requires high-resolution studio photography'
+    };
+  }
+
   if (product?.garmentType === 'accessory' || product?.tryonCompatibility === 'unsupported') {
     return {
       label: 'Catalogue Only',
