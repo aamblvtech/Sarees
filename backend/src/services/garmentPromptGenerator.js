@@ -79,17 +79,17 @@ export const garmentPromptGenerator = {
 
     // Fabric & Zari
     if (material) {
-      parts.push(`Woven in ${material.slice(0, 90)}`);
+      parts.push(`Woven in ${material.slice(0, 80)}`);
     }
 
     // Border & Pallu details extracted from description
-    const borderMatch = desc.match(/(border[s]?|korvai|zari|pallu|motifs?|butis?|embroidery)[^.]*/i);
+    const borderMatch = desc.match(/(border[s]?|korvai|zari|pallu|motifs?|butis?|embroidery|zari work)[^.]*/i);
     if (borderMatch) {
       parts.push(`Features ${borderMatch[0].trim()}`);
     }
 
-    // Contrast blouse specification
-    parts.push('Includes tailored contrast blouse. Preserve exact base body color, border width, and metallic zari luster.');
+    // Border continuity & contrast blouse specification
+    parts.push('Unbroken contrast border continuity across skirt and pallu edge. Includes tailored contrast blouse. Preserve exact base body color, border width, and metallic zari luster.');
 
     return parts.join('. ').slice(0, 480);
   },

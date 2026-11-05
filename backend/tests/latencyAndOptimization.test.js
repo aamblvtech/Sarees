@@ -74,3 +74,4 @@ test('Virtual Try-On Latency and Performance Optimization Suite', async (t) => {
     assert.notEqual(res1.body.jobId, res2.body.jobId, 'Each outfit gets its own unique job_uuid');
   });
 });
+

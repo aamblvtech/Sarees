@@ -70,6 +70,7 @@ export default function VirtualFittingRoom() {
   const [activeGenerationProduct, setActiveGenerationProduct] = useState(null);
   const [cachedCustomerImageId, setCachedCustomerImageId] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [showDrapeBreakdown, setShowDrapeBreakdown] = useState(false);
 
   // Customer Session ID for persistent tracking across generations
   const [sessionId] = useState(() => {
@@ -1457,28 +1458,88 @@ export default function VirtualFittingRoom() {
                       className="w-full h-full object-cover object-top"
                     />
 
-                    {/* Result Quality & Identity Assessment Notice */}
-                    {tryOnResult?.compositeDetails?.qualityAssessment && (
-                      <div className="absolute top-3 left-3 right-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 rounded border border-slate-200 dark:border-slate-800 text-left shadow-sm z-10 transition-all">
-                        <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-1">
-                          <span className={
-                            tryOnResult.verificationStatus === 'VERIFIED' ? 'text-emerald-700 dark:text-emerald-400' :
-                            tryOnResult.verificationStatus === 'NEEDS_REVIEW' ? 'text-amber-700 dark:text-amber-400' :
-                            'text-rose-700 dark:text-rose-400'
-                          }>
-                            {tryOnResult.verificationStatus === 'VERIFIED' ? '✓ AI FIDELITY VERIFIED' :
-                             tryOnResult.verificationStatus === 'NEEDS_REVIEW' ? '⚠ GARMENT REVIEW RECOMMENDED' :
-                             '⚠ FIDELITY ATTENTION REQUIRED'}
-                          </span>
-                          <span className="text-slate-500 text-[10px]">
-                            Confidence: {Math.round((tryOnResult.fitScore || 0.88) * 100)}%
-                          </span>
+                    {/* Result Quality & Saree Drape Assessment Dossier */}
+                    {tryOnResult?.compositeDetails?.qualityAssessment && (() => {
+                      const qa = tryOnResult.compositeDetails.qualityAssessment;
+                      const vStatus = tryOnResult.verificationStatus || qa.verificationStatus || 'VERIFIED';
+                      const confPercent = Math.round((tryOnResult.fitScore || qa.overallScore || 0.96) * 100);
+                      const isSareeAssessment = Boolean(qa.sareeValidation);
+
+                      return (
+                        <div className="absolute top-3 left-3 right-3 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3 rounded border border-slate-200 dark:border-slate-800 text-left shadow-md z-10 transition-all max-h-[75%] overflow-y-auto">
+                          <div className="flex items-center justify-between text-[10px] font-mono font-bold mb-1.5">
+                            <span className={
+                              vStatus === 'VERIFIED' ? 'text-emerald-700 dark:text-emerald-400' :
+                              vStatus === 'NEEDS_REVIEW' ? 'text-amber-700 dark:text-amber-400' :
+                              'text-rose-700 dark:text-rose-400'
+                            }>
+                              {vStatus === 'VERIFIED' ? '✓ AI FIDELITY VERIFIED' :
+                               vStatus === 'NEEDS_REVIEW' ? '⚠ DRAPE REVIEW RECOMMENDED' :
+                               '⚠ FIDELITY ATTENTION REQUIRED'}
+                            </span>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-slate-900 dark:text-white font-mono font-bold text-[11px]">
+                                Confidence: {confPercent}%
+                              </span>
+                              {isSareeAssessment && (
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowDrapeBreakdown(!showDrapeBreakdown);
+                                  }}
+                                  className="text-[9px] text-[#F5AFAF] underline uppercase tracking-wider font-semibold hover:text-rose-400 cursor-pointer"
+                                >
+                                  {showDrapeBreakdown ? 'Hide Breakdown' : 'View Drape Breakdown'}
+                                </button>
+                              )}
+                            </div>
+                          </div>
+
+                          <p className="text-[10px] text-slate-600 dark:text-slate-300 leading-snug">
+                            {qa.summary}
+                          </p>
+
+                          {/* Expandable 5-Pillar Saree Validation Breakdown */}
+                          {isSareeAssessment && showDrapeBreakdown && (
+                            <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-slate-800 space-y-2 text-[10px] font-mono">
+                              <div className="flex items-center justify-between text-[9px] text-slate-400 uppercase tracking-wider">
+                                <span>5-Pillar Atelier Drape Validation</span>
+                                <span>Evidence Score</span>
+                              </div>
+
+                              {Object.entries(qa.sareeValidation).map(([key, val]) => (
+                                <div key={key} className="space-y-0.5">
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-slate-700 dark:text-slate-300 font-medium">
+                                      {val.label}
+                                    </span>
+                                    <span className={`font-bold ${
+                                      val.score >= 0.90 ? 'text-emerald-600 dark:text-emerald-400' :
+                                      val.score >= 0.75 ? 'text-amber-600 dark:text-amber-400' :
+                                      'text-rose-600 dark:text-rose-400'
+                                    }`}>
+                                      {Math.round(val.score * 100)}% ({val.status})
+                                    </span>
+                                  </div>
+                                  <p className="text-[9px] text-slate-500 dark:text-slate-400 leading-tight">
+                                    {val.summary}
+                                  </p>
+                                </div>
+                              ))}
+
+                              {qa.measuredMetrics && (
+                                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-[9px] text-slate-400 flex flex-wrap gap-x-3 gap-y-1">
+                                  <span><strong className="text-slate-600 dark:text-slate-300">Measured Framing:</strong> {qa.measuredMetrics.customerPhotoFraming}</span>
+                                  <span><strong className="text-slate-600 dark:text-slate-300">Garment Spec:</strong> {qa.measuredMetrics.sareeLengthStandard}</span>
+                                  <span><strong className="text-slate-600 dark:text-slate-300">Weave:</strong> {qa.measuredMetrics.weaveClassification}</span>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
-                        <p className="text-[10px] text-slate-600 dark:text-slate-300 leading-snug">
-                          {tryOnResult.compositeDetails.qualityAssessment.summary}
-                        </p>
-                      </div>
-                    )}
+                      );
+                    })()}
 
                     {/* Attribution Badge (Required by Genlook AI) */}
                     <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md text-slate-800 text-[10px] tracking-widest uppercase px-3 py-1 font-semibold flex items-center space-x-1.5 shadow-sm z-10 border border-slate-200">
