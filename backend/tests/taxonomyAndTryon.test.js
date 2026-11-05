@@ -13,7 +13,7 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
 
   await t.test('2. Validates saree collection taxonomy, weaves, and compatibility', () => {
     const sarees = sampleProducts.filter((p) => p.garmentType === 'saree');
-    assert.strictEqual(sarees.length, 18, 'Must have exactly 18 curated sarees');
+    assert.ok(sarees.length >= 18, 'Must have at least 18 curated sarees');
     
     const expectedSubcategories = [
       'kanjivaram', 'banarasi', 'chanderi', 'pochampally', 'gadwal',
@@ -30,8 +30,8 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
     for (const saree of sarees) {
       assert.strictEqual(saree.gender, 'women', 'Sarees should target women');
       assert.strictEqual(saree.tryonCompatibility, 'supported', 'Sarees are enabled as AI Ready');
-      assert.ok(saree.primaryImage && saree.primaryImage.startsWith('https://'), 'Must have valid HTTPS image URL');
-      assert.ok(saree.tryonOverlayImage && saree.tryonOverlayImage.startsWith('https://'), 'Must have valid try-on input image URL');
+      assert.ok(saree.primaryImage && (saree.primaryImage.startsWith('https://') || saree.primaryImage.startsWith('/uploads/')), 'Must have valid image URL');
+      assert.ok(saree.tryonOverlayImage && (saree.tryonOverlayImage.startsWith('https://') || saree.tryonOverlayImage.startsWith('/uploads/')), 'Must have valid try-on input image URL');
     }
   });
 

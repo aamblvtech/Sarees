@@ -48,11 +48,12 @@ export async function runSeed() {
            sku, name, slug, brand, category_id, subcategory, gender, garment_type,
            tryon_compatibility, stock_status, price, original_price, currency,
            description, material, fit, care_instructions, sizes,
-           primary_image_url, tryon_image_url, is_sample, is_featured, is_active
+           primary_image_url, tryon_image_url, is_sample, is_featured, is_active,
+           color, needs_admin_review, discount_percent
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
          ON CONFLICT (sku) DO UPDATE
-         SET name = EXCLUDED.name, category_id = EXCLUDED.category_id,
+         SET name = EXCLUDED.name, brand = EXCLUDED.brand, category_id = EXCLUDED.category_id,
              subcategory = EXCLUDED.subcategory, gender = EXCLUDED.gender,
              garment_type = EXCLUDED.garment_type, tryon_compatibility = EXCLUDED.tryon_compatibility,
              stock_status = EXCLUDED.stock_status, price = EXCLUDED.price,
@@ -60,13 +61,15 @@ export async function runSeed() {
              material = EXCLUDED.material, fit = EXCLUDED.fit,
              care_instructions = EXCLUDED.care_instructions, sizes = EXCLUDED.sizes,
              primary_image_url = EXCLUDED.primary_image_url, tryon_image_url = EXCLUDED.tryon_image_url,
-             is_featured = EXCLUDED.is_featured, is_active = EXCLUDED.is_active, updated_at = CURRENT_TIMESTAMP
+             is_featured = EXCLUDED.is_featured, is_active = EXCLUDED.is_active,
+             color = EXCLUDED.color, needs_admin_review = EXCLUDED.needs_admin_review,
+             discount_percent = EXCLUDED.discount_percent, updated_at = CURRENT_TIMESTAMP
          RETURNING id, sku`,
         [
           prod.sku,
           prod.name,
           prod.slug,
-          'VESTRA',
+          prod.brand || 'VESTRA',
           categoryId,
           prod.subcategory || 'sarees',
           prod.gender || 'women',
@@ -74,7 +77,7 @@ export async function runSeed() {
           prod.tryonCompatibility || 'supported',
           prod.stockStatus || 'in_stock',
           prod.price,
-          prod.originalPrice,
+          prod.originalPrice || null,
           prod.currency || 'USD',
           prod.description,
           prod.material,
@@ -84,8 +87,11 @@ export async function runSeed() {
           prod.primaryImage,
           prod.tryonOverlayImage || prod.primaryImage,
           false,
-          prod.isFeatured,
-          true
+          prod.isFeatured || false,
+          prod.isActive ?? true,
+          prod.color || null,
+          prod.needsAdminReview || false,
+          prod.discountPercent || null
         ]
       );
 

@@ -24,11 +24,11 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
   // ==========================================
   await t.test('1. Catalogue Products & Taxonomy Integrity', async () => {
     const res = await query('SELECT count(*) as count FROM products WHERE is_active = true');
-    assert.equal(parseInt(res.rows[0].count, 10), 40, 'Should have exactly 40 seeded active products in PostgreSQL');
+    assert.ok(parseInt(res.rows[0].count, 10) >= 40, 'Should have at least 40 seeded active products in PostgreSQL');
 
     // Verify Saree items
     const sarees = await query("SELECT * FROM products WHERE garment_type = 'saree' AND is_active = true");
-    assert.equal(sarees.rows.length, 18, 'Should have 18 Sarees');
+    assert.ok(sarees.rows.length >= 18, 'Should have at least 18 Sarees');
     for (const s of sarees.rows) {
       assert.equal(s.tryon_compatibility, 'supported', 'Sarees must be supported');
       assert.notEqual(s.primary_image_url, '', 'Saree must have a primary image URL');

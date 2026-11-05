@@ -203,6 +203,9 @@ router.get('/products', requireAdminAuth, async (req, res) => {
         p.tryon_image_url AS "tryonImage",
         p.is_featured AS "isFeatured",
         p.is_active AS "isActive",
+        p.color,
+        p.needs_admin_review AS "needsAdminReview",
+        p.discount_percent AS "discountPercent",
         p.created_at AS "createdAt",
         p.updated_at AS "updatedAt"
       FROM products p
@@ -245,7 +248,10 @@ router.post('/products', requireAdminAuth, async (req, res) => {
     primaryImageUrl,
     tryonImageUrl,
     isFeatured = false,
-    isActive = true
+    isActive = true,
+    color,
+    needsAdminReview = false,
+    discountPercent
   } = req.body;
 
   if (!name || !price || !description) {
@@ -265,9 +271,10 @@ router.post('/products', requireAdminAuth, async (req, res) => {
          sku, name, slug, brand, category_id, subcategory, gender, garment_type,
          tryon_compatibility, stock_status, price, original_price, currency,
          description, material, fit, care_instructions, sizes,
-         primary_image_url, tryon_image_url, is_featured, is_active, is_sample
+         primary_image_url, tryon_image_url, is_featured, is_active, is_sample,
+         color, needs_admin_review, discount_percent
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
        RETURNING *`,
       [
         sku,
@@ -292,7 +299,10 @@ router.post('/products', requireAdminAuth, async (req, res) => {
         tryonImageUrl || primaryImageUrl || null,
         isFeatured === true || isFeatured === 'true',
         isActive === true || isActive === 'true',
-        false
+        false,
+        color ? color.trim() : null,
+        needsAdminReview === true || needsAdminReview === 'true',
+        discountPercent ? parseFloat(discountPercent) : null
       ]
     );
 
@@ -343,7 +353,10 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
     primaryImageUrl,
     tryonImageUrl,
     isFeatured,
-    isActive
+    isActive,
+    color,
+    needsAdminReview,
+    discountPercent
   } = req.body;
 
   try {
@@ -375,14 +388,17 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
            tryon_image_url = COALESCE($17, tryon_image_url),
            is_featured = COALESCE($18, is_featured),
            is_active = COALESCE($19, is_active),
+           color = COALESCE($20, color),
+           needs_admin_review = COALESCE($21, needs_admin_review),
+           discount_percent = COALESCE($22, discount_percent),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $20
+       WHERE id = $23
        RETURNING *`,
       [
         name ? name.trim() : null,
         description ? description.trim() : null,
         price ? parseFloat(price) : null,
-        originalPrice ? parseFloat(originalPrice) : null,
+        originalPrice !== undefined ? (originalPrice ? parseFloat(originalPrice) : null) : null,
         categoryId ? parseInt(categoryId, 10) : null,
         subcategory ? subcategory.trim().toLowerCase() : null,
         gender ? gender.trim().toLowerCase() : null,
@@ -398,6 +414,9 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
         tryonImageUrl || null,
         isFeatured !== undefined ? (isFeatured === true || isFeatured === 'true') : null,
         isActive !== undefined ? (isActive === true || isActive === 'true') : null,
+        color !== undefined ? (color ? color.trim() : null) : null,
+        needsAdminReview !== undefined ? (needsAdminReview === true || needsAdminReview === 'true') : null,
+        discountPercent !== undefined ? (discountPercent ? parseFloat(discountPercent) : null) : null,
         parseInt(id, 10)
       ]
     );

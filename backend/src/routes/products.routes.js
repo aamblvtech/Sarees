@@ -60,6 +60,9 @@ router.get('/products', async (req, res) => {
         p.is_sample AS "isSample",
         p.is_featured AS "isFeatured",
         p.is_active AS "isActive",
+        p.color,
+        p.needs_admin_review AS "needsAdminReview",
+        p.discount_percent AS "discountPercent",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
@@ -192,6 +195,9 @@ router.get('/products/:id', async (req, res) => {
         p.is_sample AS "isSample",
         p.is_featured AS "isFeatured",
         p.is_active AS "isActive",
+        p.color,
+        p.needs_admin_review AS "needsAdminReview",
+        p.discount_percent AS "discountPercent",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p

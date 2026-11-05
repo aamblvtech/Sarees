@@ -25,6 +25,7 @@ export default function AdminDashboard() {
   const [selectedCompatibility, setSelectedCompatibility] = useState('all');
   const [selectedStock, setSelectedStock] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedReview, setSelectedReview] = useState('all');
 
   // Modals
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
@@ -52,7 +53,10 @@ export default function AdminDashboard() {
     primaryImageUrl: '',
     tryonImageUrl: '',
     isActive: true,
-    isFeatured: false
+    isFeatured: false,
+    color: '',
+    needsAdminReview: false,
+    discountPercent: ''
   });
 
   // Image Uploading States
@@ -129,7 +133,10 @@ export default function AdminDashboard() {
       primaryImageUrl: '',
       tryonImageUrl: '',
       isActive: true,
-      isFeatured: false
+      isFeatured: false,
+      color: '',
+      needsAdminReview: false,
+      discountPercent: ''
     });
     setFormError(null);
     setIsProductModalOpen(true);
@@ -157,7 +164,10 @@ export default function AdminDashboard() {
       primaryImageUrl: prod.primaryImage || prod.primary_image_url || '',
       tryonImageUrl: prod.tryonImage || prod.tryon_image_url || prod.primaryImage || '',
       isActive: prod.isActive ?? prod.is_active ?? true,
-      isFeatured: prod.isFeatured ?? prod.is_featured ?? false
+      isFeatured: prod.isFeatured ?? prod.is_featured ?? false,
+      color: prod.color || '',
+      needsAdminReview: prod.needsAdminReview ?? prod.needs_admin_review ?? false,
+      discountPercent: prod.discountPercent ?? prod.discount_percent ?? ''
     });
     setFormError(null);
     setIsProductModalOpen(true);
@@ -282,13 +292,19 @@ export default function AdminDashboard() {
       (selectedStatus === 'active' && (p.isActive ?? p.is_active)) ||
       (selectedStatus === 'inactive' && !(p.isActive ?? p.is_active));
 
+    const matchesReview =
+      selectedReview === 'all' ||
+      (selectedReview === 'needs_review' && (p.needsAdminReview ?? p.needs_admin_review)) ||
+      (selectedReview === 'verified' && !(p.needsAdminReview ?? p.needs_admin_review));
+
     return (
       matchesSearch &&
       matchesCategory &&
       matchesGender &&
       matchesCompatibility &&
       matchesStock &&
-      matchesStatus
+      matchesStatus &&
+      matchesReview
     );
   });
 
@@ -482,6 +498,16 @@ export default function AdminDashboard() {
               <option value="out_of_stock">Out of Stock</option>
             </select>
 
+            <select
+              value={selectedReview}
+              onChange={(e) => setSelectedReview(e.target.value)}
+              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+            >
+              <option value="all">All Review Status</option>
+              <option value="needs_review">Needs Admin Review ⚠️</option>
+              <option value="verified">Verified Items</option>
+            </select>
+
           </div>
 
         </div>
@@ -556,13 +582,26 @@ export default function AdminDashboard() {
 
                         {/* Title & SKU */}
                         <td className="py-3 px-4">
-                          <p className="font-serif font-medium text-sm text-slate-900 dark:text-white hover:text-[#F5AFAF] transition-colors">
-                            {p.name}
-                          </p>
-                          <div className="flex items-center space-x-2 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                          <div className="flex items-center space-x-2">
+                            <p className="font-serif font-medium text-sm text-slate-900 dark:text-white hover:text-[#F5AFAF] transition-colors">
+                              {p.name}
+                            </p>
+                            {(p.needsAdminReview ?? p.needs_admin_review) && (
+                              <span className="px-1.5 py-0.2 bg-amber-100 dark:bg-amber-900/50 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700 text-[9px] uppercase font-bold tracking-wider">
+                                Needs Review
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                             <span className="font-mono">{p.sku}</span>
                             <span>&bull;</span>
-                            <span>{p.brand || 'VESTRA'}</span>
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{p.brand || 'VESTRA'}</span>
+                            {p.color && (
+                              <>
+                                <span>&bull;</span>
+                                <span className="text-slate-600 dark:text-slate-300">Color: {p.color}</span>
+                              </>
+                            )}
                           </div>
                         </td>
 
@@ -620,7 +659,19 @@ export default function AdminDashboard() {
 
                         {/* Price */}
                         <td className="py-3 px-4 font-semibold text-slate-900 dark:text-white">
-                          ${p.price}
+                          <div>
+                            <span>{p.currency === 'INR' ? '₹' : '$'}{p.price}</span>
+                            {p.originalPrice && (
+                              <span className="line-through text-slate-400 text-[10px] ml-1.5 font-normal">
+                                {p.currency === 'INR' ? '₹' : '$'}{p.originalPrice}
+                              </span>
+                            )}
+                          </div>
+                          {p.discountPercent && (
+                            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                              {p.discountPercent}% OFF
+                            </span>
+                          )}
                         </td>
 
                         {/* Active Status */}
@@ -961,6 +1012,38 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
+              {/* Color & Discount Percentage */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
+                    Colour Palette
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.color}
+                    onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                    placeholder="e.g. Royal Blue, Magenta Pink"
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
+                    Discount Percentage (%)
+                  </label>
+                  <input
+                    type="number"
+                    step="1"
+                    min="0"
+                    max="100"
+                    value={formData.discountPercent}
+                    onChange={(e) => setFormData({ ...formData, discountPercent: e.target.value })}
+                    placeholder="e.g. 25, 80"
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                  />
+                </div>
+              </div>
+
               {/* Size Multi-Select */}
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white block">
@@ -1085,6 +1168,18 @@ export default function AdminDashboard() {
                     className="w-4 h-4 text-[#000000] focus:ring-[#F5AFAF]"
                   />
                   <span className="text-xs font-semibold text-slate-900 dark:text-white">Featured on Homepage</span>
+                </label>
+
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.needsAdminReview}
+                    onChange={(e) => setFormData({ ...formData, needsAdminReview: e.target.checked })}
+                    className="w-4 h-4 text-amber-600 focus:ring-amber-500"
+                  />
+                  <span className="text-xs font-semibold text-amber-800 dark:text-amber-300">
+                    Flag for Admin Review (Incomplete / Truncated)
+                  </span>
                 </label>
               </div>
 

@@ -261,8 +261,11 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       garmentInput,
       path.join(customGarmentsDir, basename),
       path.join(uploadsDir, basename),
+      path.join(uploadsDir, 'catalogue_sarees', basename),
+      path.join(__dirname, '..', '..', '..', 'uploads', 'catalogue_sarees', basename),
       path.join(__dirname, '..', '..', '..', 'uploads', 'custom_garments', basename),
-      path.join(__dirname, '..', '..', '..', 'uploads', basename)
+      path.join(__dirname, '..', '..', '..', 'uploads', basename),
+      path.join(__dirname, '..', '..', '..', String(garmentInput).replace(/^\//, ''))
     ];
 
     let foundPath = null;
