@@ -134,6 +134,7 @@ export const tryOnService = {
     customGarmentName,
     userPhotoUrl,
     userPhotoFilename,
+    customerImageId,
     selectedSize = 'M',
     fitPreference = 'tailored',
     category
@@ -150,6 +151,7 @@ export const tryOnService = {
       customGarmentName,
       userPhotoUrl,
       userPhotoFilename,
+      customerImageId,
       selectedSize,
       fitPreference,
       category
@@ -159,13 +161,14 @@ export const tryOnService = {
 
   /**
    * Submit multiple independent try-on jobs for selected outfits (Batch Try-On)
-   * Reuses the same customer photo across all outfits without repeated uploads.
+   * Reuses the same customer photo and cached customerImageId across all outfits.
    */
   async createBatchTryOnJobs({
     productIds,
     products,
     userPhotoUrl,
     userPhotoFilename,
+    customerImageId,
     sessionId,
     customerSessionId,
     selectedSize = 'M',
@@ -176,6 +179,7 @@ export const tryOnService = {
       products,
       userPhotoUrl,
       userPhotoFilename,
+      customerImageId,
       sessionId,
       customerSessionId,
       selectedSize,

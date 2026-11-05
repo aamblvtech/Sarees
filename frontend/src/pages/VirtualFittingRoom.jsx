@@ -68,6 +68,8 @@ export default function VirtualFittingRoom() {
   const [tryOnResult, setTryOnResult] = useState(null);
   const [pendingGeneration, setPendingGeneration] = useState(null);
   const [activeGenerationProduct, setActiveGenerationProduct] = useState(null);
+  const [cachedCustomerImageId, setCachedCustomerImageId] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   // Customer Session ID for persistent tracking across generations
   const [sessionId] = useState(() => {
@@ -171,10 +173,27 @@ export default function VirtualFittingRoom() {
     init();
 
     return () => {
-      if (pollingRef.current) clearInterval(pollingRef.current);
-      if (batchPollingRef.current) clearInterval(batchPollingRef.current);
+      if (pollingRef.current) clearTimeout(pollingRef.current);
+      if (batchPollingRef.current) clearTimeout(batchPollingRef.current);
     };
   }, [initialProductId]);
+
+  // Live timer for tracking virtual try-on elapsed time during AI synthesis
+  useEffect(() => {
+    let timer = null;
+    if (isGenerating) {
+      setElapsedTime(0);
+      const start = Date.now();
+      timer = setInterval(() => {
+        setElapsedTime(Math.floor((Date.now() - start) / 1000));
+      }, 500);
+    } else {
+      setElapsedTime(0);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isGenerating]);
 
   // Helper to create an immutable snapshot of a product selection
   const createProductSnapshot = (prod, mode = 'catalogue') => {
@@ -211,17 +230,16 @@ export default function VirtualFittingRoom() {
     };
   };
 
-  // Polling logic for ongoing asynchronous try-on jobs with strict product verification
+  // Fast adaptive polling logic for ongoing asynchronous try-on jobs with strict product verification
   const startPolling = (jobId, photoUrl, expectedSnapshot) => {
-    if (pollingRef.current) clearInterval(pollingRef.current);
+    if (pollingRef.current) clearTimeout(pollingRef.current);
 
-    pollingRef.current = setInterval(async () => {
+    const checkJob = async () => {
       try {
         const job = await tryOnService.getJobStatus(jobId);
 
         // Verification: Ensure the polled job belongs to the expected product
         if (job.productId && expectedSnapshot?.id && job.productId !== expectedSnapshot.id) {
-          clearInterval(pollingRef.current);
           pollingRef.current = null;
           setJobStatus('failed');
           setIsGenerating(false);
@@ -230,7 +248,6 @@ export default function VirtualFittingRoom() {
         }
 
         if (job.status === 'completed' && job.result) {
-          clearInterval(pollingRef.current);
           pollingRef.current = null;
 
           // Integrity check: Never present unchanged customer photo as an AI result
@@ -272,7 +289,6 @@ export default function VirtualFittingRoom() {
           setGenerationStep('Virtual try-on synthesis complete.');
           tryOnService.getProviderInfo().then((p) => setProviderInfo(p)).catch(() => {});
         } else if (job.status === 'failed') {
-          clearInterval(pollingRef.current);
           pollingRef.current = null;
           setJobStatus('failed');
           setIsGenerating(false);
@@ -289,14 +305,19 @@ export default function VirtualFittingRoom() {
           );
         } else {
           setGenerationStep('Genlook cloud engine synthesizing draping mesh...');
+          pollingRef.current = setTimeout(checkJob, 1000);
         }
       } catch (err) {
         console.warn('Polling error:', err);
+        pollingRef.current = setTimeout(checkJob, 1200);
       }
-    }, 2500);
+    };
+
+    // Fast initial check at 800ms to eliminate 1.5s idle latency, then 1000ms cadence
+    pollingRef.current = setTimeout(checkJob, 800);
   };
 
-  // Batch polling for multiple simultaneous try-on jobs
+  // Batch polling for multiple simultaneous try-on jobs with progressive streaming
   const pollBatchJobs = (jobIds) => {
     if (!jobIds || jobIds.length === 0) {
       setIsGenerating(false);
@@ -304,9 +325,9 @@ export default function VirtualFittingRoom() {
     }
 
     let remaining = new Set(jobIds);
-    if (batchPollingRef.current) clearInterval(batchPollingRef.current);
+    if (batchPollingRef.current) clearTimeout(batchPollingRef.current);
 
-    batchPollingRef.current = setInterval(async () => {
+    const checkBatch = async () => {
       try {
         for (const jid of Array.from(remaining)) {
           const job = await tryOnService.getJobStatus(jid);
@@ -328,7 +349,7 @@ export default function VirtualFittingRoom() {
               })
             );
 
-            // Auto-activate first completed result if none is currently active
+            // Progressive display: Instantly surface the first completed result to the AFTER panel
             if (job.status === 'completed' && job.result?.resultImageUrl) {
               setTryOnResult((prev) => prev || {
                 resultImageUrl: job.result.resultImageUrl,
@@ -344,7 +365,6 @@ export default function VirtualFittingRoom() {
         }
 
         if (remaining.size === 0) {
-          clearInterval(batchPollingRef.current);
           batchPollingRef.current = null;
           setIsGenerating(false);
           setJobStatus('completed');
@@ -352,11 +372,16 @@ export default function VirtualFittingRoom() {
           tryOnService.getProviderInfo().then((p) => setProviderInfo(p)).catch(() => {});
         } else {
           setGenerationStep(`Synthesizing ${remaining.size} outfit(s) in cloud AI engine...`);
+          batchPollingRef.current = setTimeout(checkBatch, 1000);
         }
       } catch (pollErr) {
         console.warn('Batch polling warning:', pollErr);
+        batchPollingRef.current = setTimeout(checkBatch, 1200);
       }
-    }, 2500);
+    };
+
+    // Fast initial check at 800ms, then 1000ms cadence
+    batchPollingRef.current = setTimeout(checkBatch, 800);
   };
 
   // Core Execution Function: Synthesize Try-On with Immutable Product Snapshot
@@ -420,6 +445,7 @@ export default function VirtualFittingRoom() {
             productImageUrl: immutableSnapshot.primaryImage,
             userPhotoUrl: photoUrl,
             userPhotoFilename: photoFilename,
+            customerImageId: cachedCustomerImageId,
             sessionId,
             selectedSize: immutableSnapshot.size || selectedSize,
             fitPreference: immutableSnapshot.fitPreference || fitPreference,
@@ -431,6 +457,7 @@ export default function VirtualFittingRoom() {
             customGarmentName: immutableSnapshot.name,
             userPhotoUrl: photoUrl,
             userPhotoFilename: photoFilename,
+            customerImageId: cachedCustomerImageId,
             sessionId,
             selectedSize: immutableSnapshot.size || selectedSize,
             fitPreference: immutableSnapshot.fitPreference || fitPreference,
@@ -438,6 +465,9 @@ export default function VirtualFittingRoom() {
           };
 
       const response = await tryOnService.createTryOnJob(payload);
+      if (response.customerImageId) {
+        setCachedCustomerImageId(response.customerImageId);
+      }
       const jobId = response.jobId;
       setCurrentJobId(jobId);
 
@@ -526,10 +556,15 @@ export default function VirtualFittingRoom() {
         productIds,
         userPhotoUrl,
         userPhotoFilename,
+        customerImageId: cachedCustomerImageId,
         sessionId,
         selectedSize,
         fitPreference
       });
+
+      if (response.customerImageId) {
+        setCachedCustomerImageId(response.customerImageId);
+      }
 
       if (response.success && Array.isArray(response.jobs)) {
         const batchJobs = response.jobs.map((j) => ({
@@ -799,6 +834,7 @@ export default function VirtualFittingRoom() {
       setUserPhotoUrl(uploaded.url);
       setUserPhotoFilename(uploaded.filename);
       setUserPhotoSource('upload');
+      setCachedCustomerImageId(null);
       setPhotoQuality(uploaded.qualityAssessment || null);
       setTryOnResult(null);
       setJobStatus('idle');
@@ -844,6 +880,7 @@ export default function VirtualFittingRoom() {
       setUserPhotoUrl(uploaded.url);
       setUserPhotoFilename(uploaded.filename);
       setUserPhotoSource('camera');
+      setCachedCustomerImageId(null);
       setPhotoQuality(uploaded.qualityAssessment || null);
       setTryOnResult(null);
       setJobStatus('idle');
@@ -865,6 +902,7 @@ export default function VirtualFittingRoom() {
     setUserPhotoUrl(photoUrl);
     setUserPhotoFilename(photoFilename);
     setUserPhotoSource('mobile_qr');
+    setCachedCustomerImageId(null);
     setTryOnResult(null);
     setJobStatus('idle');
     setUploadError(null);
@@ -890,6 +928,7 @@ export default function VirtualFittingRoom() {
     setUserPhotoUrl(null);
     setUserPhotoFilename(null);
     setUserPhotoSource(null);
+    setCachedCustomerImageId(null);
     setPhotoQuality(null);
     setTryOnResult(null);
     setJobStatus('idle');
@@ -1371,22 +1410,40 @@ export default function VirtualFittingRoom() {
               <div className="relative aspect-[3/4] bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col items-center justify-center group">
                 
                 {isGenerating ? (
-                  /* Generating Synthesis Overlay */
-                  <div className="p-8 text-center space-y-5 max-w-sm z-20">
+                  /* Generating Synthesis Overlay with Live Elapsed Time & Progressive Stage */
+                  <div className="p-6 text-center space-y-4 max-w-sm z-20">
                     <div className="relative w-16 h-16 mx-auto flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full border-2 border-[#F5AFAF] border-t-transparent animate-spin" />
-                      <Sparkles className="w-6 h-6 text-[#F5AFAF] absolute" />
+                      <Sparkles className="w-6 h-6 text-[#F5AFAF] absolute animate-pulse" />
                     </div>
-                    <div className="space-y-1">
+
+                    <div className="space-y-1.5">
+                      <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-700 dark:text-slate-300">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#F5AFAF] animate-ping" />
+                        <span>Synthesizing Drape</span>
+                        <span className="font-bold text-[#F5AFAF]">· {elapsedTime}s</span>
+                      </div>
                       <h4 className="font-serif text-lg text-slate-900 dark:text-[#FFFFFF] font-medium">
-                        Synthesizing Neural Drape
+                        Neural Fitting in Progress
                       </h4>
                       <p className="text-xs text-slate-500 dark:text-slate-400 font-mono">
                         {generationStep || 'Genlook cloud AI calculating fabric mesh...'}
                       </p>
                     </div>
-                    <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">
-                      Target: <strong className="text-slate-900 dark:text-[#FFFFFF]">
+
+                    {/* Progress Phase Indicator */}
+                    <div className="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                      <div
+                        className="bg-gradient-to-r from-[#F5AFAF] to-rose-400 h-full transition-all duration-500 ease-out"
+                        style={{
+                          width: elapsedTime < 2 ? '30%' : elapsedTime < 5 ? '65%' : '90%'
+                        }}
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-center space-x-3 text-[10px] font-mono text-slate-400 uppercase tracking-wider">
+                      <span>Target:</span>
+                      <strong className="text-slate-900 dark:text-[#FFFFFF] truncate max-w-[180px]">
                         {activeGenerationProduct?.name || (garmentMode === 'custom' ? customGarmentName : selectedProduct?.name)}
                       </strong>
                     </div>

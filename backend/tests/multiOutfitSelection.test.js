@@ -378,3 +378,4 @@ test('Multi-Outfit Selection and Side-by-Side Try-On Comparison Suite', async (t
     assert.notEqual(aliceHistory.rows[0].user_photo_url, bobHistory.rows[0].user_photo_url);
   });
 });
+

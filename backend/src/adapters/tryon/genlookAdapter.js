@@ -30,6 +30,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
     this._cachedKey = null;
     this.lastCreditCheck = 0;
     this.cachedCredits = null;
+    this._customerImageCache = new Map();
   }
 
   get isEnabled() {
@@ -390,6 +391,43 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
   }
 
   /**
+   * Session-aware customer image cache and retrieval.
+   * Caches customer imageId to eliminate the redundant 1.4s upload latency across outfits.
+   */
+  async getOrUploadCustomerImage(userPhotoUrl, externalUserId) {
+    if (!this._customerImageCache) {
+      this._customerImageCache = new Map();
+    }
+
+    const cacheKey = typeof userPhotoUrl === 'string'
+      ? (userPhotoUrl.length < 256 ? userPhotoUrl : crypto.createHash('sha256').update(userPhotoUrl).digest('hex'))
+      : 'unknown_photo';
+
+    const cached = this._customerImageCache.get(cacheKey);
+    const now = Date.now();
+    // Cache valid for 24 hours (Genlook keeps images for 7 days)
+    if (cached && (now - cached.timestamp < 24 * 60 * 60 * 1000)) {
+      console.log(`[Genlook Adapter: Performance Win] Reusing cached customer image ID: ${cached.imageId} (Saved ~1.4s network upload)`);
+      return cached.imageId;
+    }
+
+    const tStart = performance.now();
+    const uploadResult = await this.uploadCustomerPhoto(userPhotoUrl, externalUserId);
+    const tEnd = performance.now();
+    console.log(`[Genlook Adapter] Uploaded customer photo in ${(tEnd - tStart).toFixed(0)}ms: ${uploadResult.imageId}`);
+
+    if (uploadResult?.imageId) {
+      this._customerImageCache.set(cacheKey, {
+        imageId: uploadResult.imageId,
+        timestamp: now
+      });
+      return uploadResult.imageId;
+    }
+
+    return uploadResult?.imageId;
+  }
+
+  /**
    * Submit an asynchronous try-on job to Genlook
    * Supports:
    *  - Existing catalogue products with publicly accessible HTTPS URLs
@@ -398,6 +436,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
    */
   async submitTryOnJob({
     userPhotoUrl,
+    customerImageId,
     garmentImageUrl,
     customGarmentFilename,
     garment,
@@ -433,10 +472,15 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       }
     }
 
-    // 1. Upload customer silhouette to Genlook to obtain imageId (Preserved Customer Flow)
+    // 1. Resolve customer imageId (Reuses cached image ID to eliminate redundant upload delay)
     const resolvedUserId = externalUserId || `vestra_user_${Date.now()}`;
-    const uploadResult = await this.uploadCustomerPhoto(userPhotoUrl, resolvedUserId);
-    const imageId = uploadResult.imageId;
+    let imageId = customerImageId;
+
+    if (!imageId) {
+      imageId = await this.getOrUploadCustomerImage(userPhotoUrl, resolvedUserId);
+    } else {
+      console.log(`[Genlook Adapter: Performance Win] Using pre-resolved customer image ID: ${imageId}`);
+    }
 
     // 2. Prepare structured description and versioned externalId
     const resolvedProductId = (garment && garment.id) || productId || 'garment-1';

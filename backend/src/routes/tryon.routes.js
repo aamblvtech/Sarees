@@ -316,6 +316,7 @@ export async function executeSingleTryOnJob({
   customGarmentName,
   userPhotoUrl,
   userPhotoFilename,
+  customerImageId,
   selectedSize = 'M',
   fitPreference = 'tailored',
   category
@@ -602,6 +603,7 @@ export async function executeSingleTryOnJob({
         const submission = await adapter.submitTryOnJob({
           userPhotoUrl,
           userPhotoFilename,
+          customerImageId,
           garmentImageUrl,
           customGarmentFilename: resolvedGarmentFilename,
           garment,
@@ -634,6 +636,7 @@ export async function executeSingleTryOnJob({
                 jobId: jobUuid,
                 status: 'completed',
                 provider: adapter.name,
+                customerImageId: submission.customerImageId || customerImageId || null,
                 productId: garment.id || null,
                 productTitle: garment.name,
                 productExternalId: externalId,
@@ -814,27 +817,42 @@ router.post('/batch-jobs', async (req, res) => {
       return res.status(400).json({ success: false, error: 'No valid numeric product IDs provided.' });
     }
 
-    // Process each outfit independently: each gets its own tryon_jobs row and Genlook request
-    const results = [];
-    for (const pid of uniqueIds) {
-      const outcome = await executeSingleTryOnJob({
-        productId: pid,
-        userPhotoUrl,
-        userPhotoFilename,
-        sessionId: activeSessionId,
-        selectedSize,
-        fitPreference
-      });
-      results.push({
-        ...outcome.body,
-        httpStatus: outcome.httpStatus
-      });
+    // Resolve customer image once before dispatching to eliminate redundant 1.4s upload delay
+    const adapter = getTryOnAdapter();
+    let sharedCustomerImageId = req.body.customerImageId || null;
+    if (!sharedCustomerImageId && userPhotoUrl && typeof adapter.getOrUploadCustomerImage === 'function') {
+      try {
+        sharedCustomerImageId = await adapter.getOrUploadCustomerImage(userPhotoUrl, activeSessionId);
+      } catch (uploadErr) {
+        console.warn('[Batch TryOn] Customer image pre-upload warning:', uploadErr.message);
+      }
     }
+
+    // Process all outfits concurrently: each gets its own tryon_jobs row and Genlook request
+    const outcomes = await Promise.all(
+      uniqueIds.map(pid =>
+        executeSingleTryOnJob({
+          productId: pid,
+          userPhotoUrl,
+          userPhotoFilename,
+          customerImageId: sharedCustomerImageId,
+          sessionId: activeSessionId,
+          selectedSize,
+          fitPreference
+        })
+      )
+    );
+
+    const results = outcomes.map(outcome => ({
+      ...outcome.body,
+      httpStatus: outcome.httpStatus
+    }));
 
     return res.status(201).json({
       success: true,
       count: results.length,
       sessionId: activeSessionId,
+      customerImageId: sharedCustomerImageId,
       jobs: results
     });
   } catch (err) {
@@ -889,6 +907,7 @@ router.post('/jobs/:id/retry', async (req, res) => {
       productId: job.product_id,
       productTitle: job.product_title,
       userPhotoUrl: job.user_photo_url,
+      customerImageId: job.customer_image_id || req.body?.customerImageId,
       customGarmentUrl: job.custom_garment_url,
       customGarmentName: job.custom_garment_name,
       sessionId: job.customer_session_id,
