@@ -180,6 +180,162 @@ export const imageValidationService = {
   },
 
   /**
+   * Validate garment image dimensions and format for virtual try-on.
+   * Enforces minimum size of 250x250px required by Genlook AI engine.
+   * @param {Buffer|string} bufferOrPath - Image buffer or path to image file
+   * @returns {{ valid: boolean, width: number|null, height: number|null, format: string|null, error: string|null }}
+   */
+  validateGarmentDimensions(bufferOrPath) {
+    let buffer = null;
+    if (Buffer.isBuffer(bufferOrPath)) {
+      buffer = bufferOrPath;
+    } else if (typeof bufferOrPath === 'string') {
+      try {
+        let p = bufferOrPath;
+        if (!path.isAbsolute(p)) {
+          p = path.join(__dirname, '..', '..', p.replace(/^\//, ''));
+        }
+        if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+          buffer = fs.readFileSync(p);
+        }
+      } catch (e) {
+        // file reading error
+      }
+    }
+
+    if (!buffer) {
+      return {
+        valid: false,
+        width: null,
+        height: null,
+        format: null,
+        error: 'Unable to read garment image data for dimension inspection.'
+      };
+    }
+
+    const dims = this.parseImageDimensions(buffer);
+    if (!dims) {
+      return {
+        valid: false,
+        width: null,
+        height: null,
+        format: null,
+        error: 'Invalid or unsupported image format. Only JPEG, PNG, and WebP are supported for virtual try-on.'
+      };
+    }
+
+    const { width, height, format } = dims;
+
+    // Minimum size required by Genlook AI virtual try-on engine
+    if (width < 250 || height < 250) {
+      return {
+        valid: false,
+        width,
+        height,
+        format,
+        error: 'Product image is too small for try-on. Minimum size is 250x250px.'
+      };
+    }
+
+    return {
+      valid: true,
+      width,
+      height,
+      format,
+      error: null
+    };
+  },
+
+  /**
+   * Inspect garment image metadata (dimensions, format, filesize, readiness)
+   */
+  getGarmentMetadata(imageInput) {
+    if (!imageInput) {
+      return {
+        width: null,
+        height: null,
+        format: null,
+        sizeBytes: 0,
+        isAiReady: false,
+        qualityStatus: 'missing_image',
+        dimensionLabel: 'No Image'
+      };
+    }
+
+    let buffer = null;
+    let sizeBytes = 0;
+
+    if (Buffer.isBuffer(imageInput)) {
+      buffer = imageInput;
+      sizeBytes = buffer.length;
+    } else if (typeof imageInput === 'string') {
+      // Local path candidate checks
+      const clean = imageInput.split('?')[0].replace(/^\//, '');
+      const candidatePaths = [
+        imageInput,
+        path.join(__dirname, '..', '..', clean),
+        path.join(__dirname, '..', '..', 'uploads', path.basename(clean)),
+        path.join(__dirname, '..', '..', 'uploads', 'catalogue_sarees', path.basename(clean)),
+        path.join(__dirname, '..', '..', 'uploads', 'custom_garments', path.basename(clean))
+      ];
+
+      for (const p of candidatePaths) {
+        if (typeof p === 'string' && fs.existsSync(p) && fs.statSync(p).isFile()) {
+          buffer = fs.readFileSync(p);
+          sizeBytes = buffer.length;
+          break;
+        }
+      }
+    }
+
+    if (!buffer) {
+      return {
+        width: null,
+        height: null,
+        format: null,
+        sizeBytes: 0,
+        isAiReady: false,
+        qualityStatus: 'remote_or_unresolved',
+        dimensionLabel: 'External / CDN'
+      };
+    }
+
+    const dims = this.parseImageDimensions(buffer);
+    if (!dims) {
+      return {
+        width: null,
+        height: null,
+        format: 'unknown',
+        sizeBytes,
+        isAiReady: false,
+        qualityStatus: 'invalid_format',
+        dimensionLabel: 'Invalid Format'
+      };
+    }
+
+    const isAiReady = dims.width >= 250 && dims.height >= 250;
+    const isHighRes = dims.width >= 1024 && dims.height >= 1024;
+
+    let qualityStatus = 'ai_ready';
+    if (!isAiReady) {
+      qualityStatus = 'too_small';
+    } else if (isHighRes) {
+      qualityStatus = 'high_resolution';
+    }
+
+    return {
+      width: dims.width,
+      height: dims.height,
+      format: dims.format,
+      sizeBytes,
+      sizeKb: parseFloat((sizeBytes / 1024).toFixed(1)),
+      isAiReady,
+      qualityStatus,
+      dimensionLabel: `${dims.width} × ${dims.height} px`
+    };
+  },
+
+  /**
    * Comprehensive Customer Photo Quality & Identity Preservation Inspector
    * Analyzes resolution, aspect ratio, and body framing to prevent AI facial distortion.
    */

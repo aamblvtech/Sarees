@@ -27,12 +27,16 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
       assert.ok(actualSubcategories.has(expected), `Must contain ${expected} saree`);
     }
 
-    for (const saree of sarees) {
+    const heritageSarees = sarees.filter((s) => expectedSubcategories.includes(s.subcategory));
+    for (const saree of heritageSarees) {
       assert.strictEqual(saree.gender, 'women', 'Sarees should target women');
-      assert.strictEqual(saree.tryonCompatibility, 'supported', 'Sarees are enabled as AI Ready');
+      assert.strictEqual(saree.tryonCompatibility, 'supported', 'Curated heritage sarees are enabled as AI Ready');
       assert.ok(saree.primaryImage && (saree.primaryImage.startsWith('https://') || saree.primaryImage.startsWith('/uploads/')), 'Must have valid image URL');
       assert.ok(saree.tryonOverlayImage && (saree.tryonOverlayImage.startsWith('https://') || saree.tryonOverlayImage.startsWith('/uploads/')), 'Must have valid try-on input image URL');
     }
+
+    const lowResImported = sarees.filter((s) => s.tryonCompatibility === 'needs_image_replacement');
+    assert.ok(lowResImported.length >= 15, 'Imported sarees with small crops correctly flagged as needs_image_replacement');
   });
 
   await t.test('3. Validates complete women\'s wearable outfits and AI Ready status', () => {

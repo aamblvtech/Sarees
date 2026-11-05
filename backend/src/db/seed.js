@@ -49,9 +49,9 @@ export async function runSeed() {
            tryon_compatibility, stock_status, price, original_price, currency,
            description, material, fit, care_instructions, sizes,
            primary_image_url, tryon_image_url, is_sample, is_featured, is_active,
-           color, needs_admin_review, discount_percent
+           color, needs_admin_review, discount_percent, image_width, image_height
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
          ON CONFLICT (sku) DO UPDATE
          SET name = EXCLUDED.name, brand = EXCLUDED.brand, category_id = EXCLUDED.category_id,
              subcategory = EXCLUDED.subcategory, gender = EXCLUDED.gender,
@@ -63,7 +63,9 @@ export async function runSeed() {
              primary_image_url = EXCLUDED.primary_image_url, tryon_image_url = EXCLUDED.tryon_image_url,
              is_featured = EXCLUDED.is_featured, is_active = EXCLUDED.is_active,
              color = EXCLUDED.color, needs_admin_review = EXCLUDED.needs_admin_review,
-             discount_percent = EXCLUDED.discount_percent, updated_at = CURRENT_TIMESTAMP
+             discount_percent = EXCLUDED.discount_percent,
+             image_width = EXCLUDED.image_width, image_height = EXCLUDED.image_height,
+             updated_at = CURRENT_TIMESTAMP
          RETURNING id, sku`,
         [
           prod.sku,
@@ -91,7 +93,9 @@ export async function runSeed() {
           prod.isActive ?? true,
           prod.color || null,
           prod.needsAdminReview || false,
-          prod.discountPercent || null
+          prod.discountPercent || null,
+          prod.imageWidth || null,
+          prod.imageHeight || null
         ]
       );
 

@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import { query } from '../config/db.js';
 import { requireAdminAuth } from '../middleware/auth.middleware.js';
+import imageValidationService from '../services/imageValidationService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -248,10 +249,7 @@ router.post('/products', requireAdminAuth, async (req, res) => {
     primaryImageUrl,
     tryonImageUrl,
     isFeatured = false,
-    isActive = true,
-    color,
-    needsAdminReview = false,
-    discountPercent
+    isActive = true
   } = req.body;
 
   if (!name || !price || !description) {
@@ -271,10 +269,9 @@ router.post('/products', requireAdminAuth, async (req, res) => {
          sku, name, slug, brand, category_id, subcategory, gender, garment_type,
          tryon_compatibility, stock_status, price, original_price, currency,
          description, material, fit, care_instructions, sizes,
-         primary_image_url, tryon_image_url, is_featured, is_active, is_sample,
-         color, needs_admin_review, discount_percent
+         primary_image_url, tryon_image_url, is_featured, is_active, is_sample
        )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
        RETURNING *`,
       [
         sku,
@@ -299,10 +296,7 @@ router.post('/products', requireAdminAuth, async (req, res) => {
         tryonImageUrl || primaryImageUrl || null,
         isFeatured === true || isFeatured === 'true',
         isActive === true || isActive === 'true',
-        false,
-        color ? color.trim() : null,
-        needsAdminReview === true || needsAdminReview === 'true',
-        discountPercent ? parseFloat(discountPercent) : null
+        false
       ]
     );
 
@@ -353,10 +347,7 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
     primaryImageUrl,
     tryonImageUrl,
     isFeatured,
-    isActive,
-    color,
-    needsAdminReview,
-    discountPercent
+    isActive
   } = req.body;
 
   try {
@@ -388,17 +379,14 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
            tryon_image_url = COALESCE($17, tryon_image_url),
            is_featured = COALESCE($18, is_featured),
            is_active = COALESCE($19, is_active),
-           color = COALESCE($20, color),
-           needs_admin_review = COALESCE($21, needs_admin_review),
-           discount_percent = COALESCE($22, discount_percent),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $23
+       WHERE id = $20
        RETURNING *`,
       [
         name ? name.trim() : null,
         description ? description.trim() : null,
         price ? parseFloat(price) : null,
-        originalPrice !== undefined ? (originalPrice ? parseFloat(originalPrice) : null) : null,
+        originalPrice ? parseFloat(originalPrice) : null,
         categoryId ? parseInt(categoryId, 10) : null,
         subcategory ? subcategory.trim().toLowerCase() : null,
         gender ? gender.trim().toLowerCase() : null,
@@ -414,9 +402,6 @@ router.put('/products/:id', requireAdminAuth, async (req, res) => {
         tryonImageUrl || null,
         isFeatured !== undefined ? (isFeatured === true || isFeatured === 'true') : null,
         isActive !== undefined ? (isActive === true || isActive === 'true') : null,
-        color !== undefined ? (color ? color.trim() : null) : null,
-        needsAdminReview !== undefined ? (needsAdminReview === true || needsAdminReview === 'true') : null,
-        discountPercent !== undefined ? (discountPercent ? parseFloat(discountPercent) : null) : null,
         parseInt(id, 10)
       ]
     );
@@ -472,15 +457,104 @@ router.post('/upload', requireAdminAuth, upload.single('image'), (req, res) => {
     });
   }
 
+  const filePath = path.join(uploadsDir, req.file.filename);
+  let dims = null;
+  try {
+    const buf = fs.readFileSync(filePath);
+    dims = imageValidationService.parseImageDimensions(buf);
+  } catch (e) {
+    // ignore
+  }
+
+  const width = dims?.width || null;
+  const height = dims?.height || null;
+  const isAiReady = width && height ? (width >= 250 && height >= 250) : false;
   const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
 
   res.status(201).json({
     success: true,
-    message: 'Product image uploaded successfully.',
+    message: isAiReady
+      ? 'Product image uploaded and verified (AI Ready).'
+      : 'Product image uploaded (Notice: image dimensions are below 250x250px minimum required for try-on).',
     url: fileUrl,
     filename: req.file.filename,
-    size: req.file.size
+    size: req.file.size,
+    width,
+    height,
+    isAiReady,
+    dimensionLabel: width && height ? `${width} × ${height} px` : 'Uploaded',
+    qualityStatus: isAiReady ? (width >= 1024 && height >= 1024 ? 'high_resolution' : 'standard') : 'too_small'
   });
+});
+
+/**
+ * POST /api/admin/products/:id/replace-image
+ * Protected: Replace a product image with high-resolution image file or URL
+ */
+router.post('/products/:id/replace-image', requireAdminAuth, upload.single('image'), async (req, res) => {
+  const { id } = req.params;
+  const parsedId = parseInt(id, 10);
+
+  if (isNaN(parsedId)) {
+    return res.status(400).json({ success: false, error: 'Invalid product ID.' });
+  }
+
+  try {
+    const existing = await query('SELECT * FROM products WHERE id = $1', [parsedId]);
+    if (!existing.rows || existing.rows.length === 0) {
+      return res.status(404).json({ success: false, error: `Product ID ${parsedId} not found.` });
+    }
+
+    let imageUrl = req.body.imageUrl;
+    let width = null;
+    let height = null;
+
+    if (req.file) {
+      imageUrl = `/uploads/${req.file.filename}`;
+      const buf = fs.readFileSync(path.join(uploadsDir, req.file.filename));
+      const dims = imageValidationService.parseImageDimensions(buf);
+      width = dims?.width || null;
+      height = dims?.height || null;
+    } else if (imageUrl) {
+      const meta = imageValidationService.getGarmentMetadata(imageUrl);
+      width = meta.width;
+      height = meta.height;
+    } else {
+      return res.status(400).json({ success: false, error: 'Either an image file or imageUrl must be provided.' });
+    }
+
+    const isAiReady = Boolean(width && height && width >= 250 && height >= 250);
+    const newCompatibility = isAiReady ? 'supported' : 'needs_image_replacement';
+
+    await query(
+      `UPDATE products
+       SET primary_image_url = $1,
+           tryon_image_url = $1,
+           tryon_compatibility = $2,
+           image_width = $3,
+           image_height = $4,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = $5`,
+      [imageUrl, newCompatibility, width, height, parsedId]
+    );
+
+    res.json({
+      success: true,
+      message: isAiReady
+        ? `Product image updated successfully (${width}x${height}px). Product is now AI Ready.`
+        : `Product image updated (${width}x${height}px). Note: Image is under 250x250px minimum, marked as needing image replacement.`,
+      productId: parsedId,
+      imageUrl,
+      width,
+      height,
+      tryonCompatibility: newCompatibility,
+      isAiReady,
+      qualityStatus: isAiReady ? (width >= 1024 && height >= 1024 ? 'high_resolution' : 'standard') : 'too_small'
+    });
+  } catch (err) {
+    console.error('[Replace Image Error]:', err.message);
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 /**

@@ -11,3 +11,4 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS discount_percent NUMERIC(5, 2);
 CREATE INDEX IF NOT EXISTS idx_products_needs_admin_review ON products (needs_admin_review);
 CREATE INDEX IF NOT EXISTS idx_products_brand ON products (brand);
 CREATE INDEX IF NOT EXISTS idx_products_color ON products (color);
+

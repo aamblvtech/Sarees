@@ -54,12 +54,19 @@ export async function initializeDatabase() {
   try {
     const memDb = newDb();
     
-    // Load and run initial migration schema
-    const schemaPath = path.join(__dirname, '..', 'db', 'migrations', '001_vestra_schema.sql');
-    if (fs.existsSync(schemaPath)) {
-      const sql = fs.readFileSync(schemaPath, 'utf8');
-      memDb.public.none(sql);
-      console.log('[DB] Applied 001_vestra_schema.sql.');
+    // Load and run all migration schemas in alphabetical order
+    const migrationsDir = path.join(__dirname, '..', 'db', 'migrations');
+    if (fs.existsSync(migrationsDir)) {
+      const sqlFiles = fs.readdirSync(migrationsDir).filter((f) => f.endsWith('.sql')).sort();
+      for (const f of sqlFiles) {
+        const sql = fs.readFileSync(path.join(migrationsDir, f), 'utf8');
+        try {
+          memDb.public.none(sql);
+          console.log(`[DB] Applied migration: ${f}`);
+        } catch (migErr) {
+          console.warn(`[DB] Migration notice for ${f}:`, migErr.message);
+        }
+      }
     }
 
     const pgAdapter = memDb.adapters.createPg();

@@ -116,7 +116,31 @@ export const adminService = {
         'Content-Type': 'multipart/form-data'
       }
     });
-    return response.data; // { url, filename }
+    return response.data; // { url, filename, width, height, isAiReady }
+  },
+
+  /**
+   * Replace product image with high-resolution image file or URL
+   */
+  async replaceProductImage(id, { file, imageUrl }) {
+    if (file) {
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await apiClient.post(`/admin/products/${id}/replace-image`, formData, {
+        headers: {
+          ...this.getAuthHeaders(),
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } else {
+      const response = await apiClient.post(
+        `/admin/products/${id}/replace-image`,
+        { imageUrl },
+        { headers: this.getAuthHeaders() }
+      );
+      return response.data;
+    }
   },
 
   /**

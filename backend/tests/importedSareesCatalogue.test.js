@@ -20,7 +20,7 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
   await initializeDatabase();
   await runSeed();
 
-  await t.test('1. All 24 imported sarees (IDs 41 to 64) are seeded in PostgreSQL', async () => {
+  await t.test('1. All 24 imported sarees (IDs 41 to 64) are seeded with accurate compatibility status', async () => {
     const res = await query('SELECT * FROM products WHERE id >= 41 AND id <= 64 ORDER BY id ASC');
     assert.equal(res.rows.length, 24, 'Must seed exactly 24 imported saree products');
 
@@ -30,12 +30,20 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
       'House of Pataudi', 'DARPAN TEXTILE'
     ]);
 
+    const supportedHiresIds = new Set([41, 42, 43, 44, 45, 47]);
+
     for (const row of res.rows) {
       assert.ok(row.id >= 41 && row.id <= 64, `Invalid ID: ${row.id}`);
       assert.equal(row.category_id, 1, `Product ${row.id} must belong to Sarees category (id: 1)`);
       assert.equal(row.garment_type, 'saree', `Product ${row.id} garment_type must be saree`);
       assert.equal(row.gender, 'women', `Product ${row.id} gender must be women`);
-      assert.equal(row.tryon_compatibility, 'supported', `Product ${row.id} must be supported (AI Ready)`);
+      
+      if (supportedHiresIds.has(row.id)) {
+        assert.equal(row.tryon_compatibility, 'supported', `Product ${row.id} must be supported (AI Ready) with verified high-res image`);
+      } else {
+        assert.equal(row.tryon_compatibility, 'needs_image_replacement', `Product ${row.id} with low-res crop must be marked needs_image_replacement`);
+      }
+
       assert.equal(row.currency, 'INR', `Product ${row.id} currency must be INR`);
       assert.ok(row.price > 0, `Product ${row.id} price must be positive INR`);
       assert.ok(expectedBrands.has(row.brand), `Unexpected brand: ${row.brand} on product ${row.id}`);
@@ -118,5 +126,52 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
     assert.equal(jobRes.rows.length, 1);
     assert.equal(jobRes.rows[0].product_id, 42, 'Generation history must record exact selected saree product ID 42');
     assert.equal(jobRes.rows[0].product_title, 'Art Silk Saree');
+  });
+
+  await t.test('6. Low-resolution saree try-on fails with exact message: "Product image is too small for try-on. Minimum size is 250x250px."', async () => {
+    const lowResSareeRes = await query('SELECT * FROM products WHERE id = 46');
+    const lowResSaree = lowResSareeRes.rows[0];
+    assert.equal(lowResSaree.id, 46);
+    assert.equal(lowResSaree.tryon_compatibility, 'needs_image_replacement');
+
+    const sessionId = `sess_lowres_test_${Date.now()}`;
+    const customerImageUri = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
+
+    const outcome = await executeSingleTryOnJob({
+      productId: lowResSaree.id,
+      productTitle: lowResSaree.name,
+      userPhotoUrl: customerImageUri,
+      userPhotoFilename: 'test_cust.jpg',
+      sessionId
+    });
+
+    assert.equal(outcome.body.success, false);
+    assert.equal(outcome.body.status, 'failed');
+    assert.equal(outcome.body.error, 'Product image is too small for try-on. Minimum size is 250x250px.');
+
+    // Verify job in database is recorded as failed
+    const jobRes = await query('SELECT * FROM tryon_jobs WHERE job_uuid = $1', [outcome.body.jobId]);
+    assert.equal(jobRes.rows.length, 1);
+    assert.equal(jobRes.rows[0].status, 'failed');
+    assert.equal(jobRes.rows[0].error_message, 'Product image is too small for try-on. Minimum size is 250x250px.');
+  });
+
+  await t.test('7. Replacing image with verified high-res file updates database and makes product AI Ready', async () => {
+    // Admin replaces product 46 image with high-res file
+    await query(
+      `UPDATE products
+       SET primary_image_url = '/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg',
+           tryon_image_url = '/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg',
+           tryon_compatibility = 'supported',
+           image_width = 1200,
+           image_height = 1600,
+           updated_at = CURRENT_TIMESTAMP
+       WHERE id = 46`
+    );
+
+    const check = await query('SELECT id, tryon_compatibility, image_width, image_height FROM products WHERE id = 46');
+    assert.equal(check.rows[0].tryon_compatibility, 'supported');
+    assert.equal(check.rows[0].image_width, 1200);
+    assert.equal(check.rows[0].image_height, 1600);
   });
 });

@@ -1,5 +1,6 @@
 import express from 'express';
 import { query } from '../config/db.js';
+import imageValidationService from '../services/imageValidationService.js';
 
 const router = express.Router();
 
@@ -63,6 +64,8 @@ router.get('/products', async (req, res) => {
         p.color,
         p.needs_admin_review AS "needsAdminReview",
         p.discount_percent AS "discountPercent",
+        p.image_width AS "imageWidth",
+        p.image_height AS "imageHeight",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
@@ -129,7 +132,7 @@ router.get('/products', async (req, res) => {
 
     const result = await query(sql, sqlParams);
 
-    // Ensure sizes is parsed if stored as JSON string
+    // Ensure sizes is parsed if stored as JSON string and enrich with image metadata
     const sanitizedRows = result.rows.map((row) => {
       let sizes = row.sizes;
       if (typeof sizes === 'string') {
@@ -139,9 +142,23 @@ router.get('/products', async (req, res) => {
           sizes = ['XS', 'S', 'M', 'L', 'XL'];
         }
       }
+
+      const imgMeta = imageValidationService.getGarmentMetadata(row.primaryImage);
+      const width = row.imageWidth || imgMeta.width;
+      const height = row.imageHeight || imgMeta.height;
+      const isTooSmall = (width && height && (width < 250 || height < 250)) || row.tryonCompatibility === 'needs_image_replacement';
+      const isAiReady = !isTooSmall && row.tryonCompatibility === 'supported';
+      const dimensionLabel = width && height ? `${width} × ${height} px` : (imgMeta.dimensionLabel || 'Standard');
+      const qualityStatus = isTooSmall ? 'too_small' : (width >= 1024 && height >= 1024 ? 'high_resolution' : 'standard');
+
       return {
         ...row,
         sizes,
+        imageWidth: width,
+        imageHeight: height,
+        dimensionLabel,
+        qualityStatus,
+        isAiReady,
         images: [row.primaryImage].filter(Boolean)
       };
     });
@@ -198,6 +215,8 @@ router.get('/products/:id', async (req, res) => {
         p.color,
         p.needs_admin_review AS "needsAdminReview",
         p.discount_percent AS "discountPercent",
+        p.image_width AS "imageWidth",
+        p.image_height AS "imageHeight",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
@@ -237,6 +256,16 @@ router.get('/products/:id', async (req, res) => {
         product.sizes = ['XS', 'S', 'M', 'L', 'XL'];
       }
     }
+
+    const imgMeta = imageValidationService.getGarmentMetadata(product.primaryImage);
+    const width = product.imageWidth || imgMeta.width;
+    const height = product.imageHeight || imgMeta.height;
+    const isTooSmall = (width && height && (width < 250 || height < 250)) || product.tryonCompatibility === 'needs_image_replacement';
+    product.imageWidth = width;
+    product.imageHeight = height;
+    product.dimensionLabel = width && height ? `${width} × ${height} px` : (imgMeta.dimensionLabel || 'Standard');
+    product.qualityStatus = isTooSmall ? 'too_small' : (width >= 1024 && height >= 1024 ? 'high_resolution' : 'standard');
+    product.isAiReady = !isTooSmall && product.tryonCompatibility === 'supported';
 
     return res.json({
       success: true,

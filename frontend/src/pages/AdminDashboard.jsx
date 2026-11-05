@@ -32,6 +32,13 @@ export default function AdminDashboard() {
   const [editingProduct, setEditingProduct] = useState(null);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [isReplaceModalOpen, setIsReplaceModalOpen] = useState(false);
+  const [replacingProduct, setReplacingProduct] = useState(null);
+  const [replaceFile, setReplaceFile] = useState(null);
+  const [replaceUrl, setReplaceUrl] = useState('');
+  const [replaceLoading, setReplaceLoading] = useState(false);
+  const [replaceError, setReplaceError] = useState(null);
+  const [replaceSuccess, setReplaceSuccess] = useState(null);
 
   // Product Form State
   const [formData, setFormData] = useState({
@@ -140,6 +147,42 @@ export default function AdminDashboard() {
     });
     setFormError(null);
     setIsProductModalOpen(true);
+  };
+
+  // Open Modal for Replacing Product Image
+  const handleOpenReplaceModal = (prod) => {
+    setReplacingProduct(prod);
+    setReplaceFile(null);
+    setReplaceUrl('');
+    setReplaceError(null);
+    setReplaceSuccess(null);
+    setIsReplaceModalOpen(true);
+  };
+
+  const handleExecuteReplaceImage = async (e) => {
+    e.preventDefault();
+    if (!replaceFile && !replaceUrl.trim()) {
+      setReplaceError('Please select an image file or provide an image URL.');
+      return;
+    }
+    setReplaceLoading(true);
+    setReplaceError(null);
+    setReplaceSuccess(null);
+    try {
+      const res = await adminService.replaceProductImage(replacingProduct.id, {
+        file: replaceFile,
+        imageUrl: replaceUrl.trim() || undefined
+      });
+      setReplaceSuccess(res?.message || 'Product image updated successfully.');
+      await loadAllData();
+      setTimeout(() => {
+        setIsReplaceModalOpen(false);
+      }, 1200);
+    } catch (err) {
+      setReplaceError(err.response?.data?.error || err.message || 'Failed to replace image.');
+    } finally {
+      setReplaceLoading(false);
+    }
   };
 
   // Open Modal for Edit Product
@@ -483,6 +526,7 @@ export default function AdminDashboard() {
             >
               <option value="all">All Compatibility</option>
               <option value="supported">AI Try-On Ready</option>
+              <option value="needs_image_replacement">Image Needs Replacement</option>
               <option value="awaiting_saree_engine">Awaiting Saree Drape Engine</option>
               <option value="unsupported">Unsupported / Accessories</option>
             </select>
@@ -567,16 +611,44 @@ export default function AdminDashboard() {
                     return (
                       <tr key={p.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                         
-                        {/* Thumbnail */}
+                        {/* Thumbnail & Image Resolution */}
                         <td className="py-3 px-4">
-                          <div className="w-12 h-16 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden flex-shrink-0">
-                            {img ? (
-                              <img src={img} alt={p.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-400">
-                                No Img
+                          <div className="flex items-center space-x-2.5">
+                            <div className="w-12 h-16 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden flex-shrink-0 relative group">
+                              {img ? (
+                                <img src={img} alt={p.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-400">
+                                  No Img
+                                </div>
+                              )}
+                            </div>
+                            <div className="space-y-0.5 text-[10px]">
+                              <div className="font-mono font-medium text-slate-700 dark:text-slate-300">
+                                {p.dimensionLabel || (p.imageWidth && p.imageHeight ? `${p.imageWidth} × ${p.imageHeight} px` : '—')}
                               </div>
-                            )}
+                              <div>
+                                {p.qualityStatus === 'high_resolution' ? (
+                                  <span className="text-[9px] px-1 py-0.2 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-semibold">
+                                    HD Studio
+                                  </span>
+                                ) : (p.qualityStatus === 'too_small' || compat === 'needs_image_replacement') ? (
+                                  <span className="text-[9px] px-1 py-0.2 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 font-bold">
+                                    &lt; 250px Low Res
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] px-1 py-0.2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                                    Standard
+                                  </span>
+                                )}
+                              </div>
+                              <button
+                                onClick={() => handleOpenReplaceModal(p)}
+                                className="text-[9px] text-[#F5AFAF] hover:text-[#000000] dark:hover:text-white underline font-semibold mt-0.5 block text-left"
+                              >
+                                Replace Image
+                              </button>
+                            </div>
                           </div>
                         </td>
 
@@ -631,6 +703,11 @@ export default function AdminDashboard() {
                             <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] font-semibold">
                               <Sparkles className="w-2.5 h-2.5 text-emerald-600 dark:text-emerald-400" />
                               <span>AI Ready</span>
+                            </span>
+                          ) : compat === 'needs_image_replacement' ? (
+                            <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[10px] font-semibold">
+                              <AlertCircle className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400" />
+                              <span>Image Needs Replacement</span>
                             </span>
                           ) : compat === 'awaiting_saree_engine' ? (
                             <span className="inline-flex items-center space-x-1 px-2 py-0.5 bg-purple-50 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300 border border-purple-300 dark:border-purple-800 text-[10px] font-semibold">
@@ -1279,6 +1356,134 @@ export default function AdminDashboard() {
               </form>
 
             </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* REPLACE PRODUCT IMAGE MODAL */}
+      {/* ============================================================== */}
+      {isReplaceModalOpen && replacingProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 w-full max-w-lg shadow-2xl overflow-hidden">
+            
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-[#F9DFDF] dark:border-slate-800">
+              <div>
+                <h3 className="font-serif text-lg text-slate-900 dark:text-white">
+                  Replace Garment Image
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {replacingProduct.name} (ID: {replacingProduct.id})
+                </p>
+              </div>
+              <button
+                onClick={() => setIsReplaceModalOpen(false)}
+                className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleExecuteReplaceImage} className="p-6 space-y-5">
+              
+              {/* Current Image Details */}
+              <div className="flex items-center space-x-4 p-3 bg-slate-50 dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800">
+                <div className="w-16 h-20 bg-slate-200 dark:bg-slate-800 overflow-hidden flex-shrink-0">
+                  <img
+                    src={replacingProduct.primaryImage || replacingProduct.primary_image_url}
+                    alt={replacingProduct.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-1 text-xs">
+                  <p className="font-semibold text-slate-900 dark:text-white">Current Garment Image</p>
+                  <p className="font-mono text-slate-500 dark:text-slate-400">
+                    Resolution: {replacingProduct.dimensionLabel || (replacingProduct.imageWidth && replacingProduct.imageHeight ? `${replacingProduct.imageWidth} × ${replacingProduct.imageHeight} px` : 'Below 250px')}
+                  </p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Status: <span className="font-semibold text-amber-600 dark:text-amber-400 uppercase">{replacingProduct.tryonCompatibility || replacingProduct.tryon_compatibility || 'needs_image_replacement'}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 text-[11px] text-blue-900 dark:text-blue-300">
+                <p className="font-semibold">Resolution Requirement:</p>
+                <p>Genlook AI try-on strictly requires minimum 250×250px. Luxury atelier recommended standard is 1024×1024px or higher.</p>
+              </div>
+
+              {/* Upload New Image File */}
+              <div className="space-y-1.5">
+                <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
+                  Upload High-Resolution File
+                </label>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => {
+                    setReplaceFile(e.target.files?.[0] || null);
+                    if (e.target.files?.[0]) setReplaceUrl('');
+                  }}
+                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                />
+                <p className="text-[10px] text-slate-400">Supported formats: JPEG, PNG, WebP (Max 10MB)</p>
+              </div>
+
+              <div className="flex items-center space-x-2 text-xs text-slate-400">
+                <div className="flex-1 border-t border-[#F9DFDF] dark:border-slate-800" />
+                <span>OR</span>
+                <div className="flex-1 border-t border-[#F9DFDF] dark:border-slate-800" />
+              </div>
+
+              {/* Enter High-Res Image URL */}
+              <div className="space-y-1.5">
+                <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
+                  High-Resolution Image URL
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://images.unsplash.com/... or /uploads/..."
+                  value={replaceUrl}
+                  onChange={(e) => {
+                    setReplaceUrl(e.target.value);
+                    if (e.target.value) setReplaceFile(null);
+                  }}
+                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white"
+                />
+              </div>
+
+              {replaceError && (
+                <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-800 text-xs text-red-800 dark:text-red-300">
+                  {replaceError}
+                </div>
+              )}
+
+              {replaceSuccess && (
+                <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300">
+                  {replaceSuccess}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex items-center justify-end space-x-3 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => setIsReplaceModalOpen(false)}
+                  className="px-4 py-2 border border-[#F9DFDF] dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={replaceLoading}
+                  className="px-6 py-2 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold disabled:opacity-50"
+                >
+                  {replaceLoading ? 'Updating Image...' : 'Save & Verify Image'}
+                </button>
+              </div>
+
+            </form>
 
           </div>
         </div>
