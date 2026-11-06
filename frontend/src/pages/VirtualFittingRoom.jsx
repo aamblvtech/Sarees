@@ -71,6 +71,7 @@ export default function VirtualFittingRoom() {
   const [cachedCustomerImageId, setCachedCustomerImageId] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [showDrapeBreakdown, setShowDrapeBreakdown] = useState(false);
+  const [fittingMirrorMode, setFittingMirrorMode] = useState('split'); // 'split' | 'after' | 'before'
 
   // Customer Session ID for persistent tracking across generations
   const [sessionId] = useState(() => {
@@ -1114,7 +1115,7 @@ export default function VirtualFittingRoom() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-[#FFFFFF] py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-[1600px] mx-auto space-y-6">
 
         {/* Studio Brand Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-slate-200/80 dark:border-slate-800 pb-6 gap-4">
@@ -1170,15 +1171,76 @@ export default function VirtualFittingRoom() {
         )}
 
         {/* ============================================================== */}
-        {/* SECTION 1: SIDE-BY-SIDE VIRTUAL FITTING MIRROR (BEFORE / AFTER) */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
+        {/* TWO-COLUMN REDESIGN: LEFT FITTING AREA & RIGHT WORKSPACE       */}
+        {/* ============================================================== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-            
-            {/* ------------------------------------------------------------ */}
-            {/* LEFT PANEL: BEFORE — Customer Uploaded Photograph            */}
-            {/* ------------------------------------------------------------ */}
+          {/* ============================================================ */}
+          {/* LEFT COLUMN: MAIN FITTING AREA (Sticky Desktop Mirror)       */}
+          {/* ============================================================ */}
+          <div className="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-4 space-y-6">
+            <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-sm space-y-5 rounded">
+              
+              {/* Studio Mirror Header & View Switcher */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 gap-2">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                    <h2 className="font-serif text-lg text-slate-900 dark:text-white font-medium">
+                      Virtual Fitting Mirror
+                    </h2>
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Live comparison of silhouette portrait & AI drape.
+                  </p>
+                </div>
+
+                {/* View Switcher Pills */}
+                <div className="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded text-[10px] font-mono shrink-0 self-start sm:self-center">
+                  <button
+                    type="button"
+                    onClick={() => setFittingMirrorMode('split')}
+                    className={`px-2.5 py-1 rounded transition-all font-semibold ${
+                      fittingMirrorMode === 'split'
+                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Side-by-Side
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFittingMirrorMode('after')}
+                    className={`px-2.5 py-1 rounded transition-all font-semibold ${
+                      fittingMirrorMode === 'after'
+                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Try-On
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFittingMirrorMode('before')}
+                    className={`px-2.5 py-1 rounded transition-all font-semibold ${
+                      fittingMirrorMode === 'before'
+                        ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Portrait
+                  </button>
+                </div>
+              </div>
+
+              {/* Grid holding BEFORE and/or AFTER */}
+              <div className={`grid gap-4 items-stretch ${
+                fittingMirrorMode === 'split'
+                  ? 'grid-cols-1 sm:grid-cols-2'
+                  : 'grid-cols-1'
+              }`}>
+                {(fittingMirrorMode === 'split' || fittingMirrorMode === 'before') && (
             <div className="flex flex-col space-y-3">
               
               <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -1379,11 +1441,9 @@ export default function VirtualFittingRoom() {
               </div>
 
             </div>
+                )}
 
-
-            {/* ------------------------------------------------------------ */}
-            {/* RIGHT PANEL: AFTER — AI Virtual Try-On Result               */}
-            {/* ------------------------------------------------------------ */}
+                {(fittingMirrorMode === 'split' || fittingMirrorMode === 'after') && (
             <div className="flex flex-col space-y-3">
               
               <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -1702,13 +1762,79 @@ export default function VirtualFittingRoom() {
               </div>
 
             </div>
+                )}
+              </div>
 
+            </section>
           </div>
 
-        </section>
+          {/* ============================================================ */}
+          {/* RIGHT COLUMN: OUTFIT WORKSPACE (Independent Vertical Scroll) */}
+          {/* ============================================================ */}
+          <div className="lg:col-span-7 xl:col-span-7 space-y-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:pr-2 scrollbar-thin">
+            
+          {/* Selected Outfits Tray for Batch Try-On */}
+          {selectedProducts.length > 0 && (
+            <div className="w-full max-w-full overflow-hidden p-4 bg-slate-900 text-white border border-slate-800 rounded shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="min-w-0 flex-1 space-y-1.5 overflow-hidden">
+                <div className="flex items-center space-x-2.5">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#F5AFAF] text-black text-xs font-mono font-bold shrink-0">
+                    {selectedProducts.length} {selectedProducts.length === 1 ? 'Outfit' : 'Outfits'} Selected
+                  </span>
+                  <span className="text-xs text-slate-300 truncate">
+                    Ready for simultaneous try-on on your silhouette
+                  </span>
+                </div>
+                <div className="w-full max-w-full overflow-x-auto py-1 scrollbar-thin">
+                  <div className="flex items-center space-x-2 min-w-max pr-2">
+                    {selectedProducts.map((p, idx) => (
+                      <div
+                        key={p.id}
+                        className="shrink-0 flex items-center space-x-2 bg-slate-800 border border-slate-700 px-2.5 py-1.5 rounded text-xs whitespace-nowrap"
+                      >
+                        <span className="text-[10px] font-mono text-[#F5AFAF] font-bold shrink-0">#{idx + 1}</span>
+                        <img
+                          src={p.primaryImage || ATELIER_FALLBACK_IMAGE}
+                          alt={p.name}
+                          className="w-5 h-6 object-cover rounded-xs shrink-0"
+                        />
+                        <span className="max-w-[120px] truncate text-[11px] font-serif" title={p.name}>{p.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeSelectedProduct(p.id)}
+                          className="text-slate-400 hover:text-rose-400 transition-colors ml-1 shrink-0 p-0.5"
+                          title="Remove outfit from selection"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
+              <div className="flex items-center space-x-2.5 shrink-0 self-end sm:self-center pt-1 sm:pt-0">
+                <button
+                  type="button"
+                  onClick={clearAllSelectedProducts}
+                  className="px-3 py-2 text-xs font-mono uppercase text-slate-400 hover:text-white transition-colors shrink-0"
+                >
+                  Clear All
+                </button>
+                <button
+                  type="button"
+                  disabled={isGenerating || !userPhotoUrl}
+                  onClick={executeBatchTryOn}
+                  className="px-4 py-2.5 bg-white text-slate-900 hover:bg-[#F5AFAF] text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center space-x-2 rounded shadow-md disabled:opacity-50 shrink-0"
+                  title={!userPhotoUrl ? 'Please upload a customer silhouette photo first' : 'Synthesize all selected outfits'}
+                >
+                  <Sparkles className="w-4 h-4 text-[#F5AFAF] shrink-0" />
+                  <span>Try On All ({selectedProducts.length})</span>
+                </button>
+              </div>
+            </div>
+          )}
 
-        {/* ============================================================== */}
         {/* SECTION 1.5: YOUR TRIED OUTFITS (Side-by-Side Comparison)      */}
         {/* ============================================================== */}
         <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
@@ -1759,7 +1885,7 @@ export default function VirtualFittingRoom() {
               </div>
             </div>
           ) : (
-            <div className="flex space-x-4 overflow-x-auto pb-4 pt-1 scrollbar-thin">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5 pt-1">
               {triedOutfits.map((outfit, idx) => {
                 const outfitKey = outfit.jobId || outfit.id || `outfit-${idx}`;
                 const isActive = (activeTriedOutfitId === outfitKey) || (tryOnResult?.jobId === outfitKey);
@@ -1767,7 +1893,7 @@ export default function VirtualFittingRoom() {
                 return (
                   <div
                     key={outfitKey}
-                    className={`shrink-0 w-64 bg-white dark:bg-[#181114] border transition-all duration-200 overflow-hidden relative shadow-sm hover:shadow-md flex flex-col justify-between ${
+                    className={`bg-white dark:bg-[#181114] border transition-all duration-200 overflow-hidden relative shadow-xs hover:shadow-md flex flex-col justify-between rounded ${
                       isActive ? 'ring-2 ring-[#F5AFAF] border-[#F5AFAF]' : 'border-slate-200/90 dark:border-slate-800'
                     }`}
                   >
@@ -1900,8 +2026,6 @@ export default function VirtualFittingRoom() {
           )}
         </section>
 
-
-        {/* ============================================================== */}
         {/* SECTION 2: CLOTHING COLLECTION (PostgreSQL Catalogue)         */}
         {/* ============================================================== */}
         <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
@@ -1994,66 +2118,6 @@ export default function VirtualFittingRoom() {
             </div>
           )}
 
-          {/* Selected Outfits Tray for Batch Try-On */}
-          {selectedProducts.length > 0 && (
-            <div className="p-4 bg-slate-900 text-white border border-slate-800 rounded shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1.5">
-                <div className="flex items-center space-x-2.5">
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#F5AFAF] text-black text-xs font-mono font-bold">
-                    {selectedProducts.length} {selectedProducts.length === 1 ? 'Outfit' : 'Outfits'} Selected
-                  </span>
-                  <span className="text-xs text-slate-300">
-                    Ready for simultaneous try-on using your uploaded customer photo
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2 overflow-x-auto py-1 scrollbar-thin">
-                  {selectedProducts.map((p, idx) => (
-                    <div
-                      key={p.id}
-                      className="flex items-center space-x-2 bg-slate-800 border border-slate-700 px-2.5 py-1.5 rounded text-xs shrink-0"
-                    >
-                      <span className="text-[10px] font-mono text-[#F5AFAF] font-bold">#{idx + 1}</span>
-                      <img
-                        src={p.primaryImage || ATELIER_FALLBACK_IMAGE}
-                        alt={p.name}
-                        className="w-5 h-6 object-cover rounded-xs"
-                      />
-                      <span className="max-w-[120px] truncate text-[11px] font-serif">{p.name}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeSelectedProduct(p.id)}
-                        className="text-slate-400 hover:text-rose-400 transition-colors ml-1"
-                        title="Remove outfit from selection"
-                      >
-                        <X className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={clearAllSelectedProducts}
-                  className="px-3 py-2 text-xs font-mono uppercase text-slate-400 hover:text-white transition-colors"
-                >
-                  Clear All
-                </button>
-                <button
-                  type="button"
-                  disabled={isGenerating || !userPhotoUrl}
-                  onClick={executeBatchTryOn}
-                  className="px-5 py-2.5 bg-white text-slate-900 hover:bg-[#F5AFAF] text-xs font-mono font-bold uppercase tracking-wider transition-all flex items-center space-x-2 rounded shadow-md disabled:opacity-50"
-                  title={!userPhotoUrl ? 'Please upload a customer silhouette photo first' : 'Synthesize all selected outfits'}
-                >
-                  <Sparkles className="w-4 h-4 text-[#F5AFAF]" />
-                  <span>Try On All ({selectedProducts.length})</span>
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Category Filter Pills & Sizing Toolbar */}
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2">
             
@@ -2141,7 +2205,7 @@ export default function VirtualFittingRoom() {
           </div>
 
           {/* Product Cards Grid from PostgreSQL with Multi-Select Controls */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-4">
             {filteredProducts.map((product) => {
               const isSelected = selectedProducts.some((p) => p.id === product.id);
               const selectionIndex = selectedProducts.findIndex((p) => p.id === product.id);
@@ -2281,6 +2345,10 @@ export default function VirtualFittingRoom() {
           )}
 
         </section>
+
+          </div>
+
+        </div>
 
       </div>
 

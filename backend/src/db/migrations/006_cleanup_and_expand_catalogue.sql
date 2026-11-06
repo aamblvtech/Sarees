@@ -21,3 +21,4 @@ VALUES
   (8, 'Formal Attire & Tailoring', 'formal-attire', 'Savile Row bespoke tuxedos, silk-lapel dinner jackets, chalk-stripe 3-piece suits, and evening gowns.', 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85')
 ON CONFLICT (slug) DO UPDATE
 SET name = EXCLUDED.name, description = EXCLUDED.description, image_url = EXCLUDED.image_url;
+
