@@ -2113,40 +2113,40 @@ export default function VirtualFittingRoom() {
             </div>
           )}
 
-          {/* Category Filter Pills & Sizing Toolbar */}
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-2">
-            
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {[
-                { id: 'all', label: 'All Garments' },
-                { id: 'sarees', label: 'Sarees' },
-                { id: 'shirts', label: 'Shirts & Tops' },
-                { id: 'jeans', label: 'Jeans & Denim' },
-                { id: 'pants', label: 'Baggy Pants' },
-                { id: 'formal-attire', label: 'Formal Attire' },
-                { id: 'womens', label: "Women's Collection" },
-                { id: 'mens', label: "Men's Tailoring" },
-                { id: 'accessories', label: 'Accessories' }
-              ].map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => setProductCategoryFilter(cat.id)}
-                  className={`px-3 py-1.5 text-[11px] uppercase font-mono tracking-wider font-semibold border transition-all rounded ${
-                    productCategoryFilter === cat.id
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 shadow-xs'
-                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-400 hover:border-slate-300 shadow-xs'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
+          {/* Category Filter Pills in a Horizontal Scroll Box */}
+          <div className="space-y-3 pt-1">
+            <div className="w-full max-w-full overflow-hidden p-2 bg-slate-50 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded shadow-xs">
+              <div className="flex items-center space-x-1.5 overflow-x-auto py-0.5 scrollbar-thin">
+                {[
+                  { id: 'all', label: 'All Garments' },
+                  { id: 'sarees', label: 'Sarees' },
+                  { id: 'shirts', label: 'Shirts & Tops' },
+                  { id: 'jeans', label: 'Jeans & Denim' },
+                  { id: 'pants', label: 'Baggy Pants' },
+                  { id: 'formal-attire', label: 'Formal Attire' },
+                  { id: 'womens', label: "Women's Collection" },
+                  { id: 'mens', label: "Men's Tailoring" },
+                  { id: 'accessories', label: 'Accessories' }
+                ].map((cat) => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setProductCategoryFilter(cat.id)}
+                    className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-[10px] uppercase font-mono tracking-wider font-semibold border transition-all rounded ${
+                      productCategoryFilter === cat.id
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 shadow-xs'
+                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-slate-300 shadow-xs'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Selected Garment Customization (Size & Fit) */}
             {selectedProduct && (
-              <div className="flex flex-wrap items-center gap-3 p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs rounded">
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs rounded">
                 <span className="text-[10px] uppercase font-mono tracking-widest text-[#F5AFAF] font-semibold">
                   Fit Settings:
                 </span>
@@ -2196,7 +2196,6 @@ export default function VirtualFittingRoom() {
                 </div>
               </div>
             )}
-
           </div>
 
           {/* Product Cards Grid from PostgreSQL with Multi-Select Controls */}
