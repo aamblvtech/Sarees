@@ -1008,6 +1008,18 @@ export default function VirtualFittingRoom() {
     if (productCategoryFilter === 'sarees') {
       return product.categorySlug === 'sarees' || product.garmentType === 'saree' || product.categoryId === 1;
     }
+    if (productCategoryFilter === 'shirts') {
+      return product.categorySlug === 'shirts' || product.categoryId === 5 || product.subcategory?.includes('shirt') || product.name?.toLowerCase().includes('shirt') || product.name?.toLowerCase().includes('blouse');
+    }
+    if (productCategoryFilter === 'jeans') {
+      return product.categorySlug === 'jeans' || product.categoryId === 6 || product.subcategory?.includes('jean') || product.name?.toLowerCase().includes('jean') || product.subcategory?.includes('denim');
+    }
+    if (productCategoryFilter === 'pants') {
+      return product.categorySlug === 'pants' || product.categoryId === 7 || product.subcategory?.includes('pant') || product.subcategory?.includes('trouser') || product.name?.toLowerCase().includes('pant') || product.name?.toLowerCase().includes('trouser') || product.name?.toLowerCase().includes('chino');
+    }
+    if (productCategoryFilter === 'formal-attire') {
+      return product.categorySlug === 'formal-attire' || product.categoryId === 8 || product.subcategory?.includes('suit') || product.subcategory?.includes('tuxedo') || product.name?.toLowerCase().includes('tuxedo') || product.name?.toLowerCase().includes('suit') || product.name?.toLowerCase().includes('smoking');
+    }
     if (productCategoryFilter === 'accessories') {
       return product.categorySlug === 'accessories' || product.garmentType === 'accessory' || product.categoryId === 4;
     }
@@ -2049,9 +2061,13 @@ export default function VirtualFittingRoom() {
             <div className="flex flex-wrap items-center gap-1.5">
               {[
                 { id: 'all', label: 'All Garments' },
-                { id: 'womens', label: "Women's Clothing" },
-                { id: 'mens', label: "Men's Clothing" },
                 { id: 'sarees', label: 'Sarees' },
+                { id: 'shirts', label: 'Shirts & Tops' },
+                { id: 'jeans', label: 'Jeans & Denim' },
+                { id: 'pants', label: 'Baggy Pants' },
+                { id: 'formal-attire', label: 'Formal Attire' },
+                { id: 'womens', label: "Women's Collection" },
+                { id: 'mens', label: "Men's Tailoring" },
                 { id: 'accessories', label: 'Accessories' }
               ].map((cat) => (
                 <button

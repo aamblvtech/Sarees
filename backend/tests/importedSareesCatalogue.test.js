@@ -20,68 +20,51 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
   await initializeDatabase();
   await runSeed();
 
-  await t.test('1. All 24 imported sarees (IDs 41 to 64) are seeded with accurate compatibility status', async () => {
-    const res = await query('SELECT * FROM products WHERE id >= 41 AND id <= 64 ORDER BY id ASC');
-    assert.equal(res.rows.length, 24, 'Must seed exactly 24 imported saree products');
+  await t.test('1. Retained imported sarees are verified high-res AI Ready, and low-res crops removed', async () => {
+    const res = await query('SELECT * FROM products WHERE sku LIKE $1 ORDER BY id ASC', ['VES-SAR-04%']);
+    assert.equal(res.rows.length, 6, 'Only 6 verified high-resolution imported sarees must remain');
 
-    const expectedBrands = new Set([
-      'Sangria', 'nevash fashion', 'Anouk Rustic', 'kasee', 'KALINI',
-      'Anouk', 'Mitera', 'Saree mall', 'all about you', 'VSOKA',
-      'House of Pataudi', 'DARPAN TEXTILE'
-    ]);
-
-    const supportedHiresIds = new Set([41, 42, 43, 44, 45, 47]);
+    const expectedSkus = ['VES-SAR-041', 'VES-SAR-042', 'VES-SAR-043', 'VES-SAR-044', 'VES-SAR-045', 'VES-SAR-047'];
+    const actualSkus = res.rows.map(r => r.sku);
+    assert.deepEqual(actualSkus, expectedSkus);
 
     for (const row of res.rows) {
-      assert.ok(row.id >= 41 && row.id <= 64, `Invalid ID: ${row.id}`);
       assert.equal(row.category_id, 1, `Product ${row.id} must belong to Sarees category (id: 1)`);
       assert.equal(row.garment_type, 'saree', `Product ${row.id} garment_type must be saree`);
       assert.equal(row.gender, 'women', `Product ${row.id} gender must be women`);
-      
-      if (supportedHiresIds.has(row.id)) {
-        assert.equal(row.tryon_compatibility, 'supported', `Product ${row.id} must be supported (AI Ready) with verified high-res image`);
-      } else {
-        assert.equal(row.tryon_compatibility, 'needs_image_replacement', `Product ${row.id} with low-res crop must be marked needs_image_replacement`);
-      }
-
+      assert.equal(row.tryon_compatibility, 'supported', `Product ${row.id} must be supported (AI Ready) with verified high-res image`);
+      assert.equal(row.image_width, 1200);
+      assert.equal(row.image_height, 1600);
       assert.equal(row.currency, 'INR', `Product ${row.id} currency must be INR`);
       assert.ok(row.price > 0, `Product ${row.id} price must be positive INR`);
-      assert.ok(expectedBrands.has(row.brand), `Unexpected brand: ${row.brand} on product ${row.id}`);
       assert.ok(row.color && row.color.length > 0, `Product ${row.id} must have a valid color`);
     }
+
+    const badCrops = await query("SELECT count(*) as cnt FROM products WHERE tryon_compatibility = 'needs_image_replacement'");
+    assert.equal(parseInt(badCrops.rows[0].cnt, 10), 0, 'All 18 low-res crop items must be removed');
   });
 
-  await t.test('2. Image files for all 24 sarees exist cleanly on disk in uploads directory', async () => {
-    const res = await query('SELECT id, primary_image_url FROM products WHERE id >= 41 AND id <= 64');
+  await t.test('2. High-resolution image files for retained sarees exist cleanly on disk in uploads directory', async () => {
+    const res = await query('SELECT id, primary_image_url FROM products WHERE sku LIKE $1', ['VES-SAR-04%']);
     const uploadsBase = path.join(__dirname, '..');
 
     for (const row of res.rows) {
       const imgPath = path.join(uploadsBase, row.primary_image_url);
       assert.ok(fs.existsSync(imgPath), `Image file missing on disk: ${imgPath} for product ${row.id}`);
       const stats = fs.statSync(imgPath);
-      assert.ok(stats.size > 1000, `Image file too small: ${imgPath} (${stats.size} bytes)`);
+      assert.ok(stats.size > 50000, `High-res image file too small: ${imgPath} (${stats.size} bytes)`);
     }
   });
 
-  await t.test('3. Truncated titles and missing price items are flagged for admin review', async () => {
-    const res = await query('SELECT id, name, brand, needs_admin_review, original_price, discount_percent FROM products WHERE id >= 41 AND id <= 64 ORDER BY id ASC');
+  await t.test('3. Truncated titles in imported batch are flagged for admin review', async () => {
+    const res = await query('SELECT id, sku, name, brand, needs_admin_review, original_price, discount_percent FROM products WHERE sku LIKE $1 ORDER BY id ASC', ['VES-SAR-04%']);
 
-    const flaggedIds = res.rows.filter(r => r.needs_admin_review).map(r => r.id);
-    const verifiedIds = res.rows.filter(r => !r.needs_admin_review).map(r => r.id);
+    const flaggedSkus = res.rows.filter(r => r.needs_admin_review).map(r => r.sku);
+    const verifiedSkus = res.rows.filter(r => !r.needs_admin_review).map(r => r.sku);
 
-    // Exactly 9 sarees flagged for admin review due to truncated titles or missing original prices
-    assert.equal(flaggedIds.length, 9, 'Expected exactly 9 sarees flagged for review');
-    assert.equal(verifiedIds.length, 15, 'Expected exactly 15 sarees verified complete');
-
-    // Expected review IDs: 41, 43, 45, 49, 50, 54, 58, 61, 64
-    assert.deepEqual(flaggedIds, [41, 43, 45, 49, 50, 54, 58, 61, 64]);
-
-    // Product 58 (VSOKA) has missing original price and discount
-    const vsoka = res.rows.find(r => r.id === 58);
-    assert.ok(vsoka);
-    assert.equal(vsoka.original_price, null, 'VSOKA must have null original_price');
-    assert.equal(vsoka.discount_percent, null, 'VSOKA must have null discount_percent');
-    assert.equal(vsoka.needs_admin_review, true, 'VSOKA must require admin review');
+    // Products 41, 43, 45 have truncated titles from screenshot source
+    assert.deepEqual(flaggedSkus, ['VES-SAR-041', 'VES-SAR-043', 'VES-SAR-045'], 'Expected sarees 41, 43, 45 flagged for review');
+    assert.deepEqual(verifiedSkus, ['VES-SAR-042', 'VES-SAR-044', 'VES-SAR-047'], 'Expected sarees 42, 44, 47 verified complete');
   });
 
   await t.test('4. Admin can update saree details and resolve review flag', async () => {
@@ -128,10 +111,14 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
     assert.equal(jobRes.rows[0].product_title, 'Art Silk Saree');
   });
 
-  await t.test('6. Low-resolution saree try-on fails with exact message: "Product image is too small for try-on. Minimum size is 250x250px."', async () => {
-    const lowResSareeRes = await query('SELECT * FROM products WHERE id = 46');
-    const lowResSaree = lowResSareeRes.rows[0];
-    assert.equal(lowResSaree.id, 46);
+  await t.test('6. Low-resolution garment try-on fails with exact message: "Product image is too small for try-on. Minimum size is 250x250px."', async () => {
+    // Insert a temporary low-res product to verify the technical dimension guardrail
+    const insertRes = await query(`
+      INSERT INTO products (sku, name, slug, brand, category_id, subcategory, gender, garment_type, tryon_compatibility, price, description, primary_image_url, image_width, image_height)
+      VALUES ('VES-TEST-LOWRES', 'Test Low Res Saree', 'test-low-res-saree', 'TestBrand', 1, 'sarees', 'women', 'saree', 'needs_image_replacement', 999, 'Test low resolution saree', '/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg', 161, 190)
+      RETURNING id, name, tryon_compatibility
+    `);
+    const lowResSaree = insertRes.rows[0];
     assert.equal(lowResSaree.tryon_compatibility, 'needs_image_replacement');
 
     const sessionId = `sess_lowres_test_${Date.now()}`;
@@ -154,22 +141,25 @@ test('Imported Sarees Catalogue & Virtual Try-On Verification Suite', async (t) 
     assert.equal(jobRes.rows.length, 1);
     assert.equal(jobRes.rows[0].status, 'failed');
     assert.equal(jobRes.rows[0].error_message, 'Product image is too small for try-on. Minimum size is 250x250px.');
+
+    // Clean up temporary test product
+    await query('DELETE FROM products WHERE id = $1', [lowResSaree.id]);
   });
 
   await t.test('7. Replacing image with verified high-res file updates database and makes product AI Ready', async () => {
-    // Admin replaces product 46 image with high-res file
+    // Admin replaces product 41 image with high-res file
     await query(
       `UPDATE products
-       SET primary_image_url = '/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg',
-           tryon_image_url = '/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg',
+       SET primary_image_url = '/uploads/catalogue_sarees/saree_41_sangria_printed_silk_hires.jpg',
+           tryon_image_url = '/uploads/catalogue_sarees/saree_41_sangria_printed_silk_hires.jpg',
            tryon_compatibility = 'supported',
            image_width = 1200,
            image_height = 1600,
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = 46`
+       WHERE id = 41`
     );
 
-    const check = await query('SELECT id, tryon_compatibility, image_width, image_height FROM products WHERE id = 46');
+    const check = await query('SELECT id, tryon_compatibility, image_width, image_height FROM products WHERE id = 41');
     assert.equal(check.rows[0].tryon_compatibility, 'supported');
     assert.equal(check.rows[0].image_width, 1200);
     assert.equal(check.rows[0].image_height, 1600);

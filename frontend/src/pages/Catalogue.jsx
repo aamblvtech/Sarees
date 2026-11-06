@@ -88,7 +88,8 @@ export default function Catalogue() {
     if (selectedCategory === 'sarees') {
       return [
         'kanjivaram', 'banarasi', 'pochampally', 'gadwal', 'uppada',
-        'chanderi', 'paithani', 'organza', 'cotton', 'bridal', 'designer_party', 'traditional_handloom'
+        'chanderi', 'paithani', 'organza', 'cotton', 'bridal', 'designer_party', 'traditional_handloom',
+        'kasavu', 'jamdani', 'sambalpuri', 'baluchari', 'chikankari', 'kashmiri_tilla'
       ];
     }
     if (selectedCategory === 'womens-clothing') {
@@ -105,11 +106,32 @@ export default function Catalogue() {
         'casual_coords', 'traditional_outfits'
       ];
     }
+    if (selectedCategory === 'shirts') {
+      return [
+        'oxford_shirts', 'formal_shirts', 'linen_shirts', 'silk_blouses', 'casual_shirts', 'resort_shirts'
+      ];
+    }
+    if (selectedCategory === 'jeans') {
+      return [
+        'selvedge_jeans', 'baggy_jeans', 'wide_leg_jeans', 'straight_jeans', 'carpenter_jeans'
+      ];
+    }
+    if (selectedCategory === 'pants') {
+      return [
+        'pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers'
+      ];
+    }
+    if (selectedCategory === 'formal-attire') {
+      return [
+        'tuxedos', 'three_piece_suits', 'smoking_jackets', 'womens_tuxedos', 'dinner_jackets', 'power_suits'
+      ];
+    }
     if (selectedCategory === 'accessories') return ['belts', 'shawls'];
     return [
       'kanjivaram', 'banarasi', 'chanderi', 'anarkali_suits', 'salwar_kameez',
       'gowns', 'dresses', 'lehenga_choli', 'formal_suits', 'sherwani_outfits',
-      'kurta_pyjama_sets', 'western_coord_sets', 'jumpsuits'
+      'kurta_pyjama_sets', 'western_coord_sets', 'jumpsuits', 'oxford_shirts',
+      'selvedge_jeans', 'baggy_jeans', 'pleated_trousers', 'tuxedos'
     ];
   }, [selectedCategory]);
 

@@ -30,11 +30,7 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
     const sarees = await query("SELECT * FROM products WHERE garment_type = 'saree' AND is_active = true");
     assert.ok(sarees.rows.length >= 18, 'Should have at least 18 Sarees');
     for (const s of sarees.rows) {
-      if (s.id <= 40 || [41, 42, 43, 44, 45, 47].includes(s.id)) {
-        assert.equal(s.tryon_compatibility, 'supported', `Saree ${s.id} must be supported (AI Ready)`);
-      } else {
-        assert.equal(s.tryon_compatibility, 'needs_image_replacement', `Saree ${s.id} with low-res crop must be needs_image_replacement`);
-      }
+      assert.equal(s.tryon_compatibility, 'supported', `Saree ${s.id} must be supported (AI Ready)`);
       assert.notEqual(s.primary_image_url, '', 'Saree must have a primary image URL');
       assert.ok(!s.primary_image_url.includes('photo-1610030469668-932d0c26620f'), 'Must not have old 404 broken Unsplash URL');
     }

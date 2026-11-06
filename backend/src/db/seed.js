@@ -38,7 +38,10 @@ export async function runSeed() {
     }
     console.log(`[Seed] Seeded ${categoryMap.size} apparel categories.`);
 
-    // 3. Seed Products
+    // 3. Clean up removed legacy low-resolution crops (<250x250px)
+    await client.query("DELETE FROM products WHERE tryon_compatibility = 'needs_image_replacement' OR id IN (46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64)");
+
+    // 4. Seed Products
     for (const prod of sampleProducts) {
       const catSlug = sampleCategories.find((c) => c.id === prod.categoryId)?.slug;
       const categoryId = categoryMap.get(catSlug) || null;
@@ -49,9 +52,9 @@ export async function runSeed() {
            tryon_compatibility, stock_status, price, original_price, currency,
            description, material, fit, care_instructions, sizes,
            primary_image_url, tryon_image_url, is_sample, is_featured, is_active,
-           color, needs_admin_review, discount_percent, image_width, image_height
+           color, needs_admin_review, discount_percent, image_width, image_height, approval_status
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29)
          ON CONFLICT (sku) DO UPDATE
          SET name = EXCLUDED.name, brand = EXCLUDED.brand, category_id = EXCLUDED.category_id,
              subcategory = EXCLUDED.subcategory, gender = EXCLUDED.gender,
@@ -65,6 +68,7 @@ export async function runSeed() {
              color = EXCLUDED.color, needs_admin_review = EXCLUDED.needs_admin_review,
              discount_percent = EXCLUDED.discount_percent,
              image_width = EXCLUDED.image_width, image_height = EXCLUDED.image_height,
+             approval_status = EXCLUDED.approval_status,
              updated_at = CURRENT_TIMESTAMP
          RETURNING id, sku`,
         [
@@ -95,7 +99,8 @@ export async function runSeed() {
           prod.needsAdminReview || false,
           prod.discountPercent || null,
           prod.imageWidth || null,
-          prod.imageHeight || null
+          prod.imageHeight || null,
+          prod.approvalStatus || (prod.tryonCompatibility === 'supported' ? 'AI_READY' : 'APPROVED')
         ]
       );
 

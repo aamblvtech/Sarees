@@ -36,7 +36,7 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
     }
 
     const lowResImported = sarees.filter((s) => s.tryonCompatibility === 'needs_image_replacement');
-    assert.ok(lowResImported.length >= 15, 'Imported sarees with small crops correctly flagged as needs_image_replacement');
+    assert.equal(lowResImported.length, 0, 'All low-resolution thumbnail crop outfits have been removed from active catalogue');
   });
 
   await t.test('3. Validates complete women\'s wearable outfits and AI Ready status', () => {
@@ -100,5 +100,53 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
     assert.ok(kanjivaram.description.includes('Kanchipuram'));
     assert.ok(kanjivaram.material.includes('Mulberry Silk'));
     assert.ok(kanjivaram.sizes.includes('Free Size (6 Yards)'));
+  });
+
+  await t.test('7. Validates Shirts & Tops category and high-resolution AI Ready status', () => {
+    const shirts = sampleProducts.filter((p) => p.categoryId === 5);
+    assert.strictEqual(shirts.length, 6, 'Must have 6 shirts and blouses');
+    for (const s of shirts) {
+      assert.strictEqual(s.garmentType, 'upper_body');
+      assert.strictEqual(s.tryonCompatibility, 'supported');
+      assert.strictEqual(s.imageWidth, 1200);
+      assert.strictEqual(s.imageHeight, 1600);
+      assert.ok(s.primaryImage.startsWith('https://'));
+    }
+  });
+
+  await t.test('8. Validates Jeans & Denim category and high-resolution AI Ready status', () => {
+    const jeans = sampleProducts.filter((p) => p.categoryId === 6);
+    assert.strictEqual(jeans.length, 5, 'Must have 5 jeans and denim garments');
+    for (const j of jeans) {
+      assert.strictEqual(j.garmentType, 'lower_body');
+      assert.strictEqual(j.tryonCompatibility, 'supported');
+      assert.strictEqual(j.imageWidth, 1200);
+      assert.strictEqual(j.imageHeight, 1600);
+      assert.ok(j.primaryImage.startsWith('https://'));
+    }
+  });
+
+  await t.test('9. Validates Baggy Pants & Trousers category and high-resolution AI Ready status', () => {
+    const pants = sampleProducts.filter((p) => p.categoryId === 7);
+    assert.strictEqual(pants.length, 5, 'Must have 5 baggy pants and trousers');
+    for (const p of pants) {
+      assert.strictEqual(p.garmentType, 'lower_body');
+      assert.strictEqual(p.tryonCompatibility, 'supported');
+      assert.strictEqual(p.imageWidth, 1200);
+      assert.strictEqual(p.imageHeight, 1600);
+      assert.ok(p.primaryImage.startsWith('https://'));
+    }
+  });
+
+  await t.test('10. Validates Formal Attire & Tailoring category and high-resolution AI Ready status', () => {
+    const formal = sampleProducts.filter((p) => p.categoryId === 8);
+    assert.strictEqual(formal.length, 6, 'Must have 6 formal suits and tuxedos');
+    for (const f of formal) {
+      assert.strictEqual(f.garmentType, 'full_body');
+      assert.strictEqual(f.tryonCompatibility, 'supported');
+      assert.strictEqual(f.imageWidth, 1200);
+      assert.strictEqual(f.imageHeight, 1600);
+      assert.ok(f.primaryImage.startsWith('https://'));
+    }
   });
 });

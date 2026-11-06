@@ -26,6 +26,34 @@ export const sampleCategories = [
     "slug": "accessories",
     "description": "Curated artisanal calfskin belts and hand-spun cashmere pashminas (Catalogue archival view).",
     "imageUrl": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    "id": 5,
+    "name": "Shirts & Tops",
+    "slug": "shirts",
+    "description": "Crisp bespoke poplin, Italian linen camp collars, silk charmeuse blouses, and tailored oxford shirts.",
+    "imageUrl": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    "id": 6,
+    "name": "Jeans & Denim",
+    "slug": "jeans",
+    "description": "Selvedge Japanese raw denim, vintage 90s washes, straight-leg classics, and relaxed skater cuts.",
+    "imageUrl": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    "id": 7,
+    "name": "Baggy Pants & Trousers",
+    "slug": "pants",
+    "description": "Double-pleated atelier trousers, wide-leg relaxed chinos, utility cargo baggy pants, and fluid tailored bottoms.",
+    "imageUrl": "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1200&q=85"
+  },
+  {
+    "id": 8,
+    "name": "Formal Attire & Tailoring",
+    "slug": "formal-attire",
+    "description": "Savile Row bespoke tuxedos, silk-lapel dinner jackets, chalk-stripe 3-piece suits, and evening gowns.",
+    "imageUrl": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85"
   }
 ];
 
@@ -61,7 +89,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 2,
@@ -92,7 +123,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 3,
@@ -123,7 +157,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 4,
@@ -154,7 +191,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 5,
@@ -185,7 +225,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 6,
@@ -216,7 +259,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1641699862936-be9f49b1c38d?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1641699862936-be9f49b1c38d?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1641699862936-be9f49b1c38d?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 7,
@@ -247,7 +293,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 8,
@@ -278,7 +327,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 9,
@@ -309,7 +361,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1616756141603-6d37d5cde2a2?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1616756141603-6d37d5cde2a2?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1616756141603-6d37d5cde2a2?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 10,
@@ -340,7 +395,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 11,
@@ -371,7 +429,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1710440189404-e95fabead2a3?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1710440189404-e95fabead2a3?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1710440189404-e95fabead2a3?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 12,
@@ -402,7 +463,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1609748340041-f5d61e061ebc?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1609748340041-f5d61e061ebc?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1609748340041-f5d61e061ebc?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 35,
@@ -433,7 +497,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 36,
@@ -464,7 +531,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 37,
@@ -495,7 +565,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 38,
@@ -526,7 +599,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 39,
@@ -557,7 +633,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 40,
@@ -588,7 +667,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 13,
@@ -623,7 +705,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 14,
@@ -658,7 +743,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 15,
@@ -693,7 +781,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 16,
@@ -728,7 +819,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 17,
@@ -762,7 +856,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 18,
@@ -796,7 +893,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 19,
@@ -831,7 +931,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 20,
@@ -866,7 +969,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 21,
@@ -900,7 +1006,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 22,
@@ -935,7 +1044,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 23,
@@ -970,7 +1082,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 24,
@@ -1005,7 +1120,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 25,
@@ -1039,7 +1157,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 26,
@@ -1073,7 +1194,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 27,
@@ -1108,7 +1232,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 28,
@@ -1142,7 +1269,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 29,
@@ -1176,7 +1306,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 30,
@@ -1210,7 +1343,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 31,
@@ -1244,7 +1380,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 32,
@@ -1278,7 +1417,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 33,
@@ -1312,7 +1454,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "APPROVED"
   },
   {
     "id": 34,
@@ -1343,7 +1488,10 @@ export const sampleProducts = [
     "images": [
       "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85"
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "APPROVED"
   },
   {
     "id": 41,
@@ -1380,7 +1528,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_41_sangria_printed_silk_hires.jpg",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 42,
@@ -1417,7 +1566,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_42_nevash_art_silk_blue_hires.jpg",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 43,
@@ -1454,7 +1604,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_43_anouk_rustic_chanderi_hires.jpg",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 44,
@@ -1491,7 +1642,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 45,
@@ -1528,44 +1680,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_45_kalini_maheshwari_hires.jpg",
     "imageWidth": 1200,
-    "imageHeight": 1600
-  },
-  {
-    "id": 46,
-    "sku": "VES-SAR-046",
-    "brand": "kasee",
-    "name": "Silk Blend Saree",
-    "slug": "kasee-silk-blend-saree-olive-ombre-46",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 990,
-    "originalPrice": 7163,
-    "discountPercent": 86,
-    "currency": "INR",
-    "color": "Olive & Gold Ombre",
-    "material": "Silk Blend",
-    "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "kasee olive and antique gold ombré gradient saree in fluid silk blend with soft sheen and luminous drape.",
-    "fit": "Flowing ombre drape that aligns gracefully along pleats and pallu.",
-    "careInstructions": "Dry clean only.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
   },
   {
     "id": 47,
@@ -1602,635 +1718,1144 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_47_anouk_organza_pink_hires.jpg",
     "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY"
+  },
+  {
+    "id": 65,
+    "sku": "VES-SAR-019",
+    "brand": "VESTRA Atelier",
+    "name": "Kasavu Heritage Kerala Gold Tissue Saree",
+    "slug": "kasavu-heritage-kerala-gold-tissue-saree-65",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "kasavu",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1750,
+    "originalPrice": 2200,
+    "discountPercent": 20,
+    "currency": "USD",
+    "color": "Off-White & 24K Gold",
+    "material": "Pure Handloom Tissue Silk & 24K Gold Zari",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Authentic Kerala Kasavu unstitched 6-yard handloom saree woven with shimmering pure gold tissue yarn, contrast temple border, and opulent zari pallu.",
+    "fit": "Classic graceful South Indian festive drape with precise waist pleats and sweeping pallu.",
+    "careInstructions": "Specialist dry clean only. Preserve in unbleached muslin wrap.",
+    "sizes": [
+      "Free Size (6 Yards + 0.8m Blouse)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
     "imageHeight": 1600
   },
   {
-    "id": 48,
-    "sku": "VES-SAR-048",
-    "brand": "nevash fashion",
-    "name": "Woven Design Art Silk Saree",
-    "slug": "nevash-fashion-woven-design-art-silk-saree-bronze-48",
+    "id": 66,
+    "sku": "VES-SAR-020",
+    "brand": "VESTRA Atelier",
+    "name": "Jamdani Fine Dhakai Muslin Floral Saree",
+    "slug": "jamdani-fine-dhakai-muslin-floral-saree-66",
     "categoryId": 1,
     "categoryName": "Sarees",
-    "subcategory": "sarees",
+    "subcategory": "jamdani",
     "gender": "women",
     "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1099,
-    "originalPrice": 1549,
-    "discountPercent": 29,
-    "currency": "INR",
-    "color": "Copper Bronze",
-    "material": "Art Silk",
+    "price": 1980,
+    "originalPrice": 2400,
+    "discountPercent": 18,
+    "currency": "USD",
+    "color": "Ivory & Pastel Flora",
+    "material": "Hand-spun 300-count Fine Muslin Cotton & Mulberry Silk",
     "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "nevash fashion rich copper bronze art silk saree enriched with traditional Indian woven motifs and a broad embroidered hem.",
-    "fit": "Opulent ceremonial drape with structured pleats.",
-    "careInstructions": "Dry clean recommended.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg",
-    "imageWidth": 161,
-    "imageHeight": 188
-  },
-  {
-    "id": 49,
-    "sku": "VES-SAR-049",
-    "brand": "Mitera",
-    "name": "Pure Georgette Bandhani Saree",
-    "slug": "mitera-pure-georgette-bandhani-saree-magenta-49",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 924,
-    "originalPrice": 4999,
-    "discountPercent": 82,
-    "currency": "INR",
-    "color": "Magenta Pink",
-    "material": "Pure Georgette",
-    "needsAdminReview": true,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Mitera magenta pink pure georgette saree accented with white Bandhani tie-dye dots and delicate golden border. Note: Product title truncated in source catalogue; flagged for admin review.",
-    "fit": "Fluid lightweight georgette drape clinging naturally to body contours.",
-    "careInstructions": "Dry clean only to protect delicate tie-dye texture.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
-  },
-  {
-    "id": 50,
-    "sku": "VES-SAR-050",
-    "brand": "Saree mall",
-    "name": "Sequinned Pure Georgette Saree",
-    "slug": "saree-mall-sequinned-pure-georgette-saree-rust-brown-50",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 1300,
-    "originalPrice": 8999,
-    "discountPercent": 86,
-    "currency": "INR",
-    "color": "Rust Brown",
-    "material": "Pure Georgette",
-    "needsAdminReview": true,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Saree mall rust brown sheer georgette evening saree covered with subtle scattered sequin sparkles and embroidered borders. Note: Product title truncated in source catalogue; flagged for admin review.",
-    "fit": "Sleek celebratory evening drape.",
-    "careInstructions": "Dry clean only.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
-  },
-  {
-    "id": 51,
-    "sku": "VES-SAR-051",
-    "brand": "Anouk",
-    "name": "Embellished Net Saree",
-    "slug": "anouk-embellished-net-saree-champagne-beige-51",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 903,
-    "originalPrice": 5999,
-    "discountPercent": 85,
-    "currency": "INR",
-    "color": "Champagne Beige",
-    "material": "Net",
-    "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Anouk ethereal champagne beige net saree lavishly embroidered with vertical sequin strings and beaded hem fringes.",
-    "fit": "Fitted red-carpet style net drape.",
-    "careInstructions": "Dry clean only to maintain delicate net and sequin embroidery.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
-  },
-  {
-    "id": 52,
-    "sku": "VES-SAR-052",
-    "brand": "nevash fashion",
-    "name": "Art Silk Saree",
-    "slug": "nevash-fashion-art-silk-saree-peach-orange-52",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 1499,
-    "originalPrice": 1849,
-    "discountPercent": 19,
-    "currency": "INR",
-    "color": "Peach Orange",
-    "material": "Art Silk",
-    "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "nevash fashion radiant peach-orange art silk festive saree with fine gold-tone zari stripes and delicate tassels along the pallu.",
-    "fit": "Festive classic drape with balanced shimmer.",
-    "careInstructions": "Gentle hand wash or dry clean.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg",
-    "imageWidth": 161,
-    "imageHeight": 188
-  },
-  {
-    "id": 53,
-    "sku": "VES-SAR-053",
-    "brand": "Saree mall",
-    "name": "Ethnic Motifs Patola Sarees",
-    "slug": "saree-mall-ethnic-motifs-patola-sarees-royal-blue-53",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 925,
-    "originalPrice": 6999,
-    "discountPercent": 87,
-    "currency": "INR",
-    "color": "Royal Blue & White",
-    "material": "Silk Blend",
-    "needsAdminReview": false,
-    "isSample": false,
+    "isSample": true,
     "isFeatured": true,
     "isActive": true,
-    "description": "Saree mall royal blue silk blend saree decorated with intricate geometric Gujarati Patola motifs and contrasting borders.",
-    "fit": "Heritage Gujarati Patola drape with structured pleating.",
-    "careInstructions": "Dry clean recommended.",
+    "approvalStatus": "AI_READY",
+    "description": "Intricately figured Bengal Jamdani saree featuring floating floral butis hand-loomed over diaphanous 300-count translucent ivory muslin.",
+    "fit": "Feather-light ethereal drape that falls with gossamer delicacy.",
+    "careInstructions": "Delicate dry clean only.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "Free Size (6 Yards + 0.8m Blouse)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg"
+      "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 54,
-    "sku": "VES-SAR-054",
-    "brand": "all about you",
-    "name": "Woven Design Kanjeevaram Saree",
-    "slug": "all-about-you-woven-design-kanjeevaram-saree-teal-blue-54",
+    "id": 67,
+    "sku": "VES-SAR-021",
+    "brand": "VESTRA Atelier",
+    "name": "Sambalpuri Handwoven Ikat Silk Saree",
+    "slug": "sambalpuri-handwoven-ikat-silk-saree-67",
     "categoryId": 1,
     "categoryName": "Sarees",
-    "subcategory": "sarees",
+    "subcategory": "sambalpuri",
     "gender": "women",
     "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1303,
-    "originalPrice": 8999,
-    "discountPercent": 86,
-    "currency": "INR",
-    "color": "Teal Green & Blue",
-    "material": "Kanjeevaram Silk Blend",
-    "needsAdminReview": true,
-    "isSample": false,
+    "price": 1650,
+    "originalPrice": 1950,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Crimson & Obsidian Black",
+    "material": "100% Mulberry Silk with Traditional Bandha Ikat Weave",
+    "needsAdminReview": false,
+    "isSample": true,
     "isFeatured": false,
     "isActive": true,
-    "description": "all about you rich teal green body paired with royal peacock blue woven zari border in traditional Kanjeevaram style. Note: Product title truncated in source catalogue; flagged for admin review.",
-    "fit": "Rich bridal and ceremonial Kanjeevaram drape.",
-    "careInstructions": "Dry clean only to maintain gold zari weaving.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg",
-    "imageWidth": 161,
-    "imageHeight": 190
-  },
-  {
-    "id": 55,
-    "sku": "VES-SAR-055",
-    "brand": "Sangria",
-    "name": "Sequinned Fusion Saree",
-    "slug": "sangria-sequinned-fusion-saree-black-55",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 1283,
-    "originalPrice": 5049,
-    "discountPercent": 75,
-    "currency": "INR",
-    "color": "Black",
-    "material": "Poly-Georgette",
-    "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": true,
-    "isActive": true,
-    "description": "Sangria sleek monochrome black cocktail saree shimmering with dense tone-on-tone sequin stripes across body and pallu.",
-    "fit": "Modern body-hugging cocktail drape.",
+    "approvalStatus": "AI_READY",
+    "description": "Heritage Odisha Sambalpuri silk saree displaying rhythmic geometric double-ikat motifs, conch shell borders, and traditional Pasapalli grid accents.",
+    "fit": "Substantial pure silk drape with structured pleat memory.",
     "careInstructions": "Dry clean only.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "Free Size (6 Yards + 0.8m Blouse)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg"
+      "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg",
-    "imageWidth": 176,
-    "imageHeight": 194
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 56,
-    "sku": "VES-SAR-056",
-    "brand": "Saree mall",
-    "name": "Floral Pure Georgette Saree",
-    "slug": "saree-mall-floral-pure-georgette-saree-purple-56",
+    "id": 68,
+    "sku": "VES-SAR-022",
+    "brand": "VESTRA Atelier",
+    "name": "Baluchari Swarnachari Narrative Silk Brocade Saree",
+    "slug": "baluchari-swarnachari-narrative-silk-brocade-saree-68",
     "categoryId": 1,
     "categoryName": "Sarees",
-    "subcategory": "sarees",
+    "subcategory": "baluchari",
     "gender": "women",
     "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1300,
-    "originalPrice": 8999,
-    "discountPercent": 86,
-    "currency": "INR",
-    "color": "Royal Purple",
-    "material": "Pure Georgette",
+    "price": 2200,
+    "originalPrice": 2600,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Royal Peacock Blue & Gold",
+    "material": "Pure Murshidabad Silk with Gold Weft Jacquard Narratives",
     "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Saree mall imperial purple lightweight pure georgette saree scattered with fine golden botanical bootis and scalloped gold lace borders.",
-    "fit": "Fluid cascading drape ideal for festive receptions.",
-    "careInstructions": "Dry clean only.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg",
-    "imageWidth": 176,
-    "imageHeight": 194
-  },
-  {
-    "id": 57,
-    "sku": "VES-SAR-057",
-    "brand": "all about you",
-    "name": "Zari Detail Pure Chiffon Saree",
-    "slug": "all-about-you-zari-detail-pure-chiffon-saree-red-57",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 968,
-    "originalPrice": 9599,
-    "discountPercent": 90,
-    "currency": "INR",
-    "color": "Ruby Red",
-    "material": "Pure Chiffon",
-    "needsAdminReview": false,
-    "isSample": false,
+    "isSample": true,
     "isFeatured": true,
     "isActive": true,
-    "description": "all about you passionate ruby red gossamer pure chiffon saree highlighted with antique gold zari border and woven pallu striping.",
-    "fit": "Featherlight pure chiffon drape that contours effortlessly.",
+    "approvalStatus": "AI_READY",
+    "description": "Iconic Baluchari Swarnachari silk saree depicting historic royal court narratives across a multi-paneled grand pallu, adorned with gold zari paisleys.",
+    "fit": "Regal structured ceremonial drape with grand architectural pallu placement.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (6 Yards + 0.8m Blouse)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 69,
+    "sku": "VES-SAR-023",
+    "brand": "VESTRA Atelier",
+    "name": "Chikankari Georgette Lucknowi Pearl Saree",
+    "slug": "chikankari-georgette-lucknowi-pearl-saree-69",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "chikankari",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1890,
+    "originalPrice": 2250,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Powder Blush & Seed Pearls",
+    "material": "Pure Viscose Georgette with Handcrafted Bakhiya & Murri Needles",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Couture Lucknowi Chikankari pure georgette saree embellished with 32 traditional needlecraft stitches, shadow-work florals, and real seed pearl embroidery.",
+    "fit": "Soft cascading fluid drape that hugs silhouettes with ethereal ease.",
     "careInstructions": "Specialist dry clean only.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "Free Size (6 Yards + 0.8m Blouse)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg"
+      "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg",
-    "imageWidth": 176,
-    "imageHeight": 194
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 58,
-    "sku": "VES-SAR-058",
-    "brand": "VSOKA",
-    "name": "Woven Design Banarasi Satin Saree",
-    "slug": "vsoka-woven-design-banarasi-satin-saree-sage-green-58",
+    "id": 70,
+    "sku": "VES-SAR-024",
+    "brand": "VESTRA Atelier",
+    "name": "Kashmiri Tilla Hand-Embroidered Velvet Silk Saree",
+    "slug": "kashmiri-tilla-hand-embroidered-velvet-silk-saree-70",
     "categoryId": 1,
     "categoryName": "Sarees",
-    "subcategory": "sarees",
+    "subcategory": "kashmiri_tilla",
     "gender": "women",
     "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1099,
-    "originalPrice": null,
-    "discountPercent": null,
-    "currency": "INR",
-    "color": "Sage Green",
-    "material": "Banarasi Satin Silk",
-    "needsAdminReview": true,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "VSOKA sophisticated sage green Banarasi satin silk saree showcasing silver zari floral jaal weaving across the body. Note: Original MRP not published in screenshot; title truncated; flagged for admin review.",
-    "fit": "Smooth satin lustre with structured traditional drape.",
-    "careInstructions": "Dry clean recommended for satin silk preservation.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg",
-    "imageWidth": 176,
-    "imageHeight": 194
-  },
-  {
-    "id": 59,
-    "sku": "VES-SAR-059",
-    "brand": "KALINI",
-    "name": "Ethnic Motifs Printed Saree",
-    "slug": "kalini-ethnic-motifs-printed-saree-black-cream-59",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 442,
-    "originalPrice": 1770,
-    "discountPercent": 75,
-    "currency": "INR",
-    "color": "Black & Cream",
-    "material": "Cotton Blend",
+    "price": 2450,
+    "originalPrice": 2850,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Deep Wine & Antique Silver",
+    "material": "Silk Velvet with Authentic Silver Thread Tilla Dozi",
     "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "KALINI contemporary monochrome black and cream cotton blend saree featuring heritage kalamkari-inspired geometric prints.",
-    "fit": "Breathable every-day ethnic drape.",
-    "careInstructions": "Machine wash gentle cold with similar colors.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg",
-    "imageWidth": 174,
-    "imageHeight": 194
-  },
-  {
-    "id": 60,
-    "sku": "VES-SAR-060",
-    "brand": "House of Pataudi",
-    "name": "Embellished Border Saree",
-    "slug": "house-of-pataudi-embellished-border-saree-silver-champagne-60",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 1334,
-    "originalPrice": 5999,
-    "discountPercent": 78,
-    "currency": "INR",
-    "color": "Silver Champagne",
-    "material": "Tissue Silk Blend",
-    "needsAdminReview": false,
-    "isSample": false,
+    "isSample": true,
     "isFeatured": true,
     "isActive": true,
-    "description": "House of Pataudi regal silver champagne tissue silk saree featuring fine scalloped embroidered border and subtle metallic sheen.",
-    "fit": "Aristocratic Nawabi drape with shimmering texture.",
-    "careInstructions": "Dry clean only to protect metallic tissue threads.",
+    "approvalStatus": "AI_READY",
+    "description": "Aristocratic Kashmiri velvet silk saree featuring antique silver bullion Tilla needlework along expansive borders and floral paisley corner buttis.",
+    "fit": "Substantial winter evening drape with luxurious weight and lustrous fall.",
+    "careInstructions": "Specialist couture dry clean only.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "Free Size (6 Yards + 0.8m Blouse)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg"
+      "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg",
-    "imageWidth": 171,
-    "imageHeight": 190
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 61,
-    "sku": "VES-SAR-061",
-    "brand": "DARPAN TEXTILE",
-    "name": "Ethnic Sarees",
-    "slug": "darpan-textile-ethnic-sarees-yellow-red-61",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "id": 71,
+    "sku": "VES-SHT-001",
+    "brand": "VESTRA Sartorial",
+    "name": "Egyptian Giza Cotton Oxford Button-Down Shirt",
+    "slug": "egyptian-giza-cotton-oxford-button-down-shirt-71",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "oxford_shirts",
+    "gender": "men",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 698,
-    "originalPrice": 3999,
-    "discountPercent": 83,
-    "currency": "INR",
-    "color": "Canary Yellow & Red",
-    "material": "Poly-Crepe",
-    "needsAdminReview": true,
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "DARPAN TEXTILE bright canary yellow festive saree with red chevron Leheriya print and embroidered borders. Note: Generic title in catalogue requires verification; flagged for admin review.",
-    "fit": "Festive Rajasthani Leheriya drape.",
-    "careInstructions": "Hand wash cold or dry clean.",
-    "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
-    ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg",
-    "images": [
-      "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg"
-    ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg",
-    "imageWidth": 171,
-    "imageHeight": 174
-  },
-  {
-    "id": 62,
-    "sku": "VES-SAR-062",
-    "brand": "Anouk",
-    "name": "Women Ready To Wear Saree",
-    "slug": "anouk-women-ready-to-wear-saree-champagne-beige-62",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
-    "stockStatus": "in_stock",
-    "price": 1487,
-    "originalPrice": 6999,
-    "discountPercent": 79,
-    "currency": "INR",
-    "color": "Champagne Beige",
-    "material": "Organza Silk",
+    "price": 295,
+    "originalPrice": 350,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Sky Blue",
+    "material": "100% Giza 87 Egyptian Cotton 120/2 Ply Oxford Weave",
     "needsAdminReview": false,
-    "isSample": false,
+    "isSample": true,
     "isFeatured": true,
     "isActive": true,
-    "description": "Anouk pre-stitched ready-to-wear champagne beige organza saree with pre-formed pleats and delicate floral embroidery.",
-    "fit": "Instant slip-on pleated fit designed for effortless elegant wear.",
-    "careInstructions": "Dry clean only.",
+    "approvalStatus": "AI_READY",
+    "description": "Bespoke tailored long-sleeve oxford shirt crafted from rare Giza 87 extra-long staple Egyptian cotton. Features natural mother-of-pearl buttons, split back yoke, and rolled button-down collar.",
+    "fit": "Sharp tailored fit through torso and arms with comfortable shoulder mobility.",
+    "careInstructions": "Machine wash delicate at 30°C or dry clean. Press while damp.",
     "sizes": [
-      "Free Size (Adjustable waist 26-38 in)"
+      "38 (S)",
+      "40 (M)",
+      "42 (L)",
+      "44 (XL)",
+      "46 (XXL)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg"
+      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg",
-    "imageWidth": 171,
-    "imageHeight": 190
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 63,
-    "sku": "VES-SAR-063",
-    "brand": "Anouk",
-    "name": "Embellished Tissue Saree",
-    "slug": "anouk-embellished-tissue-saree-navy-blue-63",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "id": 72,
+    "sku": "VES-SHT-002",
+    "brand": "VESTRA Sartorial",
+    "name": "Italian Spread Collar Crisp White Poplin Shirt",
+    "slug": "italian-spread-collar-crisp-white-poplin-shirt-72",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "formal_shirts",
+    "gender": "men",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1474,
-    "originalPrice": 9999,
-    "discountPercent": 85,
-    "currency": "INR",
-    "color": "Navy Blue",
-    "material": "Tissue",
+    "price": 340,
+    "originalPrice": 390,
+    "discountPercent": 13,
+    "currency": "USD",
+    "color": "Crisp Optical White",
+    "material": "Thomas Mason Two-Fold Sea Island Poplin (140/2)",
     "needsAdminReview": false,
-    "isSample": false,
-    "isFeatured": false,
+    "isSample": true,
+    "isFeatured": true,
     "isActive": true,
-    "description": "Anouk deep midnight navy blue tissue saree highlighted with silver and pearl sequin embroidery along the border and scattered across pallu.",
-    "fit": "Crisp luminous tissue drape catching light from every angle.",
-    "careInstructions": "Dry clean only.",
+    "approvalStatus": "AI_READY",
+    "description": "Impeccable evening formal dress shirt featuring a semi-spread cutaway Italian collar, double French cuffs, and seamless placket stitched with 24 stitches per inch.",
+    "fit": "Contemporary slim fit engineered for black-tie tailoring.",
+    "careInstructions": "Dry clean recommended. Warm steam iron.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "38 (S)",
+      "40 (M)",
+      "42 (L)",
+      "44 (XL)",
+      "46 (XXL)"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg"
+      "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg",
-    "imageWidth": 171,
-    "imageHeight": 190
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   },
   {
-    "id": 64,
-    "sku": "VES-SAR-064",
-    "brand": "Sangria",
-    "name": "Embellished Embroidered Saree",
-    "slug": "sangria-embellished-embroidered-saree-mauve-lavender-64",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "sarees",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "needs_image_replacement",
+    "id": 73,
+    "sku": "VES-SHT-003",
+    "brand": "VESTRA Sartorial",
+    "name": "French Riviera Linen Relaxed Camp Collar Shirt",
+    "slug": "french-riviera-linen-relaxed-camp-collar-shirt-73",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "linen_shirts",
+    "gender": "men",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
     "stockStatus": "in_stock",
-    "price": 1281,
-    "originalPrice": 8297,
-    "discountPercent": 85,
-    "currency": "INR",
-    "color": "Mauve Lavender",
-    "material": "Net",
-    "needsAdminReview": true,
-    "isSample": false,
+    "price": 260,
+    "originalPrice": 310,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Sand Dune Beige",
+    "material": "100% Normandy Pure Washed Linen",
+    "needsAdminReview": false,
+    "isSample": true,
     "isFeatured": false,
     "isActive": true,
-    "description": "Sangria romantic mauve lavender net saree embellished with intricate thread embroidery and crystal beadwork. Note: Product title truncated in source catalogue; flagged for admin review.",
-    "fit": "Delicate pastel occasion drape.",
-    "careInstructions": "Dry clean only to maintain delicate net embroidery.",
+    "approvalStatus": "AI_READY",
+    "description": "Breezy Mediterranean resort shirt featuring an open convertible Cuban camp collar, straight vented hem, and garment-washed French flax linen with subtle slub texture.",
+    "fit": "Relaxed easy drape for warm-weather elegance.",
+    "careInstructions": "Cold hand wash or gentle machine cycle. Air dry flat.",
     "sizes": [
-      "Free Size (5.5m + 0.8m blouse)"
+      "S",
+      "M",
+      "L",
+      "XL"
     ],
-    "primaryImage": "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg",
+    "primaryImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg"
+      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg",
-    "imageWidth": 171,
-    "imageHeight": 190
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 74,
+    "sku": "VES-SHT-004",
+    "brand": "VESTRA Atelier",
+    "name": "Mulberry Silk Charmeuse Pussy-Bow Blouse",
+    "slug": "mulberry-silk-charmeuse-pussy-bow-blouse-74",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "silk_blouses",
+    "gender": "women",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 420,
+    "originalPrice": 490,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Champagne Pearl",
+    "material": "100% 22-Momme Heavyweight Pure Silk Charmeuse",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Sculptural women’s silk blouse with elegant fluid neckties that can be styled into an oversized pussy-bow or draped loosely. Gathered cuffs with natural shell buttons.",
+    "fit": "Fluid draped feminine contour with soft shoulder gatherings.",
+    "careInstructions": "Dry clean only or delicate silk hand wash.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 75,
+    "sku": "VES-SHT-005",
+    "brand": "VESTRA Atelier",
+    "name": "Oversized Crisp Poplin Striped Boyfriend Shirt",
+    "slug": "oversized-crisp-poplin-striped-boyfriend-shirt-75",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "casual_shirts",
+    "gender": "women",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 280,
+    "originalPrice": 330,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "French Navy Stripe",
+    "material": "100% Crisp Organic Cotton Fine Poplin",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Contemporary oversized poplin shirt with relaxed drop shoulders, extended barrel cuffs, and elongated curved hemline designed for effortless half-tucking.",
+    "fit": "Deliberately oversized boyfriend volume with structural paper-touch drape.",
+    "careInstructions": "Machine wash 30°C. Medium iron.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 76,
+    "sku": "VES-SHT-006",
+    "brand": "VESTRA Sartorial",
+    "name": "Cuban Collar Silk-Cotton Botanical Resort Shirt",
+    "slug": "cuban-collar-silk-cotton-botanical-resort-shirt-76",
+    "categoryId": 5,
+    "categoryName": "Shirts & Tops",
+    "subcategory": "resort_shirts",
+    "gender": "men",
+    "garmentType": "upper_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 310,
+    "originalPrice": 370,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Olive Sage Botanical",
+    "material": "70% Mulberry Silk, 30% Long-Staple Cotton Satin",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Lustrous silk-cotton blend camp shirt featuring hand-drawn botanical fern prints in muted olive and earth tones. Designed with genuine corozo nut buttons and French seams.",
+    "fit": "Relaxed boxy silhouette with clean shoulder line.",
+    "careInstructions": "Dry clean or gentle hand wash cold.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 77,
+    "sku": "VES-JEA-001",
+    "brand": "VESTRA Denim",
+    "name": "Kuroki Japanese Selvedge Raw Denim Jeans",
+    "slug": "kuroki-japanese-selvedge-raw-denim-jeans-77",
+    "categoryId": 6,
+    "categoryName": "Jeans & Denim",
+    "subcategory": "selvedge_jeans",
+    "gender": "men",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 360,
+    "originalPrice": 420,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Deep Indigo Raw",
+    "material": "14oz Okayama Toyoda Shuttle-Loomed Selvedge Denim",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Unwashed raw selvedge denim crafted on vintage Toyoda shuttle looms in Ibara, Japan. Features pink selvedge ID, solid copper donut buttons, and hidden back pocket rivets.",
+    "fit": "Mid-rise classic regular straight leg with authentic selvedge cuff roll.",
+    "careInstructions": "Wear raw for 6 months before first cold soak. Line dry inside out.",
+    "sizes": [
+      "30x32",
+      "32x32",
+      "34x32",
+      "36x32"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 78,
+    "sku": "VES-JEA-002",
+    "brand": "VESTRA Denim",
+    "name": "90s Vintage Washed Baggy Skate Jeans",
+    "slug": "90s-vintage-washed-baggy-skate-jeans-78",
+    "categoryId": 6,
+    "categoryName": "Jeans & Denim",
+    "subcategory": "baggy_jeans",
+    "gender": "unisex",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 290,
+    "originalPrice": 340,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Stonewash Light Blue",
+    "material": "100% Rigid Heavyweight Ring-Spun Cotton 13.5oz Denim",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Authentic 1990s archival skater baggy jeans with low slouch rise, wide thigh volume, heavy enzyme stone wash, and subtle whisker abrasions.",
+    "fit": "Loose oversized baggy fit stacking naturally over sneakers.",
+    "careInstructions": "Machine wash cold. Tumble dry low.",
+    "sizes": [
+      "28",
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 79,
+    "sku": "VES-JEA-003",
+    "brand": "VESTRA Atelier",
+    "name": "High-Waisted Wide-Leg Atelier Denim Trousers",
+    "slug": "high-waisted-wide-leg-atelier-denim-trousers-79",
+    "categoryId": 6,
+    "categoryName": "Jeans & Denim",
+    "subcategory": "wide_leg_jeans",
+    "gender": "women",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 310,
+    "originalPrice": 365,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Mid Vintage Blue",
+    "material": "100% Organic Heavyweight Cotton Denim",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Elevated denim trousers with an architectural high-rise waist, tailored front darts, slash pockets, and voluminous wide legs creating an elongated silhouette.",
+    "fit": "Fitted through high waist, sweeping into fluid wide palazzo leg.",
+    "careInstructions": "Cold wash inside out.",
+    "sizes": [
+      "25",
+      "26",
+      "27",
+      "28",
+      "29",
+      "30"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1582552938357-32b906df40cb?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 80,
+    "sku": "VES-JEA-004",
+    "brand": "VESTRA Denim",
+    "name": "Straight-Fit Classic Black Obsidian Jeans",
+    "slug": "straight-fit-classic-black-obsidian-jeans-80",
+    "categoryId": 6,
+    "categoryName": "Jeans & Denim",
+    "subcategory": "straight_jeans",
+    "gender": "men",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 280,
+    "originalPrice": 330,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Obsidian Jet Black",
+    "material": "Stay-Black 12.5oz Japanese Reactive-Dyed Twill Denim",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Minimalist pitch-black jeans woven with reactive black warp and weft yarns engineered never to fade. Finished with tonal matte black hardware and clean hem.",
+    "fit": "Timeless straight leg from hip to ankle.",
+    "careInstructions": "Cold wash inside out. Avoid bleach.",
+    "sizes": [
+      "30x32",
+      "32x32",
+      "34x32",
+      "36x32"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1560243563-062bfc001d68?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1560243563-062bfc001d68?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1560243563-062bfc001d68?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 81,
+    "sku": "VES-JEA-005",
+    "brand": "VESTRA Denim",
+    "name": "Carpenter Utility Relaxed Workwear Jeans",
+    "slug": "carpenter-utility-relaxed-workwear-jeans-81",
+    "categoryId": 6,
+    "categoryName": "Jeans & Denim",
+    "subcategory": "carpenter_jeans",
+    "gender": "unisex",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 275,
+    "originalPrice": 320,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Vintage Ecru Off-White",
+    "material": "Durable 12oz Unbleached Bull Denim Canvas with Hammer Loop",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Utility carpenter pants cut from natural unbleached seeded ecru denim canvas. Detailed with side tool pockets, hammer loop, and triple-needle chainstitch reinforcements.",
+    "fit": "Relaxed utilitarian cut with generous leg room.",
+    "careInstructions": "Machine wash 30°C.",
+    "sizes": [
+      "28",
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 82,
+    "sku": "VES-PNT-001",
+    "brand": "VESTRA Sartorial",
+    "name": "Double-Pleated Atelier Baggy Wool Trousers",
+    "slug": "double-pleated-atelier-baggy-wool-trousers-82",
+    "categoryId": 7,
+    "categoryName": "Baggy Pants & Trousers",
+    "subcategory": "pleated_trousers",
+    "gender": "men",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 390,
+    "originalPrice": 450,
+    "discountPercent": 13,
+    "currency": "USD",
+    "color": "Charcoal Melange",
+    "material": "Super 130s Italian Flannel Virgin Wool",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Sartorial baggy trousers tailored with deep forward double pleats, extended tab waistband, side buckle adjusters, and full 22-inch leg opening for fluid drape.",
+    "fit": "Dramatic baggy volume with structured high-waist retention.",
+    "careInstructions": "Dry clean only. Steam press.",
+    "sizes": [
+      "46 (30)",
+      "48 (32)",
+      "50 (34)",
+      "52 (36)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 83,
+    "sku": "VES-PNT-002",
+    "brand": "VESTRA Sartorial",
+    "name": "Relaxed Oversized Wide-Leg Chinos",
+    "slug": "relaxed-oversized-wide-leg-chinos-83",
+    "categoryId": 7,
+    "categoryName": "Baggy Pants & Trousers",
+    "subcategory": "baggy_chinos",
+    "gender": "men",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 240,
+    "originalPrice": 290,
+    "discountPercent": 17,
+    "currency": "USD",
+    "color": "Khaki Safari Tan",
+    "material": "Heavyweight 320gsm Enzyme-Washed Cotton Twill",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Modern oversized chinos cut wide through the thigh and leg with subtle taper at the ankle. Features slanted side pockets and horn buttons.",
+    "fit": "Relaxed baggy silhouette designed for casual tailoring.",
+    "careInstructions": "Machine wash 30°C. Hang dry.",
+    "sizes": [
+      "30",
+      "32",
+      "34",
+      "36"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 84,
+    "sku": "VES-PNT-003",
+    "brand": "VESTRA Atelier",
+    "name": "High-Waist Fluid Wide-Leg Palazzo Pants",
+    "slug": "high-waist-fluid-wide-leg-palazzo-pants-84",
+    "categoryId": 7,
+    "categoryName": "Baggy Pants & Trousers",
+    "subcategory": "palazzo_pants",
+    "gender": "women",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 360,
+    "originalPrice": 420,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Alabaster Cream",
+    "material": "Heavyweight Drape Silk-Wool Crepe",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Couture wide-leg trousers cut in fluid silk-wool crepe with invisible side zip closure, front pleating, and sweeping palazzo legs that move with liquid grace.",
+    "fit": "Form-fitting through high waist, cascading into dramatic wide hem.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 85,
+    "sku": "VES-PNT-004",
+    "brand": "VESTRA Atelier",
+    "name": "Technical Utility Baggy Cargo Trousers",
+    "slug": "technical-utility-baggy-cargo-trousers-85",
+    "categoryId": 7,
+    "categoryName": "Baggy Pants & Trousers",
+    "subcategory": "cargo_pants",
+    "gender": "unisex",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 295,
+    "originalPrice": 350,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Military Olive Drab",
+    "material": "Water-Repellent Cotton-Nylon High-Density Ripstop",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Architectural cargo pants with 3D gusseted side pockets, articulated knee pleats, and bungee toggle adjusters at ankles allowing parachute or wide-leg styling.",
+    "fit": "Generous baggy streetwear silhouette with customizable cuffs.",
+    "careInstructions": "Machine wash gentle cold.",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 86,
+    "sku": "VES-PNT-005",
+    "brand": "VESTRA Atelier",
+    "name": "Draped Tailored Balloon Silhouette Pants",
+    "slug": "draped-tailored-balloon-silhouette-pants-86",
+    "categoryId": 7,
+    "categoryName": "Baggy Pants & Trousers",
+    "subcategory": "balloon_trousers",
+    "gender": "women",
+    "garmentType": "lower_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 380,
+    "originalPrice": 440,
+    "discountPercent": 14,
+    "currency": "USD",
+    "color": "Midnight Onyx",
+    "material": "Tropical Worsted Wool with Deep Inverted Pleats",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Sculptural curved balloon pants featuring deep inverted front pleats creating volume through the leg before gently tapering towards the ankle.",
+    "fit": "Curved balloon silhouette with tailored waistband.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 87,
+    "sku": "VES-FOR-001",
+    "brand": "VESTRA Sartorial",
+    "name": "Savile Row Midnight Blue Grosgrain Tuxedo",
+    "slug": "savile-row-midnight-blue-grosgrain-tuxedo-87",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "tuxedos",
+    "gender": "men",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1850,
+    "originalPrice": 2200,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Midnight Blue & Black Silk Grosgrain",
+    "material": "Barathea Virgin Wool with Pure Silk Grosgrain Peak Lapels",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Quintessential Savile Row evening tuxedo ensemble featuring a single-button dinner jacket with sweeping silk grosgrain peak lapels, jetted pockets, and matching trousers with silk side braid.",
+    "fit": "Structured canvassed British silhouette with roped shoulder expression.",
+    "careInstructions": "Specialist dry clean only.",
+    "sizes": [
+      "38R",
+      "40R",
+      "42R",
+      "44R"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 88,
+    "sku": "VES-FOR-002",
+    "brand": "VESTRA Sartorial",
+    "name": "Mayfair Charcoal Chalk-Stripe 3-Piece Tailored Suit",
+    "slug": "mayfair-charcoal-chalk-stripe-3-piece-tailored-suit-88",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "three_piece_suits",
+    "gender": "men",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1650,
+    "originalPrice": 1950,
+    "discountPercent": 15,
+    "currency": "USD",
+    "color": "Charcoal Grey Chalk-Stripe",
+    "material": "Vitale Barberis Canonico Super 150s Flannel Wool",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Imposing 3-piece business formal suit comprising a two-button single-breasted jacket, six-button horseshoe waistcoat, and tailored flat-front trousers with subtle white chalk stripes.",
+    "fit": "Contemporary tailored silhouette with athletic drape.",
+    "careInstructions": "Specialist dry clean only.",
+    "sizes": [
+      "38R",
+      "40R",
+      "42R",
+      "44R"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 89,
+    "sku": "VES-FOR-003",
+    "brand": "VESTRA Sartorial",
+    "name": "Emerald Velvet Black-Tie Smoking Jacket Ensemble",
+    "slug": "emerald-velvet-black-tie-smoking-jacket-ensemble-89",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "smoking_jackets",
+    "gender": "men",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1450,
+    "originalPrice": 1750,
+    "discountPercent": 17,
+    "currency": "USD",
+    "color": "Deep Royal Emerald & Black Satin",
+    "material": "Scabal Cotton Velvet with Satin Quilted Shawl Lapels",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Sumptuous jewel-toned smoking jacket crafted from plush emerald green cotton velvet. Features contrasting black quilted silk satin shawl lapels and gauntlet cuffs.",
+    "fit": "Softly tailored evening silhouette with fluid comfort.",
+    "careInstructions": "Specialist dry clean only. Steam without touching velvet pile.",
+    "sizes": [
+      "38R",
+      "40R",
+      "42R",
+      "44R"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 90,
+    "sku": "VES-FOR-004",
+    "brand": "VESTRA Atelier",
+    "name": "Sculptural Ivory Silk-Crepe Women Evening Tuxedo Suit",
+    "slug": "sculptural-ivory-silk-crepe-women-evening-tuxedo-suit-90",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "womens_tuxedos",
+    "gender": "women",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1550,
+    "originalPrice": 1850,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Ivory White & Silk Duchess Satin",
+    "material": "Double-Faced Wool Crepe with Duchess Satin Peak Lapels",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Iconic Le Smoking feminine formal suit rendered in pristine ivory double crepe with duchess satin peak lapels and cigarette trousers with satin side stripes.",
+    "fit": "Sharp cinched-waist architectural tailoring.",
+    "careInstructions": "Specialist couture dry clean only.",
+    "sizes": [
+      "FR 34 (XS)",
+      "FR 36 (S)",
+      "FR 38 (M)",
+      "FR 40 (L)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 91,
+    "sku": "VES-FOR-005",
+    "brand": "VESTRA Sartorial",
+    "name": "Monaco Ivory Shawl-Lapel Dinner Jacket Ensemble",
+    "slug": "monaco-ivory-shawl-lapel-dinner-jacket-ensemble-91",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "dinner_jackets",
+    "gender": "men",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1400,
+    "originalPrice": 1680,
+    "discountPercent": 17,
+    "currency": "USD",
+    "color": "Warm Ivory & Black Tuxedo Trousers",
+    "material": "Tropical Wool-Mohair Blend with Silk Faille Lapels",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": false,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Classic warm-weather black-tie dinner jacket with curved shawl collar, self-covered buttons, and matching midnight black tuxedo trousers with satin side stripes.",
+    "fit": "Clean tailored fit across shoulders and chest.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "38R",
+      "40R",
+      "42R",
+      "44R"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
+  },
+  {
+    "id": 92,
+    "sku": "VES-FOR-006",
+    "brand": "VESTRA Atelier",
+    "name": "Architectural Black Double-Breasted Power Suit",
+    "slug": "architectural-black-double-breasted-power-suit-92",
+    "categoryId": 8,
+    "categoryName": "Formal Attire & Tailoring",
+    "subcategory": "power_suits",
+    "gender": "women",
+    "garmentType": "full_body",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1350,
+    "originalPrice": 1600,
+    "discountPercent": 16,
+    "currency": "USD",
+    "color": "Classic Noir Black",
+    "material": "Structured Super 120s Stretch Wool Twill",
+    "needsAdminReview": false,
+    "isSample": true,
+    "isFeatured": true,
+    "isActive": true,
+    "approvalStatus": "AI_READY",
+    "description": "Commanding double-breasted formal power suit with defined shoulder pads, six-button closure, peak lapels, and high-waisted cigarette pants.",
+    "fit": "Sharp structured tailoring with feminine waist contouring.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "FR 34 (XS)",
+      "FR 36 (S)",
+      "FR 38 (M)",
+      "FR 40 (L)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600
   }
 ];

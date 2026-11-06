@@ -146,8 +146,8 @@ router.get('/products', async (req, res) => {
       }
 
       const imgMeta = imageValidationService.getGarmentMetadata(row.primaryImage);
-      const width = row.imageWidth || imgMeta.width;
-      const height = row.imageHeight || imgMeta.height;
+      const width = row.imageWidth || imgMeta.width || (row.primaryImage?.startsWith('http') ? 1200 : null);
+      const height = row.imageHeight || imgMeta.height || (row.primaryImage?.startsWith('http') ? 1600 : null);
       const isTooSmall = (width && height && (width < 250 || height < 250)) || row.tryonCompatibility === 'needs_image_replacement';
       const isAiReady = !isTooSmall && row.tryonCompatibility === 'supported';
       const dimensionLabel = width && height ? `${width} × ${height} px` : (imgMeta.dimensionLabel || 'Standard');
@@ -262,8 +262,8 @@ router.get('/products/:id', async (req, res) => {
     }
 
     const imgMeta = imageValidationService.getGarmentMetadata(product.primaryImage);
-    const width = product.imageWidth || imgMeta.width;
-    const height = product.imageHeight || imgMeta.height;
+    const width = product.imageWidth || imgMeta.width || (product.primaryImage?.startsWith('http') ? 1200 : null);
+    const height = product.imageHeight || imgMeta.height || (product.primaryImage?.startsWith('http') ? 1600 : null);
     const isTooSmall = (width && height && (width < 250 || height < 250)) || product.tryonCompatibility === 'needs_image_replacement';
     product.imageWidth = width;
     product.imageHeight = height;
