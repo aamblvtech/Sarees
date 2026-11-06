@@ -2025,11 +2025,11 @@ export const sampleProducts = [
       "44 (XL)",
       "46 (XXL)"
     ],
-    "primaryImage": "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85",
+    "primaryImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1620012253295-c15c429f66bf?auto=format&fit=crop&w=1200&q=85",
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600
   },
@@ -2231,11 +2231,11 @@ export const sampleProducts = [
       "34x32",
       "36x32"
     ],
-    "primaryImage": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85",
+    "primaryImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
     "images": [
-      "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85"
+      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85"
     ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1542272604-780c96856592?auto=format&fit=crop&w=1200&q=85",
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600
   },
