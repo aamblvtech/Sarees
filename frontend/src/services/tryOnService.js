@@ -75,7 +75,15 @@ export const tryOnService = {
     formData.append('garment', file);
 
     const response = await apiClient.post('/tryon/upload-garment', formData);
-    return response.data?.file;
+    return response.data?.file || response.data;
+  },
+
+  /**
+   * Upload custom garment captured from webcam snapshot (Base64 data URI)
+   */
+  async uploadCustomGarmentBase64(dataUri, name = 'Captured Outfit') {
+    const response = await apiClient.post('/tryon/upload-garment-base64', { dataUri, name });
+    return response.data?.file || response.data;
   },
 
   /**

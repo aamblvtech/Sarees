@@ -9,6 +9,7 @@ import {
 import productService from '../services/productService';
 import tryOnService from '../services/tryOnService';
 import CameraModal from '../components/CameraModal';
+import OutfitCameraModal from '../components/OutfitCameraModal';
 import QrModal from '../components/QrModal';
 import ProductStatusBadge, { ATELIER_FALLBACK_IMAGE } from '../components/ProductStatusBadge';
 
@@ -48,6 +49,9 @@ export default function VirtualFittingRoom() {
   const [customGarmentCategory, setCustomGarmentCategory] = useState('upper_body');
   const [isUploadingGarment, setIsUploadingGarment] = useState(false);
   const [customGarmentError, setCustomGarmentError] = useState(null);
+  const [isOutfitCameraModalOpen, setIsOutfitCameraModalOpen] = useState(false);
+  const [customGarmentSource, setCustomGarmentSource] = useState(null); // 'upload' | 'camera'
+  const [customGarmentQuality, setCustomGarmentQuality] = useState(null);
 
   // Customer Silhouette State (Left "BEFORE" Panel)
   const [userPhotoUrl, setUserPhotoUrl] = useState(null);
@@ -966,6 +970,8 @@ export default function VirtualFittingRoom() {
     try {
       const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
       setCustomGarmentName(cleanName);
+      setCustomGarmentSource('upload');
+      setCustomGarmentQuality(null);
 
       const uploaded = await tryOnService.uploadCustomGarment(file);
       setCustomGarmentUrl(uploaded.url);
@@ -977,6 +983,46 @@ export default function VirtualFittingRoom() {
           setPendingGeneration({ garment: null, mode: 'custom' });
         } else {
           executeTryOn(userPhotoUrl, userPhotoFilename, null, 'custom');
+        }
+      }
+    } catch (err) {
+      setCustomGarmentError(err.response?.data?.error || err.message);
+    } finally {
+      setIsUploadingGarment(false);
+    }
+  };
+
+  // Dedicated Webcam Outfit Capture Handler
+  const handleCameraOutfit = async (capturedFile, dataUrl, qualityReport) => {
+    setIsUploadingGarment(true);
+    setCustomGarmentError(null);
+
+    try {
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const cleanName = `Webcam Outfit (${timestamp})`;
+      setCustomGarmentName(cleanName);
+      setCustomGarmentSource('camera');
+      setCustomGarmentQuality(qualityReport);
+
+      let uploaded;
+      if (capturedFile) {
+        uploaded = await tryOnService.uploadCustomGarment(capturedFile);
+      } else if (dataUrl) {
+        uploaded = await tryOnService.uploadCustomGarmentBase64(dataUrl, cleanName);
+      }
+
+      if (uploaded) {
+        setCustomGarmentUrl(uploaded.url);
+        setCustomGarmentFilename(uploaded.filename);
+        setGarmentMode('custom');
+        setIsCustomGarmentDrawerOpen(false);
+
+        if (userPhotoUrl) {
+          if (providerInfo && !providerInfo.isMock) {
+            setPendingGeneration({ garment: null, mode: 'custom' });
+          } else {
+            executeTryOn(userPhotoUrl, userPhotoFilename, null, 'custom');
+          }
         }
       }
     } catch (err) {
@@ -2023,65 +2069,157 @@ export default function VirtualFittingRoom() {
 
         {/* SECTION 2: CLOTHING COLLECTION (PostgreSQL Catalogue)         */}
         {/* ============================================================== */}
-        <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
+        <section className="bg-white dark:bg-[#181114] border border-slate-200/80 dark:border-slate-800 p-5 sm:p-6 shadow-sm space-y-5">
           
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-slate-100 dark:border-slate-800 pb-4 gap-4">
-            <div>
-              <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-semibold">
-                Garment Catalogue
-              </p>
-              <h3 className="font-serif text-2xl text-slate-900 dark:text-[#FFFFFF] font-normal">
-                Select an Outfit from Our Archive
-              </h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Click any item to immediately preview it on your uploaded portrait.
-              </p>
-            </div>
+          <div className="border-b border-slate-100 dark:border-slate-800 pb-3">
+            <p className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-semibold">
+              Outfit Selection
+            </p>
+            <h3 className="font-serif text-xl sm:text-2xl text-slate-900 dark:text-[#FFFFFF] font-normal">
+              Select or Capture Garment
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Choose from our curated archive, upload your own garment photo, or capture one live using your webcam.
+            </p>
+          </div>
 
-            {/* Custom Bespoke Upload Action */}
-            <div className="flex items-center space-x-2">
+          {/* 3 Primary Outfit Options */}
+          <div className="p-2.5 bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded">
+            <div className="text-[10px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 font-semibold">
+              Garment Source Options:
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              
+              {/* Option 1: Choose Outfit from Catalogue */}
               <button
                 type="button"
-                onClick={() => setIsCustomGarmentDrawerOpen(!isCustomGarmentDrawerOpen)}
-                className={`px-3 py-1.5 text-xs uppercase tracking-wider font-semibold border transition-all flex items-center space-x-1.5 rounded ${
-                  isCustomGarmentDrawerOpen || garmentMode === 'custom'
+                onClick={() => {
+                  setGarmentMode('catalogue');
+                  setIsCustomGarmentDrawerOpen(false);
+                }}
+                className={`flex items-center justify-center space-x-2 px-3 py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded border transition-all ${
+                  garmentMode === 'catalogue'
                     ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 shadow-xs'
-                    : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-[#FFFFFF] hover:bg-slate-50 dark:hover:bg-slate-800 shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                <span>1. From Catalogue</span>
+              </button>
+
+              {/* Option 2: Upload Outfit Image */}
+              <label
+                className={`flex items-center justify-center space-x-2 px-3 py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded border cursor-pointer transition-all ${
+                  garmentMode === 'custom' && customGarmentSource === 'upload'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-400'
                 }`}
               >
                 <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                <span>Upload Custom Outfit</span>
+                <span>2. Upload Image</span>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleCustomGarmentUpload}
+                  className="hidden"
+                />
+              </label>
+
+              {/* Option 3: Capture Outfit Using Camera */}
+              <button
+                type="button"
+                onClick={() => setIsOutfitCameraModalOpen(true)}
+                className={`flex items-center justify-center space-x-2 px-3 py-2 text-xs font-mono uppercase tracking-wider font-semibold rounded border transition-all ${
+                  garmentMode === 'custom' && customGarmentSource === 'camera'
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black border-slate-900 shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                }`}
+              >
+                <Camera className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                <span>3. Capture with Camera</span>
               </button>
+
             </div>
           </div>
 
-          {/* Custom Outfit Drawer */}
-          {isCustomGarmentDrawerOpen && (
-            <div className="p-5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 space-y-4 animate-fadeIn shadow-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-200/80 dark:border-slate-800">
-                <h4 className="font-serif text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-[#FFFFFF]">
-                  Upload Bespoke Customer Outfit (Multipart fileKey)
-                </h4>
+          {/* Custom Garment Active Card (When an uploaded or captured outfit is active) */}
+          {garmentMode === 'custom' && customGarmentUrl && (
+            <div className="p-4 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded space-y-3 animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                <div className="flex items-center space-x-2">
+                  <span className={`px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded ${
+                    customGarmentSource === 'camera'
+                      ? 'bg-purple-100 text-purple-800 border border-purple-200 dark:bg-purple-950/40 dark:text-purple-300'
+                      : 'bg-blue-100 text-blue-800 border border-blue-200 dark:bg-blue-950/40 dark:text-blue-300'
+                  }`}>
+                    {customGarmentSource === 'camera' ? 'Webcam Snapshot' : 'Uploaded File'}
+                  </span>
+                  <span className="text-xs font-serif font-medium text-slate-900 dark:text-white truncate max-w-[200px]">
+                    {customGarmentName}
+                  </span>
+                </div>
                 <button
                   type="button"
-                  onClick={() => setIsCustomGarmentDrawerOpen(false)}
-                  className="text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF]"
+                  onClick={() => {
+                    setGarmentMode('catalogue');
+                  }}
+                  className="text-[10px] font-mono uppercase tracking-wider text-slate-500 hover:text-slate-900 dark:hover:text-white underline"
                 >
-                  <X className="w-4 h-4" />
+                  Switch to Catalogue
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
-                <div className="sm:col-span-2 space-y-2">
-                  <p className="text-xs text-slate-600 dark:text-slate-400">
-                    Upload a shirt, jacket, dress, or trousers from your wardrobe. Transferred securely via Genlook multipart upload.
-                  </p>
-                  
-                  <div className="flex items-center space-x-3">
-                    <label className="px-4 py-2 bg-white hover:bg-slate-50 text-slate-900 dark:bg-white dark:hover:bg-slate-100 dark:text-slate-900 text-xs uppercase tracking-wider font-semibold cursor-pointer inline-flex items-center space-x-2 border border-slate-300 shadow-xs">
-                      <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                      <span>{customGarmentUrl ? 'Change Custom Garment' : 'Select Outfit Image'}</span>
+              <div className="flex flex-col sm:flex-row gap-4 items-center">
+                <div className="w-32 h-40 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded overflow-hidden shrink-0 flex items-center justify-center p-1">
+                  <img
+                    src={customGarmentUrl}
+                    alt={customGarmentName}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                <div className="flex-1 space-y-2 text-xs">
+                  <div className="space-y-1">
+                    <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500">
+                      Garment Type for AI Drape:
+                    </span>
+                    <select
+                      value={customGarmentCategory}
+                      onChange={(e) => {
+                        setCustomGarmentCategory(e.target.value);
+                        if (userPhotoUrl) {
+                          executeTryOn(userPhotoUrl, userPhotoFilename, null, 'custom');
+                        }
+                      }}
+                      className="w-full p-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded font-mono text-slate-800 dark:text-slate-200"
+                    >
+                      <option value="upper_body">Upper Body (Shirt / Top / Jacket)</option>
+                      <option value="lower_body">Lower Body (Jeans / Pants / Skirt)</option>
+                      <option value="dresses">Full Body / Dress</option>
+                      <option value="saree">Saree Drape (Ethnic Wear)</option>
+                    </select>
+                  </div>
+
+                  {customGarmentQuality && (
+                    <div className="flex items-center space-x-2 text-[10px] font-mono text-emerald-600 dark:text-emerald-400">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>{customGarmentQuality.width}x{customGarmentQuality.height}px verified</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center space-x-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setIsOutfitCameraModalOpen(true)}
+                      className="px-2.5 py-1 text-[10px] font-mono uppercase font-semibold border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-1"
+                    >
+                      <Camera className="w-3 h-3 text-[#F5AFAF]" />
+                      <span>Retake</span>
+                    </button>
+                    <label className="px-2.5 py-1 text-[10px] font-mono uppercase font-semibold border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-1 cursor-pointer">
+                      <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                      <span>Re-upload</span>
                       <input
                         type="file"
                         accept="image/jpeg,image/png,image/webp"
@@ -2089,26 +2227,19 @@ export default function VirtualFittingRoom() {
                         className="hidden"
                       />
                     </label>
-
-                    {customGarmentUrl && (
-                      <span className="text-xs font-serif text-slate-900 dark:text-[#FFFFFF] font-medium truncate">
-                        {customGarmentName}
-                      </span>
-                    )}
                   </div>
-
-                  {customGarmentError && (
-                    <p className="text-xs text-rose-600 font-medium">{customGarmentError}</p>
-                  )}
                 </div>
+              </div>
+            </div>
+          )}
 
-                {customGarmentUrl && (
-                  <div className="flex justify-center sm:justify-end">
-                    <div className="w-20 h-24 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden shadow-xs">
-                      <img src={customGarmentUrl} alt="Custom Garment" className="w-full h-full object-cover" />
-                    </div>
-                  </div>
-                )}
+          {/* Error Message for Custom Garment */}
+          {customGarmentError && (
+            <div className="p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 rounded text-xs text-rose-700 dark:text-rose-400 flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="font-semibold">Garment Upload Notice</p>
+                <p className="text-[11px] mt-0.5">{customGarmentError}</p>
               </div>
             </div>
           )}
@@ -2346,11 +2477,18 @@ export default function VirtualFittingRoom() {
 
       </div>
 
-      {/* Laptop Webcam Capture Modal */}
+      {/* Laptop Webcam Capture Modal (Customer Portrait) */}
       <CameraModal
         isOpen={isCameraModalOpen}
         onClose={() => setIsCameraModalOpen(false)}
         onPhotoCaptured={handleCameraPhoto}
+      />
+
+      {/* Physical Outfit Webcam Capture Modal (Garment) */}
+      <OutfitCameraModal
+        isOpen={isOutfitCameraModalOpen}
+        onClose={() => setIsOutfitCameraModalOpen(false)}
+        onOutfitCaptured={handleCameraOutfit}
       />
 
       {/* Mobile QR Upload Modal */}

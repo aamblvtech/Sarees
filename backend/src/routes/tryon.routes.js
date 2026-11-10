@@ -200,7 +200,7 @@ router.post('/inspect-photo', async (req, res) => {
 
 /**
  * POST /api/tryon/upload-garment
- * Handles custom outfit image upload (Module 2)
+ * Handles custom outfit image upload (Module 2) via multipart file upload
  */
 router.post('/upload-garment', uploadGarment.single('garment'), (req, res) => {
   if (!req.file) {
@@ -210,16 +210,101 @@ router.post('/upload-garment', uploadGarment.single('garment'), (req, res) => {
     });
   }
 
+  const filePath = path.join(customGarmentsDir, req.file.filename);
+  let dims = null;
+  try {
+    const buf = fs.readFileSync(filePath);
+    dims = imageValidationService.parseImageDimensions(buf);
+  } catch (e) {
+    // ignore
+  }
+
+  const width = dims?.width || null;
+  const height = dims?.height || null;
+
+  // Technical gate: Minimum 250x250 required by Genlook try-on engine
+  if (width && height && (width < 250 || height < 250)) {
+    try { fs.unlinkSync(filePath); } catch {}
+    return res.status(400).json({
+      success: false,
+      error: `Garment image dimensions (${width}x${height}px) are below the 250x250px minimum required for virtual try-on. Please capture or upload a higher resolution photo.`
+    });
+  }
+
   const fileUrl = `${req.protocol}://${req.get('host')}/uploads/custom_garments/${req.file.filename}`;
 
-  return res.json({
+  return res.status(201).json({
     success: true,
     message: 'Custom outfit garment uploaded successfully.',
+    url: fileUrl,
+    filename: req.file.filename,
+    originalName: req.file.originalname,
+    size: req.file.size,
+    mimetype: req.file.mimetype,
+    width,
+    height,
+    isAiReady: width && height ? (width >= 250 && height >= 250) : true,
     file: {
       filename: req.file.filename,
       url: fileUrl,
       size: req.file.size,
-      mimetype: req.file.mimetype
+      mimetype: req.file.mimetype,
+      width,
+      height
+    }
+  });
+});
+
+/**
+ * POST /api/tryon/upload-garment-base64
+ * Handles custom outfit snapshot captured from live webcam (Base64 Data URI)
+ */
+router.post('/upload-garment-base64', (req, res) => {
+  const { dataUri, name } = req.body;
+  if (!dataUri || typeof dataUri !== 'string') {
+    return res.status(400).json({ success: false, error: 'Missing base64 garment image data.' });
+  }
+
+  const validation = imageValidationService.validateBase64DataUri(dataUri);
+  if (!validation.valid) {
+    return res.status(400).json({ success: false, error: validation.error });
+  }
+
+  const dims = imageValidationService.parseImageDimensions(validation.buffer);
+  const width = dims?.width || null;
+  const height = dims?.height || null;
+
+  if (width && height && (width < 250 || height < 250)) {
+    return res.status(400).json({
+      success: false,
+      error: `Garment image dimensions (${width}x${height}px) are below the 250x250px minimum required for virtual try-on.`
+    });
+  }
+
+  const ext = validation.mime === 'image/png' ? '.png' : validation.mime === 'image/webp' ? '.webp' : '.jpg';
+  const filename = `garment_cam_${Date.now()}_${crypto.randomBytes(6).toString('hex')}${ext}`;
+  const filePath = path.join(customGarmentsDir, filename);
+
+  fs.writeFileSync(filePath, validation.buffer);
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/custom_garments/${filename}`;
+
+  return res.status(201).json({
+    success: true,
+    message: 'Custom outfit garment captured and uploaded successfully.',
+    url: fileUrl,
+    filename,
+    size: validation.buffer.length,
+    mimetype: validation.mime,
+    width,
+    height,
+    isAiReady: true,
+    file: {
+      filename,
+      url: fileUrl,
+      size: validation.buffer.length,
+      mimetype: validation.mime,
+      width,
+      height
     }
   });
 });
