@@ -33,7 +33,10 @@ router.get('/categories', async (req, res) => {
  * Retrieve all active products directly from PostgreSQL with optional filtering
  */
 router.get('/products', async (req, res) => {
-  const { category, subcategory, gender, garmentType, tryonCompatibility, stockStatus, search, featured, brand } = req.query;
+  const {
+    category, subcategory, gender, garmentType, tryonCompatibility,
+    stockStatus, search, featured, brand, source, minPrice, maxPrice, aiReady
+  } = req.query;
 
   try {
     let sql = `
@@ -68,6 +71,10 @@ router.get('/products', async (req, res) => {
         p.image_height AS "imageHeight",
         p.approval_status AS "approvalStatus",
         p.myntra_url AS "myntraUrl",
+        p.source AS "source",
+        p.source_url AS "sourceUrl",
+        p.affiliate_url AS "affiliateUrl",
+        p.external_product_id AS "externalProductId",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
@@ -124,6 +131,28 @@ router.get('/products', async (req, res) => {
       sql += ` AND LOWER(p.brand) = LOWER($${paramIndex})`;
       sqlParams.push(brand);
       paramIndex++;
+    }
+
+    if (source && source !== 'all') {
+      sql += ` AND LOWER(p.source) = LOWER($${paramIndex})`;
+      sqlParams.push(source);
+      paramIndex++;
+    }
+
+    if (minPrice && !isNaN(Number(minPrice))) {
+      sql += ` AND p.price >= $${paramIndex}`;
+      sqlParams.push(Number(minPrice));
+      paramIndex++;
+    }
+
+    if (maxPrice && !isNaN(Number(maxPrice))) {
+      sql += ` AND p.price <= $${paramIndex}`;
+      sqlParams.push(Number(maxPrice));
+      paramIndex++;
+    }
+
+    if (aiReady === 'true') {
+      sql += ` AND (p.tryon_compatibility = 'supported' OR p.approval_status = 'AI_READY')`;
     }
 
     if (featured === 'true') {

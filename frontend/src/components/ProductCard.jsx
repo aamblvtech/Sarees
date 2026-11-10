@@ -56,6 +56,11 @@ export default function ProductCard({ product }) {
               Featured
             </span>
           )}
+          {product.source && product.source !== 'atelier' && (
+            <span className="bg-slate-900/90 text-white text-[9px] tracking-wider uppercase px-2 py-0.5 font-mono font-semibold rounded shadow-xs">
+              {product.source.replace('_', ' ')}
+            </span>
+          )}
           <ProductStatusBadge product={product} isImageMissing={imageError} />
         </div>
 

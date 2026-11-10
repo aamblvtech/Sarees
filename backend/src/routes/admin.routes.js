@@ -221,6 +221,10 @@ router.get('/products', requireAdminAuth, async (req, res) => {
         p.model_image_url AS "modelImageUrl",
         p.import_source AS "importSource",
         p.import_batch_id AS "importBatchId",
+        p.source AS "source",
+        p.external_product_id AS "externalProductId",
+        p.source_url AS "sourceUrl",
+        p.affiliate_url AS "affiliateUrl",
         p.created_at AS "createdAt",
         p.updated_at AS "updatedAt"
       FROM products p

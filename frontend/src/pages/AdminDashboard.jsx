@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   Package, Plus, Edit2, Trash2, Search, Filter, LogOut, Check,
   Upload, Sparkles, RefreshCw, AlertCircle, Eye, EyeOff, Layers,
   ExternalLink, Database, ShieldCheck, X, Download, FileSpreadsheet,
-  CheckCircle2, AlertTriangle, Globe, RotateCcw, FileText, CheckCheck
+  CheckCircle2, AlertTriangle, Globe, RotateCcw, FileText, CheckCheck,
+  Building2, Store, ShoppingBag, ArrowUpRight, CheckSquare
 } from 'lucide-react';
 import adminService from '../services/adminService';
 import tryOnService from '../services/tryOnService';
+import catalogueSourcesService from '../services/catalogueSourcesService';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -21,8 +23,58 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
 
   // Top Tabs
-  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'myntra_import'
+  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'sources' | 'myntra_import'
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState('all');
+  const [selectedSource, setSelectedSource] = useState('all');
+
+  // External Catalogue Sources State
+  const [sourcesOverview, setSourcesOverview] = useState([]);
+  const [sourcesLoading, setSourcesLoading] = useState(false);
+  const [sourcesError, setSourcesError] = useState(null);
+  const [suppliersList, setSuppliersList] = useState([]);
+
+  // Test Connection Modal
+  const [testingSourceSlug, setTestingSourceSlug] = useState(null);
+  const [testResultModal, setTestResultModal] = useState(null);
+
+  // Search Products Modal (for API sources: Flipkart / Amazon)
+  const [searchSourceModal, setSearchSourceModal] = useState(null);
+  const [externalSearchQuery, setExternalSearchQuery] = useState('saree');
+  const [externalSearchResults, setExternalSearchResults] = useState([]);
+  const [externalSearchLoading, setExternalSearchLoading] = useState(false);
+  const [externalSearchError, setExternalSearchError] = useState(null);
+  const [importingExternalId, setImportingExternalId] = useState(null);
+  const [externalImportMessage, setExternalImportMessage] = useState(null);
+
+  // Supplier CSV Ingestion Modal
+  const [isSupplierCsvModalOpen, setIsSupplierCsvModalOpen] = useState(false);
+  const [supplierCsvForm, setSupplierCsvForm] = useState({
+    supplierId: '',
+    csvText: '',
+    defaultCurrency: 'INR',
+    imageUsagePermission: 'supplier_granted'
+  });
+  const [supplierCsvFile, setSupplierCsvFile] = useState(null);
+  const [supplierCsvLoading, setSupplierCsvLoading] = useState(false);
+  const [supplierCsvResult, setSupplierCsvResult] = useState(null);
+  const [supplierCsvError, setSupplierCsvError] = useState(null);
+
+  // Create Supplier Modal
+  const [isAddSupplierModalOpen, setIsAddSupplierModalOpen] = useState(false);
+  const [newSupplierForm, setNewSupplierForm] = useState({
+    supplierCode: '',
+    name: '',
+    contactPerson: '',
+    email: '',
+    phone: '',
+    city: '',
+    state: '',
+    country: 'India',
+    partnershipType: 'manufacturer',
+    imageUsageAgreement: 'full_commercial_rights'
+  });
+  const [supplierCreating, setSupplierCreating] = useState(false);
+  const [supplierCreateError, setSupplierCreateError] = useState(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -210,6 +262,7 @@ export default function AdminDashboard() {
       setStats(statsData);
       setProducts(prodsData);
       setCategories(catsData);
+      loadSourcesData();
     } catch (err) {
       if (err.response?.status === 401) {
         adminService.logout();
@@ -220,6 +273,147 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadSourcesData = async () => {
+    setSourcesLoading(true);
+    setSourcesError(null);
+    try {
+      const [overviewData, suppliersData] = await Promise.all([
+        catalogueSourcesService.getSourcesOverview(),
+        catalogueSourcesService.getSuppliers()
+      ]);
+      setSourcesOverview(overviewData || []);
+      setSuppliersList(suppliersData || []);
+    } catch (err) {
+      console.error('Failed to load catalogue sources overview:', err);
+      setSourcesError(err.response?.data?.error || err.message || 'Failed to fetch catalogue sources');
+    } finally {
+      setSourcesLoading(false);
+    }
+  };
+
+  const handleTestSource = async (slug) => {
+    setTestingSourceSlug(slug);
+    try {
+      const result = await catalogueSourcesService.testSourceConnection(slug);
+      setTestResultModal({ slug, ...result });
+      loadSourcesData();
+    } catch (err) {
+      setTestResultModal({
+        slug,
+        success: false,
+        configured: false,
+        status: 'error',
+        message: err.response?.data?.error || err.message || 'Connection test failed'
+      });
+    } finally {
+      setTestingSourceSlug(null);
+    }
+  };
+
+  const handleOpenSearchModal = (source) => {
+    setSearchSourceModal(source);
+    setExternalSearchQuery('saree');
+    setExternalSearchResults([]);
+    setExternalSearchError(null);
+    setExternalImportMessage(null);
+  };
+
+  const handleExecuteExternalSearch = async () => {
+    if (!searchSourceModal) return;
+    setExternalSearchLoading(true);
+    setExternalSearchError(null);
+    setExternalImportMessage(null);
+    try {
+      const res = await catalogueSourcesService.searchSourceProducts(searchSourceModal.slug, externalSearchQuery);
+      setExternalSearchResults(res || []);
+    } catch (err) {
+      setExternalSearchError(err.response?.data?.error || err.message || 'External product search failed');
+    } finally {
+      setExternalSearchLoading(false);
+    }
+  };
+
+  const handleImportSingleProduct = async (product) => {
+    setImportingExternalId(product.externalProductId);
+    setExternalImportMessage(null);
+    try {
+      const res = await catalogueSourcesService.importSingleProduct(product);
+      setExternalImportMessage({
+        type: 'success',
+        text: `Successfully ${res.data?.action || 'imported'} "${product.name}" (ID: ${res.data?.product_id}). Held in PENDING review for image verification.`
+      });
+      loadAllData();
+      loadSourcesData();
+    } catch (err) {
+      setExternalImportMessage({
+        type: 'error',
+        text: err.response?.data?.error || err.message || 'Failed to import product'
+      });
+    } finally {
+      setImportingExternalId(null);
+    }
+  };
+
+  const handleSupplierCsvSubmit = async (e) => {
+    e.preventDefault();
+    setSupplierCsvLoading(true);
+    setSupplierCsvError(null);
+    setSupplierCsvResult(null);
+
+    try {
+      const res = await catalogueSourcesService.importSupplierCsv({
+        csvText: supplierCsvForm.csvText,
+        csvFile: supplierCsvFile,
+        supplierId: supplierCsvForm.supplierId ? parseInt(supplierCsvForm.supplierId, 10) : null,
+        defaultCurrency: supplierCsvForm.defaultCurrency,
+        imageUsagePermission: supplierCsvForm.imageUsagePermission
+      });
+
+      setSupplierCsvResult(res.results);
+      loadAllData();
+      loadSourcesData();
+    } catch (err) {
+      setSupplierCsvError(err.response?.data?.error || err.message || 'CSV batch import failed');
+    } finally {
+      setSupplierCsvLoading(false);
+    }
+  };
+
+  const handleCreateSupplierSubmit = async (e) => {
+    e.preventDefault();
+    setSupplierCreating(true);
+    setSupplierCreateError(null);
+
+    try {
+      const created = await catalogueSourcesService.createSupplier(newSupplierForm);
+      setSuppliersList(prev => [...prev, created]);
+      setIsAddSupplierModalOpen(false);
+      setNewSupplierForm({
+        supplierCode: '',
+        name: '',
+        contactPerson: '',
+        email: '',
+        phone: '',
+        city: '',
+        state: '',
+        country: 'India',
+        partnershipType: 'manufacturer',
+        imageUsageAgreement: 'full_commercial_rights'
+      });
+      loadSourcesData();
+    } catch (err) {
+      setSupplierCreateError(err.response?.data?.error || err.message || 'Failed to register supplier');
+    } finally {
+      setSupplierCreating(false);
+    }
+  };
+
+  const handleFilterBySource = (slug, approval = 'all') => {
+    setSelectedSource(slug);
+    setSelectedApprovalStatus(approval);
+    setActiveTab('inventory');
   };
 
   const handleLogout = () => {
@@ -664,6 +858,10 @@ export default function AdminDashboard() {
       selectedApprovalStatus === 'all' ||
       (p.approvalStatus || (p.tryonCompatibility === 'supported' ? 'AI_READY' : 'APPROVED')).toUpperCase() === selectedApprovalStatus.toUpperCase();
 
+    const prodSource = (p.source || 'atelier').toLowerCase();
+    const matchesSource =
+      selectedSource === 'all' || prodSource === selectedSource.toLowerCase();
+
     return (
       matchesSearch &&
       matchesCategory &&
@@ -673,7 +871,8 @@ export default function AdminDashboard() {
       matchesStock &&
       matchesStatus &&
       matchesReview &&
-      matchesApproval
+      matchesApproval &&
+      matchesSource
     );
   });
 
@@ -790,6 +989,21 @@ export default function AdminDashboard() {
           </button>
 
           <button
+            onClick={() => {
+              setActiveTab('sources');
+              loadSourcesData();
+            }}
+            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 ${
+              activeTab === 'sources'
+                ? 'border-black dark:border-white text-slate-900 dark:text-white bg-white dark:bg-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
+            }`}
+          >
+            <Layers className="w-4 h-4 text-[#F5AFAF]" />
+            <span>External Catalogue Sources ({sourcesOverview.length || 6})</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('myntra_import')}
             className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 ${
               activeTab === 'myntra_import'
@@ -798,7 +1012,7 @@ export default function AdminDashboard() {
             }`}
           >
             <Globe className="w-4 h-4 text-[#F5AFAF]" />
-            <span>Myntra Catalogue Import</span>
+            <span>Myntra Reference Import</span>
           </button>
         </div>
 
@@ -952,6 +1166,20 @@ export default function AdminDashboard() {
               <option value="all">All Review Status</option>
               <option value="needs_review">Needs Admin Review ⚠️</option>
               <option value="verified">Verified Items</option>
+            </select>
+
+            <select
+              value={selectedSource}
+              onChange={(e) => setSelectedSource(e.target.value)}
+              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
+            >
+              <option value="all">All Sources</option>
+              <option value="atelier">Atelier (In-House)</option>
+              <option value="flipkart">Flipkart Affiliate</option>
+              <option value="myntra">Myntra Partner</option>
+              <option value="amazon">Amazon Creators</option>
+              <option value="supplier_csv">Suppliers / Mills</option>
+              <option value="manual">Boutique / Manual</option>
             </select>
 
           </div>
@@ -1138,6 +1366,14 @@ export default function AdminDashboard() {
                             <span className="font-mono">{p.sku}</span>
                             <span>&bull;</span>
                             <span className="font-semibold text-slate-700 dark:text-slate-300">{p.brand || 'VESTRA'}</span>
+                            {p.source && p.source !== 'atelier' && (
+                              <>
+                                <span>&bull;</span>
+                                <span className="px-1.5 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 text-[9px] uppercase font-bold tracking-wider">
+                                  {p.source === 'supplier_csv' ? 'Supplier Feed' : p.source}
+                                </span>
+                              </>
+                            )}
                             {p.color && (
                               <>
                                 <span>&bull;</span>
@@ -1156,6 +1392,20 @@ export default function AdminDashboard() {
                               >
                                 <ExternalLink className="w-2.5 h-2.5 flex-shrink-0" />
                                 <span className="truncate max-w-[200px]">Myntra Reference Link</span>
+                              </a>
+                            </div>
+                          )}
+                          {(p.affiliateUrl || p.sourceUrl) && !p.myntraUrl && (
+                            <div className="mt-1">
+                              <a
+                                href={p.affiliateUrl || p.sourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center space-x-1 text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-mono"
+                                title="View source listing"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5 flex-shrink-0" />
+                                <span className="truncate max-w-[200px]">{p.source} Listing</span>
                               </a>
                             </div>
                           )}
@@ -1346,6 +1596,433 @@ export default function AdminDashboard() {
 
         </div>
         </>
+        ) : activeTab === 'sources' ? (
+          /* ============================================================== */
+          /* EXTERNAL CATALOGUE SOURCES SECTION                            */
+          /* ============================================================== */
+          <div className="space-y-6">
+            
+            {/* Header & Policy Notice */}
+            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                  <div className="inline-flex items-center space-x-2 px-2.5 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-[10px] uppercase font-bold tracking-widest mb-2">
+                    <Layers className="w-3.5 h-3.5" />
+                    <span>Unified Multi-Source Catalogue Architecture</span>
+                  </div>
+                  <h2 className="font-serif text-2xl text-slate-900 dark:text-white">
+                    External Fashion Catalogue Integrations
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-3xl">
+                    Connect, test, and synchronize garments across official marketplace APIs (Flipkart, Amazon), partner channels (Myntra), and certified textile mills (Surat, Varanasi) — with zero scraping, free APIs only, and strict Genlook AI readiness guardrails.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={loadSourcesData}
+                    disabled={sourcesLoading}
+                    className="px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
+                    title="Refresh connection statuses and sync metrics"
+                  >
+                    <RefreshCw className={`w-3.5 h-3.5 ${sourcesLoading ? 'animate-spin text-[#F5AFAF]' : 'text-slate-500'}`} />
+                    <span>Refresh</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSupplierCsvResult(null);
+                      setSupplierCsvError(null);
+                      setIsSupplierCsvModalOpen(true);
+                    }}
+                    className="px-3.5 py-2 border border-[#000000] dark:border-white text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
+                  >
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                    <span>Upload Supplier CSV</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setSupplierCreateError(null);
+                      setIsAddSupplierModalOpen(true);
+                    }}
+                    className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all shadow flex items-center space-x-2"
+                  >
+                    <Plus className="w-4 h-4 text-[#F5AFAF]" />
+                    <span>Register Supplier</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Zero-Cost & AI Guardrail Compliance Banner */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-4 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 text-xs">
+                <div className="flex items-start space-x-2.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
+                      Zero-Cost Policy & No Scraping
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      No paid aggregators or unauthorized scrapers. Uses official free APIs (Flipkart Affiliate, Amazon Creators) and direct supplier feeds only.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
+                      Genlook AI Readiness Guardrail
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      External garments are never auto-promoted to AI_READY. Requires resolution ≥250×250px, usage license, and explicit admin review.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-2.5">
+                  <Database className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-slate-900 dark:text-white uppercase tracking-wider text-[11px]">
+                      Duplicate Prevention Engine
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                      Normalized schema indexes (source + external_product_id) to update existing garments rather than duplicating PostgreSQL records.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Source Aggregate Stats */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Total Connectors</p>
+                <div className="flex items-baseline space-x-2 mt-1">
+                  <span className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
+                    {sourcesOverview.length || 6}
+                  </span>
+                  <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                    {sourcesOverview.filter(s => s.configured || s.isEnabled).length} active/ready
+                  </span>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">External Products Ingested</p>
+                <div className="flex items-baseline space-x-2 mt-1">
+                  <span className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
+                    {sourcesOverview.reduce((acc, s) => acc + (s.slug !== 'atelier' ? (s.productsImported || 0) : 0), 0)}
+                  </span>
+                  <span className="text-[11px] text-slate-500 font-medium">across all channels</span>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Awaiting AI Inspection</p>
+                <div className="flex items-baseline space-x-2 mt-1">
+                  <span className="font-serif text-2xl font-bold text-amber-600 dark:text-amber-400">
+                    {sourcesOverview.reduce((acc, s) => acc + (s.productsAwaitingReview || 0), 0)}
+                  </span>
+                  <span className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">pending approval</span>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+                <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Certified Suppliers & Mills</p>
+                <div className="flex items-baseline space-x-2 mt-1">
+                  <span className="font-serif text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    {suppliersList.length}
+                  </span>
+                  <span className="text-[11px] text-indigo-600 dark:text-indigo-400 font-medium">partner agreements</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Sources Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {sourcesOverview.map((src) => {
+                const isTesting = testingSourceSlug === src.slug;
+                
+                // Icon selection
+                let SourceIcon = Globe;
+                if (src.slug === 'flipkart') SourceIcon = ShoppingBag;
+                else if (src.slug === 'amazon') SourceIcon = Package;
+                else if (src.slug === 'supplier_csv') SourceIcon = Building2;
+                else if (src.slug === 'manual') SourceIcon = Store;
+                else if (src.slug === 'atelier') SourceIcon = Sparkles;
+
+                // Status Badge
+                let statusBadge = (
+                  <span className="px-2 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[10px] uppercase font-bold tracking-wider">
+                    Credentials Needed
+                  </span>
+                );
+                if (src.status === 'ready' || src.status === 'active' || src.configured) {
+                  statusBadge = (
+                    <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] uppercase font-bold tracking-wider">
+                      Active / Ready
+                    </span>
+                  );
+                } else if (src.status === 'pending_partner_approval') {
+                  statusBadge = (
+                    <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-800 text-[10px] uppercase font-bold tracking-wider">
+                      Pending Authorization
+                    </span>
+                  );
+                }
+
+                return (
+                  <div
+                    key={src.slug}
+                    className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+                  >
+                    {/* Top Content */}
+                    <div className="p-5 space-y-4">
+                      {/* Source Title & Icon */}
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-10 h-10 rounded-sm bg-rose-50 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 flex items-center justify-center shrink-0">
+                            <SourceIcon className="w-5 h-5 text-slate-800 dark:text-slate-200" />
+                          </div>
+                          <div>
+                            <h3 className="font-serif text-lg font-medium text-slate-900 dark:text-white leading-tight">
+                              {src.name}
+                            </h3>
+                            <div className="flex items-center space-x-2 text-[10px] text-slate-400 font-mono mt-0.5">
+                              <span>slug: {src.slug}</span>
+                              <span>&bull;</span>
+                              <span className="uppercase">{src.authType}</span>
+                            </div>
+                          </div>
+                        </div>
+                        {statusBadge}
+                      </div>
+
+                      {/* Adapter Description & Notes */}
+                      <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed min-h-[38px]">
+                        {src.message || 'Modular catalogue connector integrated with VESTRA standard fashion taxonomy.'}
+                      </p>
+
+                      {/* Credentials Checklist */}
+                      {src.requiresCredentials && src.requiresCredentials.length > 0 && (
+                        <div className="p-2.5 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded-sm">
+                          <p className="text-[10px] uppercase font-bold tracking-wider text-slate-500 mb-1.5">
+                            Required Environment Keys
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {src.requiresCredentials.map((key) => (
+                              <span
+                                key={key}
+                                className={`text-[10px] font-mono px-1.5 py-0.5 border ${
+                                  src.configured
+                                    ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                                    : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700'
+                                }`}
+                              >
+                                {key} {src.configured ? '✓' : '•'}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Capabilities Chips */}
+                      {src.capabilities && src.capabilities.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {src.capabilities.map((cap) => (
+                            <span
+                              key={cap}
+                              className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium"
+                            >
+                              {cap.replace(/_/g, ' ')}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Live Ingestion Metrics */}
+                      <div className="grid grid-cols-4 gap-1 pt-3 border-t border-[#F9DFDF] dark:border-slate-800 text-center">
+                        <div className="p-1 bg-slate-50 dark:bg-slate-950/40">
+                          <p className="text-[9px] text-slate-400 uppercase tracking-widest">Total</p>
+                          <p className="font-serif font-bold text-sm text-slate-900 dark:text-white">
+                            {src.productsImported || 0}
+                          </p>
+                        </div>
+                        <div className="p-1 bg-slate-50 dark:bg-slate-950/40">
+                          <p className="text-[9px] text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Ready</p>
+                          <p className="font-serif font-bold text-sm text-emerald-600 dark:text-emerald-400">
+                            {src.productsApproved || 0}
+                          </p>
+                        </div>
+                        <div className="p-1 bg-slate-50 dark:bg-slate-950/40">
+                          <p className="text-[9px] text-amber-600 dark:text-amber-400 uppercase tracking-widest">Review</p>
+                          <p className="font-serif font-bold text-sm text-amber-600 dark:text-amber-400">
+                            {src.productsAwaitingReview || 0}
+                          </p>
+                        </div>
+                        <div className="p-1 bg-slate-50 dark:bg-slate-950/40">
+                          <p className="text-[9px] text-rose-600 dark:text-rose-400 uppercase tracking-widest">Issues</p>
+                          <p className="font-serif font-bold text-sm text-rose-600 dark:text-rose-400">
+                            {src.productsRejected || 0}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Actions Footer */}
+                    <div className="p-4 bg-slate-50/70 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between gap-2">
+                      <button
+                        onClick={() => handleTestSource(src.slug)}
+                        disabled={isTesting}
+                        className="px-3 py-1.5 border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
+                      >
+                        <RefreshCw className={`w-3 h-3 ${isTesting ? 'animate-spin text-[#F5AFAF]' : 'text-slate-400'}`} />
+                        <span>{isTesting ? 'Testing...' : 'Test Adapter'}</span>
+                      </button>
+
+                      <div className="flex items-center space-x-1.5">
+                        {/* Secondary action based on connector type */}
+                        {(src.slug === 'flipkart' || src.slug === 'amazon') && (
+                          <button
+                            onClick={() => handleOpenSearchModal(src)}
+                            className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
+                          >
+                            <Search className="w-3 h-3 text-[#F5AFAF]" />
+                            <span>Search</span>
+                          </button>
+                        )}
+
+                        {src.slug === 'supplier_csv' && (
+                          <button
+                            onClick={() => {
+                              setSupplierCsvResult(null);
+                              setSupplierCsvError(null);
+                              setIsSupplierCsvModalOpen(true);
+                            }}
+                            className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
+                          >
+                            <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                            <span>Upload CSV</span>
+                          </button>
+                        )}
+
+                        {src.slug === 'myntra' && (
+                          <button
+                            onClick={() => setActiveTab('myntra_import')}
+                            className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
+                          >
+                            <Globe className="w-3 h-3 text-[#F5AFAF]" />
+                            <span>Import Tab</span>
+                          </button>
+                        )}
+
+                        {src.slug === 'manual' && (
+                          <button
+                            onClick={handleOpenAddModal}
+                            className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
+                          >
+                            <Plus className="w-3 h-3 text-[#F5AFAF]" />
+                            <span>Add SKU</span>
+                          </button>
+                        )}
+
+                        {/* Review / View garments in inventory */}
+                        <button
+                          onClick={() => handleFilterBySource(src.slug)}
+                          className="px-2.5 py-1.5 border border-[#F9DFDF] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors"
+                          title="View garments in inventory"
+                        >
+                          View ({src.productsImported || 0})
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Certified Local Wholesalers & Mills Directory */}
+            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="font-serif text-xl text-slate-900 dark:text-white">
+                    Certified Local Wholesalers & Textile Mills
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                    Surat, Varanasi, and regional weaving cooperatives providing verified high-resolution saree and apparel photography.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setIsAddSupplierModalOpen(true)}
+                  className="px-3.5 py-1.5 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5 self-start sm:self-auto"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                  <span>Register New Mill</span>
+                </button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                      <th className="py-2.5 px-4 font-semibold">Supplier Code</th>
+                      <th className="py-2.5 px-4 font-semibold">Company / Mill Name</th>
+                      <th className="py-2.5 px-4 font-semibold">Hub Location</th>
+                      <th className="py-2.5 px-4 font-semibold">Contact Person</th>
+                      <th className="py-2.5 px-4 font-semibold">Partnership Type</th>
+                      <th className="py-2.5 px-4 font-semibold">Image Rights Agreement</th>
+                      <th className="py-2.5 px-4 font-semibold text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                    {suppliersList.map((sup) => (
+                      <tr key={sup.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                        <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white">
+                          {sup.supplier_code}
+                        </td>
+                        <td className="py-3 px-4">
+                          <p className="font-medium text-slate-900 dark:text-white">{sup.name}</p>
+                          <p className="text-[10px] text-slate-400 font-mono">{sup.email || 'direct feed'}</p>
+                        </td>
+                        <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
+                          {sup.city}, {sup.state}
+                        </td>
+                        <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
+                          {sup.contact_person || 'Managing Director'}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px] uppercase font-bold tracking-wider">
+                            {sup.partnership_type?.replace(/_/g, ' ') || 'Partner'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] uppercase font-bold tracking-wider">
+                            {sup.image_usage_agreement?.replace(/_/g, ' ') || 'Commercial License'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <button
+                            onClick={() => {
+                              setSupplierCsvForm(prev => ({ ...prev, supplierId: sup.id.toString() }));
+                              setSupplierCsvResult(null);
+                              setSupplierCsvError(null);
+                              setIsSupplierCsvModalOpen(true);
+                            }}
+                            className="px-2.5 py-1 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-[11px] uppercase tracking-wider font-semibold transition-colors inline-flex items-center space-x-1"
+                          >
+                            <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                            <span>Feed CSV</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
         ) : (
           /* ============================================================== */
           /* MYNTRA CATALOGUE IMPORT SECTION                                */
@@ -3132,6 +3809,613 @@ export default function AdminDashboard() {
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* ADAPTER CONNECTION TEST MODAL                                  */}
+      {/* ============================================================== */}
+      {testResultModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center space-x-2">
+                {testResultModal.configured || testResultModal.status === 'ready' || testResultModal.status === 'active' ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                ) : testResultModal.status === 'pending_partner_approval' ? (
+                  <Globe className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                ) : (
+                  <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                )}
+                <div>
+                  <h3 className="font-serif text-lg font-medium text-slate-900 dark:text-white">
+                    Connector Test: {testResultModal.slug}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 font-mono">
+                    Latency: {testResultModal.latencyMs || 12}ms &bull; Status: {testResultModal.status}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setTestResultModal(null)}
+                className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4 text-xs">
+              <div className="p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 rounded">
+                <p className="font-semibold text-slate-900 dark:text-white text-[11px] uppercase tracking-wider mb-1">
+                  Adapter Diagnostic Output
+                </p>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-mono text-[11px]">
+                  {testResultModal.message}
+                </p>
+              </div>
+
+              {testResultModal.credentialsChecked && testResultModal.credentialsChecked.length > 0 && (
+                <div>
+                  <p className="font-semibold uppercase tracking-wider text-[10px] text-slate-400 mb-2">
+                    Credential Check Results
+                  </p>
+                  <div className="space-y-1.5 font-mono text-[11px]">
+                    {testResultModal.credentialsChecked.map((c, idx) => (
+                      <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800">
+                        <span className="text-slate-700 dark:text-slate-300">{c.key}</span>
+                        <span className={`px-1.5 py-0.5 text-[10px] font-bold ${c.configured ? 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300' : 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300'}`}>
+                          {c.configured ? 'CONFIGURED' : 'NOT CONFIGURED'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="p-3 bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">Policy Notice</p>
+                Under VESTRA zero-cost guidelines, paid aggregators and scraping bots are disabled. When credentials are not set, you can use partner CSV/TSV uploads or obtain free official developer keys.
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex justify-end">
+              <button
+                onClick={() => setTestResultModal(null)}
+                className="px-4 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs uppercase tracking-wider font-semibold"
+              >
+                Close Diagnostic
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* EXTERNAL PRODUCT SEARCH & IMPORT MODAL                         */}
+      {/* ============================================================== */}
+      {searchSourceModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center space-x-2.5">
+                <Search className="w-5 h-5 text-[#F5AFAF]" />
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-slate-900 dark:text-white">
+                    Search & Ingest: {searchSourceModal.name}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Query catalogue via official API. Imported items are placed in PENDING review with ≥250×250px validation.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSearchSourceModal(null)}
+                className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input Bar */}
+            <div className="p-5 border-b border-[#F9DFDF] dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-3">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleExecuteExternalSearch();
+                }}
+                className="flex items-center gap-2"
+              >
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search keywords (e.g. silk saree, embroidered kurti, formal shirt)..."
+                    value={externalSearchQuery}
+                    onChange={(e) => setExternalSearchQuery(e.target.value)}
+                    className="w-full bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-700 text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={externalSearchLoading}
+                  className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all flex items-center space-x-1.5 shrink-0"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${externalSearchLoading ? 'animate-spin text-[#F5AFAF]' : ''}`} />
+                  <span>{externalSearchLoading ? 'Searching...' : 'Search'}</span>
+                </button>
+              </form>
+
+              {externalImportMessage && (
+                <div
+                  className={`p-3 text-xs flex items-center space-x-2 ${
+                    externalImportMessage.type === 'success'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300'
+                      : 'bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-800 dark:text-rose-300'
+                  }`}
+                >
+                  {externalImportMessage.type === 'success' ? (
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                  ) : (
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                  )}
+                  <span>{externalImportMessage.text}</span>
+                </div>
+              )}
+
+              {externalSearchError && (
+                <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-xs text-amber-800 dark:text-amber-300 flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{externalSearchError}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Search Results List */}
+            <div className="p-5 overflow-y-auto max-h-[55vh] space-y-3">
+              {externalSearchLoading ? (
+                <div className="py-12 text-center space-y-2">
+                  <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#F5AFAF]" />
+                  <p className="text-xs uppercase tracking-wider text-slate-500">Querying {searchSourceModal.name} API...</p>
+                </div>
+              ) : externalSearchResults.length === 0 ? (
+                <div className="py-12 text-center text-slate-500 text-xs space-y-2">
+                  <Package className="w-8 h-8 text-slate-400 mx-auto" />
+                  <p>No products loaded yet. Enter a query and click Search.</p>
+                  <p className="text-[11px] text-slate-400">
+                    If credentials are not yet configured in .env, sample reference feeds will be loaded.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-[11px] uppercase tracking-wider font-semibold text-slate-500">
+                    Found {externalSearchResults.length} matching products
+                  </p>
+                  {externalSearchResults.map((prod) => {
+                    const isImporting = importingExternalId === prod.externalProductId;
+                    const primaryImg = (prod.imageUrls && prod.imageUrls[0]) || '';
+
+                    return (
+                      <div
+                        key={prod.externalProductId}
+                        className="p-3 bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between gap-4 hover:border-slate-400 transition-colors"
+                      >
+                        <div className="flex items-center space-x-3 min-w-0">
+                          <div className="w-14 h-18 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 overflow-hidden relative">
+                            {primaryImg ? (
+                              <img
+                                src={primaryImg}
+                                alt={prod.name}
+                                className="w-full h-full object-cover"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-[9px] text-slate-400">
+                                No Img
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <h4 className="font-serif font-medium text-sm text-slate-900 dark:text-white truncate">
+                              {prod.name}
+                            </h4>
+                            <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-mono mt-0.5">
+                              <span>Brand: {prod.brand}</span>
+                              <span>&bull;</span>
+                              <span>SKU: {prod.externalProductId}</span>
+                              <span>&bull;</span>
+                              <span>Type: {prod.garmentType}</span>
+                            </div>
+                            <div className="flex items-center space-x-2 text-xs font-semibold text-slate-900 dark:text-white mt-1">
+                              <span>₹{Number(prod.sellingPrice).toLocaleString('en-IN')}</span>
+                              {prod.originalPrice > prod.sellingPrice && (
+                                <span className="text-[10px] line-through text-slate-400">
+                                  ₹{Number(prod.originalPrice).toLocaleString('en-IN')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 shrink-0">
+                          {prod.sourceProductUrl && (
+                            <a
+                              href={prod.sourceProductUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors"
+                              title="View on marketplace"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </a>
+                          )}
+                          <button
+                            onClick={() => handleImportSingleProduct(prod)}
+                            disabled={isImporting}
+                            className="px-3.5 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
+                          >
+                            <Plus className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                            <span>{isImporting ? 'Importing...' : 'Import to VESTRA'}</span>
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex justify-end">
+              <button
+                onClick={() => setSearchSourceModal(null)}
+                className="px-4 py-2 border border-slate-300 dark:border-slate-700 text-xs uppercase font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+              >
+                Close Search
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* SUPPLIER CSV INGESTION MODAL                                   */}
+      {/* ============================================================== */}
+      {isSupplierCsvModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+            
+            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center space-x-2.5">
+                <FileSpreadsheet className="w-5 h-5 text-[#F5AFAF]" />
+                <div>
+                  <h3 className="font-serif text-xl font-medium text-slate-900 dark:text-white">
+                    Supplier & Textile Mill CSV Batch Ingestion
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Zero-cost batch feed parser for Surat, Varanasi, and certified apparel wholesalers.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsSupplierCsvModalOpen(false)}
+                className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSupplierCsvSubmit} className="p-6 overflow-y-auto space-y-4 text-xs">
+              
+              {supplierCsvError && (
+                <div className="p-3 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-300 flex items-center space-x-2">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{supplierCsvError}</span>
+                </div>
+              )}
+
+              {supplierCsvResult && (
+                <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300 space-y-2">
+                  <div className="flex items-center space-x-2 font-semibold text-sm">
+                    <CheckCircle2 className="w-4 h-4 shrink-0" />
+                    <span>Batch Processed Successfully!</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 font-mono text-[11px] pt-1">
+                    <div>Total Rows: {supplierCsvResult.totalRows}</div>
+                    <div>Imported: {supplierCsvResult.importedCount}</div>
+                    <div>Updated: {supplierCsvResult.updatedCount}</div>
+                    <div>Skipped/Errors: {supplierCsvResult.skippedCount + (supplierCsvResult.rejectedCount || 0)}</div>
+                  </div>
+                  {supplierCsvResult.errors && supplierCsvResult.errors.length > 0 && (
+                    <div className="text-[10px] text-rose-700 dark:text-rose-400 space-y-0.5 pt-1">
+                      {supplierCsvResult.errors.slice(0, 3).map((err, eIdx) => (
+                        <p key={eIdx}>&bull; {err}</p>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Select Certified Mill / Supplier
+                  </label>
+                  <select
+                    value={supplierCsvForm.supplierId}
+                    onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, supplierId: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  >
+                    <option value="">General Supplier Feed</option>
+                    {suppliersList.map(sup => (
+                      <option key={sup.id} value={sup.id}>
+                        {sup.name} ({sup.supplier_code})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Default Currency
+                  </label>
+                  <select
+                    value={supplierCsvForm.defaultCurrency}
+                    onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, defaultCurrency: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  >
+                    <option value="INR">INR (₹)</option>
+                    <option value="USD">USD ($)</option>
+                    <option value="EUR">EUR (€)</option>
+                    <option value="GBP">GBP (£)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Image Usage Permission
+                  </label>
+                  <select
+                    value={supplierCsvForm.imageUsagePermission}
+                    onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, imageUsagePermission: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  >
+                    <option value="supplier_granted">Supplier Granted Commercial Rights</option>
+                    <option value="authorized">Authorized Partner License</option>
+                    <option value="written_consent_on_file">Written Consent on File</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                  Upload CSV/TSV File
+                </label>
+                <input
+                  type="file"
+                  accept=".csv,.tsv,.txt"
+                  onChange={(e) => setSupplierCsvFile(e.target.files[0] || null)}
+                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:border-0 file:text-xs file:font-semibold file:bg-slate-100 dark:file:bg-slate-800 file:text-slate-700 dark:file:text-slate-300 hover:file:bg-slate-200"
+                />
+              </div>
+
+              <div>
+                <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                  Or Paste CSV Data Directly (headers required)
+                </label>
+                <textarea
+                  rows={5}
+                  value={supplierCsvForm.csvText}
+                  onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, csvText: e.target.value }))}
+                  placeholder="sku,product_name,category,brand,price,image_url&#10;SUR-01,Banarasi Katan Silk Saree,sarees,Surat Mills,12500,https://example.com/saree1.jpg"
+                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2.5 font-mono text-[11px] focus:outline-none focus:border-black dark:focus:border-white"
+                />
+              </div>
+
+              <div className="flex items-start space-x-2 pt-1 text-[11px] text-slate-600 dark:text-slate-400">
+                <input
+                  type="checkbox"
+                  required
+                  id="supplierAgreementConfirm"
+                  defaultChecked
+                  className="mt-0.5 rounded border-slate-300 text-black focus:ring-0"
+                />
+                <label htmlFor="supplierAgreementConfirm">
+                  I certify that the supplier has granted authorized rights to use these garment assets in the VESTRA virtual try-on engine, and that imported images will undergo ≥250×250px quality verification.
+                </label>
+              </div>
+
+              <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSupplierCsvModalOpen(false)}
+                  className="px-4 py-2 border border-slate-300 dark:border-slate-700 text-xs uppercase font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={supplierCsvLoading || (!supplierCsvFile && !supplierCsvForm.csvText.trim())}
+                  className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all flex items-center space-x-1.5 disabled:opacity-50"
+                >
+                  <Upload className={`w-3.5 h-3.5 ${supplierCsvLoading ? 'animate-spin text-[#F5AFAF]' : 'text-[#F5AFAF]'}`} />
+                  <span>{supplierCsvLoading ? 'Processing Batch...' : 'Process CSV Ingestion'}</span>
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      )}
+
+      {/* ============================================================== */}
+      {/* REGISTER NEW SUPPLIER MODAL                                    */}
+      {/* ============================================================== */}
+      {isAddSupplierModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full shadow-2xl overflow-hidden">
+            
+            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center space-x-2">
+                <Building2 className="w-5 h-5 text-[#F5AFAF]" />
+                <div>
+                  <h3 className="font-serif text-lg font-medium text-slate-900 dark:text-white">
+                    Register New Supplier / Textile Mill
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Add verified manufacturer or wholesale partner to VESTRA database.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsAddSupplierModalOpen(false)}
+                className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateSupplierSubmit} className="p-6 space-y-3.5 text-xs">
+              {supplierCreateError && (
+                <div className="p-2.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-xs text-rose-800 dark:text-rose-300">
+                  {supplierCreateError}
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Supplier Code *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="SUP-TEX-004"
+                    value={newSupplierForm.supplierCode}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, supplierCode: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 font-mono text-xs focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Partnership Type
+                  </label>
+                  <select
+                    value={newSupplierForm.partnershipType}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, partnershipType: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  >
+                    <option value="manufacturer">Manufacturer / Mill</option>
+                    <option value="wholesaler">Local Wholesaler</option>
+                    <option value="weaver_cooperative">Weaver Cooperative</option>
+                    <option value="boutique_artisan">Independent Boutique</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                  Company / Mill Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Kanchipuram Heritage Silk Guild"
+                  value={newSupplierForm.name}
+                  onChange={(e) => setNewSupplierForm(prev => ({ ...prev, name: e.target.value }))}
+                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Contact Person
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Ramesh Chandra"
+                    value={newSupplierForm.contactPerson}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, contactPerson: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="contact@heritageguild.in"
+                    value={newSupplierForm.email}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    City / Town
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Kanchipuram"
+                    value={newSupplierForm.city}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, city: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                    State / Region
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Tamil Nadu"
+                    value={newSupplierForm.state}
+                    onChange={(e) => setNewSupplierForm(prev => ({ ...prev, state: e.target.value }))}
+                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block uppercase text-[10px] font-bold text-slate-500 mb-1">
+                  Image Usage Agreement
+                </label>
+                <select
+                  value={newSupplierForm.imageUsageAgreement}
+                  onChange={(e) => setNewSupplierForm(prev => ({ ...prev, imageUsageAgreement: e.target.value }))}
+                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                >
+                  <option value="full_commercial_rights">Full Commercial Try-On Visualization Rights</option>
+                  <option value="limited_partner_rights">Limited Partner Showcase Rights</option>
+                  <option value="written_consent_on_file">Written Bilateral Consent on File</option>
+                </select>
+              </div>
+
+              <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-end space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddSupplierModalOpen(false)}
+                  className="px-4 py-2 border border-slate-300 dark:border-slate-700 text-xs uppercase font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={supplierCreating}
+                  className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all flex items-center space-x-1.5"
+                >
+                  <span>{supplierCreating ? 'Saving...' : 'Register Mill'}</span>
+                </button>
+              </div>
+            </form>
+
           </div>
         </div>
       )}

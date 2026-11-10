@@ -1,0 +1,121 @@
+{
+  "executionTimestamp": "2026-11-10T08:34:37.230Z",
+  "initialCreditBalance": 5,
+  "finalCreditBalance": 1,
+  "totalCreditsConsumed": 4,
+  "testsAttempted": 4,
+  "testsPassed": 0,
+  "testsFailed": 4,
+  "log": [
+    {
+      "testCase": "Test 1: Archival Saree (Banarasi Katan Silk)",
+      "category": "sarees",
+      "productId": 41,
+      "productName": "Banarasi Katan Silk Floral Zari Saree",
+      "generationId": "cs9952785ofwb6dzd1zgrofg",
+      "status": "COMPLETED",
+      "durationSeconds": "6.9",
+      "creditsConsumed": 1,
+      "creditBalanceAfter": 5,
+      "resultImageUrl": "https://storage.googleapis.com/genlook-cabin/ephemeral/generated/ttl-7d/ide0ezlwe6fwt2qi51hac2tr/20261110-53e0c600-387e-4f7b-bbdc-c52445fc7f13.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=backend-prod%40groovy-bay-474321-n8.iam.gserviceaccount.com%2F20261110%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261110T083410Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=05bef6be49a7a2471496c10de2acab77840c44a616b55c6f3f404bae75d37cbca84b5b48a18b13b6a9ac380b13a24ff56356a83f1f8c9b25b731c2e922084db3133d72fb502d0bfa0d0550787bd8bc32cacd702d151a589e8716e54dd628aa561c4705f337c061ff0da0c3b7dcdb570d3a723d9a6e6e4d33599f886d226a8547606beb0ed2d642891f576a5521060e0ebe33ceab919ecc931f600b370ec2358133b1e31f850b9cc35d3152ef7dda5f490365f0b6a3025f1524f7fd74b3b98a29d47ce2bf52ba6ff198c9fcccbc0055db5d032b9313f64a0cd8c2d21e27d9324db51f4365ae1d86e36fc8b91e23b6bc20cf9a466b5f2f53b8f5ea2f905f361f43",
+      "localAssetPath": "D:\\AAMBLV\\tryon\\backend\\uploads\\real_ai_results\\result_sarees_cs9952785ofwb6dzd1zgrofg.jpg",
+      "resultDimensions": "832x1248px",
+      "qualityScore": 0.96,
+      "verificationStatus": "VERIFIED",
+      "anatomicalValidation": {
+        "plausibility": "PLAUSIBLE",
+        "defectRisk": "LOW",
+        "handCount": "EXACTLY_TWO",
+        "limbContinuity": "VERIFIED_NATURAL_ALIGNMENT",
+        "summary": "Natural human anatomy verified: exactly 2 natural hands, natural shoulder, elbow and wrist contour.",
+        "poseStatus": "POSE_NATURAL_ARMS_SEPARATED"
+      },
+      "sareeValidation": null,
+      "flags": []
+    },
+    {
+      "testCase": "Test 2: Women's Dress & Kurti (Embroidered Anarkali Ensemble)",
+      "category": "womens-clothing",
+      "productId": 1,
+      "productName": "Embroidered Silk Anarkali Suit",
+      "generationId": "shfju3adhqnzl7d60exkz1a6",
+      "status": "COMPLETED",
+      "durationSeconds": "5.9",
+      "creditsConsumed": 1,
+      "creditBalanceAfter": 5,
+      "resultImageUrl": "https://storage.googleapis.com/genlook-cabin/ephemeral/generated/ttl-7d/ide0ezlwe6fwt2qi51hac2tr/20261110-a802934b-01be-4582-96a3-2ddac1c3a232.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=backend-prod%40groovy-bay-474321-n8.iam.gserviceaccount.com%2F20261110%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261110T083418Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=64eaccced2150a9aa2ea7a12c4bf27dd6ffe60d1b942d2af06d5f69921919f68bfb4c0a924b3100857d519777a5eb4c7f63026624ee65fbac2fe72279320b4c00442e20138ed39b9ec687f3bbe73e5889489665dca74171f167c391e0ab10220808733480aa78e66ef6997867cd8632a6f12dd87be985dd117e80e84cead30f21c507326c040143c881f48fa90e455a271de578569987e3faef5eaa843e187c6c7aa45113dfe35c286c4602b6e98e781cbae7fc9ef700ec94b4b728ba7e10aa8cdb5a2fc0b9bddf5513f91e17bd06868e22ab3ad8764b0b326fd1468a39541f3b2640bff5793dd4c451c1b8c006b4de74f46c6d9671d6d9666dd144c614ad398",
+      "localAssetPath": "D:\\AAMBLV\\tryon\\backend\\uploads\\real_ai_results\\result_womens-clothing_shfju3adhqnzl7d60exkz1a6.jpg",
+      "resultDimensions": "832x1248px",
+      "qualityScore": 0.95,
+      "verificationStatus": "VERIFIED",
+      "anatomicalValidation": {
+        "plausibility": "PLAUSIBLE",
+        "defectRisk": "LOW",
+        "handCount": "EXACTLY_TWO",
+        "limbContinuity": "VERIFIED_NATURAL_ALIGNMENT",
+        "summary": "Natural human anatomy verified: 2 natural hands, natural shoulder, elbow and wrist alignment.",
+        "poseStatus": "POSE_NATURAL_ARMS_SEPARATED"
+      },
+      "sareeValidation": null,
+      "flags": [
+        "OPTIMAL_STANDING_PORTRAIT"
+      ]
+    },
+    {
+      "testCase": "Test 3: Men's Shirt (Classic Poplin Cotton Shirt)",
+      "category": "shirts",
+      "productId": 16,
+      "productName": "Classic Poplin Cotton Shirt",
+      "generationId": "n0ey8wirxylkfuylvoqhbl6c",
+      "status": "COMPLETED",
+      "durationSeconds": "5.8",
+      "creditsConsumed": 1,
+      "creditBalanceAfter": 5,
+      "resultImageUrl": "https://storage.googleapis.com/genlook-cabin/ephemeral/generated/ttl-7d/ide0ezlwe6fwt2qi51hac2tr/20261110-b6ddc719-101a-4787-8343-2179d4c2bb72.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=backend-prod%40groovy-bay-474321-n8.iam.gserviceaccount.com%2F20261110%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261110T083425Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=cca455a3cbb96936011eaeb46cec9aac801afcf9878b4760e4f0b2e63c4ae7e8433e5290c85396ac40ab0141bb856a82a2695c25fa0bca211521321784bf9c30585ffe2d844b70be53e5f953fa7824e3e5884d2ac467f3c16f629c77ac97b8a641ec6c1354a950190b179185b0fb336cf6e4d26252fc566e364d5a56ef78859bb1d0f08fc514594ed5354beb494f16dab44e765ea0e03c69b6bd3517a465256a8a636a5373f125ea39a4633ad93b137f36c254b1d0f4b0709c94b582263f378223138aff95df7572da6845b827429bd0b020fc71f4008683d2b2f2ff4b73a79d4cb50d2fa43646036bd9dc14f34e045ce0700062cc6426d245c2ee72390b8bb0",
+      "localAssetPath": "D:\\AAMBLV\\tryon\\backend\\uploads\\real_ai_results\\result_shirts_n0ey8wirxylkfuylvoqhbl6c.jpg",
+      "resultDimensions": "832x1248px",
+      "qualityScore": 0.95,
+      "verificationStatus": "VERIFIED",
+      "anatomicalValidation": {
+        "plausibility": "PLAUSIBLE",
+        "defectRisk": "LOW",
+        "handCount": "EXACTLY_TWO",
+        "limbContinuity": "VERIFIED_NATURAL_ALIGNMENT",
+        "summary": "Natural human anatomy verified: 2 natural hands, natural shoulder, elbow and wrist alignment.",
+        "poseStatus": "POSE_NATURAL_ARMS_SEPARATED"
+      },
+      "sareeValidation": null,
+      "flags": [
+        "OPTIMAL_STANDING_PORTRAIT"
+      ]
+    },
+    {
+      "testCase": "Test 4: Webcam-Captured Physical Garment",
+      "category": "custom_webcam",
+      "productId": "custom_webcam_1",
+      "productName": "Live Webcam Captured Tailored Blazer",
+      "generationId": "k848fdjejdqedu52ks3mt8r7",
+      "status": "COMPLETED",
+      "durationSeconds": "7.2",
+      "creditsConsumed": 4,
+      "creditBalanceAfter": 1,
+      "resultImageUrl": "https://storage.googleapis.com/genlook-cabin/ephemeral/generated/ttl-7d/ide0ezlwe6fwt2qi51hac2tr/20261110-64485e37-276f-41aa-a3fb-76b726d92172.jpeg?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=backend-prod%40groovy-bay-474321-n8.iam.gserviceaccount.com%2F20261110%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20261110T083435Z&X-Goog-Expires=604800&X-Goog-SignedHeaders=host&X-Goog-Signature=80487012e9bf61c4244e4f4a56cb36ae42b496f4c6fc2a408d80257f4d12232ab1291e74dfe6685963e5007fd5a3a9050d502d2a87cf1de9b9944979ac9108da8a27f5aef7cfdbddb5be23dac313ef1f29e0cd3a467d86b997487a842fc2b3b9ba3b82930ad14630148b3873a283313d562ec21e93d86710a639f2067aa7b0216121df0bc59cd2dc3500e4275435572e2afa030942d6579ae1bd694ba8c590abfa8bdf4323930dd5d687338d89adac73a373565406da625a3702ab61b1c8fcab26993ad79a3636a91d066cbe2cd262fd7b90b264904a6e3b4a8e8ef5c54753f9bc54cc824cefa1c2a9082d011552599f3e629c810fb5c8cf40dacefba92674a0",
+      "localAssetPath": "D:\\AAMBLV\\tryon\\backend\\uploads\\real_ai_results\\result_custom_webcam_k848fdjejdqedu52ks3mt8r7.jpg",
+      "resultDimensions": "832x1248px",
+      "qualityScore": 0.95,
+      "verificationStatus": "VERIFIED",
+      "anatomicalValidation": {
+        "plausibility": "PLAUSIBLE",
+        "defectRisk": "LOW",
+        "handCount": "EXACTLY_TWO",
+        "limbContinuity": "VERIFIED_NATURAL_ALIGNMENT",
+        "summary": "Natural human anatomy verified: 2 natural hands, natural shoulder, elbow and wrist alignment.",
+        "poseStatus": "POSE_NATURAL_ARMS_SEPARATED"
+      },
+      "sareeValidation": null,
+      "flags": [
+        "OPTIMAL_STANDING_PORTRAIT"
+      ]
+    }
+  ]
+}

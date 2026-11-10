@@ -16,6 +16,10 @@ export default function Catalogue() {
   const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [selectedGender, setSelectedGender] = useState(genderParam);
   const [onlyTryOnReady, setOnlyTryOnReady] = useState(false);
+  const [selectedSource, setSelectedSource] = useState('all');
+  const [selectedBrand, setSelectedBrand] = useState('all');
+  const [selectedGarmentType, setSelectedGarmentType] = useState('all');
+  const [selectedPriceRange, setSelectedPriceRange] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
   const [loading, setLoading] = useState(true);
@@ -135,8 +139,26 @@ export default function Catalogue() {
     ];
   }, [selectedCategory]);
 
+  const availableBrands = React.useMemo(() => {
+    const set = new Set();
+    products.forEach((p) => {
+      if (p.brand) set.add(p.brand);
+    });
+    return Array.from(set).sort();
+  }, [products]);
+
   const filteredProducts = products.filter((p) => {
-    if (onlyTryOnReady && p.tryonCompatibility !== 'supported') return false;
+    if (onlyTryOnReady && p.tryonCompatibility !== 'supported' && p.approvalStatus !== 'AI_READY') return false;
+    if (selectedSource !== 'all' && (p.source || 'atelier') !== selectedSource) return false;
+    if (selectedBrand !== 'all' && p.brand !== selectedBrand) return false;
+    if (selectedGarmentType !== 'all' && (p.garmentType || p.garment_type) !== selectedGarmentType) return false;
+    if (selectedPriceRange !== 'all') {
+      const price = Number(p.price || 0);
+      if (selectedPriceRange === 'under-2000' && price >= 2000) return false;
+      if (selectedPriceRange === '2000-5000' && (price < 2000 || price > 5000)) return false;
+      if (selectedPriceRange === '5000-10000' && (price < 5000 || price > 10000)) return false;
+      if (selectedPriceRange === 'above-10000' && price <= 10000) return false;
+    }
     return true;
   });
 
@@ -260,6 +282,61 @@ export default function Catalogue() {
                 {sub.replace('_', ' ')}
               </button>
             ))}
+          </div>
+
+          {/* Multi-Source Origin Bar */}
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 whitespace-nowrap">
+              Catalogue Source:
+            </span>
+            {[
+              { id: 'all', label: 'All Sources' },
+              { id: 'atelier', label: 'VESTRA Atelier' },
+              { id: 'flipkart', label: 'Flipkart' },
+              { id: 'myntra', label: 'Myntra' },
+              { id: 'amazon', label: 'Amazon' },
+              { id: 'supplier_csv', label: 'Suppliers & Mills' },
+              { id: 'manual', label: 'Boutiques' }
+            ].map((src) => (
+              <button
+                key={src.id}
+                onClick={() => setSelectedSource(src.id)}
+                className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-semibold rounded transition-colors ${
+                  selectedSource === src.id
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                }`}
+              >
+                {src.label}
+              </button>
+            ))}
+
+            {/* Brand Filter */}
+            {availableBrands.length > 0 && (
+              <select
+                value={selectedBrand}
+                onChange={(e) => setSelectedBrand(e.target.value)}
+                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-800 dark:text-slate-200 px-2 py-1 uppercase font-mono tracking-wider font-medium rounded ml-auto"
+              >
+                <option value="all">All Brands ({availableBrands.length})</option>
+                {availableBrands.map((b) => (
+                  <option key={b} value={b}>{b}</option>
+                ))}
+              </select>
+            )}
+
+            {/* Price Filter */}
+            <select
+              value={selectedPriceRange}
+              onChange={(e) => setSelectedPriceRange(e.target.value)}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-800 dark:text-slate-200 px-2 py-1 uppercase font-mono tracking-wider font-medium rounded"
+            >
+              <option value="all">All Prices</option>
+              <option value="under-2000">Under ₹2,000</option>
+              <option value="2000-5000">₹2,000 – ₹5,000</option>
+              <option value="5000-10000">₹5,000 – ₹10,000</option>
+              <option value="above-10000">Above ₹10,000</option>
+            </select>
           </div>
 
           {/* Search, Gender, Try-On Toggle & Sort Controls */}
