@@ -567,11 +567,17 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
       };
 
       // Support multi-image inputs (front, back, on-model) where available in catalogue
+      // Note: If garment is a flat-lay or unstitched saree without a human model, pass on_model: 'false'
+      // to prevent Genlook human parser from confusing source model limbs with customer limbs (causes 3 hands).
+      const defaultOnModel = (garment?.garment_type === 'saree' || garment?.garmentType === 'saree' || garment?.is_flat_lay || garment?.on_model === false || garment?.on_model === 'false')
+        ? 'false'
+        : (garment?.on_model !== undefined ? String(garment.on_model) : 'true');
+
       const candidateList = [];
       candidateList.push({
         url: garmentImageUrl,
         orientation: 'front',
-        on_model: 'true'
+        on_model: defaultOnModel
       });
 
       if (Array.isArray(garment?.images)) {
@@ -581,7 +587,7 @@ export class GenlookTryOnAdapter extends BaseTryOnAdapter {
             candidateList.push({
               url: itemUrl,
               orientation: (typeof item === 'object' && item.orientation) || 'front',
-              on_model: (typeof item === 'object' && item.on_model) || 'true'
+              on_model: (typeof item === 'object' && item.on_model !== undefined) ? String(item.on_model) : defaultOnModel
             });
           }
         }

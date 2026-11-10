@@ -7,6 +7,7 @@ import {
   CheckCircle2, AlertTriangle, Globe, RotateCcw, FileText, CheckCheck
 } from 'lucide-react';
 import adminService from '../services/adminService';
+import tryOnService from '../services/tryOnService';
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -137,6 +138,54 @@ export default function AdminDashboard() {
   const [newCatDesc, setNewCatDesc] = useState('');
   const [newCatImage, setNewCatImage] = useState('');
   const [catSubmitting, setCatSubmitting] = useState(false);
+
+  // Saree Enhancement Comparison State
+  const [comparingProduct, setComparingProduct] = useState(null);
+  const [isCompareModalOpen, setIsCompareModalOpen] = useState(false);
+  const [compareActionLoading, setCompareActionLoading] = useState(false);
+  const [compareMessage, setCompareMessage] = useState(null);
+
+  const handleOpenCompareModal = (prod) => {
+    setComparingProduct(prod);
+    setCompareMessage(null);
+    setIsCompareModalOpen(true);
+  };
+
+  const handleApproveEnhanced = async (productId) => {
+    setCompareActionLoading(true);
+    setCompareMessage(null);
+    try {
+      await tryOnService.approveEnhancedSaree(productId);
+      setCompareMessage({ type: 'success', text: `Product #${productId} approved! Now active and AI_READY for try-on.` });
+      await loadAllData();
+      setTimeout(() => {
+        setIsCompareModalOpen(false);
+        setCompareMessage(null);
+      }, 1500);
+    } catch (err) {
+      setCompareMessage({ type: 'error', text: err.response?.data?.error || err.message });
+    } finally {
+      setCompareActionLoading(false);
+    }
+  };
+
+  const handleRejectEnhanced = async (productId) => {
+    setCompareActionLoading(true);
+    setCompareMessage(null);
+    try {
+      await tryOnService.rejectEnhancedSaree(productId, 'Insufficient fabric detail in upscale');
+      setCompareMessage({ type: 'success', text: `Product #${productId} rejected for studio reshoot.` });
+      await loadAllData();
+      setTimeout(() => {
+        setIsCompareModalOpen(false);
+        setCompareMessage(null);
+      }, 1500);
+    } catch (err) {
+      setCompareMessage({ type: 'error', text: err.response?.data?.error || err.message });
+    } finally {
+      setCompareActionLoading(false);
+    }
+  };
 
   // Load Dashboard Data
   useEffect(() => {
@@ -841,6 +890,7 @@ export default function AdminDashboard() {
                   <option value="all">All Image Statuses</option>
                   <option value="needs_replacement">⚠️ Needs Replacement (&lt;250px)</option>
                   <option value="IMAGE_VALID">✓ IMAGE_VALID (≥250px)</option>
+                  <option value="ENHANCED_REVIEW_REQUIRED">✨ ENHANCED_REVIEW_REQUIRED</option>
                   <option value="IMAGE_LOW_RESOLUTION">⚠️ IMAGE_LOW_RESOLUTION</option>
                   <option value="IMAGE_BLURRY">⚠️ IMAGE_BLURRY</option>
                   <option value="IMAGE_MISSING">❌ IMAGE_MISSING</option>
@@ -1026,7 +1076,11 @@ export default function AdminDashboard() {
                                 {p.dimensionLabel || (p.imageWidth && p.imageHeight ? `${p.imageWidth} × ${p.imageHeight} px` : '—')}
                               </div>
                               <div>
-                                {((p.imageStatus === 'IMAGE_VALID') || (!p.imageStatus && p.isAiReady)) ? (
+                                {(p.imageStatus === 'ENHANCED_REVIEW_REQUIRED' || p.image_status === 'ENHANCED_REVIEW_REQUIRED' || p.approval_status === 'ENHANCED_REVIEW_REQUIRED') ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 font-bold border border-blue-300 dark:border-blue-700">
+                                    ENHANCED_REVIEW_REQUIRED
+                                  </span>
+                                ) : ((p.imageStatus === 'IMAGE_VALID') || (!p.imageStatus && p.isAiReady)) ? (
                                   p.qualityStatus === 'high_resolution' ? (
                                     <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-800">
                                       IMAGE_VALID • HD Studio
@@ -1229,6 +1283,16 @@ export default function AdminDashboard() {
 
                         {/* Actions */}
                         <td className="py-3 px-4 text-right space-x-2">
+                          {(p.enhancedImageUrl || p.enhanced_image_url) && (
+                            <button
+                              onClick={() => handleOpenCompareModal(p)}
+                              className="p-1.5 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition-colors rounded"
+                              title="Compare Original vs Enhanced Image"
+                            >
+                              <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            </button>
+                          )}
+
                           <button
                             onClick={() => handleOpenApprovalModal(p)}
                             className="p-1.5 text-slate-500 hover:text-black dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
@@ -2917,6 +2981,156 @@ export default function AdminDashboard() {
               >
                 {catalogueActionLoading ? 'Reseeding...' : 'Reset to Default Seed'}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ENHANCED SAREE COMPARISON & APPROVAL MODAL */}
+      {isCompareModalOpen && comparingProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 max-w-4xl w-full p-6 shadow-2xl space-y-5 rounded max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#F5AFAF] font-bold">
+                    Quality Inspection Dossier
+                  </span>
+                  <span className="text-xs px-2 py-0.5 rounded font-mono font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700">
+                    ID #{comparingProduct.id}
+                  </span>
+                </div>
+                <h3 className="font-serif text-xl font-normal text-slate-900 dark:text-white mt-1">
+                  {comparingProduct.name}
+                </h3>
+                <p className="text-xs text-slate-500 font-mono mt-0.5">
+                  Brand: {comparingProduct.brand || 'VESTRA'} • SKU: {comparingProduct.sku} • Category: Saree
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCompareModalOpen(false)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Notification message */}
+            {compareMessage && (
+              <div className={`p-3 text-xs rounded border flex items-center space-x-2 ${
+                compareMessage.type === 'success'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-200 border-emerald-300 dark:border-emerald-800'
+                  : 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-200 border-rose-300 dark:border-rose-800'
+              }`}>
+                {compareMessage.type === 'success' ? (
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+                )}
+                <span>{compareMessage.text}</span>
+              </div>
+            )}
+
+            {/* Side-by-Side Comparison Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column: Original Thumbnail */}
+              <div className="space-y-3 bg-slate-50 dark:bg-slate-950/50 p-4 border border-slate-200 dark:border-slate-800 rounded">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase font-mono tracking-wider font-bold text-slate-700 dark:text-slate-300">
+                    Original Asset (Option B)
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-semibold bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-300">
+                    &lt; 250px Thumbnail
+                  </span>
+                </div>
+
+                <div className="aspect-[3/4] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded overflow-hidden flex items-center justify-center p-2">
+                  <img
+                    src={comparingProduct.originalImageUrl || comparingProduct.original_image_url || comparingProduct.imageUrl}
+                    alt="Original Saree Thumbnail"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
+
+                <div className="text-[11px] text-slate-500 space-y-1 font-mono">
+                  <p>• Dimensions: ~180 × 240 px (Pixelated)</p>
+                  <p>• Status: Insufficient for AI Try-On</p>
+                  <p>• Detail: Zari and weave blur upon zoom</p>
+                </div>
+              </div>
+
+              {/* Right Column: Enhanced Saree */}
+              <div className="space-y-3 bg-blue-50/40 dark:bg-blue-950/20 p-4 border border-blue-200 dark:border-blue-900/50 rounded">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase font-mono tracking-wider font-bold text-blue-900 dark:text-blue-300">
+                    Enhanced Asset (Local Upscale)
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded font-mono font-bold bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 border border-blue-400">
+                    600 × 708 px (Passed Gate)
+                  </span>
+                </div>
+
+                <div className="aspect-[3/4] bg-white dark:bg-slate-900 border border-blue-300 dark:border-blue-800 rounded overflow-hidden flex items-center justify-center p-2 relative">
+                  <img
+                    src={comparingProduct.enhancedImageUrl || comparingProduct.enhanced_image_url}
+                    alt="Enhanced Saree Asset"
+                    className="max-w-full max-h-full object-contain"
+                  />
+                  <div className="absolute top-2 right-2 bg-blue-900/80 text-white text-[9px] uppercase font-mono px-2 py-0.5 rounded backdrop-blur-xs">
+                    3×3 Unsharp Masked
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-slate-500 space-y-1 font-mono">
+                  <p>• Dimensions: 600 × 708 px (Aspect Preserved)</p>
+                  <p>• Method: High-Quality Bicubic + Conservative Sharpening</p>
+                  <p>• Review Status: Awaiting Admin Visual Sign-off</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quality & Ethical Guardrail Banner */}
+            <div className="p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/60 rounded text-xs text-amber-900 dark:text-amber-300 space-y-1">
+              <div className="flex items-center space-x-1.5 font-bold uppercase font-mono text-[11px]">
+                <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+                <span>Strict AI Readiness Guardrail</span>
+              </div>
+              <p className="text-[11px] leading-relaxed">
+                A 250×250+ pixel output does not automatically make an image genuinely studio-grade. Inspect borders, zari embroidery, and pallu motifs. Only approve if the garment pattern is clear and accurately represents the authentic physical saree.
+              </p>
+            </div>
+
+            {/* Footer Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setIsCompareModalOpen(false)}
+                className="w-full sm:w-auto px-4 py-2 border border-slate-300 dark:border-slate-700 text-xs uppercase font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded"
+              >
+                Close Without Changing
+              </button>
+
+              <div className="flex items-center space-x-2 w-full sm:w-auto justify-end">
+                <button
+                  type="button"
+                  onClick={() => handleRejectEnhanced(comparingProduct.id)}
+                  disabled={compareActionLoading}
+                  className="px-4 py-2 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-950/70 border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs uppercase font-mono font-bold rounded transition-colors disabled:opacity-50"
+                >
+                  {compareActionLoading ? 'Rejecting...' : 'Reject (Request Studio Reshoot)'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleApproveEnhanced(comparingProduct.id)}
+                  disabled={compareActionLoading}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs uppercase font-mono font-bold rounded shadow-sm transition-colors disabled:opacity-50 flex items-center space-x-1.5"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{compareActionLoading ? 'Approving...' : 'Approve as AI_READY'}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

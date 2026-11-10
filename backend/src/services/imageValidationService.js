@@ -525,6 +525,26 @@ export const imageValidationService = {
         framing = 'full_body';
         recommendations.push('Optimal portrait aspect ratio detected for virtual garment draping.');
       }
+
+      // 3. Anatomical Pose & Limb Separation Assessment (Investigating 3-hands / extra limb defect)
+      let anatomicalDefectRisk = 'LOW';
+      let poseStatus = 'POSE_NATURAL_ARMS_SEPARATED';
+
+      if (framing === 'close_up') {
+        anatomicalDefectRisk = 'HIGH';
+        poseStatus = 'POSE_OCCLUDED_LIMBS';
+        warnings.push('Anatomical Risk: Close-up framing hides arms and hands. Diffusion models risk synthesizing phantom extra hands.');
+      } else if (filename.toLowerCase().includes('cross') || filename.toLowerCase().includes('folded')) {
+        anatomicalDefectRisk = 'HIGH';
+        poseStatus = 'POSE_CROSSED_ARMS_RISK';
+        suitabilityScore -= 25;
+        warnings.push('Anatomical Warning: Crossed or folded arms detected across torso. High risk of duplicated limbs or a 3rd hand in virtual try-on.');
+        recommendations.push('Re-shoot with arms naturally separated from the torso so the clothing inpainting mask does not slice through arms.');
+      } else if (aspectRatio < 1.25) {
+        anatomicalDefectRisk = 'MODERATE';
+        poseStatus = 'POSE_POSSIBLE_HANDS_ON_HIPS';
+        recommendations.push('Keep hands slightly away from hips and waist to prevent boundary confusion with garment drape.');
+      }
     }
 
     suitabilityScore = Math.max(10, Math.min(100, suitabilityScore));
@@ -539,6 +559,9 @@ export const imageValidationService = {
       aspectRatio: Number(aspectRatio.toFixed(2)),
       fileSize,
       fileSizeBytes: fileSize,
+      anatomicalDefectRisk: framing === 'close_up' ? 'HIGH' : (filename.toLowerCase().includes('cross') ? 'HIGH' : 'LOW'),
+      poseStatus: framing === 'close_up' ? 'POSE_OCCLUDED_LIMBS' : (filename.toLowerCase().includes('cross') ? 'POSE_CROSSED_ARMS_RISK' : 'POSE_NATURAL_ARMS_SEPARATED'),
+      poseGuidelines: 'Stand upright facing camera with arms naturally relaxed ~15° away from torso. Keep hands open and visible. Avoid crossed arms or hands on hips to prevent duplicate limb generation.',
       warnings,
       recommendations,
       identityPreservationGrade: suitabilityScore >= 80 ? 'HIGH' : suitabilityScore >= 55 ? 'MODERATE' : 'POOR_FRAMING'

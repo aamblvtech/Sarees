@@ -226,6 +226,46 @@ export const tryOnService = {
   },
 
   /**
+   * Report an anatomical defect (three hands, extra limb, limb distortion) on a generated result
+   */
+  async reportDefect({ jobId, defectType, notes }) {
+    const response = await apiClient.post('/tryon/report-defect', { jobId, defectType, notes });
+    return response.data;
+  },
+
+  /**
+   * Fetch Saree Image Audit & Quality Report (18 low-resolution sarees + 6 high-res atelier items)
+   */
+  async getSareesAuditReport() {
+    const response = await apiClient.get('/tryon/sarees/audit-report');
+    return response.data;
+  },
+
+  /**
+   * Trigger Option B local enhancement for all 18 low-res sarees
+   */
+  async enhanceAllLowResSarees() {
+    const response = await apiClient.post('/tryon/sarees/enhance-all');
+    return response.data;
+  },
+
+  /**
+   * Admin: Approve enhanced saree to AI_READY
+   */
+  async approveEnhancedSaree(id, notes) {
+    const response = await apiClient.post(`/tryon/sarees/${id}/approve`, { notes });
+    return response.data;
+  },
+
+  /**
+   * Admin: Reject enhanced saree for studio reshoot
+   */
+  async rejectEnhancedSaree(id, reason) {
+    const response = await apiClient.post(`/tryon/sarees/${id}/reject`, { reason });
+    return response.data;
+  },
+
+  /**
    * Securely delete customer uploaded silhouette from backend storage (Privacy requirement)
    */
   async purgeCustomerPhoto(filename, externalUserId) {

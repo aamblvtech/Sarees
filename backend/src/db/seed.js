@@ -53,9 +53,10 @@ export async function runSeed() {
            description, material, fit, care_instructions, sizes,
            primary_image_url, tryon_image_url, is_sample, is_featured, is_active,
            color, needs_admin_review, discount_percent, image_width, image_height, approval_status,
-           image_status, permission_status
+           image_status, permission_status, original_image_url, enhanced_image_url,
+           enhanced_width, enhanced_height, enhancement_method
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36)
          ON CONFLICT (sku) DO UPDATE
          SET name = EXCLUDED.name, brand = EXCLUDED.brand, category_id = EXCLUDED.category_id,
              subcategory = EXCLUDED.subcategory, gender = EXCLUDED.gender,
@@ -72,6 +73,11 @@ export async function runSeed() {
              approval_status = EXCLUDED.approval_status,
              image_status = EXCLUDED.image_status,
              permission_status = EXCLUDED.permission_status,
+             original_image_url = COALESCE(EXCLUDED.original_image_url, products.original_image_url),
+             enhanced_image_url = COALESCE(EXCLUDED.enhanced_image_url, products.enhanced_image_url),
+             enhanced_width = COALESCE(EXCLUDED.enhanced_width, products.enhanced_width),
+             enhanced_height = COALESCE(EXCLUDED.enhanced_height, products.enhanced_height),
+             enhancement_method = COALESCE(EXCLUDED.enhancement_method, products.enhancement_method),
              updated_at = CURRENT_TIMESTAMP
          RETURNING id, sku`,
         [
@@ -105,7 +111,12 @@ export async function runSeed() {
           prod.imageHeight || null,
           prod.approvalStatus || (prod.tryonCompatibility === 'supported' ? 'AI_READY' : 'APPROVED'),
           prod.imageStatus || (prod.imageWidth && prod.imageHeight && prod.imageWidth >= 250 && prod.imageHeight >= 250 ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION'),
-          prod.permissionStatus || 'authorized'
+          prod.permissionStatus || 'authorized',
+          prod.originalImageUrl || prod.original_image_url || prod.primaryImage,
+          prod.enhancedImageUrl || prod.enhanced_image_url || null,
+          prod.enhancedWidth || prod.enhanced_width || null,
+          prod.enhancedHeight || prod.enhanced_height || null,
+          prod.enhancementMethod || prod.enhancement_method || null
         ]
       );
 

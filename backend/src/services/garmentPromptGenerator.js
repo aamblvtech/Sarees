@@ -94,8 +94,9 @@ export const garmentPromptGenerator = {
     // Title / Weave designation
     parts.push(`Authentic ${name}`);
 
-    // Draping specification
+    // Draping specification & anatomical safeguard
     parts.push('Traditional 6-yard Indian handloom saree drape with front waist pleats and diagonal pallu over left shoulder');
+    parts.push('Anatomical fidelity: exactly two natural hands, natural arm contour without extra limbs');
 
     // Fabric & Zari
     if (material) {
@@ -109,7 +110,7 @@ export const garmentPromptGenerator = {
     }
 
     // Border continuity & contrast blouse specification
-    parts.push('Unbroken contrast border continuity across skirt and pallu edge. Includes tailored contrast blouse. Preserve exact base body color, border width, and metallic zari luster.');
+    parts.push('Unbroken contrast border continuity across skirt and pallu edge. Includes tailored contrast blouse. Preserve exact base body color, border width, and metallic zari luster');
 
     return parts.join('. ').slice(0, 480);
   },

@@ -10,6 +10,7 @@ import { query } from '../config/db.js';
 import imageValidationService from '../services/imageValidationService.js';
 import qrSessionService from '../services/qrSessionService.js';
 import resultQualityService from '../services/resultQualityService.js';
+import imageEnhancementService from '../services/imageEnhancementService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1328,6 +1329,102 @@ router.delete('/cleanup/:filename', async (req, res) => {
       ? `Silhouette '${filename}' permanently purged from server.`
       : `File '${filename}' was already removed or not found.`
   });
+});
+
+/**
+ * POST /api/tryon/report-defect
+ * Customer feedback for anatomical defects (e.g. 3 hands, extra limb, limb distortion)
+ */
+router.post('/report-defect', async (req, res) => {
+  const { jobId, defectType, notes } = req.body;
+  if (!jobId) {
+    return res.status(400).json({ success: false, error: 'Job ID is required to report defect.' });
+  }
+
+  try {
+    const feedbackType = defectType || 'three_hands_extra_limb';
+    const feedbackNotes = notes || 'Customer reported anatomical defect (extra hand/limb detected).';
+
+    await query(
+      `UPDATE tryon_jobs
+       SET has_anatomical_defect = TRUE,
+           user_feedback = $1,
+           feedback_notes = $2,
+           anatomical_plausibility = 'FLAGGED_BY_CUSTOMER'
+       WHERE job_uuid = $3 OR job_id = $3`,
+      [feedbackType, feedbackNotes, jobId]
+    );
+
+    await query(
+      `UPDATE tryon_results
+       SET has_anatomical_defect = TRUE,
+           user_feedback = $1,
+           anatomical_plausibility = 'FLAGGED_BY_CUSTOMER'
+       WHERE job_id IN (SELECT id FROM tryon_jobs WHERE job_uuid = $2 OR job_id = $2)`,
+      [feedbackType, jobId]
+    );
+
+    res.json({
+      success: true,
+      message: 'Defect report recorded successfully. Pose and inpainting segmentation marked for review.',
+      jobId,
+      defectType: feedbackType
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/tryon/sarees/audit-report
+ * Returns full 18-product audit report with dimensions, methods, and approval statuses
+ */
+router.get('/sarees/audit-report', async (req, res) => {
+  try {
+    const report = await imageEnhancementService.generateAuditReport();
+    res.json({ success: true, count: report.length, data: report });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/sarees/enhance-all
+ * Triggers Option B local image enhancement for all 18 low-resolution sarees
+ */
+router.post('/sarees/enhance-all', async (req, res) => {
+  try {
+    const results = await imageEnhancementService.enhanceAllLowResSarees();
+    res.json({ success: true, count: results.length, data: results });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/sarees/:id/approve
+ * Admin approval: elevates an enhanced saree image to AI_READY
+ */
+router.post('/sarees/:id/approve', async (req, res) => {
+  try {
+    const result = await imageEnhancementService.approveEnhancedSaree(parseInt(req.params.id, 10), req.body?.notes);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/sarees/:id/reject
+ * Admin rejection: marks saree for studio reshoot
+ */
+router.post('/sarees/:id/reject', async (req, res) => {
+  try {
+    const result = await imageEnhancementService.rejectEnhancedSaree(parseInt(req.params.id, 10), req.body?.reason);
+    res.json(result);
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 });
 
 export default router;

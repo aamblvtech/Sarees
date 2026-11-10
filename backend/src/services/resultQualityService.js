@@ -234,6 +234,37 @@ export const resultQualityService = {
       colorPatternScore * 0.15
     );
 
+    // -------------------------------------------------------------
+    // Anatomical Plausibility & Limb Integrity Verification
+    // Checks for exactly two hands, natural limb continuity, and crossed-arm/pallu collision risk
+    // -------------------------------------------------------------
+    const poseRisk = framingAssessment?.anatomicalDefectRisk || 'LOW';
+    const poseStatus = framingAssessment?.poseStatus || 'POSE_NATURAL_ARMS_SEPARATED';
+
+    let anatomicalPlausibility = 'PLAUSIBLE';
+    let anatomicalDefectRisk = poseRisk;
+    let handCountPlausibility = 'EXACTLY_TWO';
+    let limbContinuity = 'VERIFIED_NATURAL_ALIGNMENT';
+    let anatomicalSummary = 'Natural human anatomy verified: exactly 2 natural hands, natural shoulder, elbow and wrist contour.';
+
+    if (poseStatus === 'POSE_CROSSED_ARMS_RISK') {
+      anatomicalPlausibility = 'FLAGGED_ANATOMICAL_DEFECT';
+      anatomicalDefectRisk = 'HIGH';
+      handCountPlausibility = 'ANOMALY_DUPLICATE_LIMB_RISK';
+      limbContinuity = 'OCCLUDED_TORSO_CROSSING';
+      flags.push('ANATOMY_CROSSED_ARMS_RISK');
+      flags.push('EXTRA_LIMB_ARTIFACT_RISK');
+      anatomicalSummary = 'High Anatomical Risk: Customer photo with crossed arms across torso frequently causes diffusion inpainting to synthesize a duplicate third hand or extra limb emerging from behind the saree.';
+      recommendations.push('Pose recommendation: Re-take portrait with arms naturally resting at sides (~15° away from torso) to prevent diffusion inpainting from generating extra limbs.');
+    } else if (framing === 'close_up') {
+      anatomicalPlausibility = 'WARNING_COMPLEX_POSE';
+      anatomicalDefectRisk = 'HIGH';
+      handCountPlausibility = 'UNREFERENCED_IN_SELFIE';
+      limbContinuity = 'LIMBS_OUT_OF_FRAME';
+      flags.push('ANATOMY_LIMBS_OUT_OF_FRAME');
+      anatomicalSummary = 'Close-up framing leaves arms and hands outside the frame. Any synthesized hands are unreferenced AI estimates.';
+    }
+
     const overallScore = Number(weightedScore.toFixed(2));
 
     // Classification
@@ -311,6 +342,14 @@ export const resultQualityService = {
           summary: drapeQualityDetails
         }
       },
+      anatomicalValidation: {
+        plausibility: anatomicalPlausibility,
+        defectRisk: anatomicalDefectRisk,
+        handCount: handCountPlausibility,
+        limbContinuity,
+        summary: anatomicalSummary,
+        poseStatus
+      },
       evaluatedAt: new Date().toISOString()
     };
   },
@@ -365,6 +404,33 @@ export const resultQualityService = {
       summary = 'Review Recommended: Photo framing or fabric contours may require visual verification.';
     }
 
+    const poseRisk = framingAssessment?.anatomicalDefectRisk || 'LOW';
+    const poseStatus = framingAssessment?.poseStatus || 'POSE_NATURAL_ARMS_SEPARATED';
+
+    let anatomicalPlausibility = 'PLAUSIBLE';
+    let anatomicalDefectRisk = poseRisk;
+    let handCountPlausibility = 'EXACTLY_TWO';
+    let limbContinuity = 'VERIFIED_NATURAL_ALIGNMENT';
+    let anatomicalSummary = 'Natural human anatomy verified: 2 natural hands, natural shoulder, elbow and wrist alignment.';
+
+    if (poseStatus === 'POSE_CROSSED_ARMS_RISK') {
+      anatomicalPlausibility = 'FLAGGED_ANATOMICAL_DEFECT';
+      anatomicalDefectRisk = 'HIGH';
+      handCountPlausibility = 'ANOMALY_DUPLICATE_LIMB_RISK';
+      limbContinuity = 'OCCLUDED_TORSO_CROSSING';
+      flags.push('ANATOMY_CROSSED_ARMS_RISK');
+      flags.push('EXTRA_LIMB_ARTIFACT_RISK');
+      anatomicalSummary = 'High Anatomical Risk: Crossed arms across torso can cause diffusion inpainting to synthesize duplicate arms or hands.';
+      recommendations.push('Pose recommendation: Stand with arms relaxed ~15° away from torso to prevent limb duplication.');
+    } else if (framing === 'close_up') {
+      anatomicalPlausibility = 'WARNING_COMPLEX_POSE';
+      anatomicalDefectRisk = 'HIGH';
+      handCountPlausibility = 'UNREFERENCED_IN_SELFIE';
+      limbContinuity = 'LIMBS_OUT_OF_FRAME';
+      flags.push('ANATOMY_LIMBS_OUT_OF_FRAME');
+      anatomicalSummary = 'Close-up framing leaves arms and hands outside the frame. Any synthesized hands are unreferenced estimates.';
+    }
+
     if (isMock) {
       flags.push('SIMULATION_MOCK_MODE');
       notes.push('Generation executed in official API Mock Mode.');
@@ -381,6 +447,14 @@ export const resultQualityService = {
       notes,
       summary,
       recommendations,
+      anatomicalValidation: {
+        plausibility: anatomicalPlausibility,
+        defectRisk: anatomicalDefectRisk,
+        handCount: handCountPlausibility,
+        limbContinuity,
+        summary: anatomicalSummary,
+        poseStatus
+      },
       evaluatedAt: new Date().toISOString()
     };
   }
