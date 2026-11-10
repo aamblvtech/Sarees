@@ -197,15 +197,30 @@ router.post('/import-csv', upload.single('csvFile'), async (req, res) => {
  */
 router.get('/suppliers', async (req, res) => {
   try {
-    const result = await query(
-      `SELECT s.*, 
-              COUNT(p.id) as products_count
-       FROM supplier_accounts s
-       LEFT JOIN products p ON p.supplier_id = s.id
-       GROUP BY s.id
-       ORDER BY s.company_name`
+    const supRes = await query(
+      `SELECT id, supplier_code, company_name, company_name as name, contact_person, email, phone,
+              supplier_type, supplier_type as partnership_type, city, country, default_currency,
+              image_usage_terms_agreed,
+              CASE WHEN image_usage_terms_agreed THEN 'full_commercial_rights' ELSE 'pending_agreement' END as image_usage_agreement,
+              status, notes, created_at
+       FROM supplier_accounts
+       ORDER BY company_name`
     );
-    res.json({ success: true, data: result.rows });
+
+    const countRes = await query(
+      `SELECT supplier_id, COUNT(*) as count FROM products WHERE supplier_id IS NOT NULL GROUP BY supplier_id`
+    );
+    const countMap = {};
+    countRes.rows.forEach(r => {
+      countMap[r.supplier_id] = Number(r.count);
+    });
+
+    const suppliers = supRes.rows.map(s => ({
+      ...s,
+      products_count: countMap[s.id] || 0
+    }));
+
+    res.json({ success: true, data: suppliers });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
@@ -254,3 +269,4 @@ router.post('/suppliers', async (req, res) => {
 });
 
 export default router;
+

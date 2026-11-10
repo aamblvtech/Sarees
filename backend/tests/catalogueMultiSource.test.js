@@ -193,3 +193,4 @@ SUP-SKU-002,"Bespoke Italian Poplin Shirt",Aura Fashion,1299,2599,Shirts,upper_b
     assert.ok(csvSource.productsImported >= 1);
   });
 });
+

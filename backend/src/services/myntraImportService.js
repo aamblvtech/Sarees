@@ -616,10 +616,11 @@ export const myntraImportService = {
       }
 
       // 2. Must have documented permission
-      const perm = (product.permission_status || '').toLowerCase();
-      if (perm !== 'authorized' && perm !== 'commercial_license' && perm !== 'brand_partner') {
+      const perm = (product.permission_status || product.image_usage_permission || '').toLowerCase();
+      const validPermissions = ['authorized', 'commercial_license', 'brand_partner', 'supplier_granted', 'confirmed', 'full_commercial_rights'];
+      if (!validPermissions.includes(perm)) {
         throw new Error(
-          `Cannot set status to AI_READY: Documented usage permission is required (current: "${product.permission_status}"). Must be authorized or commercially licensed.`
+          `Cannot set status to AI_READY: Documented usage permission is required (current: "${product.permission_status || product.image_usage_permission}"). Must be authorized or commercially licensed.`
         );
       }
     }

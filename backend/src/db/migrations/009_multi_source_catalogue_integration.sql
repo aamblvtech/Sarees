@@ -125,3 +125,4 @@ CREATE TABLE IF NOT EXISTS catalogue_sync_logs (
   metadata JSONB,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+

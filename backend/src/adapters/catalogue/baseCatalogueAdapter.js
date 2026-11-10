@@ -88,3 +88,4 @@ export class BaseCatalogueAdapter {
     return { categoryId: 2, categorySlug: 'womens-clothing', garmentType: 'full_body' };
   }
 }
+

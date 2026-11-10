@@ -97,7 +97,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server & Connect to Database
-app.listen(PORT, async () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log('========================================================');
   console.log(`  VESTRA Virtual Try-On Backend Service`);
   console.log(`  Running on http://localhost:${PORT}`);

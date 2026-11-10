@@ -162,3 +162,4 @@ export class SupplierCsvAdapter extends BaseCatalogueAdapter {
     return result;
   }
 }
+

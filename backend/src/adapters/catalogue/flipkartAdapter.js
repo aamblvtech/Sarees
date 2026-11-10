@@ -231,3 +231,4 @@ export class FlipkartAdapter extends BaseCatalogueAdapter {
     };
   }
 }
+

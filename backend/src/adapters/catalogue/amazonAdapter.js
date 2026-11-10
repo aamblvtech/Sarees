@@ -214,3 +214,4 @@ export class AmazonAdapter extends BaseCatalogueAdapter {
     };
   }
 }
+

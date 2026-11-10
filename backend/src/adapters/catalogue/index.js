@@ -46,9 +46,9 @@ export async function getCatalogueSourcesOverview() {
     const countRes = await query(
       `SELECT 
          COUNT(*) as total,
-         COUNT(*) FILTER (WHERE approval_status = 'AI_READY' OR approval_status = 'APPROVED') as approved,
-         COUNT(*) FILTER (WHERE approval_status = 'PENDING' OR needs_admin_review = TRUE) as awaiting_review,
-         COUNT(*) FILTER (WHERE tryon_compatibility = 'needs_image_replacement' OR image_status = 'IMAGE_LOW_RESOLUTION') as rejected
+         COUNT(CASE WHEN approval_status = 'AI_READY' OR approval_status = 'APPROVED' THEN 1 END) as approved,
+         COUNT(CASE WHEN approval_status = 'PENDING' OR needs_admin_review = TRUE THEN 1 END) as awaiting_review,
+         COUNT(CASE WHEN tryon_compatibility = 'needs_image_replacement' OR image_status = 'IMAGE_LOW_RESOLUTION' THEN 1 END) as rejected
        FROM products
        WHERE source = $1`,
       [src.slug]
@@ -143,7 +143,8 @@ export async function ingestNormalizedProduct(normalized, options = {}) {
   }
 
   // 2. Strict AI Readiness Guardrail: Imported items MUST await admin review
-  const initialApprovalStatus = (imageStatus === 'IMAGE_VALID' && image_usage_permission === 'confirmed')
+  const validPermissions = ['confirmed', 'supplier_granted', 'authorized', 'commercial_license'];
+  const initialApprovalStatus = (imageStatus === 'IMAGE_VALID' && validPermissions.includes(image_usage_permission))
     ? 'PENDING'
     : 'NEEDS_IMAGE';
 
