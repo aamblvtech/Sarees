@@ -10,6 +10,7 @@ import productRoutes from './routes/products.routes.js';
 import tryonRoutes from './routes/tryon.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import catalogueSourcesRoutes from './routes/catalogueSources.routes.js';
+import supplierRoutes from './routes/supplier.routes.js';
 import { initializeDatabase, testConnection, query } from './config/db.js';
 import { runSeed } from './db/seed.js';
 import qrSessionService from './services/qrSessionService.js';
@@ -56,6 +57,7 @@ app.use('/api', productRoutes);
 app.use('/api/tryon', tryonRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/catalogue-sources', catalogueSourcesRoutes);
+app.use('/api/supplier', supplierRoutes);
 
 // Root route
 app.get('/', (req, res) => {

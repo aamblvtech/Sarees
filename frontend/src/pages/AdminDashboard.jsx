@@ -279,11 +279,19 @@ export default function AdminDashboard() {
     setSourcesLoading(true);
     setSourcesError(null);
     try {
-      const [overviewData, suppliersData] = await Promise.all([
-        catalogueSourcesService.getSourcesOverview(),
-        catalogueSourcesService.getSuppliers()
-      ]);
+      const overviewData = await catalogueSourcesService.getSourcesOverview();
       setSourcesOverview(overviewData || []);
+
+      // Fetch enriched suppliers list from admin API with fallback
+      let suppliersData = [];
+      try {
+        const supRes = await adminService.getSuppliers();
+        if (supRes.success && supRes.data) {
+          suppliersData = supRes.data;
+        }
+      } catch (adminSupErr) {
+        suppliersData = await catalogueSourcesService.getSuppliers();
+      }
       setSuppliersList(suppliersData || []);
     } catch (err) {
       console.error('Failed to load catalogue sources overview:', err);
@@ -309,6 +317,15 @@ export default function AdminDashboard() {
       });
     } finally {
       setTestingSourceSlug(null);
+    }
+  };
+
+  const handleUpdateSupplierStatus = async (supplierId, newStatus) => {
+    try {
+      await adminService.updateSupplierStatus(supplierId, newStatus);
+      await loadSourcesData();
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to update supplier status');
     }
   };
 
@@ -1967,56 +1984,102 @@ export default function AdminDashboard() {
                   <thead>
                     <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
                       <th className="py-2.5 px-4 font-semibold">Supplier Code</th>
-                      <th className="py-2.5 px-4 font-semibold">Company / Mill Name</th>
-                      <th className="py-2.5 px-4 font-semibold">Hub Location</th>
-                      <th className="py-2.5 px-4 font-semibold">Contact Person</th>
-                      <th className="py-2.5 px-4 font-semibold">Partnership Type</th>
-                      <th className="py-2.5 px-4 font-semibold">Image Rights Agreement</th>
-                      <th className="py-2.5 px-4 font-semibold text-right">Actions</th>
+                      <th className="py-2.5 px-4 font-semibold">Company / Brand</th>
+                      <th className="py-2.5 px-4 font-semibold">Location</th>
+                      <th className="py-2.5 px-4 font-semibold">Account Status</th>
+                      <th className="py-2.5 px-4 font-semibold">Submitted Garments</th>
+                      <th className="py-2.5 px-4 font-semibold text-right">Admin Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
-                    {suppliersList.map((sup) => (
-                      <tr key={sup.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                        <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white">
-                          {sup.supplier_code}
-                        </td>
-                        <td className="py-3 px-4">
-                          <p className="font-medium text-slate-900 dark:text-white">{sup.name}</p>
-                          <p className="text-[10px] text-slate-400 font-mono">{sup.email || 'direct feed'}</p>
-                        </td>
-                        <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
-                          {sup.city}, {sup.state}
-                        </td>
-                        <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
-                          {sup.contact_person || 'Managing Director'}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px] uppercase font-bold tracking-wider">
-                            {sup.partnership_type?.replace(/_/g, ' ') || 'Partner'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] uppercase font-bold tracking-wider">
-                            {sup.image_usage_agreement?.replace(/_/g, ' ') || 'Commercial License'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <button
-                            onClick={() => {
-                              setSupplierCsvForm(prev => ({ ...prev, supplierId: sup.id.toString() }));
-                              setSupplierCsvResult(null);
-                              setSupplierCsvError(null);
-                              setIsSupplierCsvModalOpen(true);
-                            }}
-                            className="px-2.5 py-1 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-[11px] uppercase tracking-wider font-semibold transition-colors inline-flex items-center space-x-1"
-                          >
-                            <Upload className="w-3 h-3 text-[#F5AFAF]" />
-                            <span>Feed CSV</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {suppliersList.map((sup) => {
+                      const compName = sup.company_name || sup.name;
+                      const status = (sup.status || 'active').toLowerCase();
+                      const metrics = sup.productMetrics || { total: 0, approved: 0, pending: 0, rejected: 0 };
+                      const isPending = status === 'pending';
+                      const isActive = status === 'active';
+
+                      return (
+                        <tr key={sup.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                          <td className="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white">
+                            {sup.supplier_code}
+                          </td>
+                          <td className="py-3 px-4">
+                            <p className="font-medium text-slate-900 dark:text-white">{compName}</p>
+                            <p className="text-[10px] text-slate-400 font-mono">
+                              {sup.profile?.brand_name ? `Brand: ${sup.profile.brand_name} • ` : ''}
+                              {sup.email || 'direct feed'}
+                            </p>
+                          </td>
+                          <td className="py-3 px-4 text-slate-600 dark:text-slate-300">
+                            {sup.city || 'Surat'}{sup.state ? `, ${sup.state}` : ''}
+                          </td>
+                          <td className="py-3 px-4">
+                            {isActive ? (
+                              <span className="px-2 py-0.5 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-[10px] uppercase font-bold tracking-wider rounded">
+                                ● Active
+                              </span>
+                            ) : isPending ? (
+                              <span className="px-2 py-0.5 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-800 text-[10px] uppercase font-bold tracking-wider rounded">
+                                ● Pending Approval
+                              </span>
+                            ) : (
+                              <span className="px-2 py-0.5 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-800 text-[10px] uppercase font-bold tracking-wider rounded">
+                                ● {status}
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="space-y-0.5">
+                              <div className="font-semibold text-slate-900 dark:text-white">
+                                {metrics.total || 0} Garments
+                              </div>
+                              <div className="text-[10px] text-slate-400">
+                                <span className="text-emerald-600 dark:text-emerald-400">{metrics.approved || 0} approved</span>
+                                {metrics.pending > 0 && (
+                                  <span className="text-amber-600 dark:text-amber-400 ml-1.5">• {metrics.pending} pending</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4 text-right space-x-1.5">
+                            {isPending && (
+                              <button
+                                onClick={() => handleUpdateSupplierStatus(sup.id, 'active')}
+                                className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] uppercase tracking-wider font-semibold transition-colors inline-flex items-center space-x-1 rounded"
+                                title="Approve Supplier Account and Activate Logins"
+                              >
+                                <Check className="w-3 h-3" />
+                                <span>Approve</span>
+                              </button>
+                            )}
+
+                            {isActive && (
+                              <button
+                                onClick={() => handleUpdateSupplierStatus(sup.id, 'suspended')}
+                                className="px-2 py-1 border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:text-red-600 text-[10px] uppercase tracking-wider font-semibold transition-colors rounded"
+                                title="Suspend Supplier Access"
+                              >
+                                Suspend
+                              </button>
+                            )}
+
+                            <button
+                              onClick={() => {
+                                setSupplierCsvForm(prev => ({ ...prev, supplierId: sup.id.toString() }));
+                                setSupplierCsvResult(null);
+                                setSupplierCsvError(null);
+                                setIsSupplierCsvModalOpen(true);
+                              }}
+                              className="px-2.5 py-1 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-[11px] uppercase tracking-wider font-semibold transition-colors inline-flex items-center space-x-1 rounded"
+                            >
+                              <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                              <span>Feed CSV</span>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

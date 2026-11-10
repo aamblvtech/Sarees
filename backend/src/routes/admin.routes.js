@@ -886,5 +886,191 @@ router.post('/catalogue/reset-seed', requireAdminAuth, async (req, res) => {
   }
 });
 
+/**
+ * GET /api/admin/suppliers
+ * Protected: List all registered suppliers with profiles and product metrics
+ */
+router.get('/suppliers', requireAdminAuth, async (req, res) => {
+  try {
+    const suppliersRes = await query(
+      `SELECT id, supplier_code, company_name, contact_person, email, phone, supplier_type, 
+              city, country, default_currency, image_usage_terms_agreed, status, created_at, updated_at
+       FROM supplier_accounts
+       ORDER BY id DESC`
+    );
+
+    const profilesRes = await query(
+      `SELECT supplier_account_id, brand_name, warehouse_address, contact_phone, tax_id, 
+              business_registration_number, website_url
+       FROM supplier_profiles`
+    );
+    const profileMap = {};
+    (profilesRes.rows || []).forEach(p => {
+      profileMap[p.supplier_account_id] = p;
+    });
+
+    const usersRes = await query(
+      `SELECT id, supplier_account_id, email, full_name, role, status, last_login_at, created_at
+       FROM supplier_users`
+    );
+    const userMap = {};
+    (usersRes.rows || []).forEach(u => {
+      if (!userMap[u.supplier_account_id]) userMap[u.supplier_account_id] = [];
+      userMap[u.supplier_account_id].push(u);
+    });
+
+    // Aggregate product counts per supplier safely
+    const countRes = await query(
+      `SELECT supplier_id,
+              COUNT(*) AS total_count,
+              COUNT(CASE WHEN approval_status = 'APPROVED' THEN 1 END) AS approved_count,
+              COUNT(CASE WHEN approval_status = 'PENDING' THEN 1 END) AS pending_count,
+              COUNT(CASE WHEN approval_status = 'REJECTED' THEN 1 END) AS rejected_count,
+              COUNT(CASE WHEN approval_status = 'NEEDS_IMAGE_REPLACEMENT' THEN 1 END) AS needs_image_count,
+              COUNT(CASE WHEN is_ai_ready = TRUE THEN 1 END) AS ai_ready_count
+       FROM products
+       WHERE supplier_id IS NOT NULL
+       GROUP BY supplier_id`
+    );
+    const countMap = {};
+    (countRes.rows || []).forEach(c => {
+      countMap[c.supplier_id] = {
+        total: parseInt(c.total_count, 10) || 0,
+        approved: parseInt(c.approved_count, 10) || 0,
+        pending: parseInt(c.pending_count, 10) || 0,
+        rejected: parseInt(c.rejected_count, 10) || 0,
+        needs_image: parseInt(c.needs_image_count, 10) || 0,
+        ai_ready: parseInt(c.ai_ready_count, 10) || 0
+      };
+    });
+
+    const suppliers = (suppliersRes.rows || []).map(sa => {
+      const counts = countMap[sa.id] || { total: 0, approved: 0, pending: 0, rejected: 0, needs_image: 0, ai_ready: 0 };
+      const users = userMap[sa.id] || [];
+      const profile = profileMap[sa.id] || {};
+      return {
+        ...sa,
+        profile,
+        users,
+        productMetrics: counts
+      };
+    });
+
+    return res.json({
+      success: true,
+      count: suppliers.length,
+      data: suppliers
+    });
+  } catch (err) {
+    console.error('[Admin List Suppliers Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * PUT /api/admin/suppliers/:id/status
+ * Protected: Approve, reject, or suspend a supplier account and activate/deactivate their user logins
+ */
+router.put('/suppliers/:id/status', requireAdminAuth, async (req, res) => {
+  const supplierId = parseInt(req.params.id, 10);
+  const { status, reason } = req.body;
+
+  const validStatuses = ['active', 'pending', 'rejected', 'suspended'];
+  if (!status || !validStatuses.includes(status.toLowerCase())) {
+    return res.status(400).json({
+      success: false,
+      error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`
+    });
+  }
+
+  const normalizedStatus = status.toLowerCase();
+
+  try {
+    const accCheck = await query('SELECT * FROM supplier_accounts WHERE id = $1', [supplierId]);
+    if (!accCheck.rows || accCheck.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Supplier account not found.' });
+    }
+
+    // Update supplier_accounts
+    const updatedAcc = await query(
+      `UPDATE supplier_accounts
+       SET status = $1, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2
+       RETURNING *`,
+      [normalizedStatus, supplierId]
+    );
+
+    // Synchronize status in supplier_users
+    await query(
+      `UPDATE supplier_users
+       SET status = $1, updated_at = CURRENT_TIMESTAMP
+       WHERE supplier_account_id = $2`,
+      [normalizedStatus, supplierId]
+    );
+
+    // Log admin activity
+    try {
+      await query(
+        `INSERT INTO supplier_activity_logs (supplier_account_id, action, entity_type, entity_id, details)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [
+          supplierId,
+          'ADMIN_STATUS_CHANGE',
+          'supplier_account',
+          String(supplierId),
+          JSON.stringify({ new_status: normalizedStatus, admin: req.admin?.email || 'admin', reason: reason || '' })
+        ]
+      );
+    } catch (logErr) {
+      console.warn('[Admin Activity Log Warning]:', logErr.message);
+    }
+
+    return res.json({
+      success: true,
+      message: `Supplier "${updatedAcc.rows[0].company_name}" status set to ${normalizedStatus}.`,
+      data: updatedAcc.rows[0]
+    });
+  } catch (err) {
+    console.error('[Admin Update Supplier Status Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/admin/suppliers/:id/products
+ * Protected: Retrieve all products submitted by a specific supplier
+ */
+router.get('/suppliers/:id/products', requireAdminAuth, async (req, res) => {
+  const supplierId = parseInt(req.params.id, 10);
+  try {
+    const supplierCheck = await query('SELECT id, company_name FROM supplier_accounts WHERE id = $1', [supplierId]);
+    if (!supplierCheck.rows || supplierCheck.rows.length === 0) {
+      return res.status(404).json({ success: false, error: 'Supplier account not found.' });
+    }
+
+    const productsRes = await query(
+      `SELECT p.id, p.name, p.brand, p.category, p.sub_category, p.gender, p.price, p.original_price,
+              p.colour, p.fabric, p.stock_status, p.image_url, p.approval_status, p.is_active,
+              p.is_ai_ready, p.image_usage_permission, p.created_at, p.updated_at,
+              sps.submission_batch, sps.admin_feedback, sps.submitted_at
+       FROM products p
+       LEFT JOIN supplier_product_submissions sps ON sps.product_id = p.id
+       WHERE p.supplier_id = $1
+       ORDER BY p.id DESC`,
+      [supplierId]
+    );
+
+    return res.json({
+      success: true,
+      supplier: supplierCheck.rows[0],
+      count: productsRes.rows.length,
+      data: productsRes.rows
+    });
+  } catch (err) {
+    console.error('[Admin Supplier Products Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;
 

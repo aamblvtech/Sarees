@@ -75,10 +75,13 @@ router.get('/products', async (req, res) => {
         p.source_url AS "sourceUrl",
         p.affiliate_url AS "affiliateUrl",
         p.external_product_id AS "externalProductId",
+        p.supplier_id AS "supplierId",
+        sa.company_name AS "supplierName",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN supplier_accounts sa ON p.supplier_id = sa.id
       WHERE p.is_active = true AND (p.approval_status IN ('APPROVED', 'AI_READY') OR p.approval_status IS NULL)
     `;
 
@@ -250,10 +253,13 @@ router.get('/products/:id', async (req, res) => {
         p.image_height AS "imageHeight",
         p.approval_status AS "approvalStatus",
         p.myntra_url AS "myntraUrl",
+        p.supplier_id AS "supplierId",
+        sa.company_name AS "supplierName",
         c.name AS "categoryName",
         c.slug AS "categorySlug"
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN supplier_accounts sa ON p.supplier_id = sa.id
       WHERE ${isNumeric ? 'p.id = $1' : 'p.slug = $1'}
       LIMIT 1
     `;

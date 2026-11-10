@@ -264,6 +264,30 @@ export const adminService = {
       headers: this.getAuthHeaders()
     });
     return response.data;
+  },
+
+  /**
+   * Supplier Management (Portal Admin)
+   */
+  async getSuppliers() {
+    const response = await apiClient.get('/admin/suppliers', {
+      headers: this.getAuthHeaders()
+    });
+    return response.data;
+  },
+
+  async updateSupplierStatus(id, status, reason = '') {
+    const response = await apiClient.put(`/admin/suppliers/${id}/status`, { status, reason }, {
+      headers: this.getAuthHeaders()
+    });
+    return response.data;
+  },
+
+  async getSupplierProducts(id) {
+    const response = await apiClient.get(`/admin/suppliers/${id}/products`, {
+      headers: this.getAuthHeaders()
+    });
+    return response.data;
   }
 };
 

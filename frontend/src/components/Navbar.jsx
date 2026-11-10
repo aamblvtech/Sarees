@@ -86,6 +86,13 @@ export default function Navbar() {
             </button>
 
             <Link
+              to="/supplier/login"
+              className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
+            >
+              Supplier Portal
+            </Link>
+
+            <Link
               to="/admin/dashboard"
               className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
             >
@@ -171,6 +178,14 @@ export default function Navbar() {
           })}
 
           <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex flex-col space-y-2">
+            <Link
+              to="/supplier/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-xs uppercase tracking-wider py-2 px-3 text-slate-600 dark:text-slate-400 font-medium"
+            >
+              Supplier Portal
+            </Link>
+
             <Link
               to="/admin/dashboard"
               onClick={() => setMobileMenuOpen(false)}

@@ -8,6 +8,8 @@ import ProductDetails from './pages/ProductDetails';
 import VirtualFittingRoom from './pages/VirtualFittingRoom';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
+import SupplierLogin from './pages/SupplierLogin';
+import SupplierDashboard from './pages/SupplierDashboard';
 import MobileUpload from './pages/MobileUpload';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ThemeProvider } from './context/ThemeContext';
@@ -49,6 +51,11 @@ function AppContent() {
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+            {/* Supplier Portal Routes */}
+            <Route path="/supplier/login" element={<SupplierLogin />} />
+            <Route path="/supplier/register" element={<SupplierLogin />} />
+            <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
 
             {/* Fallback route */}
             <Route path="*" element={<Home />} />
