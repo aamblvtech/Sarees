@@ -624,20 +624,29 @@ export const myntraImportService = {
       }
     }
 
-    // Determine tryon_compatibility and is_active based on status
+    // Determine tryon_compatibility, image_status and is_active based on status
     let tryonCompatibility = product.tryon_compatibility;
     let isActive = product.is_active;
+    let imageStatus = product.image_status || 'IMAGE_VALID';
 
     if (newStatus === 'AI_READY') {
       tryonCompatibility = 'supported';
       isActive = true;
+      imageStatus = 'IMAGE_VALID';
     } else if (newStatus === 'APPROVED') {
       isActive = true;
-      // If image is already valid, make tryon supported
       const meta = imageValidationService.getGarmentMetadata(product.primary_image_url);
       tryonCompatibility = meta.isAiReady ? 'supported' : 'needs_image_replacement';
+      imageStatus = meta.isAiReady ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION';
+    } else if (newStatus === 'NEEDS_IMAGE') {
+      isActive = false;
+      tryonCompatibility = 'needs_image_replacement';
+      imageStatus = 'IMAGE_LOW_RESOLUTION';
+    } else if (newStatus === 'NEEDS_PERMISSION_REVIEW') {
+      isActive = false;
+      imageStatus = 'NEEDS_PERMISSION_REVIEW';
     } else {
-      // DRAFT, NEEDS_IMAGE, NEEDS_PERMISSION_REVIEW, NEEDS_ADMIN_REVIEW
+      // DRAFT, NEEDS_ADMIN_REVIEW
       isActive = false;
       tryonCompatibility = 'needs_image_replacement';
     }
@@ -648,15 +657,17 @@ export const myntraImportService = {
            tryon_compatibility = $2,
            is_active = $3,
            needs_admin_review = $4,
-           permission_notes = COALESCE($5, permission_notes),
+           image_status = $5,
+           permission_notes = COALESCE($6, permission_notes),
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $6
+       WHERE id = $7
        RETURNING *`,
       [
         newStatus,
         tryonCompatibility,
         isActive,
         newStatus === 'NEEDS_ADMIN_REVIEW' || newStatus === 'NEEDS_PERMISSION_REVIEW',
+        imageStatus,
         adminNotes ? `${product.permission_notes ? product.permission_notes + ' | ' : ''}${adminNotes}` : null,
         productId
       ]

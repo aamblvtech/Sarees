@@ -24,6 +24,10 @@ backend/uploads/*
 
 # Temporary scripts
 backend/scripts/
+backend/run_audit.js
+backend/scratch_extract.js
+backend/update_sample_products.js
+scratch/
 
 # Checkpoints / Model weights (multi-GB files)
 checkpoints/*

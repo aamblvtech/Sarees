@@ -1,3 +1,9 @@
+// ==============================================================================
+// VESTRA Luxury Product Taxonomy, Saree Collection & Expanded Multi-Category Apparel
+// Complete Catalogue Dataset: 1-40 Atelier, 41-64 Imported Sarees, 65-92 Extended Apparel
+// Includes Image Status, Dimensions, and AI Technical Readiness Audit Attributes
+// ==============================================================================
+
 export const sampleCategories = [
   {
     "id": 1,
@@ -59,6 +65,7 @@ export const sampleCategories = [
 
 export const sampleModelSilhouettes = [];
 
+
 export const sampleProducts = [
   {
     "id": 1,
@@ -92,7 +99,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 2,
@@ -126,7 +134,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 3,
@@ -160,7 +169,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 4,
@@ -194,7 +204,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 5,
@@ -228,7 +239,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 6,
@@ -262,7 +274,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1641699862936-be9f49b1c38d?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 7,
@@ -296,7 +309,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469668-8e9f641aaf27?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 8,
@@ -330,7 +344,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 9,
@@ -364,7 +379,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1616756141603-6d37d5cde2a2?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 10,
@@ -398,7 +414,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 11,
@@ -432,7 +449,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1710440189404-e95fabead2a3?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 12,
@@ -466,211 +484,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1609748340041-f5d61e061ebc?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 35,
-    "sku": "VES-SAR-013",
-    "name": "Patan Patola Double Ikkat Heritage Silk Saree",
-    "slug": "patan-patola-double-ikkat-heritage-silk-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "patola",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "low_stock",
-    "price": 3200,
-    "originalPrice": 3600,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": true,
-    "isActive": true,
-    "description": "Exquisite Patan double ikkat handloom woven with resist-dyed pure silk yarns in geometric floral and parrot motifs with traditional ruby red and mustard borders.",
-    "material": "100% Pure Mulberry Silk & Natural Herbal Dyes",
-    "fit": "Structured 6-yard unstitched handloom drape with 0.8m unstitched contrast silk blouse piece.",
-    "careInstructions": "Specialist dry clean only. Preserve in unbleached muslin wrap.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 36,
-    "sku": "VES-SAR-014",
-    "name": "Kalamkari Hand-Painted Pure Tussar Silk Saree",
-    "slug": "kalamkari-hand-painted-pure-tussar-silk-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "kalamkari",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "in_stock",
-    "price": 1480,
-    "originalPrice": 1720,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": true,
-    "isActive": true,
-    "description": "Srikalahasti style pen Kalamkari hand-painted using natural vegetable dyes on raw wild tussar silk, portraying celestial motifs and floral vines.",
-    "material": "100% Hand-Spun Wild Tussar Silk",
-    "fit": "Fluid 6-yard hand-painted drape with 0.8m unstitched raw silk blouse piece.",
-    "careInstructions": "Specialist dry clean only.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 37,
-    "sku": "VES-SAR-015",
-    "name": "Kota Doria Gold Zari Tissue Wedding Saree",
-    "slug": "kota-doria-gold-zari-tissue-wedding-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "kota_doria",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "in_stock",
-    "price": 1120,
-    "originalPrice": 1300,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Featherweight translucent Kota Doria weave with gold corded pit-loom khat square patterns, delicate botanical butis, and a shimmering zari tissue border.",
-    "material": "75% Fine Organic Cotton, 25% Pure Mulberry Silk with Real Zari",
-    "fit": "Lightweight crisp 6-yard airy drape with unstitched contrast tissue blouse.",
-    "careInstructions": "Dry clean only.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 38,
-    "sku": "VES-SAR-016",
-    "name": "Bandhani Gharchola Bridal Heritage Saree",
-    "slug": "bandhani-gharchola-bridal-heritage-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "bandhani",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "in_stock",
-    "price": 2450,
-    "originalPrice": 2800,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": true,
-    "isActive": true,
-    "description": "Traditional Gujarati Gharchola checkered grid with intricate hand-tied Rai Bandhej dots in vermillion crimson silk with gold zari borders and peacock pallu.",
-    "material": "Pure Gajji Silk with Hand-Tied Bandhej & 24K Gold Zari",
-    "fit": "Royal 6-yard bridal drape with unstitched heavy zari blouse piece.",
-    "careInstructions": "Specialist bridal couture dry clean only.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 39,
-    "sku": "VES-SAR-017",
-    "name": "Mysore Crepe Silk Pure Gold Zari Saree",
-    "slug": "mysore-crepe-silk-pure-gold-zari-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "mysore_silk",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "in_stock",
-    "price": 1650,
-    "originalPrice": 1900,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Pure Karnataka crepe silk in royal peacock blue with authentic certified 24K pure gold electroplated zari border, plain body, and rich zari pallu.",
-    "material": "100% Grade 6A Pure Karnataka Crepe Silk & 24K Gold Zari",
-    "fit": "Sumptuous buttery fluid drape with clean cascading pleats.",
-    "careInstructions": "Dry clean only. Roll in cotton casing.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
-  },
-  {
-    "id": 40,
-    "sku": "VES-SAR-018",
-    "name": "Tussar Gicha Handloom Tribal Motif Saree",
-    "slug": "tussar-gicha-handloom-tribal-motif-saree",
-    "categoryId": 1,
-    "categoryName": "Sarees",
-    "subcategory": "tussar",
-    "gender": "women",
-    "garmentType": "saree",
-    "tryonCompatibility": "supported",
-    "stockStatus": "in_stock",
-    "price": 890,
-    "originalPrice": 1050,
-    "currency": "USD",
-    "isSample": false,
-    "isFeatured": false,
-    "isActive": true,
-    "description": "Wild forest tussar silk in natural honey gold interwoven with textured gicha slub yarn, earthen temple border, and hand-block printed tribal pallu.",
-    "material": "100% Wild Forest Tussar Silk & Hand-Spun Gicha Yarn",
-    "fit": "Textured handloom drape with natural organic sheen and crisp pleat retention.",
-    "careInstructions": "Specialist dry clean only.",
-    "sizes": [
-      "Free Size (6 Yards)"
-    ],
-    "primaryImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85",
-    "images": [
-      "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85"
-    ],
-    "tryonOverlayImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85",
-    "imageWidth": 1200,
-    "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 13,
@@ -708,7 +523,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1518049362265-d5b2a6467637?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 14,
@@ -746,7 +562,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 15,
@@ -784,7 +601,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1574634534894-89d7576c8259?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 16,
@@ -822,7 +640,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 17,
@@ -859,7 +678,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 18,
@@ -896,7 +716,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1612423284934-2850a4ea6b0f?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 19,
@@ -934,7 +755,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 20,
@@ -972,7 +794,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 21,
@@ -1009,7 +832,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 22,
@@ -1047,7 +871,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 23,
@@ -1085,7 +910,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 24,
@@ -1123,7 +949,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 25,
@@ -1160,7 +987,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 26,
@@ -1197,7 +1025,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 27,
@@ -1235,7 +1064,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1610652492500-ded49ceeb378?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 28,
@@ -1272,7 +1102,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 29,
@@ -1309,7 +1140,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1593032465175-481ac7f401a0?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 30,
@@ -1346,7 +1178,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1598808503746-f34c53b9323e?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 31,
@@ -1383,7 +1216,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 32,
@@ -1420,7 +1254,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "AI_READY"
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 33,
@@ -1457,7 +1292,8 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "APPROVED"
+    "approvalStatus": "APPROVED",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 34,
@@ -1491,7 +1327,218 @@ export const sampleProducts = [
     "tryonOverlayImage": "https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
     "imageHeight": 1600,
-    "approvalStatus": "APPROVED"
+    "approvalStatus": "APPROVED",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 35,
+    "sku": "VES-SAR-013",
+    "name": "Patan Patola Double Ikkat Heritage Silk Saree",
+    "slug": "patan-patola-double-ikkat-heritage-silk-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "patola",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "low_stock",
+    "price": 3200,
+    "originalPrice": 3600,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": true,
+    "description": "Exquisite Patan double ikkat handloom woven with resist-dyed pure silk yarns in geometric floral and parrot motifs with traditional ruby red and mustard borders.",
+    "material": "100% Pure Mulberry Silk & Natural Herbal Dyes",
+    "fit": "Structured 6-yard unstitched handloom drape with 0.8m unstitched contrast silk blouse piece.",
+    "careInstructions": "Specialist dry clean only. Preserve in unbleached muslin wrap.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 36,
+    "sku": "VES-SAR-014",
+    "name": "Kalamkari Hand-Painted Pure Tussar Silk Saree",
+    "slug": "kalamkari-hand-painted-pure-tussar-silk-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "kalamkari",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1480,
+    "originalPrice": 1720,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": true,
+    "description": "Srikalahasti style pen Kalamkari hand-painted using natural vegetable dyes on raw wild tussar silk, portraying celestial motifs and floral vines.",
+    "material": "100% Hand-Spun Wild Tussar Silk",
+    "fit": "Fluid 6-yard hand-painted drape with 0.8m unstitched raw silk blouse piece.",
+    "careInstructions": "Specialist dry clean only.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 37,
+    "sku": "VES-SAR-015",
+    "name": "Kota Doria Gold Zari Tissue Wedding Saree",
+    "slug": "kota-doria-gold-zari-tissue-wedding-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "kota_doria",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1120,
+    "originalPrice": 1300,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": true,
+    "description": "Featherweight translucent Kota Doria weave with gold corded pit-loom khat square patterns, delicate botanical butis, and a shimmering zari tissue border.",
+    "material": "75% Fine Organic Cotton, 25% Pure Mulberry Silk with Real Zari",
+    "fit": "Lightweight crisp 6-yard airy drape with unstitched contrast tissue blouse.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1753981031189-27bb7bd1c079?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 38,
+    "sku": "VES-SAR-016",
+    "name": "Bandhani Gharchola Bridal Heritage Saree",
+    "slug": "bandhani-gharchola-bridal-heritage-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "bandhani",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 2450,
+    "originalPrice": 2800,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": true,
+    "description": "Traditional Gujarati Gharchola checkered grid with intricate hand-tied Rai Bandhej dots in vermillion crimson silk with gold zari borders and peacock pallu.",
+    "material": "Pure Gajji Silk with Hand-Tied Bandhej & 24K Gold Zari",
+    "fit": "Royal 6-yard bridal drape with unstitched heavy zari blouse piece.",
+    "careInstructions": "Specialist bridal couture dry clean only.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1745482035737-8cb1cc6d4471?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 39,
+    "sku": "VES-SAR-017",
+    "name": "Mysore Crepe Silk Pure Gold Zari Saree",
+    "slug": "mysore-crepe-silk-pure-gold-zari-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "mysore_silk",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 1650,
+    "originalPrice": 1900,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": true,
+    "description": "Pure Karnataka crepe silk in royal peacock blue with authentic certified 24K pure gold electroplated zari border, plain body, and rich zari pallu.",
+    "material": "100% Grade 6A Pure Karnataka Crepe Silk & 24K Gold Zari",
+    "fit": "Sumptuous buttery fluid drape with clean cascading pleats.",
+    "careInstructions": "Dry clean only. Roll in cotton casing.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
+  },
+  {
+    "id": 40,
+    "sku": "VES-SAR-018",
+    "name": "Tussar Gicha Handloom Tribal Motif Saree",
+    "slug": "tussar-gicha-handloom-tribal-motif-saree",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "tussar",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "supported",
+    "stockStatus": "in_stock",
+    "price": 890,
+    "originalPrice": 1050,
+    "currency": "USD",
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": true,
+    "description": "Wild forest tussar silk in natural honey gold interwoven with textured gicha slub yarn, earthen temple border, and hand-block printed tribal pallu.",
+    "material": "100% Wild Forest Tussar Silk & Hand-Spun Gicha Yarn",
+    "fit": "Textured handloom drape with natural organic sheen and crisp pleat retention.",
+    "careInstructions": "Specialist dry clean only.",
+    "sizes": [
+      "Free Size (6 Yards)"
+    ],
+    "primaryImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85",
+    "images": [
+      "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85"
+    ],
+    "tryonOverlayImage": "https://images.unsplash.com/photo-1742891595309-c667b0dfd3fc?auto=format&fit=crop&w=1200&q=85",
+    "imageWidth": 1200,
+    "imageHeight": 1600,
+    "approvalStatus": "AI_READY",
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 41,
@@ -1512,7 +1559,7 @@ export const sampleProducts = [
     "currency": "INR",
     "color": "Red & Green",
     "material": "Pure Silk",
-    "needsAdminReview": true,
+    "needsAdminReview": false,
     "isSample": false,
     "isFeatured": false,
     "isActive": true,
@@ -1529,6 +1576,7 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_41_sangria_printed_silk_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
   },
   {
@@ -1567,6 +1615,7 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_42_nevash_art_silk_blue_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
   },
   {
@@ -1588,7 +1637,7 @@ export const sampleProducts = [
     "currency": "INR",
     "color": "Off-White & Pink",
     "material": "Chanderi Cotton",
-    "needsAdminReview": true,
+    "needsAdminReview": false,
     "isSample": false,
     "isFeatured": false,
     "isActive": true,
@@ -1605,6 +1654,7 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_43_anouk_rustic_chanderi_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
   },
   {
@@ -1643,6 +1693,7 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_44_kasee_beads_stones_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
   },
   {
@@ -1664,7 +1715,7 @@ export const sampleProducts = [
     "currency": "INR",
     "color": "Rust Orange & Navy",
     "material": "Maheshwari Silk Blend",
-    "needsAdminReview": true,
+    "needsAdminReview": false,
     "isSample": false,
     "isFeatured": false,
     "isActive": true,
@@ -1681,7 +1732,47 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_45_kalini_maheshwari_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
+  },
+  {
+    "id": 46,
+    "sku": "VES-SAR-046",
+    "brand": "kasee",
+    "name": "Silk Blend Saree",
+    "slug": "kasee-silk-blend-saree-olive-ombre-46",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 990,
+    "originalPrice": 7163,
+    "discountPercent": 86,
+    "currency": "INR",
+    "color": "Olive & Gold Ombre",
+    "material": "Silk Blend",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "kasee olive and antique gold ombré gradient saree in fluid silk blend with soft sheen and luminous drape.",
+    "fit": "Flowing ombre drape that aligns gracefully along pleats and pallu.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_46_kasee_silk_blend.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
   },
   {
     "id": 47,
@@ -1719,7 +1810,671 @@ export const sampleProducts = [
     "tryonOverlayImage": "/uploads/catalogue_sarees/saree_47_anouk_organza_pink_hires.jpg",
     "imageWidth": 1200,
     "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID",
     "approvalStatus": "AI_READY"
+  },
+  {
+    "id": 48,
+    "sku": "VES-SAR-048",
+    "brand": "nevash fashion",
+    "name": "Woven Design Art Silk Saree",
+    "slug": "nevash-fashion-woven-design-art-silk-saree-bronze-48",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1099,
+    "originalPrice": 1549,
+    "discountPercent": 29,
+    "currency": "INR",
+    "color": "Copper Bronze",
+    "material": "Art Silk",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "nevash fashion rich copper bronze art silk saree enriched with traditional Indian woven motifs and a broad embroidered hem.",
+    "fit": "Opulent ceremonial drape with structured pleats.",
+    "careInstructions": "Dry clean recommended.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_48_nevash_copper_art_silk.jpg",
+    "imageWidth": 161,
+    "imageHeight": 188,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 49,
+    "sku": "VES-SAR-049",
+    "brand": "Mitera",
+    "name": "Pure Georgette Bandhani Saree",
+    "slug": "mitera-pure-georgette-bandhani-saree-magenta-49",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 924,
+    "originalPrice": 4999,
+    "discountPercent": 82,
+    "currency": "INR",
+    "color": "Magenta Pink",
+    "material": "Pure Georgette",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Mitera magenta pink pure georgette saree accented with white Bandhani tie-dye dots and delicate golden border. Note: Product title truncated in source catalogue; flagged for admin review.",
+    "fit": "Fluid lightweight georgette drape clinging naturally to body contours.",
+    "careInstructions": "Dry clean only to protect delicate tie-dye texture.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_49_mitera_georgette_bandhani.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 50,
+    "sku": "VES-SAR-050",
+    "brand": "Saree mall",
+    "name": "Sequinned Pure Georgette Saree",
+    "slug": "saree-mall-sequinned-pure-georgette-saree-rust-brown-50",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1300,
+    "originalPrice": 8999,
+    "discountPercent": 86,
+    "currency": "INR",
+    "color": "Rust Brown",
+    "material": "Pure Georgette",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Saree mall rust brown sheer georgette evening saree covered with subtle scattered sequin sparkles and embroidered borders. Note: Product title truncated in source catalogue; flagged for admin review.",
+    "fit": "Sleek celebratory evening drape.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_50_saree_mall_sequinned_georgette.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 51,
+    "sku": "VES-SAR-051",
+    "brand": "Anouk",
+    "name": "Embellished Net Saree",
+    "slug": "anouk-embellished-net-saree-champagne-beige-51",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 903,
+    "originalPrice": 5999,
+    "discountPercent": 85,
+    "currency": "INR",
+    "color": "Champagne Beige",
+    "material": "Net",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Anouk ethereal champagne beige net saree lavishly embroidered with vertical sequin strings and beaded hem fringes.",
+    "fit": "Fitted red-carpet style net drape.",
+    "careInstructions": "Dry clean only to maintain delicate net and sequin embroidery.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_51_anouk_embellished_net.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 52,
+    "sku": "VES-SAR-052",
+    "brand": "nevash fashion",
+    "name": "Art Silk Saree",
+    "slug": "nevash-fashion-art-silk-saree-peach-orange-52",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1499,
+    "originalPrice": 1849,
+    "discountPercent": 19,
+    "currency": "INR",
+    "color": "Peach Orange",
+    "material": "Art Silk",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "nevash fashion radiant peach-orange art silk festive saree with fine gold-tone zari stripes and delicate tassels along the pallu.",
+    "fit": "Festive classic drape with balanced shimmer.",
+    "careInstructions": "Gentle hand wash or dry clean.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_52_nevash_peach_art_silk.jpg",
+    "imageWidth": 161,
+    "imageHeight": 188,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 53,
+    "sku": "VES-SAR-053",
+    "brand": "Saree mall",
+    "name": "Ethnic Motifs Patola Sarees",
+    "slug": "saree-mall-ethnic-motifs-patola-sarees-royal-blue-53",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 925,
+    "originalPrice": 6999,
+    "discountPercent": 87,
+    "currency": "INR",
+    "color": "Royal Blue & White",
+    "material": "Silk Blend",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": false,
+    "description": "Saree mall royal blue silk blend saree decorated with intricate geometric Gujarati Patola motifs and contrasting borders.",
+    "fit": "Heritage Gujarati Patola drape with structured pleating.",
+    "careInstructions": "Dry clean recommended.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_53_saree_mall_patola.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 54,
+    "sku": "VES-SAR-054",
+    "brand": "all about you",
+    "name": "Woven Design Kanjeevaram Saree",
+    "slug": "all-about-you-woven-design-kanjeevaram-saree-teal-blue-54",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1303,
+    "originalPrice": 8999,
+    "discountPercent": 86,
+    "currency": "INR",
+    "color": "Teal Green & Blue",
+    "material": "Kanjeevaram Silk Blend",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "all about you rich teal green body paired with royal peacock blue woven zari border in traditional Kanjeevaram style. Note: Product title truncated in source catalogue; flagged for admin review.",
+    "fit": "Rich bridal and ceremonial Kanjeevaram drape.",
+    "careInstructions": "Dry clean only to maintain gold zari weaving.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_54_all_about_you_kanjeevaram.jpg",
+    "imageWidth": 161,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 55,
+    "sku": "VES-SAR-055",
+    "brand": "Sangria",
+    "name": "Sequinned Fusion Saree",
+    "slug": "sangria-sequinned-fusion-saree-black-55",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1283,
+    "originalPrice": 5049,
+    "discountPercent": 75,
+    "currency": "INR",
+    "color": "Black",
+    "material": "Poly-Georgette",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": false,
+    "description": "Sangria sleek monochrome black cocktail saree shimmering with dense tone-on-tone sequin stripes across body and pallu.",
+    "fit": "Modern body-hugging cocktail drape.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_55_sangria_black_sequinned.jpg",
+    "imageWidth": 176,
+    "imageHeight": 194,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 56,
+    "sku": "VES-SAR-056",
+    "brand": "Saree mall",
+    "name": "Floral Pure Georgette Saree",
+    "slug": "saree-mall-floral-pure-georgette-saree-purple-56",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1300,
+    "originalPrice": 8999,
+    "discountPercent": 86,
+    "currency": "INR",
+    "color": "Royal Purple",
+    "material": "Pure Georgette",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Saree mall imperial purple lightweight pure georgette saree scattered with fine golden botanical bootis and scalloped gold lace borders.",
+    "fit": "Fluid cascading drape ideal for festive receptions.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_56_saree_mall_purple_georgette.jpg",
+    "imageWidth": 176,
+    "imageHeight": 194,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 57,
+    "sku": "VES-SAR-057",
+    "brand": "all about you",
+    "name": "Zari Detail Pure Chiffon Saree",
+    "slug": "all-about-you-zari-detail-pure-chiffon-saree-red-57",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 968,
+    "originalPrice": 9599,
+    "discountPercent": 90,
+    "currency": "INR",
+    "color": "Ruby Red",
+    "material": "Pure Chiffon",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": false,
+    "description": "all about you passionate ruby red gossamer pure chiffon saree highlighted with antique gold zari border and woven pallu striping.",
+    "fit": "Featherlight pure chiffon drape that contours effortlessly.",
+    "careInstructions": "Specialist dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_57_all_about_you_red_chiffon.jpg",
+    "imageWidth": 176,
+    "imageHeight": 194,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 58,
+    "sku": "VES-SAR-058",
+    "brand": "VSOKA",
+    "name": "Woven Design Banarasi Satin Saree",
+    "slug": "vsoka-woven-design-banarasi-satin-saree-sage-green-58",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1099,
+    "originalPrice": null,
+    "discountPercent": null,
+    "currency": "INR",
+    "color": "Sage Green",
+    "material": "Banarasi Satin Silk",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "VSOKA sophisticated sage green Banarasi satin silk saree showcasing silver zari floral jaal weaving across the body. Note: Original MRP not published in screenshot; title truncated; flagged for admin review.",
+    "fit": "Smooth satin lustre with structured traditional drape.",
+    "careInstructions": "Dry clean recommended for satin silk preservation.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_58_vsoka_banarasi_satin.jpg",
+    "imageWidth": 176,
+    "imageHeight": 194,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 59,
+    "sku": "VES-SAR-059",
+    "brand": "KALINI",
+    "name": "Ethnic Motifs Printed Saree",
+    "slug": "kalini-ethnic-motifs-printed-saree-black-cream-59",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 442,
+    "originalPrice": 1770,
+    "discountPercent": 75,
+    "currency": "INR",
+    "color": "Black & Cream",
+    "material": "Cotton Blend",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "KALINI contemporary monochrome black and cream cotton blend saree featuring heritage kalamkari-inspired geometric prints.",
+    "fit": "Breathable every-day ethnic drape.",
+    "careInstructions": "Machine wash gentle cold with similar colors.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_59_kalini_black_cream_printed.jpg",
+    "imageWidth": 174,
+    "imageHeight": 194,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 60,
+    "sku": "VES-SAR-060",
+    "brand": "House of Pataudi",
+    "name": "Embellished Border Saree",
+    "slug": "house-of-pataudi-embellished-border-saree-silver-champagne-60",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1334,
+    "originalPrice": 5999,
+    "discountPercent": 78,
+    "currency": "INR",
+    "color": "Silver Champagne",
+    "material": "Tissue Silk Blend",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": false,
+    "description": "House of Pataudi regal silver champagne tissue silk saree featuring fine scalloped embroidered border and subtle metallic sheen.",
+    "fit": "Aristocratic Nawabi drape with shimmering texture.",
+    "careInstructions": "Dry clean only to protect metallic tissue threads.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_60_house_of_pataudi_silver.jpg",
+    "imageWidth": 171,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 61,
+    "sku": "VES-SAR-061",
+    "brand": "DARPAN TEXTILE",
+    "name": "Ethnic Sarees",
+    "slug": "darpan-textile-ethnic-sarees-yellow-red-61",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 698,
+    "originalPrice": 3999,
+    "discountPercent": 83,
+    "currency": "INR",
+    "color": "Canary Yellow & Red",
+    "material": "Poly-Crepe",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "DARPAN TEXTILE bright canary yellow festive saree with red chevron Leheriya print and embroidered borders. Note: Generic title in catalogue requires verification; flagged for admin review.",
+    "fit": "Festive Rajasthani Leheriya drape.",
+    "careInstructions": "Hand wash cold or dry clean.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_61_darpan_yellow_chevron.jpg",
+    "imageWidth": 171,
+    "imageHeight": 174,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 62,
+    "sku": "VES-SAR-062",
+    "brand": "Anouk",
+    "name": "Women Ready To Wear Saree",
+    "slug": "anouk-women-ready-to-wear-saree-champagne-beige-62",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1487,
+    "originalPrice": 6999,
+    "discountPercent": 79,
+    "currency": "INR",
+    "color": "Champagne Beige",
+    "material": "Organza Silk",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": true,
+    "isActive": false,
+    "description": "Anouk pre-stitched ready-to-wear champagne beige organza saree with pre-formed pleats and delicate floral embroidery.",
+    "fit": "Instant slip-on pleated fit designed for effortless elegant wear.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (Adjustable waist 26-38 in)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_62_anouk_ready_to_wear_beige.jpg",
+    "imageWidth": 171,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 63,
+    "sku": "VES-SAR-063",
+    "brand": "Anouk",
+    "name": "Embellished Tissue Saree",
+    "slug": "anouk-embellished-tissue-saree-navy-blue-63",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1474,
+    "originalPrice": 9999,
+    "discountPercent": 85,
+    "currency": "INR",
+    "color": "Navy Blue",
+    "material": "Tissue",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Anouk deep midnight navy blue tissue saree highlighted with silver and pearl sequin embroidery along the border and scattered across pallu.",
+    "fit": "Crisp luminous tissue drape catching light from every angle.",
+    "careInstructions": "Dry clean only.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_63_anouk_navy_tissue.jpg",
+    "imageWidth": 171,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
+  },
+  {
+    "id": 64,
+    "sku": "VES-SAR-064",
+    "brand": "Sangria",
+    "name": "Embellished Embroidered Saree",
+    "slug": "sangria-embellished-embroidered-saree-mauve-lavender-64",
+    "categoryId": 1,
+    "categoryName": "Sarees",
+    "subcategory": "sarees",
+    "gender": "women",
+    "garmentType": "saree",
+    "tryonCompatibility": "needs_image_replacement",
+    "stockStatus": "in_stock",
+    "price": 1281,
+    "originalPrice": 8297,
+    "discountPercent": 85,
+    "currency": "INR",
+    "color": "Mauve Lavender",
+    "material": "Net",
+    "needsAdminReview": true,
+    "isSample": false,
+    "isFeatured": false,
+    "isActive": false,
+    "description": "Sangria romantic mauve lavender net saree embellished with intricate thread embroidery and crystal beadwork. Note: Product title truncated in source catalogue; flagged for admin review.",
+    "fit": "Delicate pastel occasion drape.",
+    "careInstructions": "Dry clean only to maintain delicate net embroidery.",
+    "sizes": [
+      "Free Size (5.5m + 0.8m blouse)"
+    ],
+    "primaryImage": "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg",
+    "images": [
+      "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg"
+    ],
+    "tryonOverlayImage": "/uploads/catalogue_sarees/saree_64_sangria_mauve_net.jpg",
+    "imageWidth": 171,
+    "imageHeight": 190,
+    "imageStatus": "IMAGE_LOW_RESOLUTION",
+    "approvalStatus": "NEEDS_IMAGE"
   },
   {
     "id": 65,
@@ -1757,7 +2512,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 66,
@@ -1795,7 +2551,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 67,
@@ -1833,7 +2590,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1618901185975-d59f7091bcfe?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 68,
@@ -1871,7 +2629,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1727430228383-aa1fb59db8bf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 69,
@@ -1909,7 +2668,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1679006831648-7c9ea12e5807?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 70,
@@ -1947,7 +2707,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1739429944830-a6b292c5ca51?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 71,
@@ -1989,7 +2750,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 72,
@@ -2031,7 +2793,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 73,
@@ -2072,7 +2835,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 74,
@@ -2114,7 +2878,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1589310243389-96a5483213a8?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 75,
@@ -2155,7 +2920,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1603252109303-2751441dd157?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 76,
@@ -2196,7 +2962,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 77,
@@ -2237,7 +3004,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 78,
@@ -2279,7 +3047,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 79,
@@ -2322,7 +3091,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1582552938357-32b906df40cb?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 80,
@@ -2363,7 +3133,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1560243563-062bfc001d68?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 81,
@@ -2405,7 +3176,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1555689502-c4b22d76c56f?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 82,
@@ -2446,7 +3218,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1509551388413-e18d0ac5d495?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 83,
@@ -2487,7 +3260,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 84,
@@ -2528,7 +3302,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 85,
@@ -2569,7 +3344,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1517445312882-bc9910d016b7?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 86,
@@ -2610,7 +3386,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 87,
@@ -2651,7 +3428,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 88,
@@ -2692,7 +3470,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 89,
@@ -2733,7 +3512,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 90,
@@ -2774,7 +3554,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 91,
@@ -2815,7 +3596,8 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   },
   {
     "id": 92,
@@ -2856,6 +3638,7 @@ export const sampleProducts = [
     ],
     "tryonOverlayImage": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=85",
     "imageWidth": 1200,
-    "imageHeight": 1600
+    "imageHeight": 1600,
+    "imageStatus": "IMAGE_VALID"
   }
 ];

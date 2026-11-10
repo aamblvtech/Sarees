@@ -35,8 +35,10 @@ test('Taxonomy & Garment Categories Suite', async (t) => {
       assert.ok(saree.tryonOverlayImage && (saree.tryonOverlayImage.startsWith('https://') || saree.tryonOverlayImage.startsWith('/uploads/')), 'Must have valid try-on input image URL');
     }
 
-    const lowResImported = sarees.filter((s) => s.tryonCompatibility === 'needs_image_replacement');
-    assert.equal(lowResImported.length, 0, 'All low-resolution thumbnail crop outfits have been removed from active catalogue');
+    const lowResActive = sarees.filter((s) => s.isActive && s.tryonCompatibility === 'needs_image_replacement');
+    assert.equal(lowResActive.length, 0, 'No low-resolution thumbnail crop outfit may be active for public try-on');
+    const lowResNeedsReplacement = sarees.filter((s) => s.tryonCompatibility === 'needs_image_replacement');
+    assert.equal(lowResNeedsReplacement.length, 18, '18 low-resolution sarees are properly audited with needs_image_replacement status');
   });
 
   await t.test('3. Validates complete women\'s wearable outfits and AI Ready status', () => {

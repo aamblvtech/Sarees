@@ -217,6 +217,7 @@ router.get('/products', requireAdminAuth, async (req, res) => {
         p.front_image_url AS "frontImageUrl",
         p.back_image_url AS "backImageUrl",
         p.side_image_url AS "sideImageUrl",
+        p.image_status AS "imageStatus",
         p.model_image_url AS "modelImageUrl",
         p.import_source AS "importSource",
         p.import_batch_id AS "importBatchId",
@@ -230,9 +231,14 @@ router.get('/products', requireAdminAuth, async (req, res) => {
     const enriched = result.rows.map((p) => {
       const width = p.imageWidth;
       const height = p.imageHeight;
-      const isAiReady = Boolean(width && height && width >= 250 && height >= 250);
+      const imageStatus = p.imageStatus || (width && height && width >= 250 && height >= 250 ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION');
+      const isAiReady = Boolean(
+        imageStatus === 'IMAGE_VALID' &&
+        width && height && width >= 250 && height >= 250 &&
+        (p.permissionStatus === 'authorized' || p.permissionStatus === 'commercial_license' || p.permissionStatus === 'brand_partner' || !p.permissionStatus)
+      );
       let qualityStatus = 'standard';
-      if (!isAiReady) {
+      if (!isAiReady || (width && width < 250) || (height && height < 250)) {
         qualityStatus = 'too_small';
       } else if (width >= 1024 && height >= 1024) {
         qualityStatus = 'high_resolution';
@@ -240,6 +246,7 @@ router.get('/products', requireAdminAuth, async (req, res) => {
 
       return {
         ...p,
+        imageStatus,
         isAiReady,
         qualityStatus,
         dimensionLabel: width && height ? `${width} × ${height} px` : 'Unresolved'
@@ -556,7 +563,9 @@ router.post('/products/:id/replace-image', requireAdminAuth, upload.single('imag
     }
 
     const isAiReady = Boolean(width && height && width >= 250 && height >= 250);
+    const imageStatus = isAiReady ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION';
     const newCompatibility = isAiReady ? 'supported' : 'needs_image_replacement';
+    const newApprovalStatus = isAiReady ? 'AI_READY' : 'NEEDS_IMAGE';
 
     await query(
       `UPDATE products
@@ -565,9 +574,11 @@ router.post('/products/:id/replace-image', requireAdminAuth, upload.single('imag
            tryon_compatibility = $2,
            image_width = $3,
            image_height = $4,
+           image_status = $5,
+           approval_status = $6,
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $5`,
-      [imageUrl, newCompatibility, width, height, parsedId]
+       WHERE id = $7`,
+      [imageUrl, newCompatibility, width, height, imageStatus, newApprovalStatus, parsedId]
     );
 
     res.json({
@@ -579,6 +590,8 @@ router.post('/products/:id/replace-image', requireAdminAuth, upload.single('imag
       imageUrl,
       width,
       height,
+      imageStatus,
+      approvalStatus: newApprovalStatus,
       tryonCompatibility: newCompatibility,
       isAiReady,
       qualityStatus: isAiReady ? (width >= 1024 && height >= 1024 ? 'high_resolution' : 'standard') : 'too_small'

@@ -158,7 +158,7 @@ test('Saree Drape Confidence and 5-Pillar Validation Suite', async (t) => {
   await t.test('6. End-to-end try-on execution persists saree validation metrics to database', async () => {
     const session = 'sess_saree_test_' + Date.now();
     const outcome = await executeSingleTryOnJob({
-      productId: 17, // Mysore Crepe Saree
+      productId: 39, // Mysore Crepe Silk Pure Gold Zari Saree
       userPhotoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500',
       sessionId: session
     });

@@ -28,6 +28,7 @@ export default function AdminDashboard() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedCompatibility, setSelectedCompatibility] = useState('all');
+  const [selectedImageStatus, setSelectedImageStatus] = useState('all');
   const [selectedStock, setSelectedStock] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedReview, setSelectedReview] = useState('all');
@@ -589,6 +590,13 @@ export default function AdminDashboard() {
       selectedCompatibility === 'all' ||
       (p.tryonCompatibility || p.tryon_compatibility)?.toLowerCase() === selectedCompatibility.toLowerCase();
 
+    const imgStat = (p.imageStatus || (p.imageWidth && p.imageWidth >= 250 && p.imageHeight >= 250 ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION')).toUpperCase();
+    const compatVal = (p.tryonCompatibility || p.tryon_compatibility || 'supported').toLowerCase();
+    const matchesImageStatus =
+      selectedImageStatus === 'all' ||
+      (selectedImageStatus === 'needs_replacement' && (imgStat !== 'IMAGE_VALID' || compatVal === 'needs_image_replacement' || (p.imageWidth && p.imageWidth < 250))) ||
+      imgStat === selectedImageStatus.toUpperCase();
+
     const matchesStock =
       selectedStock === 'all' ||
       (p.stockStatus || p.stock_status)?.toLowerCase() === selectedStock.toLowerCase();
@@ -612,6 +620,7 @@ export default function AdminDashboard() {
       matchesCategory &&
       matchesGender &&
       matchesCompatibility &&
+      matchesImageStatus &&
       matchesStock &&
       matchesStatus &&
       matchesReview &&
@@ -797,9 +806,9 @@ export default function AdminDashboard() {
               </div>
 
               {/* Filter Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-3 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
                 
-                <div className="relative lg:col-span-2">
+                <div className="relative xl:col-span-2">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
@@ -822,6 +831,20 @@ export default function AdminDashboard() {
                   <option value="NEEDS_PERMISSION_REVIEW">Needs Permission</option>
                   <option value="NEEDS_IMAGE">Needs Image</option>
                   <option value="DRAFT">Draft</option>
+                </select>
+
+                <select
+                  value={selectedImageStatus}
+                  onChange={(e) => setSelectedImageStatus(e.target.value)}
+                  className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
+                >
+                  <option value="all">All Image Statuses</option>
+                  <option value="needs_replacement">⚠️ Needs Replacement (&lt;250px)</option>
+                  <option value="IMAGE_VALID">✓ IMAGE_VALID (≥250px)</option>
+                  <option value="IMAGE_LOW_RESOLUTION">⚠️ IMAGE_LOW_RESOLUTION</option>
+                  <option value="IMAGE_BLURRY">⚠️ IMAGE_BLURRY</option>
+                  <option value="IMAGE_MISSING">❌ IMAGE_MISSING</option>
+                  <option value="NEEDS_PERMISSION_REVIEW">🔒 NEEDS_PERMISSION_REVIEW</option>
                 </select>
 
             <select
@@ -1003,17 +1026,35 @@ export default function AdminDashboard() {
                                 {p.dimensionLabel || (p.imageWidth && p.imageHeight ? `${p.imageWidth} × ${p.imageHeight} px` : '—')}
                               </div>
                               <div>
-                                {p.qualityStatus === 'high_resolution' ? (
-                                  <span className="text-[9px] px-1 py-0.2 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-semibold">
-                                    HD Studio
+                                {((p.imageStatus === 'IMAGE_VALID') || (!p.imageStatus && p.isAiReady)) ? (
+                                  p.qualityStatus === 'high_resolution' ? (
+                                    <span className="text-[9px] px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-300 dark:border-emerald-800">
+                                      IMAGE_VALID • HD Studio
+                                    </span>
+                                  ) : (
+                                    <span className="text-[9px] px-1.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 font-semibold border border-emerald-200 dark:border-emerald-900">
+                                      IMAGE_VALID
+                                    </span>
+                                  )
+                                ) : (p.imageStatus === 'IMAGE_LOW_RESOLUTION' || p.qualityStatus === 'too_small' || compat === 'needs_image_replacement') ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 font-bold border border-amber-300 dark:border-amber-700">
+                                    IMAGE_LOW_RESOLUTION (&lt;250px)
                                   </span>
-                                ) : (p.qualityStatus === 'too_small' || compat === 'needs_image_replacement') ? (
-                                  <span className="text-[9px] px-1 py-0.2 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 font-bold">
-                                    &lt; 250px Low Res
+                                ) : p.imageStatus === 'IMAGE_BLURRY' ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-rose-100 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 font-bold border border-rose-300 dark:border-rose-700">
+                                    IMAGE_BLURRY
+                                  </span>
+                                ) : p.imageStatus === 'IMAGE_MISSING' ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-red-100 dark:bg-red-950/40 text-red-800 dark:text-red-300 font-bold border border-red-300 dark:border-red-700">
+                                    IMAGE_MISSING
+                                  </span>
+                                ) : p.imageStatus === 'NEEDS_PERMISSION_REVIEW' ? (
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-purple-100 dark:bg-purple-950/40 text-purple-800 dark:text-purple-300 font-bold border border-purple-300 dark:border-purple-700">
+                                    NEEDS_PERMISSION_REVIEW
                                   </span>
                                 ) : (
-                                  <span className="text-[9px] px-1 py-0.2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
-                                    Standard
+                                  <span className="text-[9px] px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">
+                                    {p.imageStatus || 'Standard'}
                                   </span>
                                 )}
                               </div>

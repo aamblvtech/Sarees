@@ -52,9 +52,10 @@ export async function runSeed() {
            tryon_compatibility, stock_status, price, original_price, currency,
            description, material, fit, care_instructions, sizes,
            primary_image_url, tryon_image_url, is_sample, is_featured, is_active,
-           color, needs_admin_review, discount_percent, image_width, image_height, approval_status
+           color, needs_admin_review, discount_percent, image_width, image_height, approval_status,
+           image_status, permission_status
          )
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31)
          ON CONFLICT (sku) DO UPDATE
          SET name = EXCLUDED.name, brand = EXCLUDED.brand, category_id = EXCLUDED.category_id,
              subcategory = EXCLUDED.subcategory, gender = EXCLUDED.gender,
@@ -69,6 +70,8 @@ export async function runSeed() {
              discount_percent = EXCLUDED.discount_percent,
              image_width = EXCLUDED.image_width, image_height = EXCLUDED.image_height,
              approval_status = EXCLUDED.approval_status,
+             image_status = EXCLUDED.image_status,
+             permission_status = EXCLUDED.permission_status,
              updated_at = CURRENT_TIMESTAMP
          RETURNING id, sku`,
         [
@@ -100,7 +103,9 @@ export async function runSeed() {
           prod.discountPercent || null,
           prod.imageWidth || null,
           prod.imageHeight || null,
-          prod.approvalStatus || (prod.tryonCompatibility === 'supported' ? 'AI_READY' : 'APPROVED')
+          prod.approvalStatus || (prod.tryonCompatibility === 'supported' ? 'AI_READY' : 'APPROVED'),
+          prod.imageStatus || (prod.imageWidth && prod.imageHeight && prod.imageWidth >= 250 && prod.imageHeight >= 250 ? 'IMAGE_VALID' : 'IMAGE_LOW_RESOLUTION'),
+          prod.permissionStatus || 'authorized'
         ]
       );
 
