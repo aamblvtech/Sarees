@@ -5,7 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 
-import healthRoutes from './routes/health.routes.js';
+import healthRoutes, { setServerReady } from './routes/health.routes.js';
 import productRoutes from './routes/products.routes.js';
 import tryonRoutes from './routes/tryon.routes.js';
 import adminRoutes from './routes/admin.routes.js';
@@ -124,6 +124,7 @@ const server = app.listen(PORT, '0.0.0.0', async () => {
 
   const conn = await testConnection();
   console.log(`[DB Status] Engine: ${conn.engine} | Connected: ${conn.connected}`);
+  setServerReady(true);
 });
 
 // Configure keep-alive timeout to eliminate connection resets with reverse proxies / Vite proxy

@@ -118,15 +118,6 @@ export async function runSeed() {
       }
     }
 
-    // Safely archive any legacy products not in curated collection
-    const validSkus = sampleProducts.map((p) => p.sku);
-    if (validSkus.length > 0) {
-      const placeholders = validSkus.map((_, i) => `$${i + 1}`).join(', ');
-      await client.query(
-        `UPDATE products SET is_active = false WHERE sku NOT IN (${placeholders})`,
-        validSkus
-      );
-    }
 
     await client.query('COMMIT');
     syncPgMemSequences();

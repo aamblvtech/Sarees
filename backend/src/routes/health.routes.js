@@ -3,6 +3,16 @@ import { getDbStatus, query } from '../config/db.js';
 
 const router = express.Router();
 
+let isServerReadyState = false;
+
+export function setServerReady(state = true) {
+  isServerReadyState = state;
+}
+
+export function isServerReady() {
+  return isServerReadyState;
+}
+
 /**
  * GET /api/health
  * Returns service status, version, uptime, and database connection state
@@ -23,9 +33,10 @@ router.get('/health', async (req, res) => {
   }
 
   const dbInfo = getDbStatus();
+  const overallHealthy = dbHealthy && isServerReadyState;
 
-  res.status(dbHealthy ? 200 : 503).json({
-    status: dbHealthy ? 'healthy' : 'degraded',
+  res.status(overallHealthy ? 200 : 503).json({
+    status: overallHealthy ? 'healthy' : 'initializing',
     service: 'VESTRA Virtual Try-On API',
     brand: 'VESTRA',
     tagline: 'Experience Fashion Before You Wear It',

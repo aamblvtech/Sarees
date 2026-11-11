@@ -445,9 +445,9 @@ router.get('/products', async (req, res) => {
     });
 
     // Flexible multi-engine sorting
-    if (sort === 'price-low') {
+    if (sort === 'price-low' || sort === 'price-asc') {
       sanitizedRows.sort((a, b) => Number(a.price) - Number(b.price));
-    } else if (sort === 'price-high') {
+    } else if (sort === 'price-high' || sort === 'price-desc') {
       sanitizedRows.sort((a, b) => Number(b.price) - Number(a.price));
     } else if (sort === 'name') {
       sanitizedRows.sort((a, b) => a.name.localeCompare(b.name));
