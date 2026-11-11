@@ -1,8 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Sparkles, SlidersHorizontal, RefreshCw } from 'lucide-react';
+import { Search, Sparkles, SlidersHorizontal, RefreshCw, X, Heart } from 'lucide-react';
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
+
+const DEFAULT_CATEGORIES = [
+  { id: 0, slug: 'all', name: 'All Garments', productCount: 74 },
+  { id: 1, slug: 'sarees', name: 'Sarees', productCount: 30 },
+  { id: 5, slug: 'shirts', name: 'Shirts & Tops', productCount: 7 },
+  { id: 6, slug: 'jeans', name: 'Jeans & Denim', productCount: 5 },
+  { id: 21, slug: 'dresses', name: 'Dresses & Gowns', productCount: 5 },
+  { id: 22, slug: 'kurtis', name: 'Kurtis & Ethnic Wear', productCount: 1 },
+  { id: 23, slug: 'salwar', name: 'Salwar Suits', productCount: 4 },
+  { id: 31, slug: 'mens-traditional', name: "Men's Traditional Wear", productCount: 5 },
+  { id: 8, slug: 'blazers', name: 'Blazers & Jackets', productCount: 11 },
+  { id: 7, slug: 'trousers', name: 'Trousers', productCount: 10 }
+];
 
 export default function Catalogue() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,14 +24,13 @@ export default function Catalogue() {
   const genderParam = searchParams.get('gender') || 'all';
 
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [selectedGender, setSelectedGender] = useState(genderParam);
   const [onlyTryOnReady, setOnlyTryOnReady] = useState(false);
   const [selectedSource, setSelectedSource] = useState('all');
   const [selectedBrand, setSelectedBrand] = useState('all');
-  const [selectedGarmentType, setSelectedGarmentType] = useState('all');
   const [selectedPriceRange, setSelectedPriceRange] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('featured');
@@ -41,171 +53,228 @@ export default function Catalogue() {
             category: selectedCategory !== 'all' ? selectedCategory : undefined,
             subcategory: selectedSubcategory !== 'all' ? selectedSubcategory : undefined,
             gender: selectedGender !== 'all' ? selectedGender : undefined,
-            search: searchQuery || undefined
+            search: searchQuery || undefined,
+            brand: selectedBrand !== 'all' ? selectedBrand : undefined,
+            source: selectedSource !== 'all' ? selectedSource : undefined,
+            aiReady: onlyTryOnReady ? 'true' : undefined,
+            sort: sortBy
           }),
           productService.getCategories()
         ]);
-        setProducts(prods);
-        setCategories(cats);
+        setProducts(prods || []);
+        if (cats && cats.length > 0) {
+          setCategories(cats);
+        }
       } catch (err) {
-        setError('Failed to load catalogue. Please try again.');
+        console.error('Failed to load catalogue:', err);
+        setError('Failed to load catalogue garments. Please try again.');
       } finally {
         setLoading(false);
       }
     }
     loadCatalogue();
-  }, [selectedCategory, selectedSubcategory, selectedGender, searchQuery]);
+  }, [
+    selectedCategory,
+    selectedSubcategory,
+    selectedGender,
+    searchQuery,
+    selectedBrand,
+    selectedSource,
+    onlyTryOnReady,
+    sortBy
+  ]);
 
   const handleCategoryChange = (slug) => {
     setSelectedCategory(slug);
     setSelectedSubcategory('all');
+    const newParams = new URLSearchParams(searchParams);
     if (slug === 'all') {
-      searchParams.delete('category');
+      newParams.delete('category');
     } else {
-      searchParams.set('category', slug);
+      newParams.set('category', slug);
     }
-    searchParams.delete('subcategory');
-    setSearchParams(searchParams);
+    newParams.delete('subcategory');
+    setSearchParams(newParams);
   };
 
   const handleSubcategoryChange = (sub) => {
     setSelectedSubcategory(sub);
+    const newParams = new URLSearchParams(searchParams);
     if (sub === 'all') {
-      searchParams.delete('subcategory');
+      newParams.delete('subcategory');
     } else {
-      searchParams.set('subcategory', sub);
+      newParams.set('subcategory', sub);
     }
-    setSearchParams(searchParams);
+    setSearchParams(newParams);
   };
 
   const handleGenderChange = (gender) => {
     setSelectedGender(gender);
+    const newParams = new URLSearchParams(searchParams);
     if (gender === 'all') {
-      searchParams.delete('gender');
+      newParams.delete('gender');
     } else {
-      searchParams.set('gender', gender);
+      newParams.set('gender', gender);
     }
-    setSearchParams(searchParams);
+    setSearchParams(newParams);
   };
 
-  const availableSubcategories = React.useMemo(() => {
-    if (selectedCategory === 'sarees') {
-      return [
-        'kanjivaram', 'banarasi', 'pochampally', 'gadwal', 'uppada',
-        'chanderi', 'paithani', 'organza', 'cotton', 'bridal', 'designer_party', 'traditional_handloom',
-        'kasavu', 'jamdani', 'sambalpuri', 'baluchari', 'chikankari', 'kashmiri_tilla'
-      ];
+  const handleResetAllFilters = () => {
+    setSelectedCategory('all');
+    setSelectedSubcategory('all');
+    setSelectedGender('all');
+    setSelectedBrand('all');
+    setSelectedSource('all');
+    setSelectedPriceRange('all');
+    setOnlyTryOnReady(false);
+    setSearchQuery('');
+    setSortBy('featured');
+    setSearchParams({});
+  };
+
+  const availableSubcategories = useMemo(() => {
+    switch (selectedCategory) {
+      case 'sarees':
+        return [
+          'kanjivaram', 'banarasi', 'chanderi', 'pochampally', 'gadwal', 'uppada',
+          'paithani', 'organza', 'cotton', 'bridal', 'designer_party', 'traditional_handloom',
+          'patola', 'kalamkari', 'kota_doria', 'bandhani', 'mysore_silk', 'tussar'
+        ];
+      case 'shirts':
+        return [
+          'oxford_shirts', 'formal_shirts', 'linen_shirts', 'silk_blouses', 'casual_shirts', 'resort_shirts'
+        ];
+      case 'jeans':
+        return [
+          'selvedge_jeans', 'baggy_jeans', 'wide_leg_jeans', 'straight_jeans', 'carpenter_jeans'
+        ];
+      case 'dresses':
+        return [
+          'gowns', 'maxi_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses'
+        ];
+      case 'kurtis':
+        return [
+          'kurti_pant_sets'
+        ];
+      case 'salwar':
+        return [
+          'anarkali_suits', 'salwar_kameez', 'churidar_sets', 'lehenga_choli'
+        ];
+      case 'mens-traditional':
+        return [
+          'sherwani_outfits', 'kurta_pyjama_sets', 'indo_western', 'traditional_outfits'
+        ];
+      case 'blazers':
+        return [
+          'formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits',
+          'smoking_jackets', 'dinner_jackets', 'power_suits', 'womens_tuxedos', 'western_coord_sets'
+        ];
+      case 'trousers':
+        return [
+          'pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'shirt_trouser_combinations'
+        ];
+      default:
+        return [];
     }
-    if (selectedCategory === 'womens-clothing') {
-      return [
-        'anarkali_suits', 'salwar_kameez', 'churidar_sets', 'kurti_pant_sets',
-        'lehenga_choli', 'gowns', 'maxi_dresses', 'evening_dresses',
-        'party_wear_dresses', 'casual_dresses', 'western_coord_sets', 'jumpsuits'
-      ];
-    }
-    if (selectedCategory === 'mens-clothing') {
-      return [
-        'formal_suits', 'blazer_trouser_sets', 'kurta_pyjama_sets',
-        'sherwani_outfits', 'indo_western', 'shirt_trouser_combinations',
-        'casual_coords', 'traditional_outfits'
-      ];
-    }
-    if (selectedCategory === 'shirts') {
-      return [
-        'oxford_shirts', 'formal_shirts', 'linen_shirts', 'silk_blouses', 'casual_shirts', 'resort_shirts'
-      ];
-    }
-    if (selectedCategory === 'jeans') {
-      return [
-        'selvedge_jeans', 'baggy_jeans', 'wide_leg_jeans', 'straight_jeans', 'carpenter_jeans'
-      ];
-    }
-    if (selectedCategory === 'pants') {
-      return [
-        'pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers'
-      ];
-    }
-    if (selectedCategory === 'formal-attire') {
-      return [
-        'tuxedos', 'three_piece_suits', 'smoking_jackets', 'womens_tuxedos', 'dinner_jackets', 'power_suits'
-      ];
-    }
-    if (selectedCategory === 'accessories') return ['belts', 'shawls'];
-    return [
-      'kanjivaram', 'banarasi', 'chanderi', 'anarkali_suits', 'salwar_kameez',
-      'gowns', 'dresses', 'lehenga_choli', 'formal_suits', 'sherwani_outfits',
-      'kurta_pyjama_sets', 'western_coord_sets', 'jumpsuits', 'oxford_shirts',
-      'selvedge_jeans', 'baggy_jeans', 'pleated_trousers', 'tuxedos'
-    ];
   }, [selectedCategory]);
 
-  const availableBrands = React.useMemo(() => {
+  const availableBrands = useMemo(() => {
     const set = new Set();
     products.forEach((p) => {
       if (p.brand) set.add(p.brand);
+      if (p.supplierName) set.add(p.supplierName);
     });
     return Array.from(set).sort();
   }, [products]);
 
-  const filteredProducts = products.filter((p) => {
-    if (onlyTryOnReady && p.tryonCompatibility !== 'supported' && p.approvalStatus !== 'AI_READY') return false;
-    if (selectedSource !== 'all' && (p.source || 'atelier') !== selectedSource) return false;
-    if (selectedBrand !== 'all' && p.brand !== selectedBrand) return false;
-    if (selectedGarmentType !== 'all' && (p.garmentType || p.garment_type) !== selectedGarmentType) return false;
-    if (selectedPriceRange !== 'all') {
-      const price = Number(p.price || 0);
-      if (selectedPriceRange === 'under-2000' && price >= 2000) return false;
-      if (selectedPriceRange === '2000-5000' && (price < 2000 || price > 5000)) return false;
-      if (selectedPriceRange === '5000-10000' && (price < 5000 || price > 10000)) return false;
-      if (selectedPriceRange === 'above-10000' && price <= 10000) return false;
-    }
-    return true;
-  });
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === 'price-low') return a.price - b.price;
-    if (sortBy === 'price-high') return b.price - a.price;
-    if (sortBy === 'name') return a.name.localeCompare(b.name);
-    return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
-  });
+  const filteredProducts = useMemo(() => {
+    return products.filter((p) => {
+      if (selectedPriceRange !== 'all') {
+        const price = Number(p.price || 0);
+        if (selectedPriceRange === 'under-2000' && price >= 2000) return false;
+        if (selectedPriceRange === '2000-5000' && (price < 2000 || price > 5000)) return false;
+        if (selectedPriceRange === '5000-10000' && (price < 5000 || price > 10000)) return false;
+        if (selectedPriceRange === 'above-10000' && price <= 10000) return false;
+      }
+      return true;
+    });
+  }, [products, selectedPriceRange]);
 
   const getCategoryHeader = () => {
-    if (selectedCategory === 'sarees') {
-      return {
-        tag: 'Heritage Indian Weaves',
-        title: 'Archival Sarees',
-        desc: 'Masterpieces in pure Kanjivaram silk, Banarasi antique zari, and gossamer Chanderi weaves.'
-      };
+    switch (selectedCategory) {
+      case 'sarees':
+        return {
+          tag: 'Heritage Indian Weaves',
+          title: 'Archival Sarees',
+          desc: 'Masterpieces in pure Kanjivaram silk, Banarasi antique zari, and gossamer Chanderi weaves.'
+        };
+      case 'shirts':
+        return {
+          tag: 'Tailored Silhouettes',
+          title: 'Shirts & Tops',
+          desc: 'Fine Italian cotton button-downs, gossamer silk blouses, and breezy resort shirts.'
+        };
+      case 'jeans':
+        return {
+          tag: 'Japanese Denim Craft',
+          title: 'Jeans & Denim',
+          desc: 'Artisanal Okayama selvedge denim, wide-leg silhouettes, and relaxed carpenter cuts.'
+        };
+      case 'dresses':
+        return {
+          tag: 'Haute Couture Eveningwear',
+          title: 'Dresses & Gowns',
+          desc: 'Sculptural velvet evening gowns, fluid bias-cut maxi dresses, and cocktail ensembles.'
+        };
+      case 'kurtis':
+        return {
+          tag: 'Artisanal Ethnic Ensembles',
+          title: 'Kurtis & Ethnic Wear',
+          desc: 'Hand-embroidered chanderi kurtis, intricate zardozi motifs, and coordinated pant sets.'
+        };
+      case 'salwar':
+        return {
+          tag: 'Royal Court Attire',
+          title: 'Salwar Suits & Anarkalis',
+          desc: 'Floor-length flared anarkalis, raw silk churidar sets, and bridal lehengas.'
+        };
+      case 'mens-traditional':
+        return {
+          tag: 'Heritage Sartorial Grandeur',
+          title: "Men's Traditional Wear",
+          desc: 'Bespoke hand-embroidered sherwanis, silk kurta pyjama sets, and royal bandhgalas.'
+        };
+      case 'blazers':
+        return {
+          tag: 'Bespoke Tailoring',
+          title: 'Blazers & Jackets',
+          desc: 'Precision Italian virgin wool tailoring, classic black-tie tuxedos, and structured power suits.'
+        };
+      case 'trousers':
+        return {
+          tag: 'Modern Sartorial Trousers',
+          title: 'Trousers & Tailored Bottoms',
+          desc: 'Double-pleated wool trousers, relaxed baggy chinos, and fluid palazzo cuts.'
+        };
+      default:
+        return {
+          tag: 'VESTRA Studio Archive',
+          title: 'Fashion Product Catalogue',
+          desc: 'Browse precision garments calibrated for neural cloth draping and AI virtual try-on.'
+        };
     }
-    if (selectedCategory === 'womens-clothing') {
-      return {
-        tag: 'Haute Couture & Modern Silhouettes',
-        title: "Women's Collection",
-        desc: 'Sculptural velvet gowns, fluid bias-cut dresses, hand-embroidered kurtis, and double-breasted blazers.'
-      };
-    }
-    if (selectedCategory === 'mens-clothing') {
-      return {
-        tag: 'Sartorial Tailoring & Refined Essentials',
-        title: "Men's Collection",
-        desc: 'Precision Italian virgin wool tailoring, handloom linen button-downs, and Okayama selvedge denim.'
-      };
-    }
-    if (selectedCategory === 'accessories') {
-      return {
-        tag: 'Atelier Accents',
-        title: 'Luxury Accessories',
-        desc: 'Artisanal full-grain leather belts with palladium hardware and pure Himalayan pashmina stoles.'
-      };
-    }
-    return {
-      tag: 'VESTRA Studio Archive',
-      title: 'Clothing Collection',
-      desc: 'Browse precision garments calibrated for neural cloth draping and AI virtual try-on.'
-    };
   };
 
   const headerInfo = getCategoryHeader();
+  const hasActiveFilters =
+    selectedCategory !== 'all' ||
+    selectedSubcategory !== 'all' ||
+    selectedGender !== 'all' ||
+    selectedBrand !== 'all' ||
+    selectedSource !== 'all' ||
+    selectedPriceRange !== 'all' ||
+    onlyTryOnReady ||
+    searchQuery.trim().length > 0;
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-[#FFFFFF] py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
@@ -227,62 +296,69 @@ export default function Catalogue() {
         {/* Filter and Control Bar */}
         <div className="bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 p-5 space-y-4 shadow-xs">
           
-          {/* Main Category Tabs */}
+          {/* Main 10 Category Tabs */}
           <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-100 dark:border-slate-800">
-            <button
-              onClick={() => handleCategoryChange('all')}
-              className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-colors rounded ${
-                selectedCategory === 'all'
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
-              }`}
-            >
-              All Garments
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id || cat.slug}
-                onClick={() => handleCategoryChange(cat.slug)}
-                className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-colors rounded ${
-                  selectedCategory === cat.slug
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
-                    : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
-                }`}
-              >
-                {cat.name}
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const isSelected = selectedCategory === cat.slug;
+              const count = cat.productCount;
+              return (
+                <button
+                  key={cat.id || cat.slug}
+                  onClick={() => handleCategoryChange(cat.slug)}
+                  className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-all rounded flex items-center space-x-1.5 ${
+                    isSelected
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  <span>{cat.name}</span>
+                  {typeof count === 'number' && (
+                    <span
+                      className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
+                        isSelected
+                          ? 'bg-white/20 text-white dark:bg-black/20 dark:text-black'
+                          : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Subcategory Pills */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-            <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 whitespace-nowrap mr-1">
-              Subcategory:
-            </span>
-            <button
-              onClick={() => handleSubcategoryChange('all')}
-              className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
-                selectedSubcategory === 'all'
-                  ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
-              }`}
-            >
-              All
-            </button>
-            {availableSubcategories.map((sub) => (
+          {/* Subcategory Pills (Only displayed when category is selected or has subcategories) */}
+          {availableSubcategories.length > 0 && (
+            <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+              <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 whitespace-nowrap mr-1">
+                Subcategory:
+              </span>
               <button
-                key={sub}
-                onClick={() => handleSubcategoryChange(sub)}
+                onClick={() => handleSubcategoryChange('all')}
                 className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
-                  selectedSubcategory === sub
+                  selectedSubcategory === 'all'
                     ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
                     : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
                 }`}
               >
-                {sub.replace('_', ' ')}
+                All
               </button>
-            ))}
-          </div>
+              {availableSubcategories.map((sub) => (
+                <button
+                  key={sub}
+                  onClick={() => handleSubcategoryChange(sub)}
+                  className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
+                    selectedSubcategory === sub
+                      ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                  }`}
+                >
+                  {sub.replace(/_/g, ' ')}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Multi-Source Origin Bar */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
@@ -311,14 +387,14 @@ export default function Catalogue() {
               </button>
             ))}
 
-            {/* Brand Filter */}
+            {/* Brand / Supplier Filter */}
             {availableBrands.length > 0 && (
               <select
                 value={selectedBrand}
                 onChange={(e) => setSelectedBrand(e.target.value)}
                 className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] text-slate-800 dark:text-slate-200 px-2 py-1 uppercase font-mono tracking-wider font-medium rounded ml-auto"
               >
-                <option value="all">All Brands ({availableBrands.length})</option>
+                <option value="all">All Brands / Suppliers ({availableBrands.length})</option>
                 {availableBrands.map((b) => (
                   <option key={b} value={b}>{b}</option>
                 ))}
@@ -386,8 +462,16 @@ export default function Catalogue() {
                   placeholder="Search kurti, saree, blazer..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-[#FFFFFF] pl-8 pr-3 py-2 rounded focus:outline-none focus:border-[#F5AFAF] shadow-xs"
+                  className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-[#FFFFFF] pl-8 pr-8 py-2 rounded focus:outline-none focus:border-[#F5AFAF] shadow-xs"
                 />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
 
               {/* Sort Dropdown */}
@@ -399,18 +483,30 @@ export default function Catalogue() {
                 <option value="featured">Featured First</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="price-high">Price: High to Low</option>
-                <option value="name">Alphabetical</option>
+                <option value="newest">Newest Arrivals</option>
+                <option value="name">Name: A to Z</option>
               </select>
 
             </div>
 
           </div>
 
-          {/* Results count & status */}
+          {/* Results count & Reset Bar */}
           <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500">
-            <span className="font-mono">
-              Showing {sortedProducts.length} items
-            </span>
+            <div className="flex items-center space-x-3">
+              <span className="font-mono">
+                Showing {filteredProducts.length} items
+              </span>
+              {hasActiveFilters && (
+                <button
+                  onClick={handleResetAllFilters}
+                  className="text-[11px] font-mono text-[#F5AFAF] hover:underline flex items-center space-x-1"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  <span>Reset All Filters</span>
+                </button>
+              )}
+            </div>
             <span className="text-[11px] font-mono text-slate-600 dark:text-slate-300 flex items-center space-x-1">
               <span className="w-2 h-2 rounded-full bg-[#F5AFAF] inline-block mr-1"></span>
               <span>Calibrated for Genlook virtual try-on</span>
@@ -427,32 +523,36 @@ export default function Catalogue() {
             ))}
           </div>
         ) : error ? (
-          <div className="text-center py-16 space-y-4 bg-[#FBEFEF] dark:bg-[#1E293B] border border-rose-200 dark:border-rose-900">
-            <p className="text-sm text-rose-600">{error}</p>
+          <div className="text-center py-16 space-y-4 bg-[#FBEFEF] dark:bg-[#1E293B] border border-rose-200 dark:border-rose-900 rounded">
+            <p className="text-sm text-rose-600 dark:text-rose-400 font-mono">{error}</p>
             <button
-              onClick={() => setSelectedCategory('all')}
-              className="px-4 py-2 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-wider font-semibold"
+              onClick={handleResetAllFilters}
+              className="px-5 py-2.5 bg-slate-900 text-white dark:bg-white dark:text-black text-xs uppercase tracking-wider font-semibold rounded shadow-xs"
             >
-              Reset Filters
+              Reset Filters & Reload
             </button>
           </div>
-        ) : sortedProducts.length === 0 ? (
-          <div className="text-center py-20 bg-[#FBEFEF] dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 space-y-4">
-            <Sparkles className="w-8 h-8 text-[#F5AFAF] mx-auto" />
-            <h3 className="font-serif text-2xl text-[#000000] dark:text-[#FFFFFF]">No Garments Found</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              Try adjusting your category filter or search keywords.
+        ) : filteredProducts.length === 0 ? (
+          <div className="text-center py-20 bg-[#FBEFEF] dark:bg-[#1E293B] border border-[#F9DFDF] dark:border-slate-800 space-y-4 rounded">
+            <Sparkles className="w-10 h-10 text-[#F5AFAF] mx-auto animate-pulse" />
+            <h3 className="font-serif text-2xl text-slate-900 dark:text-[#FFFFFF]">
+              {selectedCategory !== 'all'
+                ? `No garments found in ${categories.find(c => c.slug === selectedCategory)?.name || 'this category'}`
+                : 'No garments match your filters'}
+            </h3>
+            <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              We couldn't find any active garments matching your selected criteria. Try selecting another category or resetting your filters.
             </p>
             <button
-              onClick={() => { setSelectedCategory('all'); setSearchQuery(''); }}
-              className="px-6 py-2.5 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-widest font-semibold"
+              onClick={handleResetAllFilters}
+              className="px-6 py-2.5 bg-slate-900 text-white dark:bg-white dark:text-black text-xs uppercase tracking-widest font-semibold rounded shadow-sm hover:opacity-90 transition-opacity"
             >
-              Show All Garments
+              View All Garments
             </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sortedProducts.map((product) => (
+            {filteredProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

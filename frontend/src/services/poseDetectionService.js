@@ -368,3 +368,4 @@ class PoseDetectionService {
 
 export const poseDetectionService = new PoseDetectionService();
 export default poseDetectionService;
+

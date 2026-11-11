@@ -66,3 +66,4 @@ CREATE TABLE IF NOT EXISTS admin_audit_logs (
 
 CREATE INDEX IF NOT EXISTS idx_admin_audit_action ON admin_audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_admin_audit_created ON admin_audit_logs(created_at);
+
