@@ -24,7 +24,11 @@ import {
   User,
   MapPin,
   FileText,
-  DollarSign
+  DollarSign,
+  TrendingUp,
+  Bell,
+  CheckSquare,
+  Square
 } from 'lucide-react';
 import supplierService from '../services/supplierService';
 
@@ -46,12 +50,21 @@ export default function SupplierDashboard() {
     needs_image: 0
   });
 
-  // Products list
+  // Products list & selection
   const [products, setProducts] = useState([]);
+  const [selectedProductIds, setSelectedProductIds] = useState([]);
+  const [bulkUpdating, setBulkUpdating] = useState(false);
   const [categories, setCategories] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  // Notifications & Performance State
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showNotificationsModal, setShowNotificationsModal] = useState(false);
+  const [performanceData, setPerformanceData] = useState(null);
+  const [showPerformanceModal, setShowPerformanceModal] = useState(false);
 
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -140,6 +153,15 @@ export default function SupplierDashboard() {
       if (prodsRes.success) {
         setProducts(prodsRes.data || []);
       }
+
+      // Load notifications
+      try {
+        const notifRes = await supplierService.getNotifications();
+        if (notifRes.success) {
+          setNotifications(notifRes.data || []);
+          setUnreadCount((notifRes.data || []).filter((n) => !n.is_read).length);
+        }
+      } catch {}
     } catch (err) {
       if (err.response?.status === 401 || err.response?.status === 403) {
         supplierService.logout();
@@ -149,6 +171,45 @@ export default function SupplierDashboard() {
       setError(err.response?.data?.error || err.message || 'Failed to load supplier dashboard.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleBulkUpdate = async (stockStatus, priceAdjustmentPercent) => {
+    if (selectedProductIds.length === 0) return;
+    setBulkUpdating(true);
+    try {
+      await supplierService.bulkUpdateProducts(selectedProductIds, {
+        stockStatus,
+        priceAdjustmentPercent
+      });
+      setSelectedProductIds([]);
+      await loadData();
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Bulk update failed');
+    } finally {
+      setBulkUpdating(false);
+    }
+  };
+
+  const handleToggleStock = async (prod) => {
+    const nextStatus = prod.stock_status === 'in_stock' ? 'out_of_stock' : 'in_stock';
+    try {
+      await supplierService.updateProduct(prod.id, { stockStatus: nextStatus });
+      await loadData();
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to update stock');
+    }
+  };
+
+  const handleOpenPerformance = async () => {
+    try {
+      const res = await supplierService.getPerformanceReport();
+      if (res.success) {
+        setPerformanceData(res);
+        setShowPerformanceModal(true);
+      }
+    } catch (err) {
+      alert(err.response?.data?.error || err.message || 'Failed to load report');
     }
   };
 
@@ -421,6 +482,19 @@ export default function SupplierDashboard() {
             </div>
 
             <button
+              onClick={() => setShowNotificationsModal(true)}
+              className="p-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-stone-800 rounded-lg text-xs flex items-center space-x-1.5 transition-colors relative"
+              title="Supplier Notifications"
+            >
+              <Bell className="w-4 h-4 text-amber-500" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+
+            <button
               onClick={() => setShowProfileModal(true)}
               className="p-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-stone-800 rounded-lg text-xs flex items-center space-x-1.5 transition-colors"
               title="Supplier Profile & Settings"
@@ -464,6 +538,14 @@ export default function SupplierDashboard() {
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
+            </button>
+
+            <button
+              onClick={handleOpenPerformance}
+              className="px-3.5 py-2.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-white border border-stone-300 dark:border-stone-700 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all shadow-sm"
+            >
+              <TrendingUp className="w-4 h-4 text-amber-500" />
+              <span>Performance Report</span>
             </button>
 
             <button
@@ -587,6 +669,51 @@ export default function SupplierDashboard() {
 
         </div>
 
+        {/* Bulk Inventory Actions Bar */}
+        {selectedProductIds.length > 0 && (
+          <div className="bg-amber-500/10 border border-amber-500/30 p-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md animate-fadeIn">
+            <div className="flex items-center space-x-2 text-xs font-bold text-amber-900 dark:text-amber-200">
+              <CheckSquare className="w-4 h-4 text-amber-500" />
+              <span>
+                {selectedProductIds.length} {selectedProductIds.length === 1 ? 'Garment' : 'Garments'} Selected
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                disabled={bulkUpdating}
+                onClick={() => handleBulkUpdate('in_stock', null)}
+                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm"
+              >
+                Set In Stock
+              </button>
+
+              <button
+                disabled={bulkUpdating}
+                onClick={() => handleBulkUpdate('out_of_stock', null)}
+                className="px-3 py-1.5 bg-stone-700 hover:bg-stone-600 text-white text-xs font-semibold rounded-lg shadow-sm"
+              >
+                Set Out of Stock
+              </button>
+
+              <button
+                disabled={bulkUpdating}
+                onClick={() => handleBulkUpdate(null, -10)}
+                className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg shadow-sm"
+              >
+                Apply 10% Discount
+              </button>
+
+              <button
+                onClick={() => setSelectedProductIds([])}
+                className="px-3 py-1.5 border border-stone-400 dark:border-stone-600 text-stone-600 dark:text-stone-300 text-xs font-semibold rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800"
+              >
+                Deselect All
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Products Table */}
         <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm overflow-hidden">
           <div className="p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
@@ -624,9 +751,27 @@ export default function SupplierDashboard() {
               <table className="w-full text-left text-xs">
                 <thead className="bg-stone-50 dark:bg-stone-800/60 text-stone-500 dark:text-stone-400 uppercase tracking-wider font-semibold border-b border-stone-200 dark:border-stone-800">
                   <tr>
+                    <th className="py-3 px-3 w-8">
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedProductIds.length === filteredProducts.length &&
+                          filteredProducts.length > 0
+                        }
+                        onChange={() => {
+                          if (selectedProductIds.length === filteredProducts.length) {
+                            setSelectedProductIds([]);
+                          } else {
+                            setSelectedProductIds(filteredProducts.map((p) => p.id));
+                          }
+                        }}
+                        className="rounded border-stone-300 text-amber-600 focus:ring-amber-500"
+                      />
+                    </th>
                     <th className="py-3 px-4">Garment</th>
                     <th className="py-3 px-4">Category & Gender</th>
                     <th className="py-3 px-4">Price</th>
+                    <th className="py-3 px-4">Stock Status</th>
                     <th className="py-3 px-4">Image Quality</th>
                     <th className="py-3 px-4">Approval Status</th>
                     <th className="py-3 px-4 text-right">Actions</th>
@@ -642,6 +787,20 @@ export default function SupplierDashboard() {
 
                     return (
                       <tr key={prod.id} className="hover:bg-stone-50/60 dark:hover:bg-stone-800/40 transition-colors">
+                        
+                        {/* Checkbox */}
+                        <td className="py-3 px-3">
+                          <input
+                            type="checkbox"
+                            checked={selectedProductIds.includes(prod.id)}
+                            onChange={() => {
+                              setSelectedProductIds((prev) =>
+                                prev.includes(prod.id) ? prev.filter((id) => id !== prod.id) : [...prev, prod.id]
+                              );
+                            }}
+                            className="rounded border-stone-300 text-amber-600 focus:ring-amber-500"
+                          />
+                        </td>
                         
                         {/* Garment Details */}
                         <td className="py-3 px-4">
@@ -684,6 +843,22 @@ export default function SupplierDashboard() {
                               ₹{prod.original_price}
                             </span>
                           )}
+                        </td>
+
+                        {/* Stock Availability Toggle */}
+                        <td className="py-3 px-4">
+                          <button
+                            type="button"
+                            onClick={() => handleToggleStock(prod)}
+                            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${
+                              prod.stock_status === 'out_of_stock'
+                                ? 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 border-stone-300 dark:border-stone-700 hover:border-emerald-500'
+                                : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:border-amber-500'
+                            }`}
+                            title="Click to toggle stock availability"
+                          >
+                            {prod.stock_status === 'out_of_stock' ? 'Out of Stock' : 'In Stock'}
+                          </button>
                         </td>
 
                         {/* Image Quality Gate Badge */}
@@ -1252,6 +1427,157 @@ export default function SupplierDashboard() {
         </div>
       )}
 
+      {/* ===================== PERFORMANCE REPORT MODAL ===================== */}
+      {showPerformanceModal && performanceData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl max-w-2xl w-full p-6 space-y-5 my-8 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+              <div className="flex items-center space-x-2">
+                <TrendingUp className="w-5 h-5 text-amber-500" />
+                <h3 className="font-serif text-lg font-semibold text-stone-900 dark:text-white">
+                  Supplier Catalogue Performance Report
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowPerformanceModal(false)}
+                className="p-1 text-stone-400 hover:text-stone-700 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Performance Metrics Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 bg-stone-100 dark:bg-stone-800 rounded-xl space-y-1">
+                <div className="text-[10px] text-stone-500 uppercase tracking-wider">Catalogue Items</div>
+                <div className="text-xl font-bold font-serif">{performanceData.summary?.totalProducts || 0}</div>
+              </div>
+              <div className="p-3 bg-stone-100 dark:bg-stone-800 rounded-xl space-y-1">
+                <div className="text-[10px] text-stone-500 uppercase tracking-wider">Active Items</div>
+                <div className="text-xl font-bold font-serif text-emerald-600 dark:text-emerald-400">
+                  {performanceData.summary?.activeProducts || 0}
+                </div>
+              </div>
+              <div className="p-3 bg-stone-100 dark:bg-stone-800 rounded-xl space-y-1">
+                <div className="text-[10px] text-stone-500 uppercase tracking-wider">Customer Try-Ons</div>
+                <div className="text-xl font-bold font-serif text-amber-600 dark:text-amber-400">
+                  {performanceData.summary?.totalTryons || 0}
+                </div>
+              </div>
+              <div className="p-3 bg-stone-100 dark:bg-stone-800 rounded-xl space-y-1">
+                <div className="text-[10px] text-stone-500 uppercase tracking-wider">Wishlisted Count</div>
+                <div className="text-xl font-bold font-serif text-rose-600 dark:text-rose-400">
+                  {performanceData.summary?.totalFavorites || 0}
+                </div>
+              </div>
+            </div>
+
+            {/* Garments Breakdown Table */}
+            <div className="space-y-2">
+              <div className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                Top Performing Garments
+              </div>
+              <div className="max-h-60 overflow-y-auto border border-stone-200 dark:border-stone-800 rounded-xl">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-stone-50 dark:bg-stone-800/60 text-stone-500 uppercase font-semibold">
+                    <tr>
+                      <th className="py-2 px-3">Garment</th>
+                      <th className="py-2 px-3">Price</th>
+                      <th className="py-2 px-3">Try-Ons</th>
+                      <th className="py-2 px-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-200 dark:divide-stone-800">
+                    {(performanceData.products || []).slice(0, 10).map((p) => (
+                      <tr key={p.id}>
+                        <td className="py-2 px-3 font-medium">{p.name}</td>
+                        <td className="py-2 px-3 font-mono">₹{p.price}</td>
+                        <td className="py-2 px-3 font-mono font-bold text-amber-500">{p.tryon_count}</td>
+                        <td className="py-2 px-3">
+                          <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-stone-100 dark:bg-stone-800">
+                            {p.approval_status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-stone-200 dark:border-stone-800">
+              <button
+                onClick={() => setShowPerformanceModal(false)}
+                className="px-4 py-2 bg-stone-900 dark:bg-amber-500 text-white dark:text-stone-950 rounded-lg text-xs font-semibold"
+              >
+                Close Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================== NOTIFICATIONS MODAL ===================== */}
+      {showNotificationsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-stone-200 dark:border-stone-800 pb-3">
+              <div className="flex items-center space-x-2">
+                <Bell className="w-5 h-5 text-amber-500" />
+                <h3 className="font-serif text-lg font-semibold text-stone-900 dark:text-white">
+                  Supplier Review Alerts ({notifications.length})
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowNotificationsModal(false)}
+                className="p-1 text-stone-400 hover:text-stone-700 dark:hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-2.5 max-h-72 overflow-y-auto">
+              {notifications.length === 0 ? (
+                <div className="p-8 text-center text-xs text-stone-500">
+                  No review notifications at this time. All submissions are up to date.
+                </div>
+              ) : (
+                notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    className={`p-3 rounded-xl border text-xs space-y-1 ${
+                      n.is_read
+                        ? 'bg-stone-50 dark:bg-stone-800/40 border-stone-200 dark:border-stone-800'
+                        : 'bg-amber-500/10 border-amber-500/30'
+                    }`}
+                  >
+                    <div className="font-bold flex items-center justify-between">
+                      <span>{n.title}</span>
+                      <span className="text-[10px] text-stone-400 font-mono">
+                        {new Date(n.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="text-stone-600 dark:text-stone-300 text-[11px] leading-relaxed">
+                      {n.message}
+                    </p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-stone-200 dark:border-stone-800">
+              <button
+                onClick={() => setShowNotificationsModal(false)}
+                className="px-4 py-2 border border-stone-300 dark:border-stone-700 rounded-lg text-xs font-semibold"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
+

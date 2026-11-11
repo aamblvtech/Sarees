@@ -23,9 +23,15 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
 
   // Top Tabs
-  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'sources' | 'myntra_import'
+  const [activeTab, setActiveTab] = useState('inventory'); // 'inventory' | 'sources' | 'myntra_import' | 'audit_logs'
   const [selectedApprovalStatus, setSelectedApprovalStatus] = useState('all');
   const [selectedSource, setSelectedSource] = useState('all');
+
+  // Audit Logs & Report Exports
+  const [auditLogs, setAuditLogs] = useState({ adminLogs: [], supplierLogs: [] });
+  const [auditLoading, setAuditLoading] = useState(false);
+  const [reportExporting, setReportExporting] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
 
   // External Catalogue Sources State
   const [sourcesOverview, setSourcesOverview] = useState([]);
@@ -326,6 +332,49 @@ export default function AdminDashboard() {
       await loadSourcesData();
     } catch (err) {
       alert(err.response?.data?.error || err.message || 'Failed to update supplier status');
+    }
+  };
+
+  const loadAuditLogs = async () => {
+    setAuditLoading(true);
+    try {
+      const res = await apiClient.get('/admin/audit-logs', {
+        headers: adminService.getAuthHeaders()
+      });
+      if (res.data?.success) {
+        setAuditLogs({
+          adminLogs: res.data.adminLogs || [],
+          supplierLogs: res.data.supplierLogs || []
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to load audit logs:', e);
+    } finally {
+      setAuditLoading(false);
+    }
+  };
+
+  const handleExportReport = async (reportType) => {
+    setReportExporting(true);
+    setShowExportMenu(false);
+    try {
+      const token = adminService.getToken();
+      const response = await fetch(`/api/admin/reports/export?type=${reportType}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!response.ok) throw new Error('Report export failed');
+      const blob = await response.blob();
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `vestra_${reportType}_report.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (err) {
+      alert('Report export failed: ' + err.message);
+    } finally {
+      setReportExporting(false);
     }
   };
 
@@ -913,7 +962,45 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative">
+              <button
+                onClick={() => setShowExportMenu(!showExportMenu)}
+                disabled={reportExporting}
+                className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 text-xs uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                <span>{reportExporting ? 'Exporting...' : 'Export Reports (CSV)'}</span>
+              </button>
+
+              {showExportMenu && (
+                <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl py-2 z-50 text-xs animate-fadeIn">
+                  <div className="px-3 py-1 text-[10px] uppercase font-bold text-slate-400">Select Report Feed</div>
+                  <button
+                    onClick={() => handleExportReport('products')}
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2"
+                  >
+                    <Package className="w-3.5 h-3.5 text-amber-500" />
+                    <span>Garments Inventory (.csv)</span>
+                  </button>
+                  <button
+                    onClick={() => handleExportReport('suppliers')}
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2"
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Supplier Accounts (.csv)</span>
+                  </button>
+                  <button
+                    onClick={() => handleExportReport('tryons')}
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-rose-500" />
+                    <span>Try-On Generation Jobs (.csv)</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
             <Link
               to="/catalogue"
               target="_blank"
@@ -933,69 +1020,94 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Overview Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Overview Metric Cards with Real Database Values */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           
-          <div className="bg-white dark:bg-slate-900 p-5 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-2">
+          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-              <span className="text-[10px] uppercase tracking-widest font-semibold">Total Garments</span>
-              <Package className="w-4 h-4 text-[#F5AFAF]" />
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Total Products</span>
+              <Package className="w-3.5 h-3.5 text-[#F5AFAF]" />
             </div>
-            <p className="font-serif text-3xl font-semibold text-slate-900 dark:text-white">
+            <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {stats?.totalProducts ?? products.length}
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              {stats?.activeProducts ?? products.filter(p => p.isActive ?? p.is_active).length} active in public catalogue
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              {stats?.approvedProducts ?? 0} approved &bull; {stats?.pendingProducts ?? 0} pending
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-              <span className="text-[10px] uppercase tracking-widest font-semibold">Try-On Silhouettes</span>
-              <Sparkles className="w-4 h-4 text-[#F5AFAF]" />
+          <div className="bg-white dark:bg-slate-900 p-4 border border-emerald-500/20 dark:border-emerald-500/30 shadow-sm space-y-1">
+            <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400">
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Active Suppliers</span>
+              <Building2 className="w-3.5 h-3.5 text-emerald-500" />
             </div>
-            <p className="font-serif text-3xl font-semibold text-slate-900 dark:text-white">
-              {stats?.tryonReadyProducts ?? products.filter(p => p.tryonImage).length}
+            <p className="font-serif text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              {stats?.activeSuppliers ?? 0}
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Configured with drape warping assets
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              {stats?.totalSuppliers ?? 0} total registered
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-              <span className="text-[10px] uppercase tracking-widest font-semibold">Capsule Categories</span>
-              <Layers className="w-4 h-4 text-[#F5AFAF]" />
+          <div className="bg-white dark:bg-slate-900 p-4 border border-amber-500/20 dark:border-amber-500/30 shadow-sm space-y-1">
+            <div className="flex items-center justify-between text-amber-600 dark:text-amber-400">
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Shopper Sessions</span>
+              <UserCheck className="w-3.5 h-3.5 text-amber-500" />
             </div>
-            <p className="font-serif text-3xl font-semibold text-slate-900 dark:text-white">
+            <p className="font-serif text-2xl font-bold text-amber-600 dark:text-amber-400">
+              {stats?.totalCustomers ?? 1}
+            </p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              Online & Mall Kiosk
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Try-On Requests</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
+            </div>
+            <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
+              {stats?.totalTryonRequests ?? 0}
+            </p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              {stats?.successfulTryons ?? 0} success &bull; {stats?.failedTryons ?? 0} fail
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Credits Used</span>
+              <DollarSign className="w-3.5 h-3.5 text-[#F5AFAF]" />
+            </div>
+            <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
+              {stats?.creditsConsumed ?? 0}
+            </p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
+              Genlook provider units
+            </p>
+          </div>
+
+          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] uppercase tracking-widest font-semibold">Categories</span>
+              <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
+            </div>
+            <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {categories.length}
             </p>
-            <p className="text-[11px] text-[#F5AFAF] cursor-pointer hover:underline" onClick={() => setIsCategoryModalOpen(true)}>
-              + Add or manage categories &rarr;
-            </p>
-          </div>
-
-          <div className="bg-white dark:bg-slate-900 p-5 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-2">
-            <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
-              <span className="text-[10px] uppercase tracking-widest font-semibold">Database Engine</span>
-              <Database className="w-4 h-4 text-[#F5AFAF]" />
-            </div>
-            <div className="flex items-center space-x-2 pt-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <p className="text-sm font-semibold text-slate-900 dark:text-white">PostgreSQL</p>
-            </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-mono">
-              Driver: pg (parameterized SQL)
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+              PostgreSQL Engine
             </p>
           </div>
 
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 border-b border-[#F9DFDF] dark:border-slate-800">
+        <div className="flex items-center space-x-2 border-b border-[#F9DFDF] dark:border-slate-800 overflow-x-auto">
           <button
             onClick={() => setActiveTab('inventory')}
-            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 ${
+            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
               activeTab === 'inventory'
                 ? 'border-black dark:border-white text-slate-900 dark:text-white bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
@@ -1010,19 +1122,19 @@ export default function AdminDashboard() {
               setActiveTab('sources');
               loadSourcesData();
             }}
-            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 ${
+            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
               activeTab === 'sources'
                 ? 'border-black dark:border-white text-slate-900 dark:text-white bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
             }`}
           >
             <Layers className="w-4 h-4 text-[#F5AFAF]" />
-            <span>External Catalogue Sources ({sourcesOverview.length || 6})</span>
+            <span>External Sources ({sourcesOverview.length || 6})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('myntra_import')}
-            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 ${
+            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
               activeTab === 'myntra_import'
                 ? 'border-black dark:border-white text-slate-900 dark:text-white bg-white dark:bg-slate-900'
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
@@ -1030,6 +1142,21 @@ export default function AdminDashboard() {
           >
             <Globe className="w-4 h-4 text-[#F5AFAF]" />
             <span>Myntra Reference Import</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('audit_logs');
+              loadAuditLogs();
+            }}
+            className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
+              activeTab === 'audit_logs'
+                ? 'border-black dark:border-white text-slate-900 dark:text-white bg-white dark:bg-slate-900'
+                : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
+            }`}
+          >
+            <FileText className="w-4 h-4 text-[#F5AFAF]" />
+            <span>Platform Audit Logs</span>
           </button>
         </div>
 
@@ -2086,7 +2213,7 @@ export default function AdminDashboard() {
             </div>
 
           </div>
-        ) : (
+        ) : activeTab === 'myntra_import' ? (
           /* ============================================================== */
           /* MYNTRA CATALOGUE IMPORT SECTION                                */
           /* ============================================================== */
@@ -2684,7 +2811,151 @@ export default function AdminDashboard() {
             )}
 
           </div>
-        )}
+        ) : activeTab === 'audit_logs' ? (
+          /* ============================================================== */
+          /* PLATFORM AUDIT LOGS SECTION                                    */
+          /* ============================================================== */
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="inline-flex items-center space-x-2 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-[10px] uppercase font-bold tracking-widest mb-2">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Security & Compliance Auditing</span>
+                </div>
+                <h2 className="font-serif text-2xl text-slate-900 dark:text-white">
+                  Platform Audit & Activity Trail
+                </h2>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-2xl">
+                  Chronological record of administrator catalog decisions, supplier moderation events, and inventory changes.
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={loadAuditLogs}
+                  disabled={auditLoading}
+                  className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${auditLoading ? 'animate-spin text-[#F5AFAF]' : 'text-slate-500'}`} />
+                  <span>Refresh Logs</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Admin Audit Trail */}
+            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+              <h3 className="font-serif text-lg text-slate-900 dark:text-white flex items-center space-x-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Administrator Actions</span>
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                      <th className="py-2.5 px-4 font-semibold">Timestamp</th>
+                      <th className="py-2.5 px-4 font-semibold">Admin</th>
+                      <th className="py-2.5 px-4 font-semibold">Action</th>
+                      <th className="py-2.5 px-4 font-semibold">Target</th>
+                      <th className="py-2.5 px-4 font-semibold">Details</th>
+                      <th className="py-2.5 px-4 font-semibold">IP Address</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                    {auditLogs.adminLogs?.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="py-6 text-center text-xs text-slate-400 italic">
+                          No administrator audit logs recorded yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      auditLogs.adminLogs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                          <td className="py-2.5 px-4 font-mono text-[11px] text-slate-500 whitespace-nowrap">
+                            {new Date(log.created_at).toLocaleString()}
+                          </td>
+                          <td className="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">
+                            {log.admin_email}
+                          </td>
+                          <td className="py-2.5 px-4 font-mono text-[11px] uppercase tracking-wide">
+                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 rounded text-slate-700 dark:text-slate-300">
+                              {log.action}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400">
+                            {log.target_type ? `${log.target_type} #${log.target_id || ''}` : '-'}
+                          </td>
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400 max-w-xs truncate" title={typeof log.details === 'object' ? JSON.stringify(log.details) : log.details}>
+                            {typeof log.details === 'object' ? JSON.stringify(log.details) : log.details || '-'}
+                          </td>
+                          <td className="py-2.5 px-4 font-mono text-[11px] text-slate-400">
+                            {log.ip_address || '-'}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Supplier Activity Logs */}
+            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+              <h3 className="font-serif text-lg text-slate-900 dark:text-white flex items-center space-x-2">
+                <Building2 className="w-4 h-4 text-indigo-500" />
+                <span>Supplier Activity & Submissions</span>
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-xs">
+                  <thead>
+                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                      <th className="py-2.5 px-4 font-semibold">Timestamp</th>
+                      <th className="py-2.5 px-4 font-semibold">Supplier</th>
+                      <th className="py-2.5 px-4 font-semibold">Action</th>
+                      <th className="py-2.5 px-4 font-semibold">Target Entity</th>
+                      <th className="py-2.5 px-4 font-semibold">Details</th>
+                      <th className="py-2.5 px-4 font-semibold">IP Address</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                    {auditLogs.supplierLogs?.length === 0 ? (
+                      <tr>
+                        <td colSpan="6" className="py-6 text-center text-xs text-slate-400 italic">
+                          No supplier activity logs recorded yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      auditLogs.supplierLogs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                          <td className="py-2.5 px-4 font-mono text-[11px] text-slate-500 whitespace-nowrap">
+                            {new Date(log.created_at).toLocaleString()}
+                          </td>
+                          <td className="py-2.5 px-4 font-semibold text-slate-800 dark:text-slate-200">
+                            {log.supplier_name || 'Supplier'}
+                          </td>
+                          <td className="py-2.5 px-4 font-mono text-[11px] uppercase tracking-wide">
+                            <span className="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900 text-indigo-700 dark:text-indigo-300 rounded">
+                              {log.action}
+                            </span>
+                          </td>
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400">
+                            {log.entity_type ? `${log.entity_type} #${log.entity_id || ''}` : '-'}
+                          </td>
+                          <td className="py-2.5 px-4 text-slate-600 dark:text-slate-400 max-w-xs truncate" title={typeof log.details === 'object' ? JSON.stringify(log.details) : log.details}>
+                            {typeof log.details === 'object' ? JSON.stringify(log.details) : log.details || '-'}
+                          </td>
+                          <td className="py-2.5 px-4 font-mono text-[11px] text-slate-400">
+                            {log.ip_address || '-'}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        ) : null}
 
       </div>
 

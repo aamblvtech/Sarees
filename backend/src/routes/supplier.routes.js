@@ -1050,4 +1050,140 @@ router.put('/profile', requireSupplierAuth, async (req, res) => {
   }
 });
 
+// ==============================================================================
+// 6. INVENTORY BULK EDITING, NOTIFICATIONS & PERFORMANCE
+// ==============================================================================
+
+/**
+ * PUT /api/supplier/products/bulk
+ * Bulk update stock status and pricing for supplier products
+ */
+router.put('/products/bulk', requireSupplierAuth, async (req, res) => {
+  const supplierId = req.supplier.supplierAccountId;
+  const { ids, stockStatus, priceAdjustmentPercent } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ success: false, error: 'Product IDs array is required.' });
+  }
+
+  try {
+    const intIds = ids.map((id) => parseInt(id, 10)).filter((id) => !isNaN(id));
+    if (intIds.length === 0) {
+      return res.status(400).json({ success: false, error: 'No valid numeric product IDs provided.' });
+    }
+
+    if (stockStatus) {
+      await query(
+        `UPDATE products
+         SET stock_status = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE id = ANY($2) AND supplier_id = $3`,
+        [stockStatus, intIds, supplierId]
+      );
+    }
+
+    if (priceAdjustmentPercent && !isNaN(priceAdjustmentPercent)) {
+      const multiplier = 1 + parseFloat(priceAdjustmentPercent) / 100;
+      await query(
+        `UPDATE products
+         SET price = ROUND(price * $1, 2), updated_at = CURRENT_TIMESTAMP
+         WHERE id = ANY($2) AND supplier_id = $3`,
+        [multiplier, intIds, supplierId]
+      );
+    }
+
+    return res.json({
+      success: true,
+      message: `Updated ${intIds.length} garments in inventory.`,
+      updatedIds: intIds
+    });
+  } catch (err) {
+    console.error('[Bulk Update Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/supplier/notifications
+ * Retrieve review notifications and alerts for this supplier
+ */
+router.get('/notifications', requireSupplierAuth, async (req, res) => {
+  const supplierId = req.supplier.supplierAccountId;
+  try {
+    const notifs = await query(
+      `SELECT * FROM supplier_notifications
+       WHERE supplier_account_id = $1
+       ORDER BY created_at DESC
+       LIMIT 30`,
+      [supplierId]
+    );
+
+    return res.json({
+      success: true,
+      data: notifs.rows || []
+    });
+  } catch (err) {
+    console.error('[Supplier Notifications Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * PUT /api/supplier/notifications/:id/read
+ * Mark notification as read
+ */
+router.put('/notifications/:id/read', requireSupplierAuth, async (req, res) => {
+  const supplierId = req.supplier.supplierAccountId;
+  const notifId = parseInt(req.params.id, 10);
+  try {
+    await query(
+      `UPDATE supplier_notifications
+       SET is_read = TRUE
+       WHERE id = $1 AND supplier_account_id = $2`,
+      [notifId, supplierId]
+    );
+
+    return res.json({ success: true, message: 'Notification marked as read.' });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/supplier/reports/performance
+ * Returns real database performance metrics for supplier products
+ */
+router.get('/reports/performance', requireSupplierAuth, async (req, res) => {
+  const supplierId = req.supplier.supplierAccountId;
+  try {
+    const prodsRes = await query(
+      `SELECT id, name, sku, category_id, subcategory, price, approval_status,
+              is_active, COALESCE(tryon_count, 0) AS tryon_count,
+              COALESCE(favorite_count, 0) AS favorite_count
+       FROM products
+       WHERE supplier_id = $1
+       ORDER BY tryon_count DESC, id DESC`,
+      [supplierId]
+    );
+
+    const prods = prodsRes.rows || [];
+    const totalTryons = prods.reduce((sum, p) => sum + (parseInt(p.tryon_count, 10) || 0), 0);
+    const totalFavorites = prods.reduce((sum, p) => sum + (parseInt(p.favorite_count, 10) || 0), 0);
+
+    return res.json({
+      success: true,
+      summary: {
+        totalProducts: prods.length,
+        totalTryons,
+        totalFavorites,
+        activeProducts: prods.filter((p) => p.is_active).length
+      },
+      products: prods
+    });
+  } catch (err) {
+    console.error('[Supplier Performance Report Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;
+

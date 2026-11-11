@@ -6,8 +6,8 @@ import adminService from '../services/adminService';
 export default function AdminLogin() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('admin@vestra.com');
-  const [password, setPassword] = useState('AdminPassword2026!');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 

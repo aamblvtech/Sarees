@@ -160,7 +160,52 @@ export const supplierService = {
       }
     });
     return response.data;
+  },
+
+  /**
+   * Bulk update product stock and pricing
+   */
+  async bulkUpdateProducts(ids, { stockStatus, priceAdjustmentPercent }) {
+    const response = await apiClient.put(
+      '/supplier/products/bulk',
+      { ids, stockStatus, priceAdjustmentPercent },
+      { headers: this.getAuthHeaders() }
+    );
+    return response.data;
+  },
+
+  /**
+   * Get supplier notifications
+   */
+  async getNotifications() {
+    const response = await apiClient.get('/supplier/notifications', {
+      headers: this.getAuthHeaders()
+    });
+    return response.data;
+  },
+
+  /**
+   * Mark notification as read
+   */
+  async markNotificationRead(id) {
+    const response = await apiClient.put(
+      `/supplier/notifications/${id}/read`,
+      {},
+      { headers: this.getAuthHeaders() }
+    );
+    return response.data;
+  },
+
+  /**
+   * Get supplier performance report
+   */
+  async getPerformanceReport() {
+    const response = await apiClient.get('/supplier/reports/performance', {
+      headers: this.getAuthHeaders()
+    });
+    return response.data;
   }
 };
 
 export default supplierService;
+

@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import SupplierLogin from './pages/SupplierLogin';
 import SupplierDashboard from './pages/SupplierDashboard';
+import KioskMode from './pages/KioskMode';
 import MobileUpload from './pages/MobileUpload';
 import ErrorBoundary from './components/ErrorBoundary';
 import { ThemeProvider } from './context/ThemeContext';
@@ -26,12 +27,23 @@ function ScrollToTop() {
 function AppContent() {
   const { pathname } = useLocation();
   const isMobileUploadView = pathname.startsWith('/mobile-upload');
+  const isKioskView = pathname.startsWith('/kiosk');
 
   if (isMobileUploadView) {
     return (
       <ErrorBoundary>
         <Routes>
           <Route path="/mobile-upload/:token" element={<MobileUpload />} />
+        </Routes>
+      </ErrorBoundary>
+    );
+  }
+
+  if (isKioskView) {
+    return (
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/kiosk" element={<KioskMode />} />
         </Routes>
       </ErrorBoundary>
     );
@@ -47,6 +59,7 @@ function AppContent() {
             <Route path="/catalogue" element={<Catalogue />} />
             <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/try-on" element={<VirtualFittingRoom />} />
+            <Route path="/kiosk" element={<KioskMode />} />
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />

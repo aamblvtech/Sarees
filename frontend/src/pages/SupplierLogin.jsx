@@ -22,8 +22,8 @@ export default function SupplierLogin() {
   const [activeTab, setActiveTab] = useState('login'); // 'login' | 'register'
 
   // Login form state
-  const [loginEmail, setLoginEmail] = useState('supplier@surathandloom.com');
-  const [loginPassword, setLoginPassword] = useState('SupplierPass2026!');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState(null);
 
@@ -173,36 +173,6 @@ export default function SupplierLogin() {
         {/* ===================== TAB 1: LOGIN ===================== */}
         {activeTab === 'login' && (
           <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 sm:p-8 rounded-2xl shadow-sm space-y-6">
-            
-            {/* Quick Demo Pre-fills */}
-            <div className="p-3.5 bg-stone-100 dark:bg-stone-800/60 rounded-xl border border-stone-200/80 dark:border-stone-700/60 text-xs space-y-2">
-              <div className="font-semibold text-stone-700 dark:text-stone-300 flex items-center justify-between">
-                <span>Quick Test Credentials:</span>
-                <span className="text-[10px] text-stone-500">Click to fill</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginEmail('supplier@surathandloom.com');
-                    setLoginPassword('SupplierPass2026!');
-                  }}
-                  className="px-2.5 py-1 bg-white dark:bg-stone-700 border border-stone-300 dark:border-stone-600 rounded text-[11px] hover:border-amber-500 transition-colors"
-                >
-                  <span className="font-medium text-emerald-600 dark:text-emerald-400">● Active:</span> Surat Handloom Mills
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLoginEmail('weaver@varanasiweaves.org');
-                    setLoginPassword('WeaverPass2026!');
-                  }}
-                  className="px-2.5 py-1 bg-white dark:bg-stone-700 border border-stone-300 dark:border-stone-600 rounded text-[11px] hover:border-amber-500 transition-colors"
-                >
-                  <span className="font-medium text-amber-600 dark:text-amber-400">● Pending:</span> Varanasi Weavers
-                </button>
-              </div>
-            </div>
 
             {/* Error Message */}
             {loginError && (
@@ -498,3 +468,4 @@ export default function SupplierLogin() {
     </div>
   );
 }
+

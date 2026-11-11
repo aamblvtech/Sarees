@@ -279,6 +279,61 @@ export const tryOnService = {
       console.warn('[Privacy Cleanup Error]:', err.message);
       return { success: false };
     }
+  },
+
+  /**
+   * Customer Wishlist Management
+   */
+  async getWishlist(sessionId) {
+    try {
+      const response = await apiClient.get('/tryon/wishlist', {
+        params: { sessionId }
+      });
+      return response.data?.wishlist || [];
+    } catch (err) {
+      console.warn('Failed to fetch wishlist:', err.message);
+      return [];
+    }
+  },
+
+  async addToWishlist(productId, sessionId) {
+    const response = await apiClient.post('/tryon/wishlist', { productId, sessionId });
+    return response.data;
+  },
+
+  async removeFromWishlist(productId, sessionId) {
+    const response = await apiClient.delete(`/tryon/wishlist/${productId}`, {
+      params: { sessionId }
+    });
+    return response.data;
+  },
+
+  /**
+   * AI Outfit Recommendations
+   */
+  async getRecommendations({ categoryId, color, limit = 4 }) {
+    try {
+      const response = await apiClient.get('/tryon/recommendations', {
+        params: { categoryId, color, limit }
+      });
+      return response.data?.recommendations || [];
+    } catch (err) {
+      console.warn('Failed to fetch recommendations:', err.message);
+      return [];
+    }
+  },
+
+  /**
+   * Complete Session & Photo Purge
+   */
+  async purgeSession(sessionToken) {
+    try {
+      const response = await apiClient.post('/tryon/purge-session', { sessionToken });
+      return response.data;
+    } catch (err) {
+      console.warn('Session purge error:', err.message);
+      return { success: false };
+    }
   }
 };
 

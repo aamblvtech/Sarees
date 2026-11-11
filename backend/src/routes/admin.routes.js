@@ -149,22 +149,63 @@ router.get('/me', requireAdminAuth, (req, res) => {
 
 /**
  * GET /api/admin/stats
- * Protected: Overview metrics for the Admin Dashboard
+ * Protected: Overview metrics for the Admin Dashboard with real database values
  */
 router.get('/stats', requireAdminAuth, async (req, res) => {
   try {
     const totalProdResult = await query('SELECT COUNT(*) as count FROM products');
     const activeProdResult = await query('SELECT COUNT(*) as count FROM products WHERE is_active = true');
+    const approvedResult = await query("SELECT COUNT(*) as count FROM products WHERE approval_status IN ('APPROVED', 'AI_READY')");
+    const pendingResult = await query("SELECT COUNT(*) as count FROM products WHERE approval_status = 'PENDING'");
+    const rejectedResult = await query("SELECT COUNT(*) as count FROM products WHERE approval_status = 'REJECTED'");
+    const needsImageResult = await query("SELECT COUNT(*) as count FROM products WHERE approval_status = 'NEEDS_IMAGE_REPLACEMENT' OR approval_status = 'NEEDS_IMAGE'");
     const totalCatsResult = await query('SELECT COUNT(*) as count FROM categories');
-    const tryonReadyResult = await query('SELECT COUNT(*) as count FROM products WHERE tryon_image_url IS NOT NULL AND is_active = true');
+    const tryonReadyResult = await query("SELECT COUNT(*) as count FROM products WHERE (is_ai_ready = true OR approval_status = 'AI_READY') AND is_active = true");
+
+    // Real supplier counts
+    const suppliersResult = await query('SELECT COUNT(*) as count, COUNT(CASE WHEN status = \'active\' THEN 1 END) as active_count FROM supplier_accounts');
+    
+    // Real try-on request and generation stats
+    const tryonStatsResult = await query(`
+      SELECT 
+        COUNT(*) as total_requests,
+        COUNT(CASE WHEN status = 'completed' THEN 1 END) as successful_generations,
+        COUNT(CASE WHEN status = 'failed' THEN 1 END) as failed_generations,
+        COALESCE(SUM(credits_used), 0) as credits_consumed
+      FROM tryon_jobs
+    `);
+
+    // Customer count from sessions
+    const customersResult = await query(`
+      SELECT 
+        COALESCE(
+          (SELECT COUNT(*) FROM customer_tryon_sessions),
+          (SELECT COUNT(DISTINCT customer_session_id) FROM tryon_jobs WHERE customer_session_id IS NOT NULL),
+          0
+        ) as total_customers
+    `);
+
+    const tryonRow = tryonStatsResult.rows[0] || {};
+    const supRow = suppliersResult.rows[0] || {};
 
     res.json({
       success: true,
       data: {
         totalProducts: parseInt(totalProdResult.rows[0]?.count || 0, 10),
         activeProducts: parseInt(activeProdResult.rows[0]?.count || 0, 10),
+        approvedProducts: parseInt(approvedResult.rows[0]?.count || 0, 10),
+        pendingProducts: parseInt(pendingResult.rows[0]?.count || 0, 10),
+        rejectedProducts: parseInt(rejectedResult.rows[0]?.count || 0, 10),
+        needsImageProducts: parseInt(needsImageResult.rows[0]?.count || 0, 10),
         totalCategories: parseInt(totalCatsResult.rows[0]?.count || 0, 10),
-        tryonReadyProducts: parseInt(tryonReadyResult.rows[0]?.count || 0, 10)
+        tryonReadyProducts: parseInt(tryonReadyResult.rows[0]?.count || 0, 10),
+        totalSuppliers: parseInt(supRow.count || 0, 10),
+        activeSuppliers: parseInt(supRow.active_count || 0, 10),
+        totalTryonRequests: parseInt(tryonRow.total_requests || 0, 10),
+        successfulTryons: parseInt(tryonRow.successful_generations || 0, 10),
+        failedTryons: parseInt(tryonRow.failed_generations || 0, 10),
+        creditsConsumed: parseInt(tryonRow.credits_consumed || 0, 10),
+        totalCustomers: Math.max(parseInt(customersResult.rows[0]?.total_customers || 0, 10), 1)
       }
     });
   } catch (err) {
@@ -1068,6 +1109,103 @@ router.get('/suppliers/:id/products', requireAdminAuth, async (req, res) => {
     });
   } catch (err) {
     console.error('[Admin Supplier Products Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/admin/audit-logs
+ * Protected: Retrieve platform audit and activity logs
+ */
+router.get('/audit-logs', requireAdminAuth, async (req, res) => {
+  try {
+    const adminLogs = await query(
+      `SELECT id, admin_email, action, target_type, target_id, details, ip_address, created_at
+       FROM admin_audit_logs
+       ORDER BY created_at DESC
+       LIMIT 50`
+    );
+
+    const supplierLogs = await query(
+      `SELECT sa.id, sa.action, sa.entity_type, sa.entity_id, sa.details, sa.ip_address, sa.created_at,
+              acc.company_name as supplier_name
+       FROM supplier_activity_logs sa
+       LEFT JOIN supplier_accounts acc ON acc.id = sa.supplier_account_id
+       ORDER BY sa.created_at DESC
+       LIMIT 50`
+    );
+
+    return res.json({
+      success: true,
+      adminLogs: adminLogs.rows || [],
+      supplierLogs: supplierLogs.rows || []
+    });
+  } catch (err) {
+    console.error('[Audit Logs Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * GET /api/admin/reports/export
+ * Protected: Generates CSV export for products, suppliers, or tryon requests
+ */
+router.get('/reports/export', requireAdminAuth, async (req, res) => {
+  const { type = 'products' } = req.query;
+
+  try {
+    if (type === 'suppliers') {
+      const supRes = await query(
+        `SELECT sa.id, sa.supplier_code, sa.company_name, sa.contact_person, sa.email, sa.phone,
+                sa.supplier_type, sa.city, sa.country, sa.status, sa.created_at
+         FROM supplier_accounts sa ORDER BY sa.id ASC`
+      );
+
+      const headers = 'ID,Supplier Code,Company Name,Contact Person,Email,Phone,Supplier Type,City,Country,Status,Created At\n';
+      const rows = (supRes.rows || []).map(s => 
+        `"${s.id}","${s.supplier_code}","${(s.company_name||'').replace(/"/g, '""')}","${s.contact_person||''}","${s.email||''}","${s.phone||''}","${s.supplier_type||''}","${s.city||''}","${s.country||''}","${s.status||''}","${s.created_at||''}"`
+      ).join('\n');
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="vestra_suppliers_report.csv"');
+      return res.send(headers + rows);
+    }
+
+    if (type === 'tryons') {
+      const tryonRes = await query(
+        `SELECT tj.id, tj.job_uuid, tj.status, tj.provider, tj.product_title, tj.fit_preference,
+                tj.credits_used, tj.created_at, tj.completed_at
+         FROM tryon_jobs tj ORDER BY tj.id DESC LIMIT 500`
+      );
+
+      const headers = 'Job ID,UUID,Status,Provider,Product Title,Fit Preference,Credits Used,Created At,Completed At\n';
+      const rows = (tryonRes.rows || []).map(j =>
+        `"${j.id}","${j.job_uuid}","${j.status}","${j.provider}","${(j.product_title||'').replace(/"/g, '""')}","${j.fit_preference||''}","${j.credits_used||0}","${j.created_at||''}","${j.completed_at||''}"`
+      ).join('\n');
+
+      res.setHeader('Content-Type', 'text/csv');
+      res.setHeader('Content-Disposition', 'attachment; filename="vestra_tryon_jobs_report.csv"');
+      return res.send(headers + rows);
+    }
+
+    // Default: products
+    const prodRes = await query(
+      `SELECT p.id, p.sku, p.name, p.brand, p.subcategory, p.gender, p.garment_type,
+              p.price, p.stock_status, p.approval_status, p.is_active, p.source,
+              p.image_width, p.image_height, COALESCE(p.tryon_count, 0) as tryon_count
+       FROM products p ORDER BY p.id ASC`
+    );
+
+    const headers = 'ID,SKU,Name,Brand,Category,Gender,Garment Type,Price,Stock Status,Approval Status,Active,Source,Width,Height,TryOn Count\n';
+    const rows = (prodRes.rows || []).map(p =>
+      `"${p.id}","${p.sku}","${(p.name||'').replace(/"/g, '""')}","${p.brand||''}","${p.subcategory||''}","${p.gender||''}","${p.garment_type||''}","${p.price}","${p.stock_status||''}","${p.approval_status||''}","${p.is_active}","${p.source||''}","${p.image_width||''}","${p.image_height||''}","${p.tryon_count}"`
+    ).join('\n');
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="vestra_inventory_report.csv"');
+    return res.send(headers + rows);
+  } catch (err) {
+    console.error('[Export Report Error]:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });

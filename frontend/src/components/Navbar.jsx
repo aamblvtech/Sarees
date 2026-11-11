@@ -86,6 +86,13 @@ export default function Navbar() {
             </button>
 
             <Link
+              to="/kiosk"
+              className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-semibold transition-colors px-2 py-1"
+            >
+              Mall Kiosk
+            </Link>
+
+            <Link
               to="/supplier/login"
               className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
             >

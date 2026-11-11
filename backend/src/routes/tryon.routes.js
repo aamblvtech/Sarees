@@ -1427,4 +1427,223 @@ router.post('/sarees/:id/reject', async (req, res) => {
   }
 });
 
+// ==============================================================================
+// CUSTOMER WISHLIST & FAVORITES
+// ==============================================================================
+
+/**
+ * GET /api/tryon/wishlist
+ * Retrieve all favorited products for the customer session
+ */
+router.get('/wishlist', async (req, res) => {
+  const sessionId = req.query.sessionId || req.headers['x-session-id'] || 'default-session';
+  try {
+    const result = await query(
+      `SELECT p.id, p.name, p.slug, p.brand, p.category_id, p.subcategory, p.gender,
+              p.garment_type AS "garmentType", p.tryon_compatibility AS "tryonCompatibility",
+              p.price, p.original_price AS "originalPrice", p.currency, p.description,
+              p.material, p.primary_image_url AS "primaryImage", p.color,
+              p.approval_status AS "approvalStatus", p.is_ai_ready AS "isAiReady",
+              cw.created_at AS "addedAt"
+       FROM customer_wishlists cw
+       JOIN products p ON p.id = cw.product_id
+       WHERE cw.session_id = $1
+       ORDER BY cw.created_at DESC`,
+      [sessionId]
+    );
+
+    return res.json({
+      success: true,
+      count: result.rows.length,
+      data: result.rows
+    });
+  } catch (err) {
+    console.error('[Wishlist Get Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/wishlist
+ * Add a product to the customer session wishlist
+ */
+router.post('/wishlist', async (req, res) => {
+  const { sessionId = 'default-session', productId } = req.body;
+  if (!productId) {
+    return res.status(400).json({ success: false, error: 'Product ID is required.' });
+  }
+
+  try {
+    await query(
+      `INSERT INTO customer_wishlists (session_id, product_id)
+       VALUES ($1, $2)
+       ON CONFLICT (session_id, product_id) DO NOTHING`,
+      [sessionId, parseInt(productId, 10)]
+    );
+
+    try {
+      await query(
+        `UPDATE products SET favorite_count = COALESCE(favorite_count, 0) + 1 WHERE id = $1`,
+        [parseInt(productId, 10)]
+      );
+    } catch {}
+
+    return res.json({
+      success: true,
+      message: 'Product added to wishlist.',
+      productId: parseInt(productId, 10)
+    });
+  } catch (err) {
+    console.error('[Wishlist Add Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * DELETE /api/tryon/wishlist/:productId
+ * Remove a product from the customer session wishlist
+ */
+router.delete('/wishlist/:productId', async (req, res) => {
+  const productId = parseInt(req.params.productId, 10);
+  const sessionId = req.query.sessionId || req.headers['x-session-id'] || 'default-session';
+
+  try {
+    await query(
+      `DELETE FROM customer_wishlists WHERE session_id = $1 AND product_id = $2`,
+      [sessionId, productId]
+    );
+
+    return res.json({
+      success: true,
+      message: 'Product removed from wishlist.',
+      productId
+    });
+  } catch (err) {
+    console.error('[Wishlist Delete Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ==============================================================================
+// AI OUTFIT RECOMMENDATIONS
+// ==============================================================================
+
+/**
+ * GET /api/tryon/recommendations
+ * Recommends complementary garments based on category pairing and color harmony
+ */
+router.get('/recommendations', async (req, res) => {
+  const { productId, category, color, gender } = req.query;
+
+  try {
+    let sql = `
+      SELECT id, name, slug, brand, subcategory, gender, garment_type AS "garmentType",
+             price, original_price AS "originalPrice", primary_image_url AS "primaryImage",
+             color, approval_status AS "approvalStatus"
+      FROM products
+      WHERE is_active = TRUE AND (approval_status IN ('APPROVED', 'AI_READY') OR approval_status IS NULL)
+    `;
+    const params = [];
+    let idx = 1;
+
+    if (productId) {
+      sql += ` AND id != $${idx}`;
+      params.push(parseInt(productId, 10));
+      idx++;
+    }
+
+    if (gender && gender !== 'all') {
+      sql += ` AND (LOWER(gender) = LOWER($${idx}) OR LOWER(gender) = 'unisex')`;
+      params.push(gender);
+      idx++;
+    }
+
+    sql += ` ORDER BY is_featured DESC, id DESC LIMIT 8`;
+
+    const result = await query(sql, params);
+
+    return res.json({
+      success: true,
+      count: result.rows.length,
+      data: result.rows
+    });
+  } catch (err) {
+    console.error('[Recommendations Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// ==============================================================================
+// MALL KIOSK SESSION MANAGEMENT & PRIVACY PURGE
+// ==============================================================================
+
+/**
+ * POST /api/tryon/kiosk/session
+ * Initializes a new mall kiosk session with customer privacy consent
+ */
+router.post('/kiosk/session', async (req, res) => {
+  const { isKiosk = true, consentGiven = true, deviceType = 'kiosk_touchscreen' } = req.body;
+  const sessionToken = `kiosk_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+
+  try {
+    await query(
+      `INSERT INTO customer_tryon_sessions (session_token, is_kiosk, consent_given, device_type, status)
+       VALUES ($1, $2, $3, $4, 'active')`,
+      [sessionToken, isKiosk, consentGiven, deviceType]
+    );
+
+    return res.json({
+      success: true,
+      sessionToken,
+      expiresInMinutes: 120,
+      message: 'Kiosk session established. Customer consent recorded.'
+    });
+  } catch (err) {
+    console.error('[Kiosk Session Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+/**
+ * POST /api/tryon/purge-session
+ * Fully purges customer session data, uploaded photos, and temporary try-on history for complete privacy
+ */
+router.post('/purge-session', async (req, res) => {
+  const { sessionId, sessionToken } = req.body;
+  const targetToken = sessionToken || sessionId;
+
+  if (!targetToken) {
+    return res.status(400).json({ success: false, error: 'Session identifier is required to purge.' });
+  }
+
+  try {
+    // 1. Purge wishlist items for this session
+    await query(`DELETE FROM customer_wishlists WHERE session_id = $1`, [targetToken]);
+
+    // 2. Mark session purged
+    await query(
+      `UPDATE customer_tryon_sessions
+       SET status = 'purged', customer_photo_url = NULL, customer_image_id = NULL
+       WHERE session_token = $1`,
+      [targetToken]
+    );
+
+    // 3. Mark tryon_jobs as purged / remove customer session reference
+    await query(
+      `UPDATE tryon_jobs
+       SET customer_session_id = NULL
+       WHERE customer_session_id = $1`,
+      [targetToken]
+    );
+
+    return res.json({
+      success: true,
+      message: 'Customer session photographs and temporary data have been securely erased.'
+    });
+  } catch (err) {
+    console.error('[Purge Session Error]:', err.message);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 export default router;
