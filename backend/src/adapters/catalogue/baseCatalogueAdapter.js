@@ -59,28 +59,28 @@ export class BaseCatalogueAdapter {
   mapCategory(rawCategory = '', rawName = '', rawType = '') {
     const text = `${rawCategory} ${rawName} ${rawType}`.toLowerCase();
 
-    if (text.includes('saree') || text.includes('sari') || text.includes('kanjivaram') || text.includes('banarasi')) {
+    if (text.includes('saree') || text.includes('sari') || text.includes('kanjivaram') || text.includes('banarasi') || text.includes('paithani') || text.includes('chanderi')) {
       return { categoryId: 1, categorySlug: 'sarees', garmentType: 'saree' };
     }
-    if (text.includes('shirt') || text.includes('blouse') || text.includes('top') || text.includes('t-shirt') || text.includes('tshirt') || text.includes('polo')) {
+    if (text.includes('shirt') || text.includes('blouse') || text.includes('top') || text.includes('t-shirt') || text.includes('tshirt') || text.includes('polo') || text.includes('hoodie') || text.includes('sweatshirt')) {
       return { categoryId: 5, categorySlug: 'shirts', garmentType: 'upper_body' };
     }
     if (text.includes('jean') || text.includes('denim')) {
       return { categoryId: 6, categorySlug: 'jeans', garmentType: 'lower_body' };
     }
-    if (text.includes('pant') || text.includes('trouser') || text.includes('chino') || text.includes('cargo') || text.includes('palazzo')) {
+    if (text.includes('pant') || text.includes('trouser') || text.includes('chino') || text.includes('cargo') || text.includes('palazzo') || text.includes('short') || text.includes('skirt')) {
       return { categoryId: 7, categorySlug: 'pants', garmentType: 'lower_body' };
     }
-    if (text.includes('tuxedo') || text.includes('suit') || text.includes('blazer') || text.includes('formal') || text.includes('smoking jacket')) {
+    if (text.includes('tuxedo') || text.includes('suit') || text.includes('blazer') || text.includes('jacket') || text.includes('formal') || text.includes('smoking jacket')) {
       return { categoryId: 8, categorySlug: 'formal-attire', garmentType: 'full_body' };
     }
-    if (text.includes('anarkali') || text.includes('lehenga') || text.includes('kurti') || text.includes('gown') || text.includes('dress') || text.includes('salwar')) {
+    if (text.includes('anarkali') || text.includes('lehenga') || text.includes('kurti') || text.includes('gown') || text.includes('dress') || text.includes('salwar') || text.includes('mini dress') || text.includes('maxi dress') || text.includes('jumpsuit') || text.includes('coord')) {
       return { categoryId: 2, categorySlug: 'womens-clothing', garmentType: 'full_body' };
     }
-    if (text.includes('sherwani') || text.includes('kurta') || text.includes('bandhgala') || text.includes('mens')) {
+    if (text.includes('sherwani') || text.includes('kurta') || text.includes('bandhgala') || text.includes('nehru') || text.includes('waistcoat') || text.includes('dhoti') || text.includes('mens')) {
       return { categoryId: 3, categorySlug: 'mens-clothing', garmentType: 'full_body' };
     }
-    if (text.includes('belt') || text.includes('shawl') || text.includes('pashmina') || text.includes('accessory')) {
+    if (text.includes('belt') || text.includes('shawl') || text.includes('pashmina') || text.includes('tie') || text.includes('pocket square') || text.includes('dupatta') || text.includes('scarf') || text.includes('accessory')) {
       return { categoryId: 4, categorySlug: 'accessories', garmentType: 'accessory' };
     }
 

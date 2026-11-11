@@ -17,27 +17,177 @@ const FASHION_CATEGORIES = [
   { id: 23, slug: 'salwar', name: 'Salwar Suits', key: 'salwar', description: 'Anarkalis, salwar kameez, and churidar sets' },
   { id: 31, slug: 'mens-traditional', name: "Men's Traditional Wear", key: 'mensTraditional', description: 'Sherwanis, kurta pyjamas, and Indo-Western attire' },
   { id: 8, slug: 'blazers', name: 'Blazers & Jackets', key: 'blazers', description: 'Italian wool blazers, tuxedos, and tailored jackets' },
-  { id: 7, slug: 'trousers', name: 'Trousers', key: 'trousers', description: 'Pleated trousers, tailored pants, and chinos' }
+  { id: 7, slug: 'trousers', name: 'Trousers', key: 'trousers', description: 'Pleated trousers, tailored pants, and chinos' },
+  { id: 4, slug: 'accessories', name: 'Accessories', key: 'accessories', description: 'Luxury silk ties, pocket squares, dupattas, and accents' },
+  { id: 9, slug: 'womens-traditional', name: "Women's Traditional Wear", key: 'womensTraditionalDept', description: "Curated Indian heritage sarees, lehengas, anarkalis, and ethnic wear" },
+  { id: 10, slug: 'womens-western', name: "Women's Western Wear", key: 'womensWesternDept', description: "Modern silhouettes: sculptural dresses, tailored blazers, trousers, and denim" },
+  { id: 11, slug: 'mens-traditional-dept', name: "Men's Traditional Wear", key: 'mensTraditionalDept2', description: "Royal sherwanis, silk kurta pyjamas, bandhgalas, and Nehru jackets" },
+  { id: 12, slug: 'mens-western', name: "Men's Western Wear", key: 'mensWesternDept', description: "Bespoke tailoring, Italian wool suits, selvedge denim, and luxury shirts" }
 ];
 
 /**
+ * Main shopping navigation tabs requested for VESTRA
+ */
+const MAIN_NAVIGATION_TABS = [
+  { id: 'all', slug: 'all', name: 'All Garments', key: 'all', description: 'Complete luxury fashion archive for men and women' },
+  { id: 'womens-wear', slug: 'womens-wear', name: "Women's Wear", key: 'womensWear', description: 'Curated traditional sarees, ethnic gowns, western dresses, and tailoring for women' },
+  { id: 'mens-wear', slug: 'mens-wear', name: "Men's Wear", key: 'mensWear', description: 'Bespoke tailoring, silk kurtas, sherwanis, polos, denim, and outerwear for men' },
+  { id: 'traditional-wear', slug: 'traditional-wear', name: 'Traditional Wear', key: 'traditionalWear', description: 'Heritage handloom sarees, lehengas, anarkalis, sherwanis, and kurtas' },
+  { id: 'western-wear', slug: 'western-wear', name: 'Western Wear', key: 'westernWear', description: 'Contemporary dresses, tailored suits, jackets, denim, shirts, and casual essentials' },
+  { id: 'accessories', slug: 'accessories', name: 'Accessories', key: 'accessories', description: 'Hand-woven dupattas, 7-fold silk neckties, and artisanal pocket squares' }
+];
+
+/**
+ * Dynamic subcategories mapped per main navigation filter
+ */
+const NAVIGATION_SUBCATEGORIES = {
+  'all': [
+    { slug: 'all', name: 'All Subcategories' },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'dresses', name: 'Dresses & Gowns' },
+    { slug: 'kurtis', name: 'Kurtis & Sets' },
+    { slug: 'shirts', name: 'Shirts & Polos' },
+    { slug: 'jeans', name: 'Jeans & Denim' },
+    { slug: 'trousers', name: 'Trousers & Shorts' },
+    { slug: 'blazers', name: 'Blazers & Jackets' },
+    { slug: 'traditional', name: 'Traditional Ensembles' },
+    { slug: 'accessories', name: 'Accessories' }
+  ],
+  'womens-wear': [
+    { slug: 'all', name: "All Women's Wear" },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'silk_sarees', name: 'Silk Sarees' },
+    { slug: 'cotton_sarees', name: 'Cotton Sarees' },
+    { slug: 'banarasi_sarees', name: 'Banarasi Sarees' },
+    { slug: 'kanjivaram_sarees', name: 'Kanjivaram Sarees' },
+    { slug: 'paithani_sarees', name: 'Paithani Sarees' },
+    { slug: 'lehengas', name: 'Lehengas' },
+    { slug: 'anarkali_suits', name: 'Anarkali Suits' },
+    { slug: 'salwar_suits', name: 'Salwar Suits' },
+    { slug: 'churidar_sets', name: 'Churidar Sets' },
+    { slug: 'kurtis', name: 'Kurtis' },
+    { slug: 'ethnic_gowns', name: 'Ethnic Gowns' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'dresses', name: 'Dresses' },
+    { slug: 'maxi_dresses', name: 'Maxi Dresses' },
+    { slug: 'midi_dresses', name: 'Midi Dresses' },
+    { slug: 'mini_dresses', name: 'Mini Dresses' },
+    { slug: 'tops', name: 'Tops & Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'trousers', name: 'Trousers' },
+    { slug: 'skirts', name: 'Skirts' },
+    { slug: 'jumpsuits', name: 'Jumpsuits' },
+    { slug: 'coord_sets', name: 'Co-ord Sets' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'jackets', name: 'Jackets' }
+  ],
+  'mens-wear': [
+    { slug: 'all', name: "All Men's Wear" },
+    { slug: 'mens_kurtas', name: "Men's Kurtas" },
+    { slug: 'kurta_pyjama_sets', name: 'Kurta Pyjama Sets' },
+    { slug: 'sherwanis', name: 'Sherwanis' },
+    { slug: 'dhoti_sets', name: 'Dhoti Sets' },
+    { slug: 'nehru_jackets', name: 'Nehru Jackets' },
+    { slug: 'traditional_waistcoats', name: 'Traditional Waistcoats' },
+    { slug: 'casual_shirts', name: 'Casual Shirts' },
+    { slug: 'formal_shirts', name: 'Formal Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'polo_t_shirts', name: 'Polo T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'formal_trousers', name: 'Formal Trousers' },
+    { slug: 'casual_trousers', name: 'Casual Trousers' },
+    { slug: 'shorts', name: 'Shorts' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'suits', name: 'Suits' },
+    { slug: 'jackets', name: 'Jackets' },
+    { slug: 'hoodies', name: 'Hoodies' },
+    { slug: 'sweatshirts', name: 'Sweatshirts' }
+  ],
+  'traditional-wear': [
+    { slug: 'all', name: 'All Traditional' },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'silk_sarees', name: 'Silk Sarees' },
+    { slug: 'cotton_sarees', name: 'Cotton Sarees' },
+    { slug: 'banarasi_sarees', name: 'Banarasi Sarees' },
+    { slug: 'kanjivaram_sarees', name: 'Kanjivaram Sarees' },
+    { slug: 'paithani_sarees', name: 'Paithani Sarees' },
+    { slug: 'lehengas', name: 'Lehengas' },
+    { slug: 'anarkali_suits', name: 'Anarkali Suits' },
+    { slug: 'salwar_suits', name: 'Salwar Suits' },
+    { slug: 'churidar_sets', name: 'Churidar Sets' },
+    { slug: 'kurtis', name: 'Kurtis' },
+    { slug: 'ethnic_gowns', name: 'Ethnic Gowns' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'mens_kurtas', name: "Men's Kurtas" },
+    { slug: 'kurta_pyjama_sets', name: 'Kurta Pyjama Sets' },
+    { slug: 'sherwanis', name: 'Sherwanis' },
+    { slug: 'dhoti_sets', name: 'Dhoti Sets' },
+    { slug: 'nehru_jackets', name: 'Nehru Jackets' },
+    { slug: 'traditional_waistcoats', name: 'Traditional Waistcoats' }
+  ],
+  'western-wear': [
+    { slug: 'all', name: 'All Western' },
+    { slug: 'dresses', name: 'Dresses' },
+    { slug: 'maxi_dresses', name: 'Maxi Dresses' },
+    { slug: 'midi_dresses', name: 'Midi Dresses' },
+    { slug: 'mini_dresses', name: 'Mini Dresses' },
+    { slug: 'tops', name: 'Tops & Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'polo_t_shirts', name: 'Polo T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'trousers', name: 'Trousers' },
+    { slug: 'formal_trousers', name: 'Formal Trousers' },
+    { slug: 'casual_trousers', name: 'Casual Trousers' },
+    { slug: 'skirts', name: 'Skirts' },
+    { slug: 'shorts', name: 'Shorts' },
+    { slug: 'jumpsuits', name: 'Jumpsuits' },
+    { slug: 'coord_sets', name: 'Co-ord Sets' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'suits', name: 'Suits' },
+    { slug: 'jackets', name: 'Jackets' },
+    { slug: 'hoodies', name: 'Hoodies' },
+    { slug: 'sweatshirts', name: 'Sweatshirts' }
+  ],
+  'accessories': [
+    { slug: 'all', name: 'All Accessories' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'scarves', name: 'Scarves' },
+    { slug: 'belts', name: 'Belts' },
+    { slug: 'ties', name: 'Ties' },
+    { slug: 'fashion_accessories', name: 'Fashion Accessories' }
+  ]
+};
+
+/**
  * GET /api/categories
- * Retrieve all 10 fashion categories with dynamic product counts from PostgreSQL
+ * Retrieve all fashion categories and main navigation tabs with dynamic product counts from PostgreSQL
  */
 router.get('/categories', async (req, res) => {
   try {
     const countSql = `
       SELECT 
         COUNT(*)::int AS total,
+        -- Department counts
         COUNT(CASE WHEN category_id = 1 OR garment_type = 'saree' OR subcategory ILIKE '%saree%' THEN 1 END)::int AS sarees,
         COUNT(CASE WHEN category_id = 5 OR subcategory ILIKE '%shirt%' OR subcategory ILIKE '%blouse%' OR name ILIKE '%shirt%' OR name ILIKE '%blouse%' THEN 1 END)::int AS shirts,
         COUNT(CASE WHEN category_id = 6 OR subcategory ILIKE '%jean%' OR subcategory ILIKE '%denim%' THEN 1 END)::int AS jeans,
-        COUNT(CASE WHEN subcategory IN ('gowns', 'maxi_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses') OR garment_type = 'dress' OR subcategory ILIKE '%dress%' OR subcategory ILIKE '%gown%' OR name ILIKE '%gown%' OR name ILIKE '%dress%' THEN 1 END)::int AS dresses,
+        COUNT(CASE WHEN subcategory IN ('gowns', 'maxi_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses', 'mini_dresses') OR garment_type = 'dress' OR subcategory ILIKE '%dress%' OR subcategory ILIKE '%gown%' OR name ILIKE '%gown%' OR name ILIKE '%dress%' THEN 1 END)::int AS dresses,
         COUNT(CASE WHEN subcategory IN ('kurti_pant_sets') OR subcategory ILIKE '%kurti%' OR name ILIKE '%kurti%' THEN 1 END)::int AS kurtis,
         COUNT(CASE WHEN subcategory IN ('anarkali_suits', 'salwar_kameez', 'churidar_sets', 'lehenga_choli') OR subcategory ILIKE '%salwar%' OR subcategory ILIKE '%anarkali%' OR subcategory ILIKE '%churidar%' OR subcategory ILIKE '%lehenga%' THEN 1 END)::int AS salwar,
-        COUNT(CASE WHEN subcategory IN ('sherwani_outfits', 'kurta_pyjama_sets', 'indo_western', 'traditional_outfits') OR name ILIKE '%sherwani%' OR name ILIKE '%kurta%' OR name ILIKE '%bandhgala%' THEN 1 END)::int AS "mensTraditional",
-        COUNT(CASE WHEN category_id = 8 OR subcategory IN ('formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'smoking_jackets', 'dinner_jackets', 'power_suits', 'womens_tuxedos', 'western_coord_sets') OR name ILIKE '%blazer%' OR name ILIKE '%suit%' OR name ILIKE '%tuxedo%' OR name ILIKE '%jacket%' THEN 1 END)::int AS blazers,
-        COUNT(CASE WHEN category_id = 7 OR subcategory IN ('pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'shirt_trouser_combinations') OR name ILIKE '%trouser%' OR name ILIKE '%pant%' OR name ILIKE '%chino%' THEN 1 END)::int AS trousers
+        COUNT(CASE WHEN subcategory IN ('sherwani_outfits', 'kurta_pyjama_sets', 'indo_western', 'traditional_outfits', 'mens_kurtas', 'nehru_jackets', 'traditional_waistcoats') OR name ILIKE '%sherwani%' OR name ILIKE '%kurta%' OR name ILIKE '%bandhgala%' OR name ILIKE '%nehru%' OR name ILIKE '%waistcoat%' THEN 1 END)::int AS "mensTraditional",
+        COUNT(CASE WHEN category_id = 8 OR subcategory IN ('formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'smoking_jackets', 'dinner_jackets', 'power_suits', 'womens_tuxedos', 'western_coord_sets', 'jackets') OR name ILIKE '%blazer%' OR name ILIKE '%suit%' OR name ILIKE '%tuxedo%' OR name ILIKE '%jacket%' THEN 1 END)::int AS blazers,
+        COUNT(CASE WHEN category_id = 7 OR subcategory IN ('pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'shirt_trouser_combinations', 'shorts') OR name ILIKE '%trouser%' OR name ILIKE '%pant%' OR name ILIKE '%chino%' OR name ILIKE '%short%' THEN 1 END)::int AS trousers,
+        COUNT(CASE WHEN category_id = 4 OR garment_type = 'accessory' OR subcategory IN ('ties', 'fashion_accessories', 'dupattas', 'belts', 'scarves') THEN 1 END)::int AS accessories,
+        COUNT(CASE WHEN category_id = 9 OR (gender = 'women' AND (category_id = 1 OR garment_type = 'saree' OR subcategory ILIKE '%saree%' OR subcategory ILIKE '%gown%' OR subcategory ILIKE '%lehenga%' OR subcategory ILIKE '%kurti%' OR subcategory ILIKE '%salwar%')) THEN 1 END)::int AS "womensTraditionalDept",
+        COUNT(CASE WHEN category_id = 10 OR (gender = 'women' AND (category_id IN (5, 6, 7, 8) OR subcategory IN ('mini_dresses', 'skirts', 'jackets', 't_shirts', 'dresses', 'gowns', 'jeans', 'trousers'))) THEN 1 END)::int AS "womensWesternDept",
+        COUNT(CASE WHEN category_id = 11 OR (gender = 'men' AND (subcategory IN ('mens_kurtas', 'nehru_jackets', 'traditional_waistcoats', 'sherwani_outfits', 'kurta_pyjama_sets', 'indo_western'))) THEN 1 END)::int AS "mensTraditionalDept2",
+        COUNT(CASE WHEN category_id = 12 OR (gender = 'men' AND (category_id IN (5, 6, 7, 8) OR subcategory IN ('polo_t_shirts', 'shorts', 'hoodies', 'jackets', 'shirts', 'jeans', 'trousers', 'blazers', 'suits'))) THEN 1 END)::int AS "mensWesternDept",
+        -- Main Navigation Tab counts
+        COUNT(CASE WHEN gender = 'women' OR category_id IN (1, 2, 9, 10) THEN 1 END)::int AS "womensWear",
+        COUNT(CASE WHEN gender = 'men' OR category_id IN (3, 11, 12) THEN 1 END)::int AS "mensWear",
+        COUNT(CASE WHEN category_id IN (1, 9, 11) OR garment_type = 'saree' OR subcategory IN ('sarees', 'silk_sarees', 'cotton_sarees', 'banarasi_sarees', 'kanjivaram_sarees', 'paithani_sarees', 'lehengas', 'lehenga_choli', 'anarkali_suits', 'salwar_suits', 'salwar_kameez', 'churidar_sets', 'kurtis', 'kurti_pant_sets', 'ethnic_gowns', 'dupattas', 'mens_kurtas', 'kurta_pyjama_sets', 'sherwanis', 'sherwani_outfits', 'dhoti_sets', 'nehru_jackets', 'traditional_waistcoats', 'indo_western', 'traditional_outfits') OR subcategory ILIKE '%saree%' OR subcategory ILIKE '%kurta%' OR subcategory ILIKE '%sherwani%' THEN 1 END)::int AS "traditionalWear",
+        COUNT(CASE WHEN category_id IN (5, 6, 7, 8, 10, 12) OR subcategory IN ('dresses', 'maxi_dresses', 'midi_dresses', 'mini_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses', 'tops', 'shirts', 'oxford_shirts', 'formal_shirts', 'linen_shirts', 'silk_blouses', 'casual_shirts', 'resort_shirts', 't_shirts', 'polo_t_shirts', 'jeans', 'selvedge_jeans', 'baggy_jeans', 'wide_leg_jeans', 'straight_jeans', 'carpenter_jeans', 'trousers', 'formal_trousers', 'casual_trousers', 'pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'skirts', 'jumpsuits', 'coord_sets', 'western_coord_sets', 'blazers', 'jackets', 'suits', 'formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'hoodies', 'sweatshirts', 'shorts') THEN 1 END)::int AS "westernWear"
       FROM products
       WHERE is_active = true AND COALESCE(approval_status, 'APPROVED') IN ('APPROVED', 'AI_READY')
     `;
@@ -53,10 +203,20 @@ router.get('/categories', async (req, res) => {
       productCount: cat.key === 'all' ? (counts.total || 0) : (counts[cat.key] || 0)
     }));
 
+    const enrichedNavTabs = MAIN_NAVIGATION_TABS.map((tab) => ({
+      id: tab.id,
+      name: tab.name,
+      slug: tab.slug,
+      description: tab.description,
+      productCount: tab.key === 'all' ? (counts.total || 0) : (counts[tab.key] || 0)
+    }));
+
     return res.json({
       success: true,
       source: 'postgresql',
       count: enrichedCategories.length,
+      mainNavigation: enrichedNavTabs,
+      subcategories: NAVIGATION_SUBCATEGORIES,
       data: enrichedCategories
     });
   } catch (err) {
@@ -88,24 +248,40 @@ router.get('/products', async (req, res) => {
 
     if (category && category !== 'all') {
       const catKey = category.toLowerCase().trim();
-      if (catKey === 'sarees') {
+      if (catKey === 'womens-wear' || catKey === 'women' || catKey === "women's wear") {
+        whereClauses.push("(p.gender = 'women' OR p.category_id IN (1, 2, 9, 10))");
+      } else if (catKey === 'mens-wear' || catKey === 'men' || catKey === "men's wear") {
+        whereClauses.push("(p.gender = 'men' OR p.category_id IN (3, 11, 12))");
+      } else if (catKey === 'traditional-wear' || catKey === 'traditional' || catKey === 'traditional wear') {
+        whereClauses.push("(p.category_id IN (1, 9, 11) OR p.garment_type = 'saree' OR p.subcategory IN ('sarees', 'silk_sarees', 'cotton_sarees', 'banarasi_sarees', 'kanjivaram_sarees', 'paithani_sarees', 'lehengas', 'lehenga_choli', 'anarkali_suits', 'salwar_suits', 'salwar_kameez', 'churidar_sets', 'kurtis', 'kurti_pant_sets', 'ethnic_gowns', 'dupattas', 'mens_kurtas', 'kurta_pyjama_sets', 'sherwanis', 'sherwani_outfits', 'dhoti_sets', 'nehru_jackets', 'traditional_waistcoats', 'indo_western', 'traditional_outfits') OR p.subcategory ILIKE '%saree%' OR p.subcategory ILIKE '%kurta%' OR p.subcategory ILIKE '%sherwani%')");
+      } else if (catKey === 'western-wear' || catKey === 'western' || catKey === 'western wear') {
+        whereClauses.push("(p.category_id IN (5, 6, 7, 8, 10, 12) OR p.subcategory IN ('dresses', 'maxi_dresses', 'midi_dresses', 'mini_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses', 'tops', 'shirts', 'oxford_shirts', 'formal_shirts', 'linen_shirts', 'silk_blouses', 'casual_shirts', 'resort_shirts', 't_shirts', 'polo_t_shirts', 'jeans', 'selvedge_jeans', 'baggy_jeans', 'wide_leg_jeans', 'straight_jeans', 'carpenter_jeans', 'trousers', 'formal_trousers', 'casual_trousers', 'pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'skirts', 'jumpsuits', 'coord_sets', 'western_coord_sets', 'blazers', 'jackets', 'suits', 'formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'hoodies', 'sweatshirts', 'shorts'))");
+      } else if (catKey === 'accessories' || catKey === 'accessory') {
+        whereClauses.push("(p.category_id = 4 OR p.garment_type = 'accessory' OR p.subcategory IN ('ties', 'fashion_accessories', 'dupattas', 'belts', 'scarves'))");
+      } else if (catKey === 'womens-traditional' || catKey === "women's traditional wear") {
+        whereClauses.push("(p.category_id = 9 OR (p.gender = 'women' AND (p.category_id = 1 OR p.garment_type = 'saree' OR p.subcategory ILIKE '%saree%' OR p.subcategory ILIKE '%gown%' OR p.subcategory ILIKE '%lehenga%' OR p.subcategory ILIKE '%kurti%' OR p.subcategory ILIKE '%salwar%')))");
+      } else if (catKey === 'womens-western' || catKey === "women's western wear") {
+        whereClauses.push("(p.category_id = 10 OR (p.gender = 'women' AND (p.category_id IN (5, 6, 7, 8) OR p.subcategory IN ('mini_dresses', 'skirts', 'jackets', 't_shirts', 'dresses', 'gowns', 'jeans', 'trousers', 'tops', 'jumpsuits', 'coord_sets', 'blazers'))))");
+      } else if (catKey === 'mens-traditional' || catKey === "men's traditional wear" || catKey === 'mens-traditional-wear' || catKey === 'mens-traditional-dept') {
+        whereClauses.push("(p.category_id = 11 OR (p.gender = 'men' AND p.subcategory IN ('mens_kurtas', 'nehru_jackets', 'traditional_waistcoats', 'sherwani_outfits', 'kurta_pyjama_sets', 'indo_western', 'traditional_outfits', 'dhoti_sets')) OR p.name ILIKE '%sherwani%' OR p.name ILIKE '%kurta%' OR p.name ILIKE '%bandhgala%')");
+      } else if (catKey === 'mens-western' || catKey === "men's western wear") {
+        whereClauses.push("(p.category_id = 12 OR (p.gender = 'men' AND (p.category_id IN (5, 6, 7, 8) OR p.subcategory IN ('polo_t_shirts', 'shorts', 'hoodies', 'jackets', 'shirts', 'jeans', 'trousers', 'blazers', 'suits', 'casual_shirts', 'formal_shirts', 't_shirts', 'sweatshirts'))))");
+      } else if (catKey === 'sarees') {
         whereClauses.push("(p.category_id = 1 OR p.garment_type = 'saree' OR p.subcategory ILIKE '%saree%')");
       } else if (catKey === 'shirts' || catKey === 'shirts & tops' || catKey === 'shirts-and-tops') {
         whereClauses.push("(p.category_id = 5 OR p.subcategory ILIKE '%shirt%' OR p.subcategory ILIKE '%blouse%' OR p.name ILIKE '%shirt%' OR p.name ILIKE '%blouse%')");
       } else if (catKey === 'jeans' || catKey === 'jeans & denim' || catKey === 'jeans-and-denim') {
         whereClauses.push("(p.category_id = 6 OR p.subcategory ILIKE '%jean%' OR p.subcategory ILIKE '%denim%')");
       } else if (catKey === 'dresses' || catKey === 'dresses & gowns' || catKey === 'dresses-and-gowns') {
-        whereClauses.push("(p.subcategory IN ('gowns', 'maxi_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses') OR p.garment_type = 'dress' OR p.subcategory ILIKE '%dress%' OR p.subcategory ILIKE '%gown%' OR p.name ILIKE '%gown%' OR p.name ILIKE '%dress%')");
+        whereClauses.push("(p.subcategory IN ('gowns', 'maxi_dresses', 'evening_dresses', 'party_wear_dresses', 'casual_dresses', 'mini_dresses') OR p.garment_type = 'dress' OR p.subcategory ILIKE '%dress%' OR p.subcategory ILIKE '%gown%' OR p.name ILIKE '%gown%' OR p.name ILIKE '%dress%')");
       } else if (catKey === 'kurtis' || catKey === 'kurtis & ethnic wear' || catKey === 'kurtis-and-ethnic-wear') {
         whereClauses.push("(p.subcategory IN ('kurti_pant_sets') OR p.subcategory ILIKE '%kurti%' OR p.name ILIKE '%kurti%')");
       } else if (catKey === 'salwar' || catKey === 'salwar suits' || catKey === 'salwar-suits') {
         whereClauses.push("(p.subcategory IN ('anarkali_suits', 'salwar_kameez', 'churidar_sets', 'lehenga_choli') OR p.subcategory ILIKE '%salwar%' OR p.subcategory ILIKE '%anarkali%' OR p.subcategory ILIKE '%churidar%' OR p.subcategory ILIKE '%lehenga%')");
-      } else if (catKey === 'mens-traditional' || catKey === "men's traditional wear" || catKey === 'mens-traditional-wear') {
-        whereClauses.push("(p.subcategory IN ('sherwani_outfits', 'kurta_pyjama_sets', 'indo_western', 'traditional_outfits') OR p.name ILIKE '%sherwani%' OR p.name ILIKE '%kurta%' OR p.name ILIKE '%bandhgala%')");
       } else if (catKey === 'blazers' || catKey === 'blazers & jackets' || catKey === 'blazers-and-jackets') {
-        whereClauses.push("(p.category_id = 8 OR p.subcategory IN ('formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'smoking_jackets', 'dinner_jackets', 'power_suits', 'womens_tuxedos', 'western_coord_sets') OR p.name ILIKE '%blazer%' OR p.name ILIKE '%suit%' OR p.name ILIKE '%tuxedo%' OR p.name ILIKE '%jacket%')");
+        whereClauses.push("(p.category_id = 8 OR p.subcategory IN ('formal_suits', 'blazer_trouser_sets', 'tuxedos', 'three_piece_suits', 'smoking_jackets', 'dinner_jackets', 'power_suits', 'womens_tuxedos', 'western_coord_sets', 'jackets') OR p.name ILIKE '%blazer%' OR p.name ILIKE '%suit%' OR p.name ILIKE '%tuxedo%' OR p.name ILIKE '%jacket%')");
       } else if (catKey === 'trousers' || catKey === 'pants') {
-        whereClauses.push("(p.category_id = 7 OR p.subcategory IN ('pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'shirt_trouser_combinations') OR p.name ILIKE '%trouser%' OR p.name ILIKE '%pant%' OR p.name ILIKE '%chino%')");
+        whereClauses.push("(p.category_id = 7 OR p.subcategory IN ('pleated_trousers', 'baggy_chinos', 'palazzo_pants', 'cargo_pants', 'balloon_trousers', 'shirt_trouser_combinations', 'shorts') OR p.name ILIKE '%trouser%' OR p.name ILIKE '%pant%' OR p.name ILIKE '%chino%' OR p.name ILIKE '%short%')");
       } else {
         whereClauses.push(`(p.subcategory = $${paramIndex} OR p.garment_type = $${paramIndex})`);
         sqlParams.push(catKey);
@@ -114,9 +290,15 @@ router.get('/products', async (req, res) => {
     }
 
     if (subcategory && subcategory !== 'all') {
-      whereClauses.push(`LOWER(p.subcategory) = LOWER($${paramIndex})`);
-      sqlParams.push(subcategory);
-      paramIndex++;
+      const subKey = subcategory.toLowerCase().trim();
+      const cleanSub = subKey.replace(/-/g, '_').replace(/\s+/g, '_');
+      whereClauses.push(`(
+        LOWER(p.subcategory) = $${paramIndex} 
+        OR LOWER(p.subcategory) = $${paramIndex + 1}
+        OR p.subcategory ILIKE $${paramIndex + 2}
+      )`);
+      sqlParams.push(subKey, cleanSub, `%${cleanSub}%`);
+      paramIndex += 3;
     }
 
     if (gender && gender !== 'all') {

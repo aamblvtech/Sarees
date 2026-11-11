@@ -18,11 +18,14 @@ export const productService = {
   },
 
   /**
-   * Fetch categories directly from PostgreSQL
+   * Fetch categories and navigation tabs directly from PostgreSQL
    */
   async getCategories() {
     const response = await apiClient.get('/categories');
-    return response.data?.data || [];
+    const categories = response.data?.data || [];
+    categories.mainNavigation = response.data?.mainNavigation || [];
+    categories.subcategories = response.data?.subcategories || {};
+    return categories;
   }
 };
 

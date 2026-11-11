@@ -203,7 +203,7 @@ test('Advanced Virtual Try-On and QR Mobile Upload Suite', async (t) => {
     assert.ok(balance === null || balance >= 0, 'Balance should either be a non-negative number or null if offline');
 
     // Verify Saree product is supported for virtual try-on
-    const saree = await query("SELECT * FROM products WHERE garment_type = 'saree' LIMIT 1");
+    const saree = await query("SELECT * FROM products WHERE garment_type = 'saree' AND is_active = true LIMIT 1");
     assert.equal(saree.rows[0].tryon_compatibility, 'supported');
 
     // Verify Accessory product rejection

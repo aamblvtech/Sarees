@@ -1021,6 +1021,81 @@ export default function SupplierDashboard() {
 
                 <div className="space-y-1">
                   <label className="text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
+                    Subcategory *
+                  </label>
+                  <select
+                    value={formData.subcategory}
+                    onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
+                    className="w-full px-3.5 py-2 bg-stone-50 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                  >
+                    <optgroup label="Women's Traditional Wear">
+                      <option value="sarees">Saree</option>
+                      <option value="silk_sarees">Silk Saree</option>
+                      <option value="cotton_sarees">Cotton Saree</option>
+                      <option value="banarasi">Banarasi Saree</option>
+                      <option value="kanjivaram">Kanjivaram Saree</option>
+                      <option value="paithani_sarees">Paithani Saree</option>
+                      <option value="chanderi">Chanderi Saree</option>
+                      <option value="pochampally">Pochampally Saree</option>
+                      <option value="lehengas">Lehenga Choli</option>
+                      <option value="anarkali_suits">Anarkali Suit</option>
+                      <option value="salwar_suits">Salwar Suit</option>
+                      <option value="churidar_sets">Churidar Set</option>
+                      <option value="kurtis">Kurti / Kurti Set</option>
+                      <option value="ethnic_gowns">Ethnic Gown</option>
+                      <option value="dupattas">Dupatta</option>
+                    </optgroup>
+                    <optgroup label="Women's Western Wear">
+                      <option value="dresses">Dress</option>
+                      <option value="maxi_dresses">Maxi Dress</option>
+                      <option value="midi_dresses">Midi Dress</option>
+                      <option value="mini_dresses">Mini Dress</option>
+                      <option value="tops">Top</option>
+                      <option value="shirts">Shirt</option>
+                      <option value="tshirts">T-Shirt</option>
+                      <option value="jeans">Jeans / Denim</option>
+                      <option value="trousers">Trousers</option>
+                      <option value="skirts">Skirt</option>
+                      <option value="jumpsuits">Jumpsuit</option>
+                      <option value="coord_sets">Co-ord Set</option>
+                      <option value="blazers">Blazer</option>
+                      <option value="jackets">Jacket</option>
+                    </optgroup>
+                    <optgroup label="Men's Traditional Wear">
+                      <option value="mens_kurtas">Men's Kurta</option>
+                      <option value="kurta_pyjama_sets">Kurta Pyjama Set</option>
+                      <option value="sherwanis">Sherwani</option>
+                      <option value="dhoti_sets">Dhoti Set</option>
+                      <option value="nehru_jackets">Nehru Jacket</option>
+                      <option value="traditional_waistcoats">Traditional Waistcoat</option>
+                    </optgroup>
+                    <optgroup label="Men's Western Wear">
+                      <option value="casual_shirts">Casual Shirt</option>
+                      <option value="formal_shirts">Formal Shirt</option>
+                      <option value="mens_tshirts">T-Shirt</option>
+                      <option value="polo_tshirts">Polo T-Shirt</option>
+                      <option value="mens_jeans">Jeans / Denim</option>
+                      <option value="formal_trousers">Formal Trousers</option>
+                      <option value="casual_trousers">Casual Trousers</option>
+                      <option value="shorts">Shorts</option>
+                      <option value="mens_blazers">Blazer</option>
+                      <option value="suits">Full Suit</option>
+                      <option value="mens_jackets">Jacket</option>
+                      <option value="hoodies">Hoodie</option>
+                      <option value="sweatshirts">Sweatshirt</option>
+                    </optgroup>
+                    <optgroup label="Accessories">
+                      <option value="dupattas">Dupatta</option>
+                      <option value="scarves">Scarf / Stole</option>
+                      <option value="belts">Leather Belt</option>
+                      <option value="ties">Necktie & Pocket Square</option>
+                      <option value="fashion_accessories">Fashion Accessories</option>
+                    </optgroup>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-stone-700 dark:text-stone-300">
                     Selling Price (INR) *
                   </label>
                   <input

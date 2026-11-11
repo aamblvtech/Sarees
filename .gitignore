@@ -27,6 +27,7 @@ backend/scripts/
 backend/run_audit.js
 backend/scratch_extract.js
 backend/update_sample_products.js
+backend/test_*.js
 scratch/
 
 # Checkpoints / Model weights (multi-GB files)

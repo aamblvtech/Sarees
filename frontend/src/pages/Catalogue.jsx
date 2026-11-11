@@ -4,17 +4,146 @@ import { Search, Sparkles, SlidersHorizontal, RefreshCw, X, Heart } from 'lucide
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 
+const MAIN_NAV_TABS = [
+  { id: 'all', slug: 'all', name: 'All Garments' },
+  { id: 'womens-wear', slug: 'womens-wear', name: "Women's Wear" },
+  { id: 'mens-wear', slug: 'mens-wear', name: "Men's Wear" },
+  { id: 'traditional-wear', slug: 'traditional-wear', name: 'Traditional Wear' },
+  { id: 'western-wear', slug: 'western-wear', name: 'Western Wear' },
+  { id: 'accessories', slug: 'accessories', name: 'Accessories' }
+];
+
+const STATIC_SUBCATEGORIES = {
+  'all': [
+    { slug: 'all', name: 'All Subcategories' },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'dresses', name: 'Dresses & Gowns' },
+    { slug: 'kurtis', name: 'Kurtis & Sets' },
+    { slug: 'shirts', name: 'Shirts & Polos' },
+    { slug: 'jeans', name: 'Jeans & Denim' },
+    { slug: 'trousers', name: 'Trousers & Shorts' },
+    { slug: 'blazers', name: 'Blazers & Jackets' },
+    { slug: 'traditional', name: 'Traditional Ensembles' },
+    { slug: 'accessories', name: 'Accessories' }
+  ],
+  'womens-wear': [
+    { slug: 'all', name: "All Women's" },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'silk_sarees', name: 'Silk Sarees' },
+    { slug: 'cotton_sarees', name: 'Cotton Sarees' },
+    { slug: 'banarasi_sarees', name: 'Banarasi Sarees' },
+    { slug: 'kanjivaram_sarees', name: 'Kanjivaram Sarees' },
+    { slug: 'paithani_sarees', name: 'Paithani Sarees' },
+    { slug: 'lehengas', name: 'Lehengas' },
+    { slug: 'anarkali_suits', name: 'Anarkali Suits' },
+    { slug: 'salwar_suits', name: 'Salwar Suits' },
+    { slug: 'churidar_sets', name: 'Churidar Sets' },
+    { slug: 'kurtis', name: 'Kurtis' },
+    { slug: 'ethnic_gowns', name: 'Ethnic Gowns' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'dresses', name: 'Dresses' },
+    { slug: 'maxi_dresses', name: 'Maxi Dresses' },
+    { slug: 'midi_dresses', name: 'Midi Dresses' },
+    { slug: 'mini_dresses', name: 'Mini Dresses' },
+    { slug: 'tops', name: 'Tops & Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'trousers', name: 'Trousers' },
+    { slug: 'skirts', name: 'Skirts' },
+    { slug: 'jumpsuits', name: 'Jumpsuits' },
+    { slug: 'coord_sets', name: 'Co-ord Sets' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'jackets', name: 'Jackets' }
+  ],
+  'mens-wear': [
+    { slug: 'all', name: "All Men's" },
+    { slug: 'mens_kurtas', name: "Men's Kurtas" },
+    { slug: 'kurta_pyjama_sets', name: 'Kurta Pyjama Sets' },
+    { slug: 'sherwanis', name: 'Sherwanis' },
+    { slug: 'dhoti_sets', name: 'Dhoti Sets' },
+    { slug: 'nehru_jackets', name: 'Nehru Jackets' },
+    { slug: 'traditional_waistcoats', name: 'Traditional Waistcoats' },
+    { slug: 'casual_shirts', name: 'Casual Shirts' },
+    { slug: 'formal_shirts', name: 'Formal Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'polo_t_shirts', name: 'Polo T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'formal_trousers', name: 'Formal Trousers' },
+    { slug: 'casual_trousers', name: 'Casual Trousers' },
+    { slug: 'shorts', name: 'Shorts' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'suits', name: 'Suits' },
+    { slug: 'jackets', name: 'Jackets' },
+    { slug: 'hoodies', name: 'Hoodies' },
+    { slug: 'sweatshirts', name: 'Sweatshirts' }
+  ],
+  'traditional-wear': [
+    { slug: 'all', name: 'All Traditional' },
+    { slug: 'sarees', name: 'Sarees' },
+    { slug: 'silk_sarees', name: 'Silk Sarees' },
+    { slug: 'cotton_sarees', name: 'Cotton Sarees' },
+    { slug: 'banarasi_sarees', name: 'Banarasi Sarees' },
+    { slug: 'kanjivaram_sarees', name: 'Kanjivaram Sarees' },
+    { slug: 'paithani_sarees', name: 'Paithani Sarees' },
+    { slug: 'lehengas', name: 'Lehengas' },
+    { slug: 'anarkali_suits', name: 'Anarkali Suits' },
+    { slug: 'salwar_suits', name: 'Salwar Suits' },
+    { slug: 'churidar_sets', name: 'Churidar Sets' },
+    { slug: 'kurtis', name: 'Kurtis' },
+    { slug: 'ethnic_gowns', name: 'Ethnic Gowns' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'mens_kurtas', name: "Men's Kurtas" },
+    { slug: 'kurta_pyjama_sets', name: 'Kurta Pyjama Sets' },
+    { slug: 'sherwanis', name: 'Sherwanis' },
+    { slug: 'dhoti_sets', name: 'Dhoti Sets' },
+    { slug: 'nehru_jackets', name: 'Nehru Jackets' },
+    { slug: 'traditional_waistcoats', name: 'Traditional Waistcoats' }
+  ],
+  'western-wear': [
+    { slug: 'all', name: 'All Western' },
+    { slug: 'dresses', name: 'Dresses' },
+    { slug: 'maxi_dresses', name: 'Maxi Dresses' },
+    { slug: 'midi_dresses', name: 'Midi Dresses' },
+    { slug: 'mini_dresses', name: 'Mini Dresses' },
+    { slug: 'tops', name: 'Tops & Shirts' },
+    { slug: 't_shirts', name: 'T-Shirts' },
+    { slug: 'polo_t_shirts', name: 'Polo T-Shirts' },
+    { slug: 'jeans', name: 'Jeans' },
+    { slug: 'trousers', name: 'Trousers' },
+    { slug: 'formal_trousers', name: 'Formal Trousers' },
+    { slug: 'casual_trousers', name: 'Casual Trousers' },
+    { slug: 'skirts', name: 'Skirts' },
+    { slug: 'shorts', name: 'Shorts' },
+    { slug: 'jumpsuits', name: 'Jumpsuits' },
+    { slug: 'coord_sets', name: 'Co-ord Sets' },
+    { slug: 'blazers', name: 'Blazers' },
+    { slug: 'suits', name: 'Suits' },
+    { slug: 'jackets', name: 'Jackets' },
+    { slug: 'hoodies', name: 'Hoodies' },
+    { slug: 'sweatshirts', name: 'Sweatshirts' }
+  ],
+  'accessories': [
+    { slug: 'all', name: 'All Accessories' },
+    { slug: 'dupattas', name: 'Dupattas' },
+    { slug: 'scarves', name: 'Scarves' },
+    { slug: 'belts', name: 'Belts' },
+    { slug: 'ties', name: 'Ties' },
+    { slug: 'fashion_accessories', name: 'Fashion Accessories' }
+  ]
+};
+
 const DEFAULT_CATEGORIES = [
-  { id: 0, slug: 'all', name: 'All Garments', productCount: 74 },
-  { id: 1, slug: 'sarees', name: 'Sarees', productCount: 30 },
+  { id: 0, slug: 'all', name: 'All Garments', productCount: 92 },
+  { id: 1, slug: 'sarees', name: 'Sarees', productCount: 32 },
   { id: 5, slug: 'shirts', name: 'Shirts & Tops', productCount: 7 },
   { id: 6, slug: 'jeans', name: 'Jeans & Denim', productCount: 5 },
-  { id: 21, slug: 'dresses', name: 'Dresses & Gowns', productCount: 5 },
+  { id: 21, slug: 'dresses', name: 'Dresses & Gowns', productCount: 6 },
   { id: 22, slug: 'kurtis', name: 'Kurtis & Ethnic Wear', productCount: 1 },
   { id: 23, slug: 'salwar', name: 'Salwar Suits', productCount: 4 },
-  { id: 31, slug: 'mens-traditional', name: "Men's Traditional Wear", productCount: 5 },
-  { id: 8, slug: 'blazers', name: 'Blazers & Jackets', productCount: 11 },
-  { id: 7, slug: 'trousers', name: 'Trousers', productCount: 10 }
+  { id: 31, slug: 'mens-traditional', name: "Men's Traditional Wear", productCount: 8 },
+  { id: 8, slug: 'blazers', name: 'Blazers & Jackets', productCount: 13 },
+  { id: 7, slug: 'trousers', name: 'Trousers', productCount: 11 },
+  { id: 4, slug: 'accessories', name: 'Accessories', productCount: 3 }
 ];
 
 export default function Catalogue() {
@@ -25,6 +154,8 @@ export default function Catalogue() {
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
+  const [navTabs, setNavTabs] = useState(MAIN_NAV_TABS);
+  const [subcategoriesMap, setSubcategoriesMap] = useState(STATIC_SUBCATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState(categoryParam);
   const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [selectedGender, setSelectedGender] = useState(genderParam);
@@ -65,6 +196,12 @@ export default function Catalogue() {
         if (cats && cats.length > 0) {
           setCategories(cats);
         }
+        if (cats?.mainNavigation && cats.mainNavigation.length > 0) {
+          setNavTabs(cats.mainNavigation);
+        }
+        if (cats?.subcategories && Object.keys(cats.subcategories).length > 0) {
+          setSubcategoriesMap(cats.subcategories);
+        }
       } catch (err) {
         console.error('Failed to load catalogue:', err);
         setError('Failed to load catalogue garments. Please try again.');
@@ -83,6 +220,32 @@ export default function Catalogue() {
     onlyTryOnReady,
     sortBy
   ]);
+
+  const activeMainTab = useMemo(() => {
+    if (['all', 'womens-wear', 'mens-wear', 'traditional-wear', 'western-wear', 'accessories'].includes(selectedCategory)) {
+      return selectedCategory;
+    }
+    if (['sarees', 'salwar', 'kurtis', 'womens-traditional'].includes(selectedCategory)) {
+      return 'traditional-wear';
+    }
+    if (['mens-traditional', 'mens-traditional-dept'].includes(selectedCategory)) {
+      return 'traditional-wear';
+    }
+    if (['shirts', 'jeans', 'dresses', 'blazers', 'trousers', 'womens-western', 'mens-western'].includes(selectedCategory)) {
+      return 'western-wear';
+    }
+    return 'all';
+  }, [selectedCategory]);
+
+  const currentSubcategories = useMemo(() => {
+    if (subcategoriesMap[selectedCategory]) {
+      return subcategoriesMap[selectedCategory];
+    }
+    if (subcategoriesMap[activeMainTab]) {
+      return subcategoriesMap[activeMainTab];
+    }
+    return STATIC_SUBCATEGORIES['all'];
+  }, [selectedCategory, activeMainTab, subcategoriesMap]);
 
   const handleCategoryChange = (slug) => {
     setSelectedCategory(slug);
@@ -134,6 +297,36 @@ export default function Catalogue() {
 
   const availableSubcategories = useMemo(() => {
     switch (selectedCategory) {
+      case 'womens-wear':
+        return {
+          tag: "Women's Sartorial Collection",
+          title: "Women's Fashion Archive",
+          desc: 'Curated Indian heritage sarees, royal lehengas, haute couture dresses, tailored trousers, and tops.'
+        };
+      case 'mens-wear':
+        return {
+          tag: "Men's Sartorial Collection",
+          title: "Men's Fashion Archive",
+          desc: 'Bespoke wool tailoring, royal silk sherwanis, Sea Island cotton polos, selvedge denim, and outerwear.'
+        };
+      case 'traditional-wear':
+        return {
+          tag: 'Indian Heritage Grandeur',
+          title: 'Traditional Couture',
+          desc: 'Archival Banarasi weaves, Yeola Paithani sarees, bespoke sherwanis, and royal Nehru jackets.'
+        };
+      case 'western-wear':
+        return {
+          tag: 'Modern Atelier Tailoring',
+          title: 'Western Apparel',
+          desc: 'Sculptural evening dresses, bespoke suits, luxury hoodies, and contemporary denim.'
+        };
+      case 'accessories':
+        return {
+          tag: 'Artisanal Accents',
+          title: 'Luxury Accessories',
+          desc: 'Como 7-fold silk neckties, mulberry silk pocket squares, and gold zari bridal dupattas.'
+        };
       case 'sarees':
         return [
           'kanjivaram', 'banarasi', 'chanderi', 'pochampally', 'gadwal', 'uppada',
@@ -202,6 +395,36 @@ export default function Catalogue() {
 
   const getCategoryHeader = () => {
     switch (selectedCategory) {
+      case 'womens-wear':
+        return {
+          tag: "Women's Sartorial Collection",
+          title: "Women's Fashion Archive",
+          desc: 'Curated Indian heritage sarees, royal lehengas, haute couture dresses, tailored trousers, and tops.'
+        };
+      case 'mens-wear':
+        return {
+          tag: "Men's Sartorial Collection",
+          title: "Men's Fashion Archive",
+          desc: 'Bespoke wool tailoring, royal silk sherwanis, Sea Island cotton polos, selvedge denim, and outerwear.'
+        };
+      case 'traditional-wear':
+        return {
+          tag: 'Indian Heritage Grandeur',
+          title: 'Traditional Couture',
+          desc: 'Archival Banarasi weaves, Yeola Paithani sarees, bespoke sherwanis, and royal Nehru jackets.'
+        };
+      case 'western-wear':
+        return {
+          tag: 'Modern Atelier Tailoring',
+          title: 'Western Apparel',
+          desc: 'Sculptural evening dresses, bespoke suits, luxury hoodies, and contemporary denim.'
+        };
+      case 'accessories':
+        return {
+          tag: 'Artisanal Accents',
+          title: 'Luxury Accessories',
+          desc: 'Como 7-fold silk neckties, mulberry silk pocket squares, and gold zari bridal dupattas.'
+        };
       case 'sarees':
         return {
           tag: 'Heritage Indian Weaves',
@@ -296,22 +519,23 @@ export default function Catalogue() {
         {/* Filter and Control Bar */}
         <div className="bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 p-5 space-y-4 shadow-xs">
           
-          {/* Main 10 Category Tabs */}
+          {/* 1. Main Navigation Filters (6 High-Level Department Tabs) */}
           <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none border-b border-slate-100 dark:border-slate-800">
-            {categories.map((cat) => {
-              const isSelected = selectedCategory === cat.slug;
-              const count = cat.productCount;
+            {navTabs.map((tab) => {
+              const isSelected = selectedCategory === tab.slug || (tab.slug === 'all' && selectedCategory === 'all');
+              const count = tab.productCount;
               return (
                 <button
-                  key={cat.id || cat.slug}
-                  onClick={() => handleCategoryChange(cat.slug)}
+                  key={tab.id || tab.slug}
+                  onClick={() => handleCategoryChange(tab.slug)}
                   className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold whitespace-nowrap transition-all rounded flex items-center space-x-1.5 ${
                     isSelected
                       ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
                       : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300 border border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  <span>{cat.name}</span>
+                  <Sparkles className={`w-3.5 h-3.5 ${isSelected ? 'text-[#F5AFAF]' : 'text-slate-400'}`} />
+                  <span>{tab.name}</span>
                   {typeof count === 'number' && (
                     <span
                       className={`text-[10px] font-mono px-1.5 py-0.2 rounded-full ${
@@ -328,37 +552,55 @@ export default function Catalogue() {
             })}
           </div>
 
-          {/* Subcategory Pills (Only displayed when category is selected or has subcategories) */}
-          {availableSubcategories.length > 0 && (
+          {/* 2. Dynamic Subcategory Filters (Based on Active Navigation Tab) */}
+          {currentSubcategories && currentSubcategories.length > 0 && (
             <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-none text-xs">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 whitespace-nowrap mr-1">
-                Subcategory:
+              <span className="text-[10px] uppercase font-mono tracking-wider text-slate-500 whitespace-nowrap mr-1 flex items-center space-x-1">
+                <span>Subcategory:</span>
               </span>
-              <button
-                onClick={() => handleSubcategoryChange('all')}
-                className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
-                  selectedSubcategory === 'all'
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
-                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
-                }`}
-              >
-                All
-              </button>
-              {availableSubcategories.map((sub) => (
-                <button
-                  key={sub}
-                  onClick={() => handleSubcategoryChange(sub)}
-                  className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
-                    selectedSubcategory === sub
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs'
-                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
-                  }`}
-                >
-                  {sub.replace(/_/g, ' ')}
-                </button>
-              ))}
+              {currentSubcategories.map((sub) => {
+                const subSlug = typeof sub === 'string' ? sub : sub.slug;
+                const subName = typeof sub === 'string' ? sub.replace(/_/g, ' ') : sub.name;
+                const isSubSelected = selectedSubcategory === subSlug;
+                return (
+                  <button
+                    key={subSlug}
+                    onClick={() => handleSubcategoryChange(subSlug)}
+                    className={`px-2.5 py-1 text-[10px] uppercase font-mono tracking-wider font-medium whitespace-nowrap rounded transition-colors ${
+                      isSubSelected
+                        ? 'bg-slate-900 text-white dark:bg-white dark:text-black shadow-xs font-semibold'
+                        : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    {subName}
+                  </button>
+                );
+              })}
             </div>
           )}
+
+          {/* 3. Department Quick-Select Pills */}
+          <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none text-[11px] pt-1">
+            <span className="text-[10px] uppercase font-mono tracking-wider text-slate-400 whitespace-nowrap mr-1">
+              Departments:
+            </span>
+            {categories.filter((c) => c.slug !== 'all').map((dept) => {
+              const isDeptActive = selectedCategory === dept.slug;
+              return (
+                <button
+                  key={dept.id || dept.slug}
+                  onClick={() => handleCategoryChange(dept.slug)}
+                  className={`px-2 py-0.5 text-[9px] uppercase font-mono tracking-wider whitespace-nowrap rounded-sm transition-all ${
+                    isDeptActive
+                      ? 'bg-rose-50 text-rose-900 border border-rose-300 dark:bg-rose-950/40 dark:text-rose-200 dark:border-rose-800 font-semibold'
+                      : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+                  }`}
+                >
+                  {dept.name} {typeof dept.productCount === 'number' && `(${dept.productCount})`}
+                </button>
+              );
+            })}
+          </div>
 
           {/* Multi-Source Origin Bar */}
           <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">

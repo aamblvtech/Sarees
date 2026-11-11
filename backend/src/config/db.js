@@ -14,9 +14,33 @@ dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 const { Pool: RealPgPool } = pg;
 
 let activePool = null;
+let rawMemDb = null;
 let dbEngineType = 'uninitialized';
 let isConnected = false;
 let connectionError = null;
+
+export function syncPgMemSequences() {
+  if (!rawMemDb) return;
+  try {
+    for (const table of rawMemDb.public._tables) {
+      if (table && table.serialsId && table.name && table.name !== 'dual') {
+        const tblName = table.name;
+        const maxRes = rawMemDb.public.one(`SELECT COALESCE(MAX(id), 0) AS max_id FROM ${tblName}`);
+        const maxId = Number(maxRes?.max_id || 0);
+        const t = rawMemDb.public.db.data;
+        let serials = t.getMap(table.serialsId);
+        if (serials && serials.has('id')) {
+          const currentVal = serials.get('id');
+          if (maxId > currentVal) {
+            t.set(table.serialsId, serials.set('id', maxId));
+          }
+        }
+      }
+    }
+  } catch (err) {
+    // ignore
+  }
+}
 
 export async function initializeDatabase() {
   if (activePool && isConnected) return activePool;
@@ -71,6 +95,8 @@ export async function initializeDatabase() {
 
     const pgAdapter = memDb.adapters.createPg();
     activePool = new pgAdapter.Pool();
+    rawMemDb = memDb;
+    syncPgMemSequences();
     isConnected = true;
     dbEngineType = 'PostgreSQL Engine (pg-mem)';
     console.log('[DB] PostgreSQL engine initialized.');
@@ -98,13 +124,25 @@ export const pool = {
   },
   connect: async () => {
     if (!activePool) await initializeDatabase();
-    return activePool.connect();
+    const client = await activePool.connect();
+    if (rawMemDb && client && typeof client.release === 'function') {
+      const origRelease = client.release.bind(client);
+      client.release = () => {
+        syncPgMemSequences();
+        return origRelease();
+      };
+    }
+    return client;
   }
 };
 
 export async function query(text, params = []) {
   if (!activePool) await initializeDatabase();
-  return activePool.query(text, params);
+  const res = await activePool.query(text, params);
+  if (rawMemDb && typeof text === 'string' && text.toUpperCase().includes('INSERT INTO')) {
+    syncPgMemSequences();
+  }
+  return res;
 }
 
 export async function testConnection() {
