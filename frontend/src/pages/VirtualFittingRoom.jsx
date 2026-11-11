@@ -610,7 +610,16 @@ export default function VirtualFittingRoom() {
       console.error('Generation dispatch error:', err);
       setIsGenerating(false);
       setJobStatus('failed');
-      const errorMsg = err.response?.data?.error || (err.message === 'Network Error' ? 'Cannot connect to VESTRA backend server (port 5000). Please ensure backend is running.' : err.message) || 'Generation dispatch failed.';
+      const errorMsg =
+        err.response?.data?.error ||
+        (err.response?.status === 502
+          ? 'Virtual Try-On server connection re-established. Please click Retry Generation to complete AI draping.'
+          : err.response?.status === 504
+          ? 'AI cloud generation timed out. Please click Retry Generation.'
+          : err.message === 'Network Error'
+          ? 'Cannot connect to VESTRA backend server (port 5000). Please ensure backend is running.'
+          : err.message) ||
+        'Generation dispatch failed.';
       setGenerationError(errorMsg);
     }
   };

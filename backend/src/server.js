@@ -99,7 +99,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server & Connect to Database
-app.listen(PORT, '0.0.0.0', async () => {
+const server = app.listen(PORT, '0.0.0.0', async () => {
   console.log('========================================================');
   console.log(`  VESTRA Virtual Try-On Backend Service`);
   console.log(`  Running on http://localhost:${PORT}`);
@@ -125,5 +125,9 @@ app.listen(PORT, '0.0.0.0', async () => {
   const conn = await testConnection();
   console.log(`[DB Status] Engine: ${conn.engine} | Connected: ${conn.connected}`);
 });
+
+// Configure keep-alive timeout to eliminate connection resets with reverse proxies / Vite proxy
+server.keepAliveTimeout = 65000;
+server.headersTimeout = 66000;
 
 export default app;

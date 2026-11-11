@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js",
+    "dev": "node --watch --watch-path=src src/server.js",
     "migrate": "node src/db/migrate.js",
     "seed": "node src/db/seed.js",
     "test": "node --test tests/taxonomyAndTryon.test.js tests/advancedTryonAndQr.test.js tests/genlook.test.js tests/productMappingAndHistory.test.js tests/multiOutfitSelection.test.js tests/latencyAndOptimization.test.js tests/sareeDrapeConfidence.test.js tests/importedSareesCatalogue.test.js tests/myntraCatalogueImport.test.js tests/customGarmentWebcam.test.js tests/sareeEnhancementAndAnatomy.test.js tests/catalogueMultiSource.test.js tests/supplierPortal.test.js tests/platformEnhancements.test.js"
