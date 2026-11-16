@@ -313,6 +313,36 @@ class PoseDetectionService {
   }
 
   /**
+   * Evaluates pose assessment (or passes through result if already evaluated)
+   */
+  evaluatePose(assessmentOrResults) {
+    if (assessmentOrResults && assessmentOrResults.status) {
+      return assessmentOrResults;
+    }
+    return {
+      detected: false,
+      status: 'idle',
+      guidance: 'Position yourself in front of the camera.',
+      progress: 0,
+      readyToCapture: false
+    };
+  }
+
+  /**
+   * Draws aesthetic pose skeleton onto canvas overlay using canvas element
+   */
+  drawPoseSkeleton(canvas, result, assessment) {
+    if (!canvas) return;
+    const ctx = canvas.getContext ? canvas.getContext('2d') : null;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const landmarks = assessment?.landmarks || result?.landmarks;
+    if (landmarks && landmarks.length >= 33) {
+      this.drawSkeleton(ctx, landmarks, canvas.width, canvas.height);
+    }
+  }
+
+  /**
    * Draws aesthetic pose skeleton onto canvas overlay
    */
   drawSkeleton(ctx, landmarks, width, height) {
@@ -358,7 +388,7 @@ class PoseDetectionService {
           ctx.fillStyle = '#FFFFFF';
           ctx.fill();
           ctx.lineWidth = 2;
-          ctx.strokeStyle = '#F5AFAF';
+          ctx.strokeStyle = '#C96872';
           ctx.stroke();
         }
       }

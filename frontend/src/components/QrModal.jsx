@@ -102,13 +102,13 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-slate-800 max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-neutral-950/70 backdrop-blur-xs">
+      <div className="bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] max-w-md w-full p-6 sm:p-8 space-y-6 shadow-2xl relative rounded-xs">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] transition-colors"
+          className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
           title="Close"
         >
           <X className="w-5 h-5" />
@@ -116,60 +116,60 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
 
         {/* Modal Header */}
         <div className="text-center space-y-2 pt-1">
-          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-[#FFFFFF] border border-slate-200 dark:border-slate-700 text-[9px] uppercase font-mono tracking-widest font-semibold shadow-xs">
-            <Smartphone className="w-3 h-3 text-[#F5AFAF]" />
-            <span>Mobile Silhouette Link</span>
+          <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-black/[0.06] dark:border-white/[0.08] text-xs font-mono rounded-xs">
+            <Smartphone className="w-3.5 h-3.5 text-[#A84B55] dark:text-[#C96872]" />
+            <span>Mobile silhouette link</span>
           </div>
-          <h3 className="font-serif text-2xl text-slate-900 dark:text-[#FFFFFF]">
-            Scan with Your Phone Camera
+          <h3 className="font-serif text-2xl text-neutral-900 dark:text-neutral-50 font-normal">
+            Scan with your phone camera
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm mx-auto">
+          <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed max-w-sm mx-auto">
             Scan the QR code below using your mobile phone camera to upload a portrait directly from your phone gallery.
           </p>
         </div>
 
         {/* Synchronized Success Screen */}
         {uploadedPhotoUrl ? (
-          <div className="p-6 bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800 text-center space-y-4 animate-fadeIn">
-            <div className="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 mx-auto flex items-center justify-center text-emerald-600">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="p-6 bg-white dark:bg-[#17181C] border border-emerald-500/30 text-center space-y-4 rounded-xs">
+            <div className="w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500/20 mx-auto flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h4 className="font-serif text-lg text-[#000000] dark:text-[#FFFFFF]">Silhouette Transferred!</h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <h4 className="font-serif text-lg text-neutral-900 dark:text-neutral-100 font-normal">Silhouette transferred</h4>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
                 Synchronizing with fitting room session...
               </p>
             </div>
-            <div className="w-20 h-28 mx-auto bg-slate-100 border border-[#F9DFDF] overflow-hidden shadow">
-              <img src={uploadedPhotoUrl} alt="Synchronized Photo" className="w-full h-full object-cover" />
+            <div className="w-20 h-28 mx-auto bg-neutral-100 dark:bg-neutral-800 border border-black/[0.08] dark:border-white/[0.08] overflow-hidden rounded-xs">
+              <img src={uploadedPhotoUrl} alt="Synchronized" className="w-full h-full object-cover" />
             </div>
           </div>
         ) : (
           /* Active QR Display Screen */
           <div className="space-y-5">
             {isLoading ? (
-              <div className="aspect-square max-w-[260px] mx-auto bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 flex flex-col items-center justify-center p-6 space-y-3">
-                <RefreshCw className="w-7 h-7 animate-spin text-[#F5AFAF]" />
-                <span className="text-xs font-mono uppercase tracking-wider text-slate-500">
-                  Generating Token...
+              <div className="aspect-square max-w-[260px] mx-auto bg-neutral-50 dark:bg-[#17181C] border border-black/[0.06] dark:border-white/[0.06] flex flex-col items-center justify-center p-6 space-y-3 rounded-xs">
+                <RefreshCw className="w-6 h-6 animate-spin text-[#C96872]" />
+                <span className="text-xs font-mono text-neutral-500">
+                  Generating secure token...
                 </span>
               </div>
             ) : error ? (
-              <div className="p-6 bg-rose-50 dark:bg-rose-950/40 border border-[#F9DFDF] dark:border-rose-800/40 text-center space-y-3">
-                <AlertCircle className="w-6 h-6 text-rose-600 mx-auto" />
-                <p className="text-xs text-rose-800 dark:text-rose-200 leading-relaxed">{error}</p>
+              <div className="p-6 bg-red-50 dark:bg-red-950/40 border border-red-500/20 text-center space-y-3 rounded-xs">
+                <AlertCircle className="w-6 h-6 text-red-600 mx-auto" />
+                <p className="text-xs text-red-800 dark:text-red-200 leading-relaxed">{error}</p>
                 <button
                   onClick={initSession}
-                  className="px-4 py-2 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-wider font-semibold"
+                  className="min-h-[40px] px-4 py-2 bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 text-xs font-medium rounded-xs"
                 >
-                  Generate New QR
+                  Generate new QR
                 </button>
               </div>
             ) : session?.qrCodeDataUrl ? (
               <div className="space-y-4">
                 
                 {/* QR Code Container */}
-                <div className="relative aspect-square max-w-[240px] mx-auto bg-white p-3 border-2 border-[#000000] dark:border-[#FFFFFF] shadow-md flex items-center justify-center">
+                <div className="relative aspect-square max-w-[240px] mx-auto bg-white p-3 border border-black/[0.1] dark:border-white/[0.1] shadow-xs flex items-center justify-center rounded-xs">
                   <img
                     src={session.qrCodeDataUrl}
                     alt="Mobile Upload QR Code"
@@ -178,10 +178,10 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                   {countdown === 0 && (
                     <div className="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-4 text-center space-y-2 text-white">
                       <Clock className="w-6 h-6 text-amber-400" />
-                      <p className="text-xs font-semibold uppercase tracking-wider font-mono">Token Expired</p>
+                      <p className="text-xs font-mono">Token expired</p>
                       <button
                         onClick={initSession}
-                        className="px-4 py-2 bg-white text-black text-xs uppercase tracking-widest font-semibold hover:bg-slate-100 transition-colors"
+                        className="px-4 py-2 bg-white text-black text-xs font-medium hover:bg-neutral-100 transition-colors rounded-xs"
                       >
                         Refresh QR
                       </button>
@@ -190,38 +190,38 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                 </div>
 
                 {/* Session countdown and security badge */}
-                <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 px-3 py-2 bg-[#FBEFEF] dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800">
+                <div className="flex items-center justify-between text-xs text-neutral-600 dark:text-neutral-400 px-3 py-2 bg-neutral-50 dark:bg-[#17181C] border border-black/[0.06] dark:border-white/[0.06] rounded-xs">
                   <div className="flex items-center space-x-1.5 font-mono">
-                    <Clock className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                    <span>Expires: <strong className="text-[#000000] dark:text-[#FFFFFF]">{formattedCountdown}</strong></span>
+                    <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                    <span>Expires: <strong className="text-neutral-900 dark:text-neutral-200">{formattedCountdown}</strong></span>
                   </div>
-                  <div className="flex items-center space-x-1 text-[10px] text-slate-500">
-                    <Shield className="w-3 h-3 text-[#F5AFAF]" />
-                    <span>Isolated Token</span>
+                  <div className="flex items-center space-x-1 text-xs text-neutral-500">
+                    <Shield className="w-3.5 h-3.5 text-neutral-400" />
+                    <span>Isolated token</span>
                   </div>
                 </div>
 
                 {/* Wi-Fi & Network Notice */}
-                <div className="flex items-center space-x-2 p-2 bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/50 rounded text-[10px] text-amber-800 dark:text-amber-200">
-                  <Wifi className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                  <span>Ensure your phone is connected to the same Wi-Fi network (IP: <strong>{session.lanIp}</strong>)</span>
+                <div className="flex items-center space-x-2 p-2.5 bg-neutral-50 dark:bg-[#17181C] border border-black/[0.06] dark:border-white/[0.06] rounded-xs text-xs text-neutral-600 dark:text-neutral-400">
+                  <Wifi className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
+                  <span>Connect phone to the same Wi-Fi network (IP: <strong className="text-neutral-800 dark:text-neutral-200">{session.lanIp}</strong>)</span>
                 </div>
 
-                <div className="text-center text-[10px] text-slate-500 dark:text-slate-400 space-y-2">
+                <div className="text-center text-xs text-neutral-500 dark:text-neutral-400 space-y-2">
                   <p>Scan with your phone's default Camera app to upload.</p>
                   
                   {/* Direct link helper */}
-                  <div className="flex items-center justify-center space-x-2 pt-1 border-t border-slate-100 dark:border-slate-800 text-[10px]">
+                  <div className="flex items-center justify-center space-x-2 pt-1 border-t border-black/[0.06] dark:border-white/[0.06] text-xs">
                     <a
                       href={session.mobileUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white underline font-mono flex items-center space-x-1"
+                      className="text-neutral-700 dark:text-neutral-300 hover:underline font-mono flex items-center space-x-1"
                     >
-                      <span>Open mobile page in tab</span>
+                      <span>Open mobile link</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
-                    <span className="text-slate-300">&bull;</span>
+                    <span className="text-neutral-300 dark:text-neutral-700">&bull;</span>
                     <button
                       type="button"
                       onClick={() => {
@@ -229,10 +229,10 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
                         setCopied(true);
                         setTimeout(() => setCopied(false), 2000);
                       }}
-                      className="text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white font-mono flex items-center space-x-1"
+                      className="text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white font-mono flex items-center space-x-1"
                     >
                       {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
-                      <span>{copied ? 'Copied' : 'Copy Link'}</span>
+                      <span>{copied ? 'Copied' : 'Copy link'}</span>
                     </button>
                   </div>
                 </div>
@@ -241,20 +241,20 @@ export default function QrModal({ isOpen, onClose, onPhotoReceived }) {
             ) : null}
 
             {/* Modal Actions */}
-            <div className="flex items-center justify-between pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between pt-3 border-t border-black/[0.06] dark:border-white/[0.06]">
               <button
                 type="button"
                 onClick={initSession}
-                className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-[#000000] dark:hover:text-[#FFFFFF] font-semibold flex items-center space-x-1.5 transition-colors"
+                className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-neutral-100 font-medium flex items-center space-x-1.5 transition-colors"
               >
                 <RefreshCw className="w-3 h-3" />
-                <span>New QR Token</span>
+                <span>New QR token</span>
               </button>
 
               <button
                 type="button"
                 onClick={onClose}
-                className="px-5 py-2 border border-[#F9DFDF] dark:border-slate-700 text-[#000000] dark:text-[#FFFFFF] text-xs uppercase tracking-widest font-semibold hover:bg-[#FBEFEF] dark:hover:bg-slate-800 transition-all"
+                className="min-h-[40px] px-5 py-2 border border-black/[0.1] dark:border-white/[0.1] text-neutral-800 dark:text-neutral-200 text-xs font-medium hover:bg-neutral-50 dark:hover:bg-[#17181C] transition-colors rounded-xs"
               >
                 Cancel
               </button>

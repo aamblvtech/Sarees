@@ -1,116 +1,106 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, Shield, Cpu, ArrowUpRight } from 'lucide-react';
+import { ShieldCheck, ArrowUpRight } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-white dark:bg-[#0F172A] text-slate-600 dark:text-slate-300 pt-16 pb-12 border-t border-slate-200/80 dark:border-[#1E293B] transition-colors duration-200">
+    <footer className="bg-white dark:bg-[#0D0E10] text-neutral-600 dark:text-neutral-400 pt-16 pb-12 border-t border-black/[0.08] dark:border-white/[0.08] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-14 border-b border-slate-100 dark:border-[#1E293B]">
+        {/* Top Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-14 border-b border-black/[0.06] dark:border-white/[0.06]">
           
           {/* Brand Column */}
-          <div className="md:col-span-1 space-y-4">
-            <span className="font-serif text-3xl tracking-[0.24em] text-slate-900 dark:text-[#FFFFFF] font-semibold block">
+          <div className="md:col-span-1 space-y-3">
+            <span className="font-serif text-2xl tracking-[0.16em] text-neutral-900 dark:text-neutral-100 font-normal block">
               VESTRA
             </span>
-            <p className="text-xs tracking-[0.18em] text-[#F5AFAF] uppercase font-semibold">
-              Virtual Fitting Studio
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pt-1">
-              Precision virtual fitting room synthesizing luxury garments onto customer silhouettes with zero latency and true-to-life draping.
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+              Virtual fashion fitting room synthesizing luxury garments onto customer silhouette portraits with true-to-life draping.
             </p>
           </div>
 
           {/* Navigation */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-slate-900 dark:text-[#FFFFFF] font-semibold">
-              Clothing Archive
+            <h4 className="text-xs uppercase font-medium tracking-wider text-neutral-900 dark:text-neutral-100">
+              Collection
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-500 dark:text-slate-400">
+            <ul className="space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
               <li>
-                <Link to="/catalogue" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+                <Link to="/catalogue" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
                   All Garments
                 </Link>
               </li>
               <li>
-                <Link to="/catalogue?category=womens-clothing" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  Women's Couture
+                <Link to="/catalogue?category=womens-wear" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Women's Wear
                 </Link>
               </li>
               <li>
-                <Link to="/catalogue?category=mens-clothing" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  Men's Tailoring
+                <Link to="/catalogue?category=mens-wear" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Men's Wear
                 </Link>
               </li>
               <li>
-                <Link to="/catalogue?category=sarees" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  Heirloom Sarees
-                </Link>
-              </li>
-              <li>
-                <Link to="/catalogue?category=accessories" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  Atelier Accessories
+                <Link to="/catalogue?category=traditional-wear" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Traditional Couture
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Virtual Fitting Studio */}
+          {/* Platform */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-slate-900 dark:text-[#FFFFFF] font-semibold">
-              AI Try-On Platform
+            <h4 className="text-xs uppercase font-medium tracking-wider text-neutral-900 dark:text-neutral-100">
+              Studio
             </h4>
-            <ul className="space-y-2.5 text-xs text-slate-500 dark:text-slate-400">
+            <ul className="space-y-2 text-xs text-neutral-500 dark:text-neutral-400">
               <li>
-                <Link to="/try-on" className="hover:text-slate-900 dark:hover:text-white transition-colors inline-flex items-center space-x-1">
-                  <span>Virtual Fitting Room</span>
-                  <Sparkles className="w-3 h-3 text-[#F5AFAF]" />
+                <Link to="/try-on" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Virtual Fitting Room
                 </Link>
               </li>
               <li>
-                <Link to="/#how-it-works" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-                  How It Works
+                <Link to="/kiosk" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Mall Kiosk Experience
                 </Link>
               </li>
               <li>
-                <span className="inline-flex items-center space-x-1.5 text-slate-500 dark:text-slate-400">
-                  <Cpu className="w-3 h-3 text-[#F5AFAF]" />
-                  <span>Genlook Cloud AI Engine</span>
-                </span>
+                <Link to="/supplier/login" className="hover:text-neutral-900 dark:hover:text-white transition-colors">
+                  Supplier Portal
+                </Link>
               </li>
-              <li className="pt-1">
-                <Link to="/admin/dashboard" className="text-slate-900 dark:text-white hover:text-slate-700 dark:hover:text-slate-300 font-medium inline-flex items-center space-x-1">
-                  <span>Admin Console</span>
-                  <ArrowUpRight className="w-3 h-3" />
+              <li>
+                <Link to="/admin/login" className="hover:text-neutral-900 dark:hover:text-white transition-colors inline-flex items-center space-x-1">
+                  <span>Atelier Console</span>
+                  <ArrowUpRight className="w-3 h-3 opacity-60" strokeWidth={1.5} />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Technology & Privacy */}
+          {/* Privacy Notice */}
           <div className="space-y-3">
-            <h4 className="text-xs uppercase tracking-widest text-slate-900 dark:text-[#FFFFFF] font-semibold">
-              Privacy & Security
+            <h4 className="text-xs uppercase font-medium tracking-wider text-neutral-900 dark:text-neutral-100">
+              Privacy Standard
             </h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Customer photographs remain strictly confidential. Temporary sessions can be deleted with one click.
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+              Customer portrait data is processed in private transient sessions with zero model retention. Session data purges automatically.
             </p>
-            <div className="pt-2 flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400">
-              <Shield className="w-4 h-4 text-[#F5AFAF]" />
-              <span>Isolated Private Cloud &bull; GDPR Compliant</span>
+            <div className="pt-1 flex items-center space-x-2 text-[11px] text-neutral-500 dark:text-neutral-400">
+              <ShieldCheck className="w-3.5 h-3.5 text-neutral-400" strokeWidth={1.5} />
+              <span>Isolated customer sessions</span>
             </div>
           </div>
 
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 dark:text-slate-500 gap-4">
-          <p>&copy; {new Date().getFullYear()} VESTRA Atelier Inc. All rights reserved.</p>
-          <div className="flex items-center space-x-6">
-            <span>Clean Light Luxury Atelier Design</span>
-          </div>
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 gap-4">
+          <p>&copy; {new Date().getFullYear()} VESTRA Atelier. All rights reserved.</p>
+          <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
+            Experience Fashion Before You Wear It
+          </p>
         </div>
 
       </div>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,116 +7,101 @@
 @layer base {
   :root {
     --bg-primary: #FFFFFF;
+    --bg-canvas: #FAFAFA;
     --bg-card: #FFFFFF;
-    --border-color: #E2E8F0;
-    --accent-rose: #F5AFAF;
-    --bg-dark: #0F172A;
-    --border-dark: #1E293B;
-    --active-light: #1E293B;
-    --active-dark: #FFFFFF;
+    --text-primary: #171717;
+    --text-secondary: #525252;
+    --text-muted: #737373;
+    --hairline: rgba(23, 23, 23, 0.08);
+    --hairline-hover: rgba(23, 23, 23, 0.16);
+    --accent: #A84B55;
+  }
+
+  .dark {
+    --bg-primary: #121316;
+    --bg-canvas: #0D0E10;
+    --bg-card: #17181C;
+    --text-primary: #EDEDED;
+    --text-secondary: #A1A1A6;
+    --text-muted: #85858B;
+    --hairline: rgba(237, 237, 237, 0.08);
+    --hairline-hover: rgba(237, 237, 237, 0.16);
+    --accent: #C96872;
   }
 
   body {
-    background-color: #FFFFFF;
-    color: #1E293B;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.2s ease, color 0.2s ease;
-  }
-
-  html.dark body,
-  .dark body,
-  body.dark {
-    background-color: #0F172A !important;
-    color: #FFFFFF !important;
-  }
-
-  html:not(.dark) body {
-    background-color: #FFFFFF !important;
-    color: #1E293B !important;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   h1, h2, h3, h4, .font-serif {
     font-family: 'Playfair Display', Georgia, serif;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
+    font-weight: 400;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-feature-settings: 'tnum' on, 'lnum' on;
   }
 }
 
-/* Custom Minimalist White Fashion-Tech Scrollbar */
+/* Hairline border utility */
+.hairline {
+  border-color: var(--hairline);
+}
+
+/* Tailor's Registration Notch (Atelier Signature Detail) */
+.atelier-corner-mark {
+  position: relative;
+}
+.atelier-corner-mark::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--hairline-hover);
+  border-left: 1px solid var(--hairline-hover);
+  pointer-events: none;
+}
+.atelier-corner-mark::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-bottom: 1px solid var(--hairline-hover);
+  border-right: 1px solid var(--hairline-hover);
+  pointer-events: none;
+}
+
+/* Precision Subtle Guide Line */
+.atelier-guideline {
+  background-image: linear-gradient(to bottom, var(--hairline) 50%, transparent 50%);
+  background-size: 1px 8px;
+}
+
+/* Editorial Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFFFFF;
-}
-.dark ::-webkit-scrollbar-track {
-  background: #0F172A;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #E2E8F0;
-  border-radius: 2px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: var(--hairline);
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #CBD5E1;
-}
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #FFFFFF;
-}
-
-/* Modern Minimalist Glass Effect with White Base */
-.minimal-glass {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #E2E8F0;
-}
-.dark .minimal-glass {
-  background: rgba(15, 23, 42, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #1E293B;
-}
-
-/* Scanning Animation for Live Camera & Scanning Indicators (#F5AFAF Accent) */
-@keyframes camera-scan {
-  0% {
-    top: 0%;
-    opacity: 0.8;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    top: 100%;
-    opacity: 0.8;
-  }
-}
-
-.animate-camera-scan {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #F5AFAF, transparent);
-  box-shadow: 0 0 16px 2px #F5AFAF;
-  animation: camera-scan 2.4s ease-in-out infinite;
-}
-
-@keyframes pulse-rose {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(245, 175, 175, 0.6);
-  }
-  50% {
-    box-shadow: 0 0 0 8px rgba(245, 175, 175, 0);
-  }
-}
-
-.pulse-camera {
-  animation: pulse-rose 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: var(--hairline-hover);
 }

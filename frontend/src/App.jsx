@@ -50,7 +50,7 @@ function AppContent() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-[#FFFFFF] transition-colors duration-200">
+    <div className="flex flex-col min-h-screen bg-white dark:bg-[#0D0E10] text-neutral-900 dark:text-neutral-50 transition-colors duration-200">
       <Navbar />
       <main className="flex-grow">
         <ErrorBoundary>

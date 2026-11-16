@@ -8,37 +8,54 @@ export default {
   theme: {
     extend: {
       colors: {
-        app: {
+        // Unslop Atelier Neutral Ramp: Warm Graphite & Pure Canvas
+        atelier: {
           bg: '#FFFFFF',
+          canvas: '#FAFAFA',
+          subtle: '#F4F4F5',
           card: '#FFFFFF',
-          surface: '#F8FAFC',
-          border: '#E2E8F0',
-          borderLight: '#F1F5F9',
-          accent: '#F5AFAF',
-          accentSoft: '#FBEFEF',
-          darkBg: '#0F172A',
-          darkBorder: '#1E293B',
-          activeLight: '#1E293B',
-          activeDark: '#FFFFFF',
-        },
-        rose: {
-          lightest: '#FFFFFF',
-          soft: '#FBEFEF',
-          border: '#F9DFDF',
-          accent: '#F5AFAF',
+          border: 'rgba(23, 23, 23, 0.08)',
+          borderMedium: 'rgba(23, 23, 23, 0.14)',
+          text: '#171717',
+          secondary: '#525252',
+          muted: '#737373',
+          
+          // Dark Atelier Neutral Ramp
+          darkDeep: '#0D0E10',
+          darkBg: '#121316',
+          darkCard: '#17181C',
+          darkRaised: '#202126',
+          darkBorder: 'rgba(237, 237, 237, 0.08)',
+          darkBorderMedium: 'rgba(237, 237, 237, 0.16)',
+          darkText: '#EDEDED',
+          darkSecondary: '#A1A1A6',
+          darkMuted: '#85858B',
+
+          // High-Fashion Accessible Accent (Rose Copper / Terracotta Tinted)
+          // 4.5:1+ contrast on both light and dark
+          accent: '#A84B55',
+          accentLight: '#C96872',
+          accentDark: '#85363F',
+          accentWash: 'rgba(168, 75, 85, 0.08)',
+          accentWashDark: 'rgba(201, 104, 114, 0.12)',
         }
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
-        sans: ['"Plus Jakarta Sans"', 'Inter', '-apple-system', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'Menlo', 'monospace']
       },
       boxShadow: {
-        'vestra-xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-        'vestra-sm': '0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px 0 rgba(0, 0, 0, 0.02)',
-        'vestra': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
-        'vestra-lg': '0 12px 36px -4px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03)',
-        'scanner': '0 0 25px rgba(245, 175, 175, 0.65)',
+        'atelier-xs': '0 1px 2px rgba(0, 0, 0, 0.04)',
+        'atelier-sm': '0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02)',
+        'atelier-card': '0 4px 16px -2px rgba(0, 0, 0, 0.04)',
+        'atelier-modal': '0 20px 40px -8px rgba(0, 0, 0, 0.12)',
+      },
+      borderRadius: {
+        'atelier-sm': '4px',
+        'atelier': '8px',
+        'atelier-card': '12px',
+        'atelier-panel': '16px',
       }
     },
   },

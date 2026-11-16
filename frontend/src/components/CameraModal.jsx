@@ -5,29 +5,22 @@ import {
   RefreshCw,
   Check,
   AlertCircle,
-  Sparkles,
   Users,
   UserCheck,
-  Maximize2,
-  Sliders,
-  CheckCircle2,
   Scan
 } from 'lucide-react';
 import cameraService from '../services/cameraService';
 import poseDetectionService from '../services/poseDetectionService';
 
 /**
- * CameraModal - Smart AI Camera with Automatic Pose Estimation & Auto-Capture
- * 
+ * CameraModal - Smart Camera with Automatic Pose Estimation & Auto-Capture
  * Features:
  * - Real-time browser-based body pose estimation (MediaPipe Tasks Vision).
  * - Landmarks tracking: Head, Shoulders, Elbows, Wrists, Hips, Knees, Ankles.
- * - Automatic posture verification: upright, facing camera, full body visible.
- * - Anti-crowd detection: prevents capture when multiple people are in frame.
- * - Stability detection: holds still for 1.5–2.0s triggers automatic capture.
- * - Visual guidance overlays, progress ring, shutter flash animation.
+ * - Posture verification: upright, facing camera, full body in frame.
+ * - Anti-crowd detection: flags when multiple people are in frame.
+ * - Stability detection: holds still for 1.5–2.0s triggers auto capture.
  * - Manual capture fallback button available anytime.
- * - Captured photo review: "Use This Photo" vs "Retake Photo".
  */
 export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
   const [stream, setStream] = useState(null);
@@ -55,7 +48,6 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
   const animationFrameId = useRef(null);
   const hasAutoCaptured = useRef(false);
 
-  // Initialize camera and pose detector
   useEffect(() => {
     if (isOpen) {
       hasAutoCaptured.current = false;
@@ -94,19 +86,24 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
     resetState();
 
     try {
-      // 1. Initialize PoseLandmarker in background
       poseDetectionService.initialize().catch((e) => console.warn('Pose init notice:', e));
+      const mediaStream = await cameraService.startCamera({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          facingMode: 'user'
+        }
+      });
 
-      // 2. Start Camera MediaStream
-      const mediaStream = await cameraService.startCamera();
       setStream(mediaStream);
+
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
       }
-    } catch (err) {
-      setCameraError(err.message || 'Unable to access your camera.');
-    } finally {
       setIsInitializing(false);
+    } catch (err) {
+      setIsInitializing(false);
+      setCameraError(err.message || 'Unable to access camera.');
     }
   };
 
@@ -119,124 +116,89 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
       cameraService.stopStream(stream);
       setStream(null);
     }
-    if (videoRef.current && videoRef.current.srcObject) {
-      cameraService.stopStream(videoRef.current.srcObject);
-      videoRef.current.srcObject = null;
-    }
-    setIsVideoReady(false);
   };
 
-  // Real-time pose detection loop
-  const runPoseDetectionLoop = useCallback(() => {
-    if (!videoRef.current || !isOpen || capturedPhoto || hasAutoCaptured.current) {
-      return;
-    }
+  // Pose estimation frame loop
+  const processPoseFrame = useCallback(() => {
+    if (!videoRef.current || !canvasRef.current || capturedPhoto) return;
 
     const video = videoRef.current;
-    if (video.readyState >= 2 && video.videoWidth > 0 && video.videoHeight > 0) {
-      const timestamp = performance.now();
-      const assessment = poseDetectionService.detectPose(video, timestamp);
+    const canvas = canvasRef.current;
 
-      setPoseState(assessment);
-
-      // Draw skeleton landmarks on overlay canvas
-      if (canvasRef.current) {
-        const canvas = canvasRef.current;
-        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-          canvas.width = video.videoWidth;
-          canvas.height = video.videoHeight;
-        }
-        const ctx = canvas.getContext('2d');
-        if (assessment.landmarks) {
-          poseDetectionService.drawSkeleton(ctx, assessment.landmarks, canvas.width, canvas.height);
-        } else {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
+    if (video.readyState >= 2 && video.videoWidth > 0) {
+      if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
       }
 
-      // Check for automatic capture trigger
-      if (isAutoCaptureEnabled && assessment.readyToCapture && !hasAutoCaptured.current && !isCapturing) {
-        hasAutoCaptured.current = true;
-        handleCapture('auto');
-        return;
+      try {
+        const assessment = poseDetectionService.detectPose(video, performance.now());
+
+        if (assessment) {
+          setPoseState(assessment);
+          poseDetectionService.drawPoseSkeleton(canvas, assessment, assessment);
+
+          if (isAutoCaptureEnabled && assessment.readyToCapture && !hasAutoCaptured.current && !isCapturing) {
+            hasAutoCaptured.current = true;
+            handleCapture('auto');
+            return;
+          }
+        }
+      } catch (poseErr) {
+        console.warn('[CameraModal] Pose estimation loop warning:', poseErr);
       }
     }
 
-    animationFrameId.current = requestAnimationFrame(runPoseDetectionLoop);
-  }, [isOpen, capturedPhoto, isAutoCaptureEnabled, isCapturing]);
+    animationFrameId.current = requestAnimationFrame(processPoseFrame);
+  }, [isAutoCaptureEnabled, isCapturing, capturedPhoto]);
 
-  // Start pose loop when video is ready
   useEffect(() => {
     if (isVideoReady && !capturedPhoto) {
-      animationFrameId.current = requestAnimationFrame(runPoseDetectionLoop);
+      animationFrameId.current = requestAnimationFrame(processPoseFrame);
     }
     return () => {
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isVideoReady, capturedPhoto, runPoseDetectionLoop]);
+  }, [isVideoReady, capturedPhoto, processPoseFrame]);
 
-  /**
-   * Captures photograph from video sensor (either auto or manual)
-   */
-  const handleCapture = async (triggerType = 'manual') => {
-    setCameraError(null);
-    const video = videoRef.current;
-
-    if (!video || video.readyState < 2) {
-      setCameraError('Camera feed is still calibrating. Please wait a moment.');
-      return;
-    }
+  const handleCapture = async (trigger = 'manual') => {
+    if (!videoRef.current || isCapturing) return;
 
     setIsCapturing(true);
+    setShutterFlash(true);
+    setTimeout(() => setShutterFlash(false), 150);
 
     try {
-      // Trigger shutter flash animation
-      setShutterFlash(true);
-      setTimeout(() => setShutterFlash(false), 200);
-
-      const result = await cameraService.captureFrame(video);
-      if (!result || !result.blob) {
-        throw new Error('No image data returned from camera sensor.');
-      }
-
-      setCapturedFile(result.file);
-      setCapturedPhoto({
-        blob: result.blob,
-        file: result.file,
-        dataUrl: result.dataUrl,
-        width: result.width,
-        height: result.height,
-        triggerType,
-        timestamp: result.timestamp
+      const snap = await cameraService.captureFrame(videoRef.current, {
+        mimeType: 'image/jpeg',
+        quality: 0.95
       });
 
-      // Stop pose loop
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-        animationFrameId.current = null;
-      }
+      setCapturedFile(snap.file);
+      setCapturedPhoto({
+        dataUrl: snap.dataUrl,
+        file: snap.file,
+        triggerType: trigger
+      });
+      stopCameraStream();
     } catch (err) {
-      console.error('Frame capture failure:', err);
-      setCameraError(err.message || 'Failed to capture frame from camera.');
-      hasAutoCaptured.current = false;
+      setCameraError('Capture failed: ' + err.message);
     } finally {
       setIsCapturing(false);
     }
   };
 
   const handleRetake = () => {
-    setCapturedFile(null);
     setCapturedPhoto(null);
-    setCameraError(null);
+    setCapturedFile(null);
     hasAutoCaptured.current = false;
-    poseDetectionService.resetStability();
     startCameraStream();
   };
 
   const handleConfirm = () => {
-    if (capturedFile || capturedPhoto) {
+    if (capturedPhoto && onPhotoCaptured) {
       onPhotoCaptured(capturedFile || capturedPhoto.file || capturedPhoto.blob, capturedPhoto?.dataUrl);
       onClose();
     }
@@ -245,18 +207,18 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white dark:bg-[#0B0F19] border border-slate-200 dark:border-slate-800 max-w-2xl w-full shadow-2xl rounded-2xl relative overflow-hidden flex flex-col my-auto max-h-[96vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] max-w-2xl w-full rounded-xl relative overflow-hidden flex flex-col my-auto max-h-[96vh] shadow-atelier-modal">
         
-        {/* Header with Live Status & Mode Badge */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-[#0B0F19]">
-          <div className="flex items-center space-x-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <h3 className="font-serif text-base sm:text-lg font-semibold text-slate-900 dark:text-white">
-              Smart AI Pose Camera
+        {/* Header with Status */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-black/[0.06] dark:border-white/[0.06]">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+            <h3 className="font-serif text-base text-neutral-900 dark:text-neutral-100 font-normal">
+              Smart Studio Camera
             </h3>
-            <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-              Automatic Detection
+            <span className="text-[11px] font-mono text-neutral-500">
+              Auto-Pose
             </span>
           </div>
 
@@ -264,64 +226,55 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
             <button
               type="button"
               onClick={() => setIsAutoCaptureEnabled(!isAutoCaptureEnabled)}
-              className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg border transition-all ${
+              className={`h-7 px-2.5 text-xs rounded transition-colors ${
                 isAutoCaptureEnabled
-                  ? 'bg-amber-500/15 border-amber-500/30 text-amber-800 dark:text-amber-300'
-                  : 'bg-stone-100 dark:bg-stone-800 border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400'
+                  ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 font-medium'
+                  : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
               }`}
-              title="Toggle Auto Capture"
             >
-              Auto Capture: {isAutoCaptureEnabled ? 'ON' : 'OFF'}
+              Auto-capture: {isAutoCaptureEnabled ? 'On' : 'Off'}
             </button>
 
             <button
               onClick={onClose}
-              className="p-1 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded-lg transition-colors"
+              className="p-1.5 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded transition-colors"
               aria-label="Close"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" strokeWidth={1.5} />
             </button>
           </div>
         </div>
 
-        {/* Viewfinder Content Area */}
-        <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-slate-950 overflow-hidden flex items-center justify-center">
+        {/* Viewfinder Area */}
+        <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-neutral-950 overflow-hidden flex items-center justify-center">
           
-          {/* Shutter Flash Animation */}
           {shutterFlash && (
-            <div className="absolute inset-0 bg-white z-40 transition-opacity duration-150 animate-pulse" />
+            <div className="absolute inset-0 bg-white z-40 transition-opacity duration-150" />
           )}
 
-          {/* Scanning Line Animation */}
-          {!capturedPhoto && isVideoReady && (
-            <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-[#F5AFAF] to-transparent animate-camera-scan pointer-events-none z-20" />
-          )}
-
-          {/* Camera Error Display */}
           {cameraError && (
-            <div className="p-6 text-center text-white space-y-3 max-w-sm z-30 bg-slate-900/90 border border-slate-700 backdrop-blur-md rounded-xl">
-              <AlertCircle className="w-8 h-8 text-rose-400 mx-auto" />
-              <p className="text-xs font-medium text-rose-200 leading-relaxed">{cameraError}</p>
+            <div className="p-6 text-center text-white space-y-3 max-w-sm z-30 bg-neutral-900/90 border border-neutral-700 rounded-lg">
+              <AlertCircle className="w-6 h-6 text-rose-400 mx-auto" strokeWidth={1.5} />
+              <p className="text-xs text-neutral-200">{cameraError}</p>
               <button
                 onClick={startCameraStream}
-                className="px-4 py-2 bg-white text-slate-950 text-xs uppercase tracking-wider font-semibold rounded-lg hover:bg-slate-100 transition-colors"
+                className="h-8 px-4 bg-white text-neutral-900 text-xs font-medium rounded hover:bg-neutral-100 transition-colors"
               >
-                Restart Camera
+                Restart camera
               </button>
             </div>
           )}
 
-          {/* Initializing Spinner */}
           {isInitializing && !cameraError && (
-            <div className="text-center text-white space-y-3 z-20">
-              <RefreshCw className="w-8 h-8 animate-spin mx-auto text-amber-500" />
-              <p className="text-xs tracking-wider uppercase font-mono text-slate-300">
-                Calibrating AI Pose Optics...
+            <div className="text-center text-white space-y-2 z-20">
+              <RefreshCw className="w-6 h-6 animate-spin mx-auto text-neutral-400" strokeWidth={1.5} />
+              <p className="text-xs font-mono text-neutral-400">
+                Calibrating camera...
               </p>
             </div>
           )}
 
-          {/* Live Video Viewfinder & Overlay */}
+          {/* Live Video & Framing Guide */}
           {!capturedPhoto && (
             <>
               <video
@@ -329,74 +282,49 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
                 autoPlay
                 playsInline
                 muted
-                className="w-full h-full object-cover transform -scale-x-100" // Mirrored for natural selfie view
+                className="w-full h-full object-cover transform -scale-x-100"
                 onCanPlay={() => setIsVideoReady(true)}
               />
 
-              {/* Skeleton Canvas Overlay */}
               <canvas
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full pointer-events-none z-10 transform -scale-x-100"
               />
 
-              {/* High-Precision Full-Body Silhouette Framing Guide Overlay */}
-              <div className="absolute inset-4 sm:inset-6 border border-dashed border-amber-500/40 pointer-events-none flex flex-col justify-between p-3 z-20 rounded-2xl">
-                
-                {/* Top Corner Markers & Head Guide */}
+              {/* Atelier Tailored Viewfinder Corner Brackets */}
+              <div className="absolute inset-6 pointer-events-none flex flex-col justify-between z-20">
                 <div className="flex justify-between items-start">
-                  <span className="w-4 h-4 border-t-2 border-l-2 border-amber-400" />
-                  <div className="w-20 h-24 rounded-full border-2 border-dashed border-amber-400/50 flex items-center justify-center bg-amber-400/5">
-                    <span className="text-[8px] uppercase tracking-wider text-amber-300 font-mono">Head</span>
-                  </div>
-                  <span className="w-4 h-4 border-t-2 border-r-2 border-amber-400" />
+                  <span className="w-4 h-4 border-t border-l border-white/60" />
+                  <span className="w-4 h-4 border-t border-r border-white/60" />
                 </div>
-
-                {/* Torso Alignment Zone */}
-                <div className="mx-auto w-36 sm:w-44 h-48 border border-amber-400/30 rounded-3xl flex flex-col items-center justify-center p-2 bg-amber-500/5 backdrop-blur-[0.5px]">
-                  <span className="text-[9px] uppercase font-mono tracking-wider text-amber-200 bg-black/60 px-2 py-0.5 rounded">
-                    Torso & Shoulders
-                  </span>
-                </div>
-
-                {/* Bottom Corner Markers & Feet Guide */}
                 <div className="flex justify-between items-end">
-                  <span className="w-4 h-4 border-b-2 border-l-2 border-amber-400" />
-                  <div className="text-[9px] uppercase font-mono tracking-wider text-slate-200 bg-black/75 px-3 py-1 rounded-full border border-slate-700">
-                    Stand 5–7 ft away &bull; Keep feet in frame
+                  <span className="w-4 h-4 border-b border-l border-white/60" />
+                  <div className="text-[10px] font-mono text-white/80 bg-black/60 px-2.5 py-1 rounded">
+                    Full body portrait &bull; Stand 5–7 ft away
                   </div>
-                  <span className="w-4 h-4 border-b-2 border-r-2 border-amber-400" />
+                  <span className="w-4 h-4 border-b border-r border-white/60" />
                 </div>
-
               </div>
 
-              {/* Real-Time Pose Guidance Banner */}
-              <div className="absolute top-4 inset-x-4 sm:inset-x-8 z-30 flex flex-col items-center pointer-events-none space-y-2">
-                <div className={`px-4 py-2 rounded-xl text-xs font-semibold backdrop-blur-md shadow-lg border flex items-center space-x-2 transition-all ${
-                  poseState.status === 'perfect'
-                    ? 'bg-emerald-500/90 text-white border-emerald-400'
-                    : poseState.status === 'holding_still'
-                    ? 'bg-amber-500/90 text-stone-950 border-amber-400'
-                    : poseState.status === 'multiple_people'
-                    ? 'bg-red-500/90 text-white border-red-400'
-                    : 'bg-black/75 text-white border-white/20'
-                }`}>
+              {/* Guidance Badge */}
+              <div className="absolute top-4 inset-x-6 z-30 flex flex-col items-center pointer-events-none space-y-2">
+                <div className="px-3 py-1.5 rounded bg-black/75 backdrop-blur-sm border border-white/10 text-xs text-white font-medium flex items-center space-x-1.5 shadow-xs">
                   {poseState.status === 'perfect' ? (
-                    <CheckCircle2 className="w-4 h-4 text-white animate-bounce" />
+                    <Check className="w-3.5 h-3.5 text-emerald-400" strokeWidth={2} />
                   ) : poseState.status === 'holding_still' ? (
-                    <Scan className="w-4 h-4 animate-spin text-stone-950" />
+                    <Scan className="w-3.5 h-3.5 text-amber-300 animate-spin" strokeWidth={1.5} />
                   ) : poseState.status === 'multiple_people' ? (
-                    <Users className="w-4 h-4 text-white" />
+                    <Users className="w-3.5 h-3.5 text-rose-300" strokeWidth={1.5} />
                   ) : (
-                    <UserCheck className="w-4 h-4 text-amber-400" />
+                    <UserCheck className="w-3.5 h-3.5 text-neutral-300" strokeWidth={1.5} />
                   )}
                   <span>{poseState.guidance}</span>
                 </div>
 
-                {/* Progress bar when holding still */}
                 {isAutoCaptureEnabled && poseState.progress > 0 && poseState.progress < 1.0 && (
-                  <div className="w-48 bg-black/60 rounded-full h-1.5 overflow-hidden border border-white/20">
+                  <div className="w-44 bg-black/50 rounded-full h-1 overflow-hidden">
                     <div
-                      className="bg-amber-400 h-full transition-all duration-75"
+                      className="bg-white h-full transition-all duration-75"
                       style={{ width: `${Math.round(poseState.progress * 100)}%` }}
                     />
                   </div>
@@ -405,53 +333,45 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
             </>
           )}
 
-          {/* Captured Photo Preview */}
+          {/* Captured Review Preview */}
           {capturedPhoto && (
-            <div className="relative w-full h-full animate-fadeIn">
+            <div className="relative w-full h-full">
               <img
                 src={capturedPhoto.dataUrl}
-                alt="Captured Silhouette Preview"
+                alt="Captured silhouette"
                 className="w-full h-full object-cover"
               />
-              <div className="absolute top-4 left-4 bg-black/85 backdrop-blur-md text-white text-[10px] tracking-widest uppercase px-3.5 py-1.5 font-semibold flex items-center space-x-2 border border-white/20 rounded-lg">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>
-                  {capturedPhoto.triggerType === 'auto' ? 'Auto-Captured Pose' : 'Manual Snapshot'} &bull; HD
-                </span>
+              <div className="absolute top-4 left-4 bg-black/75 text-white text-[11px] font-mono px-2.5 py-1 rounded border border-white/10">
+                {capturedPhoto.triggerType === 'auto' ? 'Auto-captured portrait' : 'Manual capture'}
               </div>
             </div>
           )}
 
         </div>
 
-        {/* Controls Footer */}
-        <div className="px-5 py-4 bg-white dark:bg-[#0B0F19] border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        {/* Footer Actions */}
+        <div className="px-5 py-3.5 bg-white dark:bg-[#17181C] border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
           {!capturedPhoto ? (
             <div className="w-full flex items-center justify-between">
-              <div className="text-xs text-stone-500 dark:text-stone-400">
-                {isAutoCaptureEnabled ? (
-                  <span>Stand still in frame for auto-capture</span>
-                ) : (
-                  <span>Click capture when ready</span>
-                )}
-              </div>
+              <span className="text-xs text-neutral-500">
+                {isAutoCaptureEnabled ? 'Hold steady for auto-capture' : 'Press capture when aligned'}
+              </span>
 
-              {/* Manual Capture Fallback Button */}
               <button
                 type="button"
                 onClick={() => handleCapture('manual')}
                 disabled={isInitializing || isCapturing}
-                className="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-stone-950 text-xs font-semibold uppercase tracking-wider rounded-xl flex items-center space-x-2 transition-all shadow-md disabled:opacity-50"
+                className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 text-xs font-medium rounded flex items-center space-x-1.5 transition-colors disabled:opacity-50"
               >
                 {isCapturing ? (
                   <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" strokeWidth={1.5} />
                     <span>Capturing...</span>
                   </>
                 ) : (
                   <>
-                    <Camera className="w-4 h-4" />
-                    <span>Capture Photo</span>
+                    <Camera className="w-3.5 h-3.5" strokeWidth={1.5} />
+                    <span>Capture photo</span>
                   </>
                 )}
               </button>
@@ -461,19 +381,19 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
               <button
                 type="button"
                 onClick={handleRetake}
-                className="px-4 py-2.5 border border-stone-300 dark:border-stone-700 text-stone-700 dark:text-stone-200 text-xs uppercase tracking-wider font-semibold rounded-xl hover:bg-stone-100 dark:hover:bg-stone-800 flex items-center space-x-2 transition-colors"
+                className="h-9 px-3.5 border border-black/[0.12] dark:border-white/[0.12] text-neutral-800 dark:text-neutral-200 text-xs font-medium rounded hover:bg-neutral-50 dark:hover:bg-neutral-800 flex items-center space-x-1.5 transition-colors"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Retake Photo</span>
+                <RefreshCw className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <span>Retake photo</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleConfirm}
-                className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs uppercase tracking-wider font-semibold rounded-xl flex items-center space-x-2 transition-all shadow-md"
+                className="h-9 px-5 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 text-xs font-medium rounded flex items-center space-x-1.5 transition-colors shadow-xs"
               >
-                <Check className="w-4 h-4" />
-                <span>Use This Photo</span>
+                <Check className="w-3.5 h-3.5" strokeWidth={1.5} />
+                <span>Use this photo</span>
               </button>
             </div>
           )}

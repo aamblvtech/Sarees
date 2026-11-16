@@ -18,7 +18,6 @@ import {
   Eye,
   ExternalLink,
   ShieldCheck,
-  Sparkles,
   RefreshCw,
   X,
   User,
@@ -452,43 +451,43 @@ export default function SupplierDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-[#0B0F19] text-stone-900 dark:text-stone-100 transition-colors">
+    <div className="min-h-screen bg-neutral-50 dark:bg-[#0D0E10] text-neutral-900 dark:text-neutral-100 transition-colors">
       
       {/* Top Navbar */}
-      <header className="border-b border-stone-200 dark:border-stone-800 bg-white dark:bg-stone-900/90 sticky top-0 z-20 backdrop-blur-md">
+      <header className="border-b border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121316] sticky top-0 z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
           <div className="flex items-center space-x-3">
-            <Link to="/" className="font-serif text-2xl tracking-[0.2em] font-semibold text-stone-900 dark:text-white">
+            <Link to="/" className="font-serif text-2xl tracking-[0.2em] font-light text-neutral-900 dark:text-white">
               VESTRA
             </Link>
-            <span className="text-stone-300 dark:text-stone-700">|</span>
+            <span className="text-neutral-300 dark:text-neutral-700">|</span>
             <div className="flex items-center space-x-2">
-              <Building2 className="w-4 h-4 text-amber-500" />
-              <span className="text-xs uppercase tracking-wider font-semibold text-stone-700 dark:text-stone-300 hidden sm:inline">
+              <Building2 className="w-4 h-4 opacity-60" strokeWidth={1.5} />
+              <span className="text-xs font-mono text-neutral-500 hidden sm:inline">
                 Supplier Atelier Portal
               </span>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <div className="text-right hidden md:block">
-              <div className="text-xs font-semibold text-stone-900 dark:text-white">
+              <div className="text-xs font-medium text-neutral-900 dark:text-white">
                 {supplierUser?.companyName || 'Supplier Account'}
               </div>
-              <div className="text-[10px] text-stone-500 font-mono">
-                {supplierUser?.supplierCode || 'SUP-CODE'} • <span className="text-emerald-500 uppercase font-semibold">Active</span>
+              <div className="text-[10px] text-neutral-500 font-mono">
+                {supplierUser?.supplierCode || 'SUP-CODE'} • <span className="text-emerald-600 dark:text-emerald-400 font-medium">Active</span>
               </div>
             </div>
 
             <button
               onClick={() => setShowNotificationsModal(true)}
-              className="p-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-stone-800 rounded-lg text-xs flex items-center space-x-1.5 transition-colors relative"
+              className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs flex items-center space-x-1.5 transition-colors relative"
               title="Supplier Notifications"
             >
-              <Bell className="w-4 h-4 text-amber-500" />
+              <Bell className="w-4 h-4 opacity-60" strokeWidth={1.5} />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-600 text-white rounded-full text-[9px] flex items-center justify-center font-bold">
                   {unreadCount}
                 </span>
               )}
@@ -496,19 +495,19 @@ export default function SupplierDashboard() {
 
             <button
               onClick={() => setShowProfileModal(true)}
-              className="p-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-stone-800 rounded-lg text-xs flex items-center space-x-1.5 transition-colors"
+              className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs flex items-center space-x-1.5 transition-colors"
               title="Supplier Profile & Settings"
             >
-              <User className="w-4 h-4 text-amber-500" />
+              <User className="w-4 h-4 opacity-60" strokeWidth={1.5} />
               <span className="hidden sm:inline">Profile</span>
             </button>
 
             <button
               onClick={handleLogout}
-              className="p-2 text-stone-600 dark:text-stone-400 hover:text-red-600 dark:hover:text-red-400 border border-stone-200 dark:border-stone-800 rounded-lg text-xs flex items-center space-x-1.5 transition-colors"
+              className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-rose-600 dark:hover:text-rose-400 border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs flex items-center space-x-1.5 transition-colors"
               title="Sign Out"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 opacity-60" strokeWidth={1.5} />
               <span className="hidden sm:inline">Sign Out</span>
             </button>
           </div>
@@ -517,24 +516,24 @@ export default function SupplierDashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         
         {/* Banner with Actions */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-6 rounded-2xl shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] p-6 rounded-md shadow-xs">
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-semibold text-stone-900 dark:text-white">
+            <h1 className="font-serif text-2xl sm:text-3xl font-normal text-neutral-900 dark:text-white">
               {supplierUser?.companyName || 'Supplier Atelier'}
             </h1>
-            <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
-              Manage your high-resolution garments, batch catalogue feeds, and review approval status for AI Virtual Fitting.
+            <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+              Manage high-resolution garments, batch catalogue feeds, and review approval status for AI Virtual Fitting.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2.5">
             <button
               onClick={loadData}
               disabled={loading}
-              className="px-3.5 py-2.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all"
+              className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-[#17181C] dark:hover:bg-neutral-800 text-neutral-700 dark:text-neutral-300 rounded-md text-xs font-medium flex items-center space-x-1.5 transition-colors"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
@@ -542,26 +541,26 @@ export default function SupplierDashboard() {
 
             <button
               onClick={handleOpenPerformance}
-              className="px-3.5 py-2.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-white border border-stone-300 dark:border-stone-700 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all shadow-sm"
+              className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-[#17181C] dark:hover:bg-neutral-800 text-neutral-900 dark:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs font-medium flex items-center space-x-1.5 transition-colors"
             >
-              <TrendingUp className="w-4 h-4 text-amber-500" />
-              <span>Performance Report</span>
+              <TrendingUp className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
+              <span>Performance</span>
             </button>
 
             <button
               onClick={() => setShowCsvModal(true)}
-              className="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-900 dark:text-white border border-stone-300 dark:border-stone-700 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all shadow-sm"
+              className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 dark:bg-[#17181C] dark:hover:bg-neutral-800 text-neutral-900 dark:text-white border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs font-medium flex items-center space-x-1.5 transition-colors"
             >
-              <FileSpreadsheet className="w-4 h-4 text-emerald-500" />
-              <span>Upload CSV Feed</span>
+              <FileSpreadsheet className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
+              <span>Upload CSV</span>
             </button>
 
             <button
               onClick={handleOpenAddModal}
-              className="px-4 py-2.5 bg-stone-900 hover:bg-stone-800 dark:bg-amber-500 dark:hover:bg-amber-400 text-white dark:text-stone-950 rounded-xl text-xs font-semibold flex items-center space-x-2 transition-all shadow-md"
+              className="px-4 py-2 bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-neutral-950 rounded-md text-xs font-medium flex items-center space-x-1.5 transition-colors shadow-xs"
             >
-              <Plus className="w-4 h-4" />
-              <span>Add New Garment</span>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add garment</span>
             </button>
           </div>
         </div>
@@ -569,74 +568,74 @@ export default function SupplierDashboard() {
         {/* 5 KPI Metric Cards */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           
-          <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-4 rounded-xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-stone-500 text-xs uppercase tracking-wider">
+          <div className="bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] p-4 rounded-md shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-neutral-500 text-xs">
               <span>Total Garments</span>
-              <Package className="w-4 h-4 text-stone-400" />
+              <Package className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
             </div>
-            <div className="text-2xl font-bold font-serif text-stone-900 dark:text-white">
+            <div className="text-2xl font-serif font-normal text-neutral-900 dark:text-white">
               {metrics.total || 0}
             </div>
-            <div className="text-[11px] text-stone-400">Registered in catalogue</div>
+            <div className="text-[11px] text-neutral-400">Registered in catalogue</div>
           </div>
 
-          <div className="bg-white dark:bg-stone-900 border border-emerald-500/20 dark:border-emerald-500/30 p-4 rounded-xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 text-xs uppercase tracking-wider">
+          <div className="bg-white dark:bg-[#121316] border border-emerald-500/20 dark:border-emerald-500/30 p-4 rounded-md shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 text-xs">
               <span>Approved & Live</span>
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
             </div>
-            <div className="text-2xl font-bold font-serif text-emerald-600 dark:text-emerald-400">
+            <div className="text-2xl font-serif font-normal text-emerald-600 dark:text-emerald-400">
               {metrics.approved || 0}
             </div>
-            <div className="text-[11px] text-stone-400">Visible to customers</div>
+            <div className="text-[11px] text-neutral-400">Visible to customers</div>
           </div>
 
-          <div className="bg-white dark:bg-stone-900 border border-amber-500/20 dark:border-amber-500/30 p-4 rounded-xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-amber-600 dark:text-amber-400 text-xs uppercase tracking-wider">
+          <div className="bg-white dark:bg-[#121316] border border-amber-500/20 dark:border-amber-500/30 p-4 rounded-md shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-amber-600 dark:text-amber-400 text-xs">
               <span>Pending Review</span>
-              <Clock className="w-4 h-4 text-amber-500" />
+              <Clock className="w-3.5 h-3.5 text-amber-500" />
             </div>
-            <div className="text-2xl font-bold font-serif text-amber-600 dark:text-amber-400">
+            <div className="text-2xl font-serif font-normal text-amber-600 dark:text-amber-400">
               {metrics.pending || 0}
             </div>
-            <div className="text-[11px] text-stone-400">Held for admin review</div>
+            <div className="text-[11px] text-neutral-400">Held for admin review</div>
           </div>
 
-          <div className="bg-white dark:bg-stone-900 border border-orange-500/20 dark:border-orange-500/30 p-4 rounded-xl shadow-sm space-y-1">
-            <div className="flex items-center justify-between text-orange-600 dark:text-orange-400 text-xs uppercase tracking-wider">
+          <div className="bg-white dark:bg-[#121316] border border-orange-500/20 dark:border-orange-500/30 p-4 rounded-md shadow-xs space-y-1">
+            <div className="flex items-center justify-between text-orange-600 dark:text-orange-400 text-xs">
               <span>Needs Image</span>
-              <AlertTriangle className="w-4 h-4 text-orange-500" />
+              <AlertTriangle className="w-3.5 h-3.5 text-orange-500" />
             </div>
-            <div className="text-2xl font-bold font-serif text-orange-600 dark:text-orange-400">
+            <div className="text-2xl font-serif font-normal text-orange-600 dark:text-orange-400">
               {metrics.needs_image || 0}
             </div>
-            <div className="text-[11px] text-stone-400">&lt; 250×250 px resolution</div>
+            <div className="text-[11px] text-neutral-400">&lt; 250×250 px resolution</div>
           </div>
 
-          <div className="bg-white dark:bg-stone-900 border border-red-500/20 dark:border-red-500/30 p-4 rounded-xl shadow-sm space-y-1 col-span-2 sm:col-span-1">
-            <div className="flex items-center justify-between text-red-600 dark:text-red-400 text-xs uppercase tracking-wider">
+          <div className="bg-white dark:bg-[#121316] border border-rose-500/20 dark:border-rose-500/30 p-4 rounded-md shadow-xs space-y-1 col-span-2 sm:col-span-1">
+            <div className="flex items-center justify-between text-rose-600 dark:text-rose-400 text-xs">
               <span>Rejected</span>
-              <XCircle className="w-4 h-4 text-red-500" />
+              <XCircle className="w-3.5 h-3.5 text-rose-500" />
             </div>
-            <div className="text-2xl font-bold font-serif text-red-600 dark:text-red-400">
+            <div className="text-2xl font-serif font-normal text-rose-600 dark:text-rose-400">
               {metrics.rejected || 0}
             </div>
-            <div className="text-[11px] text-stone-400">Incompatible assets</div>
+            <div className="text-[11px] text-neutral-400">Incompatible assets</div>
           </div>
 
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-3.5 rounded-xl shadow-sm">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] p-3 rounded-md shadow-xs">
           
           <div className="relative w-full sm:w-72">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" strokeWidth={1.5} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name, SKU or brand..."
-              className="w-full pl-9 pr-3 py-1.5 bg-stone-50 dark:bg-stone-800/80 border border-stone-300 dark:border-stone-700 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+              className="w-full pl-9 pr-3 py-1.5 bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs text-neutral-900 dark:text-white focus:outline-none focus:border-neutral-900 dark:focus:border-white"
             />
           </div>
 
@@ -644,7 +643,7 @@ export default function SupplierDashboard() {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-3 py-1.5 bg-stone-50 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-lg text-xs focus:outline-none text-stone-700 dark:text-stone-300"
+              className="px-3 py-1.5 bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs focus:outline-none text-neutral-700 dark:text-neutral-300"
             >
               <option value="all">All Categories</option>
               {categories.map((c) => (
@@ -657,7 +656,7 @@ export default function SupplierDashboard() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-1.5 bg-stone-50 dark:bg-stone-800 border border-stone-300 dark:border-stone-700 rounded-lg text-xs focus:outline-none text-stone-700 dark:text-stone-300"
+              className="px-3 py-1.5 bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-md text-xs focus:outline-none text-neutral-700 dark:text-neutral-300"
             >
               <option value="all">All Statuses</option>
               <option value="APPROVED">Approved & Live</option>
@@ -671,11 +670,11 @@ export default function SupplierDashboard() {
 
         {/* Bulk Inventory Actions Bar */}
         {selectedProductIds.length > 0 && (
-          <div className="bg-amber-500/10 border border-amber-500/30 p-3.5 rounded-2xl flex flex-wrap items-center justify-between gap-3 shadow-md animate-fadeIn">
-            <div className="flex items-center space-x-2 text-xs font-bold text-amber-900 dark:text-amber-200">
-              <CheckSquare className="w-4 h-4 text-amber-500" />
+          <div className="bg-neutral-100 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-3.5 rounded-md flex flex-wrap items-center justify-between gap-3 shadow-xs animate-fadeIn">
+            <div className="flex items-center space-x-2 text-xs font-medium text-neutral-900 dark:text-neutral-100">
+              <CheckSquare className="w-4 h-4 opacity-60" strokeWidth={1.5} />
               <span>
-                {selectedProductIds.length} {selectedProductIds.length === 1 ? 'Garment' : 'Garments'} Selected
+                {selectedProductIds.length} {selectedProductIds.length === 1 ? 'Garment' : 'Garments'} selected
               </span>
             </div>
 
@@ -683,67 +682,67 @@ export default function SupplierDashboard() {
               <button
                 disabled={bulkUpdating}
                 onClick={() => handleBulkUpdate('in_stock', null)}
-                className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm"
+                className="px-3 py-1.5 bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 text-xs font-medium rounded-md shadow-xs"
               >
-                Set In Stock
+                Set in stock
               </button>
 
               <button
                 disabled={bulkUpdating}
                 onClick={() => handleBulkUpdate('out_of_stock', null)}
-                className="px-3 py-1.5 bg-stone-700 hover:bg-stone-600 text-white text-xs font-semibold rounded-lg shadow-sm"
+                className="px-3 py-1.5 bg-neutral-800 text-white text-xs font-medium rounded-md shadow-xs"
               >
-                Set Out of Stock
+                Set out of stock
               </button>
 
               <button
                 disabled={bulkUpdating}
                 onClick={() => handleBulkUpdate(null, -10)}
-                className="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold rounded-lg shadow-sm"
+                className="px-3 py-1.5 border border-black/[0.08] dark:border-white/[0.08] text-neutral-800 dark:text-neutral-200 text-xs font-medium rounded-md"
               >
-                Apply 10% Discount
+                Apply 10% discount
               </button>
 
               <button
                 onClick={() => setSelectedProductIds([])}
-                className="px-3 py-1.5 border border-stone-400 dark:border-stone-600 text-stone-600 dark:text-stone-300 text-xs font-semibold rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800"
+                className="px-3 py-1.5 border border-black/[0.08] dark:border-white/[0.08] text-neutral-600 dark:text-neutral-400 text-xs font-medium rounded-md hover:bg-neutral-200 dark:hover:bg-[#121316]"
               >
-                Deselect All
+                Deselect all
               </button>
             </div>
           </div>
         )}
 
         {/* Products Table */}
-        <div className="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-sm overflow-hidden">
-          <div className="p-4 border-b border-stone-200 dark:border-stone-800 flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-stone-900 dark:text-white uppercase tracking-wider">
-              Garments Catalogue ({filteredProducts.length})
+        <div className="bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] rounded-md shadow-xs overflow-hidden">
+          <div className="p-4 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
+            <h2 className="text-xs font-medium text-neutral-900 dark:text-white uppercase tracking-wider font-mono">
+              Garments catalogue ({filteredProducts.length})
             </h2>
-            <div className="text-xs text-stone-500">
-              Technical Gate: <span className="font-semibold text-amber-500">≥ 250×250 px</span> (Prefer ≥ 1024 px)
+            <div className="text-xs text-neutral-500 font-mono">
+              Technical gate: <span className="font-medium text-neutral-900 dark:text-neutral-100">≥ 250×250 px</span> (prefer ≥ 1024 px)
             </div>
           </div>
 
           {loading ? (
-            <div className="p-12 text-center text-xs text-stone-500 flex flex-col items-center justify-center space-y-2">
-              <RefreshCw className="w-5 h-5 animate-spin text-amber-500" />
+            <div className="p-12 text-center text-xs text-neutral-500 flex flex-col items-center justify-center space-y-2">
+              <RefreshCw className="w-5 h-5 animate-spin text-neutral-400" />
               <span>Loading registered garments...</span>
             </div>
           ) : filteredProducts.length === 0 ? (
             <div className="p-12 text-center space-y-3">
-              <Package className="w-8 h-8 text-stone-400 mx-auto" />
-              <div className="text-sm font-semibold text-stone-900 dark:text-white">
+              <Package className="w-8 h-8 text-neutral-400 mx-auto opacity-60" strokeWidth={1.5} />
+              <div className="text-sm font-serif font-normal text-neutral-900 dark:text-white">
                 No garments found
               </div>
-              <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                No items match your filter criteria. Click "Add New Garment" to register individual garments or upload a batch CSV feed.
+              <p className="text-xs text-neutral-500 max-w-sm mx-auto">
+                No items match your filter criteria. Click &quot;Add garment&quot; to register individual garments or upload a batch CSV feed.
               </p>
               <button
                 onClick={handleOpenAddModal}
-                className="mt-2 px-4 py-2 bg-stone-900 dark:bg-amber-500 text-white dark:text-stone-950 text-xs font-semibold rounded-lg"
+                className="mt-2 px-4 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-medium rounded-md shadow-xs"
               >
-                + Add First Garment
+                + Add first garment
               </button>
             </div>
           ) : (

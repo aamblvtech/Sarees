@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Sparkles, Menu, X, Sun, Moon } from 'lucide-react';
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Navbar() {
@@ -9,9 +9,10 @@ export default function Navbar() {
   const { isDark, toggleTheme } = useTheme();
 
   const navLinks = [
-    { name: 'Collection', path: '/catalogue' },
-    { name: 'Virtual Fitting Room', path: '/try-on', badge: 'AI Studio' },
-    { name: 'How It Works', path: '/#how-it-works' },
+    { name: 'Catalogue', path: '/catalogue' },
+    { name: 'Virtual Fitting Room', path: '/try-on' },
+    { name: 'Mall Kiosk', path: '/kiosk' },
+    { name: 'Supplier Portal', path: '/supplier/login' },
   ];
 
   const isActive = (path) => {
@@ -20,17 +21,17 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white/95 dark:bg-[#121316]/95 backdrop-blur-md border-b border-black/[0.08] dark:border-white/[0.08] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16">
           
           {/* Brand Identity */}
-          <Link to="/" className="flex flex-col group">
-            <span className="font-serif text-2xl sm:text-3xl tracking-[0.24em] text-slate-900 dark:text-[#FFFFFF] font-semibold transition-opacity group-hover:opacity-85">
+          <Link to="/" className="flex items-baseline space-x-2.5 group">
+            <span className="font-serif text-2xl tracking-[0.16em] text-neutral-900 dark:text-neutral-100 font-normal transition-opacity group-hover:opacity-80">
               VESTRA
             </span>
-            <span className="text-[9px] tracking-[0.2em] text-[#F5AFAF] uppercase font-semibold">
-              Virtual Fitting Studio
+            <span className="text-[11px] font-sans tracking-wide text-neutral-500 dark:text-neutral-400 hidden sm:inline">
+              Virtual Fitting Atelier
             </span>
           </Link>
 
@@ -42,20 +43,15 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   to={link.path}
-                  className={`text-xs tracking-[0.15em] uppercase transition-all py-1.5 relative ${
+                  className={`text-[13px] transition-colors py-1 relative ${
                     active
-                      ? 'text-slate-900 dark:text-[#FFFFFF] font-semibold'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF]'
+                      ? 'text-neutral-900 dark:text-neutral-100 font-medium'
+                      : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100'
                   }`}
                 >
                   <span>{link.name}</span>
-                  {link.badge && (
-                    <span className="ml-2 inline-flex items-center px-1.5 py-0.5 text-[8px] font-mono font-semibold tracking-normal bg-rose-50 text-rose-800 border border-rose-200/80 dark:bg-slate-800 dark:text-[#F5AFAF] dark:border-slate-700 rounded">
-                      {link.badge}
-                    </span>
-                  )}
                   {active && (
-                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#F5AFAF] dark:bg-[#FFFFFF]" />
+                    <span className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-neutral-900 dark:bg-neutral-100" />
                   )}
                 </Link>
               );
@@ -63,151 +59,76 @@ export default function Navbar() {
           </nav>
 
           {/* Actions & Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Theme Toggle Button */}
+          <div className="hidden md:flex items-center space-x-3">
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center space-x-2 px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-white transition-all shadow-xs"
-              title={isDark ? 'Switch to Pure White Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle Theme"
+              className="p-2 rounded-md text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800/60 transition-colors"
+              title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              aria-label="Toggle theme"
             >
               {isDark ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-[10px] uppercase font-mono tracking-wider font-semibold">Light</span>
-                </>
+                <Sun className="w-4 h-4 text-neutral-300" strokeWidth={1.5} />
               ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-slate-800" />
-                  <span className="text-[10px] uppercase font-mono tracking-wider font-semibold">Dark</span>
-                </>
+                <Moon className="w-4 h-4 text-neutral-700" strokeWidth={1.5} />
               )}
             </button>
 
             <Link
-              to="/kiosk"
-              className="text-xs uppercase tracking-wider text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 font-semibold transition-colors px-2 py-1"
-            >
-              Mall Kiosk
-            </Link>
-
-            <Link
-              to="/supplier/login"
-              className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
-            >
-              Supplier Portal
-            </Link>
-
-            <Link
-              to="/admin/dashboard"
-              className="text-xs uppercase tracking-wider text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-[#FFFFFF] font-medium transition-colors px-2 py-1"
-            >
-              Admin Portal
-            </Link>
-
-            <Link
               to="/try-on"
-              className="inline-flex items-center space-x-2 bg-white text-slate-900 hover:bg-rose-50/50 hover:border-rose-300 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 px-5 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all duration-200 border border-slate-300 dark:border-white shadow-xs group"
+              className="h-9 px-4 rounded-md bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-white dark:text-neutral-900 text-xs font-medium inline-flex items-center justify-center transition-colors"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
-              <span>Try Virtual Fitting</span>
+              Start Try-On
             </Link>
           </div>
 
-          {/* Mobile Actions */}
+          {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-2">
             <button
               type="button"
               onClick={toggleTheme}
-              className="flex items-center space-x-1 px-2.5 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200"
-              aria-label="Toggle Theme"
+              className="p-2 text-neutral-600 dark:text-neutral-400"
+              aria-label="Toggle theme"
             >
               {isDark ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-amber-400" />
-                  <span className="text-[9px] uppercase font-mono font-semibold">Light</span>
-                </>
+                <Sun className="w-4 h-4" strokeWidth={1.5} />
               ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-slate-800" />
-                  <span className="text-[9px] uppercase font-mono font-semibold">Dark</span>
-                </>
+                <Moon className="w-4 h-4" strokeWidth={1.5} />
               )}
             </button>
-
-            <Link
-              to="/try-on"
-              className="p-2 text-slate-900 dark:text-[#FFFFFF]"
-              title="Virtual Fitting"
-            >
-              <Sparkles className="w-5 h-5 text-[#F5AFAF]" />
-            </Link>
-
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-900 dark:text-[#FFFFFF] border border-slate-200 dark:border-slate-800 rounded"
-              aria-label="Toggle Menu"
+              className="p-2 text-neutral-700 dark:text-neutral-300"
+              aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" strokeWidth={1.5} /> : <Menu className="w-5 h-5" strokeWidth={1.5} />}
             </button>
           </div>
 
         </div>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-4 pb-6 space-y-3 animate-fadeIn">
-          {navLinks.map((link) => {
-            const active = isActive(link.path);
-            return (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block text-xs uppercase tracking-widest py-2.5 px-3 rounded transition-colors ${
-                  active
-                    ? 'bg-rose-50 text-slate-900 border border-rose-200 dark:bg-white dark:text-[#000000] font-semibold'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span>{link.name}</span>
-                  {link.badge && (
-                    <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-[#FBEFEF] border border-[#F9DFDF] text-slate-800">
-                      {link.badge}
-                    </span>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
-
-          <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex flex-col space-y-2">
+        <div className="md:hidden border-t border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#121316] px-4 pt-3 pb-6 space-y-3">
+          {navLinks.map((link) => (
             <Link
-              to="/supplier/login"
+              key={link.name}
+              to={link.path}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-xs uppercase tracking-wider py-2 px-3 text-slate-600 dark:text-slate-400 font-medium"
+              className="block py-2 text-sm text-neutral-800 dark:text-neutral-200 hover:text-neutral-900 dark:hover:text-white"
             >
-              Supplier Portal
+              {link.name}
             </Link>
-
-            <Link
-              to="/admin/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-xs uppercase tracking-wider py-2 px-3 text-slate-600 dark:text-slate-400 font-medium"
-            >
-              Admin Portal
-            </Link>
-
+          ))}
+          <div className="pt-2">
             <Link
               to="/try-on"
               onClick={() => setMobileMenuOpen(false)}
-              className="w-full text-center py-3 bg-[#000000] text-[#FFFFFF] dark:bg-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-widest font-semibold flex items-center justify-center space-x-2"
+              className="w-full h-10 rounded-md bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 text-xs font-medium flex items-center justify-center"
             >
-              <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
-              <span>Launch Virtual Fitting</span>
+              Start Try-On
             </Link>
           </div>
         </div>

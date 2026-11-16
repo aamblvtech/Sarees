@@ -943,11 +943,11 @@ export default function AdminDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-white dark:bg-[#0D0E10] text-slate-900 dark:text-slate-100 py-8 px-4 sm:px-6 lg:px-8 transition-colors">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Top Atelier Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-[#F9DFDF] dark:border-slate-800 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 border-b border-black/[0.08] dark:border-white/[0.08] gap-4">
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-serif text-2xl sm:text-3xl font-semibold tracking-wider text-slate-900 dark:text-white">
@@ -958,7 +958,7 @@ export default function AdminDashboard() {
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Signed in as <strong>{admin?.name || 'Administrator'}</strong> ({admin?.email}) &bull; Role: <span className="uppercase text-[#F5AFAF] font-semibold">{admin?.role || 'superadmin'}</span>
+              Signed in as <strong>{admin?.name || 'Administrator'}</strong> ({admin?.email}) &bull; Role: <span className="uppercase text-rose-600 dark:text-rose-400 font-semibold">{admin?.role || 'superadmin'}</span>
             </p>
           </div>
 
@@ -969,7 +969,7 @@ export default function AdminDashboard() {
                 disabled={reportExporting}
                 className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 text-xs uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors shadow-sm"
               >
-                <Download className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                <Download className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                 <span>{reportExporting ? 'Exporting...' : 'Export Reports (CSV)'}</span>
               </button>
 
@@ -1004,10 +1004,10 @@ export default function AdminDashboard() {
             <Link
               to="/catalogue"
               target="_blank"
-              className="px-3.5 py-2 border border-[#F9DFDF] dark:border-slate-800 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors"
+              className="px-3.5 py-2 border border-black/[0.08] dark:border-white/[0.08] text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors"
             >
               <span>View Public Boutique</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#F5AFAF]" />
+              <ExternalLink className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </Link>
 
             <button
@@ -1023,10 +1023,10 @@ export default function AdminDashboard() {
         {/* Overview Metric Cards with Real Database Values */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           
-          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+          <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-1">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
               <span className="text-[10px] uppercase tracking-widest font-semibold">Total Products</span>
-              <Package className="w-3.5 h-3.5 text-[#F5AFAF]" />
+              <Package className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </div>
             <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {stats?.totalProducts ?? products.length}
@@ -1062,10 +1062,10 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+          <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-1">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
               <span className="text-[10px] uppercase tracking-widest font-semibold">Try-On Requests</span>
-              <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
+              <Sparkles className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </div>
             <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {stats?.totalTryonRequests ?? 0}
@@ -1075,10 +1075,10 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+          <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-1">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
               <span className="text-[10px] uppercase tracking-widest font-semibold">Credits Used</span>
-              <DollarSign className="w-3.5 h-3.5 text-[#F5AFAF]" />
+              <DollarSign className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </div>
             <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {stats?.creditsConsumed ?? 0}
@@ -1088,10 +1088,10 @@ export default function AdminDashboard() {
             </p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-1">
+          <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-1">
             <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
               <span className="text-[10px] uppercase tracking-widest font-semibold">Categories</span>
-              <Layers className="w-3.5 h-3.5 text-[#F5AFAF]" />
+              <Layers className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
             </div>
             <p className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
               {categories.length}
@@ -1104,7 +1104,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 border-b border-[#F9DFDF] dark:border-slate-800 overflow-x-auto">
+        <div className="flex items-center space-x-2 border-b border-black/[0.08] dark:border-white/[0.08] overflow-x-auto">
           <button
             onClick={() => setActiveTab('inventory')}
             className={`px-5 py-3 text-xs uppercase tracking-widest font-semibold transition-all border-b-2 flex items-center space-x-2 flex-shrink-0 ${
@@ -1113,7 +1113,7 @@ export default function AdminDashboard() {
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
             }`}
           >
-            <Package className="w-4 h-4 text-[#F5AFAF]" />
+            <Package className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>Catalogue Inventory ({products.length})</span>
           </button>
 
@@ -1128,7 +1128,7 @@ export default function AdminDashboard() {
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
             }`}
           >
-            <Layers className="w-4 h-4 text-[#F5AFAF]" />
+            <Layers className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>External Sources ({sourcesOverview.length || 6})</span>
           </button>
 
@@ -1140,7 +1140,7 @@ export default function AdminDashboard() {
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
             }`}
           >
-            <Globe className="w-4 h-4 text-[#F5AFAF]" />
+            <Globe className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>Myntra Reference Import</span>
           </button>
 
@@ -1155,7 +1155,7 @@ export default function AdminDashboard() {
                 : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 hover:bg-slate-100/50'
             }`}
           >
-            <FileText className="w-4 h-4 text-[#F5AFAF]" />
+            <FileText className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>Platform Audit Logs</span>
           </button>
         </div>
@@ -1163,7 +1163,7 @@ export default function AdminDashboard() {
         {activeTab === 'inventory' ? (
           <>
             {/* Action Header & Search */}
-            <div className="bg-white dark:bg-slate-900 p-5 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-5 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -1206,14 +1206,14 @@ export default function AdminDashboard() {
                     onClick={handleOpenAddModal}
                     className="px-5 py-2 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all shadow flex items-center space-x-2"
                   >
-                    <Plus className="w-4 h-4 text-[#F5AFAF]" />
+                    <Plus className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                     <span>Add New Garment</span>
                   </button>
                 </div>
               </div>
 
               {/* Filter Bar */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-3 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-3 pt-3 border-t border-black/[0.08] dark:border-white/[0.08]">
                 
                 <div className="relative xl:col-span-2">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -1222,14 +1222,14 @@ export default function AdminDashboard() {
                     placeholder="Search name, SKU, brand, URL..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2 focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2 focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
 
                 <select
                   value={selectedApprovalStatus}
                   onChange={(e) => setSelectedApprovalStatus(e.target.value)}
-                  className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                  className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
                 >
                   <option value="all">All Statuses</option>
                   <option value="AI_READY">AI Ready</option>
@@ -1243,7 +1243,7 @@ export default function AdminDashboard() {
                 <select
                   value={selectedImageStatus}
                   onChange={(e) => setSelectedImageStatus(e.target.value)}
-                  className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
+                  className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
                 >
                   <option value="all">All Image Statuses</option>
                   <option value="needs_replacement">⚠️ Needs Replacement (&lt;250px)</option>
@@ -1258,7 +1258,7 @@ export default function AdminDashboard() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
             >
               <option value="all">All Categories ({categories.length})</option>
               {categories.map((c) => (
@@ -1271,7 +1271,7 @@ export default function AdminDashboard() {
             <select
               value={selectedGender}
               onChange={(e) => setSelectedGender(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
             >
               <option value="all">All Genders</option>
               <option value="women">Women</option>
@@ -1282,7 +1282,7 @@ export default function AdminDashboard() {
             <select
               value={selectedCompatibility}
               onChange={(e) => setSelectedCompatibility(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
             >
               <option value="all">All Compatibility</option>
               <option value="supported">AI Try-On Ready</option>
@@ -1294,7 +1294,7 @@ export default function AdminDashboard() {
             <select
               value={selectedStock}
               onChange={(e) => setSelectedStock(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
             >
               <option value="all">All Stock Statuses</option>
               <option value="in_stock">In Stock</option>
@@ -1305,7 +1305,7 @@ export default function AdminDashboard() {
             <select
               value={selectedReview}
               onChange={(e) => setSelectedReview(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white"
             >
               <option value="all">All Review Status</option>
               <option value="needs_review">Needs Admin Review ⚠️</option>
@@ -1315,7 +1315,7 @@ export default function AdminDashboard() {
             <select
               value={selectedSource}
               onChange={(e) => setSelectedSource(e.target.value)}
-              className="bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
+              className="bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2 uppercase tracking-wider focus:outline-none focus:border-[#000000] dark:focus:border-white font-medium"
             >
               <option value="all">All Sources</option>
               <option value="atelier">Atelier (In-House)</option>
@@ -1331,11 +1331,11 @@ export default function AdminDashboard() {
         </div>
 
         {/* Product Table */}
-        <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] shadow-sm overflow-hidden">
           
           {loading ? (
             <div className="p-16 text-center space-y-3">
-              <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#F5AFAF]" />
+              <RefreshCw className="w-8 h-8 animate-spin mx-auto text-rose-600 dark:text-rose-400" />
               <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Querying PostgreSQL Inventory...</p>
             </div>
           ) : filteredProducts.length === 0 ? (
@@ -1362,7 +1362,7 @@ export default function AdminDashboard() {
               {selectedProductIds.length > 0 && (
                 <div className="bg-slate-900 text-white px-5 py-3 flex items-center justify-between border-b border-slate-700 animate-fadeIn">
                   <div className="flex items-center space-x-2 text-xs">
-                    <CheckCheck className="w-4 h-4 text-[#F5AFAF]" />
+                    <CheckCheck className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                     <span><strong>{selectedProductIds.length}</strong> garments selected</span>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -1386,7 +1386,7 @@ export default function AdminDashboard() {
 
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-b border-[#F9DFDF] dark:border-slate-800 text-[10px] uppercase tracking-widest">
+                  <tr className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white border-b border-black/[0.08] dark:border-white/[0.08] text-[10px] uppercase tracking-widest">
                     <th className="py-3.5 px-3 w-8">
                       <input
                         type="checkbox"
@@ -1406,7 +1406,7 @@ export default function AdminDashboard() {
                     <th className="py-3.5 px-4 font-semibold text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800 text-xs">
+                <tbody className="divide-y divide-black/[0.08] dark:divide-white/[0.08] text-xs">
                   {filteredProducts.map((p) => {
                     const active = p.isActive ?? p.is_active;
                     const img = p.primaryImage || p.primary_image_url;
@@ -1434,7 +1434,7 @@ export default function AdminDashboard() {
                         {/* Thumbnail & Image Resolution */}
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2.5">
-                            <div className="w-12 h-16 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden flex-shrink-0 relative group">
+                            <div className="w-12 h-16 bg-slate-100 dark:bg-slate-800 border border-black/[0.08] dark:border-white/[0.08] overflow-hidden flex-shrink-0 relative group">
                               {img ? (
                                 <img src={img} alt={p.name} className="w-full h-full object-cover" />
                               ) : (
@@ -1486,7 +1486,7 @@ export default function AdminDashboard() {
                               </div>
                               <button
                                 onClick={() => handleOpenReplaceModal(p)}
-                                className="text-[9px] text-[#F5AFAF] hover:text-[#000000] dark:hover:text-white underline font-semibold mt-0.5 block text-left"
+                                className="text-[9px] text-rose-600 dark:text-rose-400 hover:text-[#000000] dark:hover:text-white underline font-semibold mt-0.5 block text-left"
                               >
                                 Replace Image
                               </button>
@@ -1497,7 +1497,7 @@ export default function AdminDashboard() {
                         {/* Title & SKU */}
                         <td className="py-3 px-4">
                           <div className="flex items-center space-x-2">
-                            <p className="font-serif font-medium text-sm text-slate-900 dark:text-white hover:text-[#F5AFAF] transition-colors">
+                            <p className="font-serif font-medium text-sm text-slate-900 dark:text-white hover:text-rose-600 dark:text-rose-400 transition-colors">
                               {p.name}
                             </p>
                             {(p.needsAdminReview ?? p.needs_admin_review) && (
@@ -1558,7 +1558,7 @@ export default function AdminDashboard() {
                         {/* Taxonomy */}
                         <td className="py-3 px-4">
                           <p className="font-medium text-slate-900 dark:text-white">{p.categoryName || 'Apparel'}</p>
-                          <span className="inline-block mt-0.5 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 text-[9px] uppercase tracking-wider text-slate-600 dark:text-slate-300 font-semibold">
+                          <span className="inline-block mt-0.5 px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 border border-black/[0.08] dark:border-white/[0.08] text-[9px] uppercase tracking-wider text-slate-600 dark:text-slate-300 font-semibold">
                             {subcat.replace('_', ' ')}
                           </span>
                         </td>
@@ -1747,7 +1747,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             
             {/* Header & Policy Notice */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="inline-flex items-center space-x-2 px-2.5 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-[10px] uppercase font-bold tracking-widest mb-2">
@@ -1769,7 +1769,7 @@ export default function AdminDashboard() {
                     className="px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
                     title="Refresh connection statuses and sync metrics"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 ${sourcesLoading ? 'animate-spin text-[#F5AFAF]' : 'text-slate-500'}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 ${sourcesLoading ? 'animate-spin text-rose-600 dark:text-rose-400' : 'text-slate-500'}`} />
                     <span>Refresh</span>
                   </button>
 
@@ -1781,7 +1781,7 @@ export default function AdminDashboard() {
                     }}
                     className="px-3.5 py-2 border border-[#000000] dark:border-white text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
                   >
-                    <FileSpreadsheet className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                     <span>Upload Supplier CSV</span>
                   </button>
 
@@ -1792,7 +1792,7 @@ export default function AdminDashboard() {
                     }}
                     className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all shadow flex items-center space-x-2"
                   >
-                    <Plus className="w-4 h-4 text-[#F5AFAF]" />
+                    <Plus className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                     <span>Register Supplier</span>
                   </button>
                 </div>
@@ -1840,7 +1840,7 @@ export default function AdminDashboard() {
 
             {/* Source Aggregate Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
                 <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Total Connectors</p>
                 <div className="flex items-baseline space-x-2 mt-1">
                   <span className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
@@ -1852,7 +1852,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
                 <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">External Products Ingested</p>
                 <div className="flex items-baseline space-x-2 mt-1">
                   <span className="font-serif text-2xl font-bold text-slate-900 dark:text-white">
@@ -1862,7 +1862,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
                 <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Awaiting AI Inspection</p>
                 <div className="flex items-baseline space-x-2 mt-1">
                   <span className="font-serif text-2xl font-bold text-amber-600 dark:text-amber-400">
@@ -1872,7 +1872,7 @@ export default function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-slate-900 p-4 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
+              <div className="bg-white dark:bg-slate-900 p-4 border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
                 <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400">Certified Suppliers & Mills</p>
                 <div className="flex items-baseline space-x-2 mt-1">
                   <span className="font-serif text-2xl font-bold text-indigo-600 dark:text-indigo-400">
@@ -1919,14 +1919,14 @@ export default function AdminDashboard() {
                 return (
                   <div
                     key={src.slug}
-                    className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+                    className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] shadow-sm flex flex-col justify-between hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
                   >
                     {/* Top Content */}
                     <div className="p-5 space-y-4">
                       {/* Source Title & Icon */}
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 rounded-sm bg-rose-50 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-700 flex items-center justify-center shrink-0">
+                          <div className="w-10 h-10 rounded-sm bg-rose-50 dark:bg-slate-800 border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-center shrink-0">
                             <SourceIcon className="w-5 h-5 text-slate-800 dark:text-slate-200" />
                           </div>
                           <div>
@@ -1986,7 +1986,7 @@ export default function AdminDashboard() {
                       )}
 
                       {/* Live Ingestion Metrics */}
-                      <div className="grid grid-cols-4 gap-1 pt-3 border-t border-[#F9DFDF] dark:border-slate-800 text-center">
+                      <div className="grid grid-cols-4 gap-1 pt-3 border-t border-black/[0.08] dark:border-white/[0.08] text-center">
                         <div className="p-1 bg-slate-50 dark:bg-slate-950/40">
                           <p className="text-[9px] text-slate-400 uppercase tracking-widest">Total</p>
                           <p className="font-serif font-bold text-sm text-slate-900 dark:text-white">
@@ -2015,13 +2015,13 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Card Actions Footer */}
-                    <div className="p-4 bg-slate-50/70 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between gap-2">
+                    <div className="p-4 bg-slate-50/70 dark:bg-slate-950/40 border-t border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-2">
                       <button
                         onClick={() => handleTestSource(src.slug)}
                         disabled={isTesting}
                         className="px-3 py-1.5 border border-slate-300 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
                       >
-                        <RefreshCw className={`w-3 h-3 ${isTesting ? 'animate-spin text-[#F5AFAF]' : 'text-slate-400'}`} />
+                        <RefreshCw className={`w-3 h-3 ${isTesting ? 'animate-spin text-rose-600 dark:text-rose-400' : 'text-slate-400'}`} />
                         <span>{isTesting ? 'Testing...' : 'Test Adapter'}</span>
                       </button>
 
@@ -2032,7 +2032,7 @@ export default function AdminDashboard() {
                             onClick={() => handleOpenSearchModal(src)}
                             className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
                           >
-                            <Search className="w-3 h-3 text-[#F5AFAF]" />
+                            <Search className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                             <span>Search</span>
                           </button>
                         )}
@@ -2046,7 +2046,7 @@ export default function AdminDashboard() {
                             }}
                             className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
                           >
-                            <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                            <Upload className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                             <span>Upload CSV</span>
                           </button>
                         )}
@@ -2056,7 +2056,7 @@ export default function AdminDashboard() {
                             onClick={() => setActiveTab('myntra_import')}
                             className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
                           >
-                            <Globe className="w-3 h-3 text-[#F5AFAF]" />
+                            <Globe className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                             <span>Import Tab</span>
                           </button>
                         )}
@@ -2066,7 +2066,7 @@ export default function AdminDashboard() {
                             onClick={handleOpenAddModal}
                             className="px-3 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1"
                           >
-                            <Plus className="w-3 h-3 text-[#F5AFAF]" />
+                            <Plus className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                             <span>Add SKU</span>
                           </button>
                         )}
@@ -2074,7 +2074,7 @@ export default function AdminDashboard() {
                         {/* Review / View garments in inventory */}
                         <button
                           onClick={() => handleFilterBySource(src.slug)}
-                          className="px-2.5 py-1.5 border border-[#F9DFDF] dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors"
+                          className="px-2.5 py-1.5 border border-black/[0.08] dark:border-white/[0.08] hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors"
                           title="View garments in inventory"
                         >
                           View ({src.productsImported || 0})
@@ -2087,7 +2087,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Certified Local Wholesalers & Mills Directory */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
                   <h3 className="font-serif text-xl text-slate-900 dark:text-white">
@@ -2101,7 +2101,7 @@ export default function AdminDashboard() {
                   onClick={() => setIsAddSupplierModalOpen(true)}
                   className="px-3.5 py-1.5 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5 self-start sm:self-auto"
                 >
-                  <Building2 className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                  <Building2 className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                   <span>Register New Mill</span>
                 </button>
               </div>
@@ -2109,7 +2109,7 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
-                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                    <tr className="border-b border-black/[0.08] dark:border-white/[0.08] text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
                       <th className="py-2.5 px-4 font-semibold">Supplier Code</th>
                       <th className="py-2.5 px-4 font-semibold">Company / Brand</th>
                       <th className="py-2.5 px-4 font-semibold">Location</th>
@@ -2118,7 +2118,7 @@ export default function AdminDashboard() {
                       <th className="py-2.5 px-4 font-semibold text-right">Admin Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                  <tbody className="divide-y divide-black/[0.08] dark:divide-white/[0.08]">
                     {suppliersList.map((sup) => {
                       const compName = sup.company_name || sup.name;
                       const status = (sup.status || 'active').toLowerCase();
@@ -2200,7 +2200,7 @@ export default function AdminDashboard() {
                               }}
                               className="px-2.5 py-1 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-[11px] uppercase tracking-wider font-semibold transition-colors inline-flex items-center space-x-1 rounded"
                             >
-                              <Upload className="w-3 h-3 text-[#F5AFAF]" />
+                              <Upload className="w-3 h-3 text-rose-600 dark:text-rose-400" />
                               <span>Feed CSV</span>
                             </button>
                           </td>
@@ -2220,7 +2220,7 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             
             {/* Header & Atelier Notice */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <div className="inline-flex items-center space-x-2 px-2.5 py-1 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-900 text-[10px] uppercase font-bold tracking-widest mb-2">
@@ -2240,7 +2240,7 @@ export default function AdminDashboard() {
                     onClick={handleDownloadTemplate}
                     className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-white text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5 border border-slate-300 dark:border-slate-700"
                   >
-                    <Download className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                    <Download className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                     <span>Download CSV Template</span>
                   </button>
                 </div>
@@ -2258,7 +2258,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Sub-Tabs: Single vs CSV */}
-              <div className="flex items-center space-x-2 border-b border-[#F9DFDF] dark:border-slate-800 pt-2">
+              <div className="flex items-center space-x-2 border-b border-black/[0.08] dark:border-white/[0.08] pt-2">
                 <button
                   onClick={() => setImportSubTab('single')}
                   className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all border-b-2 flex items-center space-x-1.5 ${
@@ -2287,7 +2287,7 @@ export default function AdminDashboard() {
 
             {/* SUB-TAB 1: SINGLE PRODUCT MANUAL REFERENCE */}
             {importSubTab === 'single' && (
-              <form onSubmit={handleSingleMyntraSubmit} className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-6">
+              <form onSubmit={handleSingleMyntraSubmit} className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-6">
                 
                 {singleImportSuccess && (
                   <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-200 flex items-center space-x-2">
@@ -2318,7 +2318,7 @@ export default function AdminDashboard() {
                         placeholder="https://www.myntra.com/sarees/brand/product-name/12345/buy"
                         value={myntraSingleForm.myntraUrl}
                         onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, myntraUrl: e.target.value })}
-                        className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2.5 font-mono focus:outline-none focus:border-black dark:focus:border-white"
+                        className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2.5 font-mono focus:outline-none focus:border-black dark:focus:border-white"
                       />
                     </div>
                   </div>
@@ -2334,7 +2334,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. Sangria, Anouk, KALINI, nevash fashion"
                       value={myntraSingleForm.brand}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, brand: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2349,7 +2349,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. Women Printed Pure Silk Saree"
                       value={myntraSingleForm.productTitle}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, productTitle: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2365,7 +2365,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. 1320"
                       value={myntraSingleForm.sellingPrice}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, sellingPrice: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2380,7 +2380,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. 1749"
                       value={myntraSingleForm.originalPrice}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, originalPrice: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2392,7 +2392,7 @@ export default function AdminDashboard() {
                     <select
                       value={myntraSingleForm.categoryId}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, categoryId: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
                     >
                       {categories.map((c) => (
                         <option key={c.id} value={c.id}>{c.name}</option>
@@ -2410,7 +2410,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. sarees, silk_sarees, lehengas"
                       value={myntraSingleForm.subcategory}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, subcategory: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2422,7 +2422,7 @@ export default function AdminDashboard() {
                     <select
                       value={myntraSingleForm.gender}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, gender: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
                     >
                       <option value="women">Women</option>
                       <option value="men">Men</option>
@@ -2438,7 +2438,7 @@ export default function AdminDashboard() {
                     <select
                       value={myntraSingleForm.garmentType}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, garmentType: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white uppercase tracking-wider"
                     >
                       <option value="saree">Saree (6-Yard Unstitched Drape)</option>
                       <option value="full_body">Full Body Outfit / Dress</option>
@@ -2457,7 +2457,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. Cobalt Blue, Crimson Red, Gold"
                       value={myntraSingleForm.colour}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, colour: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2470,7 +2470,7 @@ export default function AdminDashboard() {
                       placeholder="e.g. Pure Silk, Art Silk, Chanderi Cotton, Georgette"
                       value={myntraSingleForm.fabric}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, fabric: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
@@ -2482,7 +2482,7 @@ export default function AdminDashboard() {
                     <select
                       value={myntraSingleForm.permissionStatus}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, permissionStatus: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white font-semibold"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white font-semibold"
                     >
                       <option value="authorized">Authorized / Direct Brand Partner</option>
                       <option value="commercial_license">Commercial License (Licensed Studio Photography)</option>
@@ -2501,14 +2501,14 @@ export default function AdminDashboard() {
                       placeholder="e.g. Brand agreement #2026-SR, Shutterstock License #48912"
                       value={myntraSingleForm.permissionNotes}
                       onChange={(e) => setMyntraSingleForm({ ...myntraSingleForm, permissionNotes: e.target.value })}
-                      className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                      className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white px-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                     />
                   </div>
 
                 </div>
 
                 {/* Multi-View Image Uploads */}
-                <div className="pt-4 border-t border-[#F9DFDF] dark:border-slate-800 space-y-4">
+                <div className="pt-4 border-t border-black/[0.08] dark:border-white/[0.08] space-y-4">
                   <div>
                     <h4 className="font-serif text-lg text-slate-900 dark:text-white">
                       Authorised Garment View Photographs
@@ -2521,7 +2521,7 @@ export default function AdminDashboard() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     
                     {/* Front / Primary */}
-                    <div className="p-4 border-2 border-dashed border-[#F9DFDF] dark:border-slate-800 rounded bg-[#FCF8F8] dark:bg-slate-950 space-y-2 text-center">
+                    <div className="p-4 border-2 border-dashed border-black/[0.08] dark:border-white/[0.08] rounded bg-neutral-50 dark:bg-[#17181C] space-y-2 text-center">
                       <span className="text-[10px] uppercase font-bold tracking-wider text-rose-600 dark:text-rose-400">Front View (Primary) *</span>
                       <input
                         type="file"
@@ -2535,7 +2535,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Back View */}
-                    <div className="p-4 border-2 border-dashed border-[#F9DFDF] dark:border-slate-800 rounded bg-[#FCF8F8] dark:bg-slate-950 space-y-2 text-center">
+                    <div className="p-4 border-2 border-dashed border-black/[0.08] dark:border-white/[0.08] rounded bg-neutral-50 dark:bg-[#17181C] space-y-2 text-center">
                       <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Back View (Optional)</span>
                       <input
                         type="file"
@@ -2549,7 +2549,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Side View */}
-                    <div className="p-4 border-2 border-dashed border-[#F9DFDF] dark:border-slate-800 rounded bg-[#FCF8F8] dark:bg-slate-950 space-y-2 text-center">
+                    <div className="p-4 border-2 border-dashed border-black/[0.08] dark:border-white/[0.08] rounded bg-neutral-50 dark:bg-[#17181C] space-y-2 text-center">
                       <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Side View (Optional)</span>
                       <input
                         type="file"
@@ -2563,7 +2563,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Model View */}
-                    <div className="p-4 border-2 border-dashed border-[#F9DFDF] dark:border-slate-800 rounded bg-[#FCF8F8] dark:bg-slate-950 space-y-2 text-center">
+                    <div className="p-4 border-2 border-dashed border-black/[0.08] dark:border-white/[0.08] rounded bg-neutral-50 dark:bg-[#17181C] space-y-2 text-center">
                       <span className="text-[10px] uppercase font-bold tracking-wider text-slate-500">Model View (Optional)</span>
                       <input
                         type="file"
@@ -2580,13 +2580,13 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Form Submit */}
-                <div className="flex items-center justify-end space-x-3 pt-4 border-t border-[#F9DFDF] dark:border-slate-800">
+                <div className="flex items-center justify-end space-x-3 pt-4 border-t border-black/[0.08] dark:border-white/[0.08]">
                   <button
                     type="submit"
                     disabled={singleImportLoading}
                     className="px-6 py-3 bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all shadow flex items-center space-x-2"
                   >
-                    <Plus className="w-4 h-4 text-[#F5AFAF]" />
+                    <Plus className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                     <span>{singleImportLoading ? 'Validating & Saving...' : 'Save Product as Draft for Review'}</span>
                   </button>
                 </div>
@@ -2596,15 +2596,15 @@ export default function AdminDashboard() {
 
             {/* SUB-TAB 2: CSV BULK IMPORT */}
             {importSubTab === 'csv' && (
-              <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-6">
+              <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-6">
                 
                 {/* Format Guidance Card */}
-                <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 space-y-2 text-xs">
+                <div className="p-4 bg-slate-50 dark:bg-slate-950 border border-black/[0.08] dark:border-white/[0.08] space-y-2 text-xs">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-slate-900 dark:text-white">Required 12 CSV Columns (in order):</span>
                     <button
                       onClick={handleDownloadTemplate}
-                      className="text-xs text-[#F5AFAF] hover:text-black dark:hover:text-white underline font-semibold flex items-center space-x-1"
+                      className="text-xs text-rose-600 dark:text-rose-400 hover:text-black dark:hover:text-white underline font-semibold flex items-center space-x-1"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>Download Sample CSV</span>
@@ -2642,8 +2642,8 @@ export default function AdminDashboard() {
                   </div>
 
                   {csvTabMode === 'upload' ? (
-                    <div className="p-8 border-2 border-dashed border-[#F9DFDF] dark:border-slate-800 rounded bg-[#FCF8F8] dark:bg-slate-950 text-center space-y-2">
-                      <FileSpreadsheet className="w-8 h-8 mx-auto text-[#F5AFAF]" />
+                    <div className="p-8 border-2 border-dashed border-black/[0.08] dark:border-white/[0.08] rounded bg-neutral-50 dark:bg-[#17181C] text-center space-y-2">
+                      <FileSpreadsheet className="w-8 h-8 mx-auto text-rose-600 dark:text-rose-400" />
                       <p className="text-xs font-semibold text-slate-900 dark:text-white">Select a valid CSV file</p>
                       <input
                         type="file"
@@ -2662,7 +2662,7 @@ export default function AdminDashboard() {
                         placeholder="Paste CSV rows here including headers..."
                         value={csvText}
                         onChange={(e) => setCsvText(e.target.value)}
-                        className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs text-slate-900 dark:text-white p-3 font-mono focus:outline-none focus:border-black dark:focus:border-white"
+                        className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white p-3 font-mono focus:outline-none focus:border-black dark:focus:border-white"
                       />
                     </div>
                   )}
@@ -2674,7 +2674,7 @@ export default function AdminDashboard() {
                       disabled={csvPreviewLoading}
                       className="px-5 py-2.5 bg-slate-900 hover:bg-black text-white text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-2"
                     >
-                      <Search className="w-4 h-4 text-[#F5AFAF]" />
+                      <Search className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                       <span>{csvPreviewLoading ? 'Validating Rows...' : 'Parse & Validate Rows'}</span>
                     </button>
                   </div>
@@ -2697,7 +2697,7 @@ export default function AdminDashboard() {
 
                 {/* Preview Table & Summary */}
                 {csvPreviewData && (
-                  <div className="space-y-4 pt-4 border-t border-[#F9DFDF] dark:border-slate-800 animate-fadeIn">
+                  <div className="space-y-4 pt-4 border-t border-black/[0.08] dark:border-white/[0.08] animate-fadeIn">
                     
                     {/* Summary Statistics */}
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -2720,7 +2720,7 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Commit Action */}
-                    <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-950 p-4 border border-[#F9DFDF] dark:border-slate-800">
+                    <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-950 p-4 border border-black/[0.08] dark:border-white/[0.08]">
                       <div>
                         <p className="text-xs font-semibold text-slate-900 dark:text-white">
                           Ready to commit <strong>{csvPreviewData.validCount}</strong> validated rows to PostgreSQL.
@@ -2739,10 +2739,10 @@ export default function AdminDashboard() {
                     </div>
 
                     {/* Validation Table */}
-                    <div className="overflow-x-auto border border-[#F9DFDF] dark:border-slate-800">
+                    <div className="overflow-x-auto border border-black/[0.08] dark:border-white/[0.08]">
                       <table className="w-full text-left text-xs border-collapse">
                         <thead>
-                          <tr className="bg-slate-100 dark:bg-slate-950 text-[10px] uppercase tracking-wider font-semibold border-b border-[#F9DFDF] dark:border-slate-800">
+                          <tr className="bg-slate-100 dark:bg-slate-950 text-[10px] uppercase tracking-wider font-semibold border-b border-black/[0.08] dark:border-white/[0.08]">
                             <th className="p-2.5">Row</th>
                             <th className="p-2.5">Brand & Name</th>
                             <th className="p-2.5">Myntra Reference URL</th>
@@ -2817,7 +2817,7 @@ export default function AdminDashboard() {
           /* ============================================================== */
           <div className="space-y-6">
             {/* Header */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="inline-flex items-center space-x-2 px-2.5 py-1 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300 border border-slate-300 dark:border-slate-700 text-[10px] uppercase font-bold tracking-widest mb-2">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -2837,14 +2837,14 @@ export default function AdminDashboard() {
                   disabled={auditLoading}
                   className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${auditLoading ? 'animate-spin text-[#F5AFAF]' : 'text-slate-500'}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 ${auditLoading ? 'animate-spin text-rose-600 dark:text-rose-400' : 'text-slate-500'}`} />
                   <span>Refresh Logs</span>
                 </button>
               </div>
             </div>
 
             {/* Admin Audit Trail */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               <h3 className="font-serif text-lg text-slate-900 dark:text-white flex items-center space-x-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>Administrator Actions</span>
@@ -2852,7 +2852,7 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
-                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                    <tr className="border-b border-black/[0.08] dark:border-white/[0.08] text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
                       <th className="py-2.5 px-4 font-semibold">Timestamp</th>
                       <th className="py-2.5 px-4 font-semibold">Admin</th>
                       <th className="py-2.5 px-4 font-semibold">Action</th>
@@ -2861,7 +2861,7 @@ export default function AdminDashboard() {
                       <th className="py-2.5 px-4 font-semibold">IP Address</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                  <tbody className="divide-y divide-black/[0.08] dark:divide-white/[0.08]">
                     {auditLogs.adminLogs?.length === 0 ? (
                       <tr>
                         <td colSpan="6" className="py-6 text-center text-xs text-slate-400 italic">
@@ -2900,7 +2900,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Supplier Activity Logs */}
-            <div className="bg-white dark:bg-slate-900 p-6 border border-[#F9DFDF] dark:border-slate-800 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-slate-900 p-6 border border-black/[0.08] dark:border-white/[0.08] shadow-sm space-y-4">
               <h3 className="font-serif text-lg text-slate-900 dark:text-white flex items-center space-x-2">
                 <Building2 className="w-4 h-4 text-indigo-500" />
                 <span>Supplier Activity & Submissions</span>
@@ -2908,7 +2908,7 @@ export default function AdminDashboard() {
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
-                    <tr className="border-b border-[#F9DFDF] dark:border-slate-800 text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
+                    <tr className="border-b border-black/[0.08] dark:border-white/[0.08] text-slate-500 uppercase tracking-wider text-[10px] bg-slate-50 dark:bg-slate-950/40">
                       <th className="py-2.5 px-4 font-semibold">Timestamp</th>
                       <th className="py-2.5 px-4 font-semibold">Supplier</th>
                       <th className="py-2.5 px-4 font-semibold">Action</th>
@@ -2917,7 +2917,7 @@ export default function AdminDashboard() {
                       <th className="py-2.5 px-4 font-semibold">IP Address</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#F9DFDF] dark:divide-slate-800">
+                  <tbody className="divide-y divide-black/[0.08] dark:divide-white/[0.08]">
                     {auditLogs.supplierLogs?.length === 0 ? (
                       <tr>
                         <td colSpan="6" className="py-6 text-center text-xs text-slate-400 italic">
@@ -2964,10 +2964,10 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {isProductModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-6 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div>
                 <h3 className="font-serif text-2xl text-slate-900 dark:text-white">
                   {editingProduct ? 'Edit Garment Record' : 'Register New Luxury Garment'}
@@ -3006,7 +3006,7 @@ export default function AdminDashboard() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="e.g. The Midnight Satin Tailored Blazer"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
 
@@ -3020,7 +3020,7 @@ export default function AdminDashboard() {
                     value={formData.brand}
                     onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
                     placeholder="VESTRA"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
               </div>
@@ -3034,7 +3034,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.categoryId}
                     onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -3051,7 +3051,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.subcategory}
                     onChange={(e) => setFormData({ ...formData, subcategory: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     <optgroup label="Women's Traditional Wear">
                       <option value="sarees">Saree</option>
@@ -3126,7 +3126,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.gender}
                     onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     <option value="women">Women</option>
                     <option value="men">Men</option>
@@ -3141,7 +3141,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.garmentType}
                     onChange={(e) => setFormData({ ...formData, garmentType: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     <option value="upper_body">Upper Body (Tops, Shirts, Blazers, Kurtas)</option>
                     <option value="lower_body">Lower Body (Trousers, Jeans, Skirts)</option>
@@ -3161,7 +3161,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.tryonCompatibility}
                     onChange={(e) => setFormData({ ...formData, tryonCompatibility: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     <option value="supported">Supported (AI Try-On Ready)</option>
                     <option value="awaiting_saree_engine">Awaiting Saree Drape Engine</option>
@@ -3176,7 +3176,7 @@ export default function AdminDashboard() {
                   <select
                     value={formData.stockStatus}
                     onChange={(e) => setFormData({ ...formData, stockStatus: e.target.value })}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   >
                     <option value="in_stock">In Stock</option>
                     <option value="low_stock">Low Stock</option>
@@ -3195,7 +3195,7 @@ export default function AdminDashboard() {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="1850"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
 
@@ -3209,7 +3209,7 @@ export default function AdminDashboard() {
                     value={formData.originalPrice}
                     onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
                     placeholder="2200"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
               </div>
@@ -3225,7 +3225,7 @@ export default function AdminDashboard() {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   placeholder="Artisanal description of drape, cut, and occasion..."
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                 />
               </div>
 
@@ -3240,7 +3240,7 @@ export default function AdminDashboard() {
                     value={formData.material}
                     onChange={(e) => setFormData({ ...formData, material: e.target.value })}
                     placeholder="100% Grade 6A Mulberry Silk"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
 
@@ -3253,7 +3253,7 @@ export default function AdminDashboard() {
                     value={formData.fit}
                     onChange={(e) => setFormData({ ...formData, fit: e.target.value })}
                     placeholder="True to size; fitted shoulders"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
               </div>
@@ -3269,7 +3269,7 @@ export default function AdminDashboard() {
                     value={formData.color}
                     onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                     placeholder="e.g. Royal Blue, Magenta Pink"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
 
@@ -3285,7 +3285,7 @@ export default function AdminDashboard() {
                     value={formData.discountPercent}
                     onChange={(e) => setFormData({ ...formData, discountPercent: e.target.value })}
                     placeholder="e.g. 25, 80"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
               </div>
@@ -3311,7 +3311,7 @@ export default function AdminDashboard() {
                         className={`px-3 py-1.5 text-xs font-semibold uppercase border transition-all ${
                           checked
                             ? 'bg-[#000000] dark:bg-[#FFFFFF] text-white dark:text-black border-[#000000] dark:border-[#FFFFFF]'
-                            : 'bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-[#F9DFDF] dark:border-slate-800 hover:border-slate-400'
+                            : 'bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-black/[0.08] dark:border-white/[0.08] hover:border-slate-400'
                         }`}
                       >
                         {s}
@@ -3322,7 +3322,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Image Uploads: Primary & Try-On */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-[#F9DFDF] dark:border-slate-800">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-black/[0.08] dark:border-white/[0.08]">
                 
                 {/* Primary Image */}
                 <div className="space-y-3">
@@ -3332,7 +3332,7 @@ export default function AdminDashboard() {
 
                   <div className="flex items-center space-x-3">
                     <label className="cursor-pointer px-4 py-2 bg-white dark:bg-slate-950 border border-[#000000] dark:border-white text-slate-900 dark:text-white text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2">
-                      <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                      <Upload className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                       <span>{uploadingPrimary ? 'Uploading...' : 'Upload Image File'}</span>
                       <input
                         type="file"
@@ -3348,11 +3348,11 @@ export default function AdminDashboard() {
                     value={formData.primaryImageUrl}
                     onChange={(e) => setFormData({ ...formData, primaryImageUrl: e.target.value })}
                     placeholder="Or enter image URL (https://...)"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                   />
 
                   {formData.primaryImageUrl && (
-                    <div className="w-20 h-28 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden">
+                    <div className="w-20 h-28 bg-slate-100 dark:bg-slate-800 border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
                       <img src={formData.primaryImageUrl} alt="Primary Preview" className="w-full h-full object-cover" />
                     </div>
                   )}
@@ -3366,7 +3366,7 @@ export default function AdminDashboard() {
 
                   <div className="flex items-center space-x-3">
                     <label className="cursor-pointer px-4 py-2 bg-white dark:bg-slate-950 border border-[#000000] dark:border-white text-slate-900 dark:text-white text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center space-x-2">
-                      <Upload className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                      <Upload className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                       <span>{uploadingTryon ? 'Uploading...' : 'Upload Try-On Asset'}</span>
                       <input
                         type="file"
@@ -3382,11 +3382,11 @@ export default function AdminDashboard() {
                     value={formData.tryonImageUrl}
                     onChange={(e) => setFormData({ ...formData, tryonImageUrl: e.target.value })}
                     placeholder="Or enter try-on URL"
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                   />
 
                   {formData.tryonImageUrl && (
-                    <div className="w-20 h-28 bg-slate-100 dark:bg-slate-800 border border-[#F9DFDF] dark:border-slate-800 overflow-hidden">
+                    <div className="w-20 h-28 bg-slate-100 dark:bg-slate-800 border border-black/[0.08] dark:border-white/[0.08] overflow-hidden">
                       <img src={formData.tryonImageUrl} alt="Tryon Preview" className="w-full h-full object-cover" />
                     </div>
                   )}
@@ -3395,13 +3395,13 @@ export default function AdminDashboard() {
               </div>
 
               {/* Status Toggles */}
-              <div className="flex space-x-6 pt-4 border-t border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex space-x-6 pt-4 border-t border-black/[0.08] dark:border-white/[0.08]">
                 <label className="flex items-center space-x-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={formData.isActive}
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                    className="w-4 h-4 text-[#000000] focus:ring-[#F5AFAF]"
+                    className="w-4 h-4 text-[#000000] focus:ring-rose-500"
                   />
                   <span className="text-xs font-semibold text-slate-900 dark:text-white">Active in Boutique Catalogue</span>
                 </label>
@@ -3411,7 +3411,7 @@ export default function AdminDashboard() {
                     type="checkbox"
                     checked={formData.isFeatured}
                     onChange={(e) => setFormData({ ...formData, isFeatured: e.target.checked })}
-                    className="w-4 h-4 text-[#000000] focus:ring-[#F5AFAF]"
+                    className="w-4 h-4 text-[#000000] focus:ring-rose-500"
                   />
                   <span className="text-xs font-semibold text-slate-900 dark:text-white">Featured on Homepage</span>
                 </label>
@@ -3430,11 +3430,11 @@ export default function AdminDashboard() {
               </div>
 
               {/* Submit Action */}
-              <div className="pt-4 border-t border-[#F9DFDF] dark:border-slate-800 flex justify-end space-x-3">
+              <div className="pt-4 border-t border-black/[0.08] dark:border-white/[0.08] flex justify-end space-x-3">
                 <button
                   type="button"
                   onClick={() => setIsProductModalOpen(false)}
-                  className="px-5 py-2.5 border border-[#F9DFDF] dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="px-5 py-2.5 border border-black/[0.08] dark:border-white/[0.08] text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </button>
@@ -3458,8 +3458,8 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {approvalModalProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-3">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-lg w-full p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-black/[0.08] dark:border-white/[0.08] pb-3">
               <div>
                 <h3 className="font-serif text-xl text-slate-900 dark:text-white">Product Approval & Quality Gate</h3>
                 <p className="text-xs text-slate-500 font-mono">Product ID #{approvalModalProduct.id} &bull; {approvalModalProduct.sku}</p>
@@ -3515,7 +3515,7 @@ export default function AdminDashboard() {
                 <select
                   value={newApprovalStatus}
                   onChange={(e) => setNewApprovalStatus(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 p-2.5 text-xs uppercase tracking-wider font-semibold"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2.5 text-xs uppercase tracking-wider font-semibold"
                 >
                   <option value="DRAFT">DRAFT (Inactive / Under Preparation)</option>
                   <option value="NEEDS_IMAGE">NEEDS_IMAGE (Image below 250px or Missing)</option>
@@ -3535,12 +3535,12 @@ export default function AdminDashboard() {
                   placeholder="e.g. Verified resolution & photographer license."
                   value={approvalNotes}
                   onChange={(e) => setApprovalNotes(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 p-2 text-xs"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-black/[0.08] dark:border-white/[0.08]">
               <button
                 type="button"
                 onClick={() => setApprovalModalProduct(null)}
@@ -3578,7 +3578,7 @@ export default function AdminDashboard() {
               placeholder="Type DELETE to confirm"
               value={clearConfirmText}
               onChange={(e) => setClearConfirmText(e.target.value)}
-              className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-red-300 p-2.5 text-xs font-mono font-bold text-center tracking-widest text-red-600 focus:outline-none"
+              className="w-full bg-neutral-50 dark:bg-[#17181C] border border-red-300 p-2.5 text-xs font-mono font-bold text-center tracking-widest text-red-600 focus:outline-none"
             />
             <div className="flex items-center justify-end space-x-2 pt-2">
               <button
@@ -3604,9 +3604,9 @@ export default function AdminDashboard() {
       {/* RESET SEED MODAL */}
       {showResetModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center space-x-2 text-slate-900 dark:text-white">
-              <RotateCcw className="w-5 h-5 text-[#F5AFAF]" />
+              <RotateCcw className="w-5 h-5 text-rose-600 dark:text-rose-400" />
               <h3 className="font-serif text-lg font-bold">Reset Catalogue to Atelier Default</h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -3638,9 +3638,9 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {isCategoryModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full flex flex-col shadow-2xl">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-lg w-full flex flex-col shadow-2xl">
             
-            <div className="flex items-center justify-between p-6 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-6 border-b border-black/[0.08] dark:border-white/[0.08]">
               <h3 className="font-serif text-2xl text-slate-900 dark:text-white">Category Management</h3>
               <button onClick={() => setIsCategoryModalOpen(false)}>
                 <X className="w-5 h-5 text-slate-400 hover:text-slate-900 dark:hover:text-white" />
@@ -3654,7 +3654,7 @@ export default function AdminDashboard() {
                 <label className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
                   Existing Categories in PostgreSQL
                 </label>
-                <div className="max-h-40 overflow-y-auto divide-y divide-[#F9DFDF] dark:divide-slate-800 border border-[#F9DFDF] dark:border-slate-800 bg-[#FCF8F8] dark:bg-slate-950">
+                <div className="max-h-40 overflow-y-auto divide-y divide-black/[0.08] dark:divide-white/[0.08] border border-black/[0.08] dark:border-white/[0.08] bg-neutral-50 dark:bg-[#17181C]">
                   {categories.map((c) => (
                     <div key={c.id} className="p-2.5 flex items-center justify-between text-xs">
                       <span className="font-medium text-slate-900 dark:text-white">{c.name}</span>
@@ -3665,7 +3665,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Add Category Form */}
-              <form onSubmit={handleCreateCategory} className="space-y-3 pt-4 border-t border-[#F9DFDF] dark:border-slate-800">
+              <form onSubmit={handleCreateCategory} className="space-y-3 pt-4 border-t border-black/[0.08] dark:border-white/[0.08]">
                 <h4 className="text-xs uppercase tracking-wider font-semibold text-slate-900 dark:text-white">
                   Create New Category
                 </h4>
@@ -3676,7 +3676,7 @@ export default function AdminDashboard() {
                   placeholder="Category Name (e.g. Resort Atelier)"
                   value={newCatName}
                   onChange={(e) => setNewCatName(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                 />
 
                 <input
@@ -3684,7 +3684,7 @@ export default function AdminDashboard() {
                   placeholder="Description..."
                   value={newCatDesc}
                   onChange={(e) => setNewCatDesc(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                 />
 
                 <input
@@ -3692,7 +3692,7 @@ export default function AdminDashboard() {
                   placeholder="Banner Image URL (https://...)"
                   value={newCatImage}
                   onChange={(e) => setNewCatImage(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                 />
 
                 <button
@@ -3714,10 +3714,10 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {isReplaceModalOpen && replacingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 w-full max-w-lg shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] w-full max-w-lg shadow-2xl overflow-hidden">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-6 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div>
                 <h3 className="font-serif text-lg text-slate-900 dark:text-white">
                   Replace Garment Image
@@ -3738,7 +3738,7 @@ export default function AdminDashboard() {
             <form onSubmit={handleExecuteReplaceImage} className="p-6 space-y-5">
               
               {/* Current Image Details */}
-              <div className="flex items-center space-x-4 p-3 bg-slate-50 dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center space-x-4 p-3 bg-slate-50 dark:bg-slate-950 border border-black/[0.08] dark:border-white/[0.08]">
                 <div className="w-16 h-20 bg-slate-200 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                   <img
                     src={replacingProduct.primaryImage || replacingProduct.primary_image_url}
@@ -3774,15 +3774,15 @@ export default function AdminDashboard() {
                     setReplaceFile(e.target.files?.[0] || null);
                     if (e.target.files?.[0]) setReplaceUrl('');
                   }}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2 text-slate-900 dark:text-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2 text-slate-900 dark:text-white"
                 />
                 <p className="text-[10px] text-slate-400">Supported formats: JPEG, PNG, WebP (Max 10MB)</p>
               </div>
 
               <div className="flex items-center space-x-2 text-xs text-slate-400">
-                <div className="flex-1 border-t border-[#F9DFDF] dark:border-slate-800" />
+                <div className="flex-1 border-t border-black/[0.08] dark:border-white/[0.08]" />
                 <span>OR</span>
-                <div className="flex-1 border-t border-[#F9DFDF] dark:border-slate-800" />
+                <div className="flex-1 border-t border-black/[0.08] dark:border-white/[0.08]" />
               </div>
 
               {/* Enter High-Res Image URL */}
@@ -3798,7 +3798,7 @@ export default function AdminDashboard() {
                     setReplaceUrl(e.target.value);
                     if (e.target.value) setReplaceFile(null);
                   }}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 text-xs p-2.5 text-slate-900 dark:text-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white"
                 />
               </div>
 
@@ -3815,11 +3815,11 @@ export default function AdminDashboard() {
               )}
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-end space-x-3 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+              <div className="flex items-center justify-end space-x-3 pt-3 border-t border-black/[0.08] dark:border-white/[0.08]">
                 <button
                   type="button"
                   onClick={() => setIsReplaceModalOpen(false)}
-                  className="px-4 py-2 border border-[#F9DFDF] dark:border-slate-800 text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                  className="px-4 py-2 border border-black/[0.08] dark:border-white/[0.08] text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
                 >
                   Cancel
                 </button>
@@ -3843,8 +3843,8 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {approvalModalProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-[#F9DFDF] dark:border-slate-800 pb-3">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-lg w-full p-6 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between border-b border-black/[0.08] dark:border-white/[0.08] pb-3">
               <div>
                 <h3 className="font-serif text-xl text-slate-900 dark:text-white">Product Approval & Quality Gate</h3>
                 <p className="text-xs text-slate-500 font-mono">Product ID #{approvalModalProduct.id} &bull; {approvalModalProduct.sku}</p>
@@ -3900,7 +3900,7 @@ export default function AdminDashboard() {
                 <select
                   value={newApprovalStatus}
                   onChange={(e) => setNewApprovalStatus(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 p-2.5 text-xs uppercase tracking-wider font-semibold"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2.5 text-xs uppercase tracking-wider font-semibold"
                 >
                   <option value="DRAFT">DRAFT (Inactive / Under Preparation)</option>
                   <option value="NEEDS_IMAGE">NEEDS_IMAGE (Image below 250px or Missing)</option>
@@ -3920,12 +3920,12 @@ export default function AdminDashboard() {
                   placeholder="e.g. Verified resolution & photographer license."
                   value={approvalNotes}
                   onChange={(e) => setApprovalNotes(e.target.value)}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-800 p-2 text-xs"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs"
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-end space-x-2 pt-3 border-t border-black/[0.08] dark:border-white/[0.08]">
               <button
                 type="button"
                 onClick={() => setApprovalModalProduct(null)}
@@ -3963,7 +3963,7 @@ export default function AdminDashboard() {
               placeholder="Type DELETE to confirm"
               value={clearConfirmText}
               onChange={(e) => setClearConfirmText(e.target.value)}
-              className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-red-300 p-2.5 text-xs font-mono font-bold text-center tracking-widest text-red-600 focus:outline-none"
+              className="w-full bg-neutral-50 dark:bg-[#17181C] border border-red-300 p-2.5 text-xs font-mono font-bold text-center tracking-widest text-red-600 focus:outline-none"
             />
             <div className="flex items-center justify-end space-x-2 pt-2">
               <button
@@ -3989,9 +3989,9 @@ export default function AdminDashboard() {
       {/* RESET SEED MODAL */}
       {showResetModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-md w-full p-6 shadow-2xl space-y-4">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-md w-full p-6 shadow-2xl space-y-4">
             <div className="flex items-center space-x-2 text-slate-900 dark:text-white">
-              <RotateCcw className="w-5 h-5 text-[#F5AFAF]" />
+              <RotateCcw className="w-5 h-5 text-rose-600 dark:text-rose-400" />
               <h3 className="font-serif text-lg font-bold">Reset Catalogue to Atelier Default</h3>
             </div>
             <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
@@ -4026,7 +4026,7 @@ export default function AdminDashboard() {
             <div className="flex items-start justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-[10px] uppercase font-mono tracking-widest text-[#F5AFAF] font-bold">
+                  <span className="text-[10px] uppercase font-mono tracking-widest text-rose-600 dark:text-rose-400 font-bold">
                     Quality Inspection Dossier
                   </span>
                   <span className="text-xs px-2 py-0.5 rounded font-mono font-bold bg-blue-100 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border border-blue-300 dark:border-blue-700">
@@ -4173,8 +4173,8 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {testResultModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-lg w-full shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between p-5 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center space-x-2">
                 {testResultModal.configured || testResultModal.status === 'ready' || testResultModal.status === 'active' ? (
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
@@ -4234,7 +4234,7 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex justify-end">
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-black/[0.08] dark:border-white/[0.08] flex justify-end">
               <button
                 onClick={() => setTestResultModal(null)}
                 className="px-4 py-1.5 bg-black dark:bg-white text-white dark:text-black text-xs uppercase tracking-wider font-semibold"
@@ -4251,12 +4251,12 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {searchSourceModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-5 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center space-x-2.5">
-                <Search className="w-5 h-5 text-[#F5AFAF]" />
+                <Search className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 <div>
                   <h3 className="font-serif text-xl font-medium text-slate-900 dark:text-white">
                     Search & Ingest: {searchSourceModal.name}
@@ -4275,7 +4275,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Search Input Bar */}
-            <div className="p-5 border-b border-[#F9DFDF] dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 space-y-3">
+            <div className="p-5 border-b border-black/[0.08] dark:border-white/[0.08] bg-slate-50 dark:bg-slate-950/40 space-y-3">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -4290,7 +4290,7 @@ export default function AdminDashboard() {
                     placeholder="Search keywords (e.g. silk saree, embroidered kurti, formal shirt)..."
                     value={externalSearchQuery}
                     onChange={(e) => setExternalSearchQuery(e.target.value)}
-                    className="w-full bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-700 text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
+                    className="w-full bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] text-xs text-slate-900 dark:text-white pl-9 pr-3 py-2.5 focus:outline-none focus:border-black dark:focus:border-white"
                   />
                 </div>
                 <button
@@ -4298,7 +4298,7 @@ export default function AdminDashboard() {
                   disabled={externalSearchLoading}
                   className="px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all flex items-center space-x-1.5 shrink-0"
                 >
-                  <RefreshCw className={`w-3.5 h-3.5 ${externalSearchLoading ? 'animate-spin text-[#F5AFAF]' : ''}`} />
+                  <RefreshCw className={`w-3.5 h-3.5 ${externalSearchLoading ? 'animate-spin text-rose-600 dark:text-rose-400' : ''}`} />
                   <span>{externalSearchLoading ? 'Searching...' : 'Search'}</span>
                 </button>
               </form>
@@ -4332,7 +4332,7 @@ export default function AdminDashboard() {
             <div className="p-5 overflow-y-auto max-h-[55vh] space-y-3">
               {externalSearchLoading ? (
                 <div className="py-12 text-center space-y-2">
-                  <RefreshCw className="w-7 h-7 animate-spin mx-auto text-[#F5AFAF]" />
+                  <RefreshCw className="w-7 h-7 animate-spin mx-auto text-rose-600 dark:text-rose-400" />
                   <p className="text-xs uppercase tracking-wider text-slate-500">Querying {searchSourceModal.name} API...</p>
                 </div>
               ) : externalSearchResults.length === 0 ? (
@@ -4355,7 +4355,7 @@ export default function AdminDashboard() {
                     return (
                       <div
                         key={prod.externalProductId}
-                        className="p-3 bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 flex items-center justify-between gap-4 hover:border-slate-400 transition-colors"
+                        className="p-3 bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-4 hover:border-slate-400 transition-colors"
                       >
                         <div className="flex items-center space-x-3 min-w-0">
                           <div className="w-14 h-18 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shrink-0 overflow-hidden relative">
@@ -4411,7 +4411,7 @@ export default function AdminDashboard() {
                             disabled={isImporting}
                             className="px-3.5 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
                           >
-                            <Plus className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                            <Plus className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
                             <span>{isImporting ? 'Importing...' : 'Import to VESTRA'}</span>
                           </button>
                         </div>
@@ -4423,7 +4423,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Footer */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-[#F9DFDF] dark:border-slate-800 flex justify-end">
+            <div className="p-4 bg-slate-50 dark:bg-slate-950/40 border-t border-black/[0.08] dark:border-white/[0.08] flex justify-end">
               <button
                 onClick={() => setSearchSourceModal(null)}
                 className="px-4 py-2 border border-slate-300 dark:border-slate-700 text-xs uppercase font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -4440,11 +4440,11 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {isSupplierCsvModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             
-            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-5 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center space-x-2.5">
-                <FileSpreadsheet className="w-5 h-5 text-[#F5AFAF]" />
+                <FileSpreadsheet className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 <div>
                   <h3 className="font-serif text-xl font-medium text-slate-900 dark:text-white">
                     Supplier & Textile Mill CSV Batch Ingestion
@@ -4501,7 +4501,7 @@ export default function AdminDashboard() {
                   <select
                     value={supplierCsvForm.supplierId}
                     onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, supplierId: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   >
                     <option value="">General Supplier Feed</option>
                     {suppliersList.map(sup => (
@@ -4519,7 +4519,7 @@ export default function AdminDashboard() {
                   <select
                     value={supplierCsvForm.defaultCurrency}
                     onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, defaultCurrency: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   >
                     <option value="INR">INR (₹)</option>
                     <option value="USD">USD ($)</option>
@@ -4535,7 +4535,7 @@ export default function AdminDashboard() {
                   <select
                     value={supplierCsvForm.imageUsagePermission}
                     onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, imageUsagePermission: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   >
                     <option value="supplier_granted">Supplier Granted Commercial Rights</option>
                     <option value="authorized">Authorized Partner License</option>
@@ -4565,7 +4565,7 @@ export default function AdminDashboard() {
                   value={supplierCsvForm.csvText}
                   onChange={(e) => setSupplierCsvForm(prev => ({ ...prev, csvText: e.target.value }))}
                   placeholder="sku,product_name,category,brand,price,image_url&#10;SUR-01,Banarasi Katan Silk Saree,sarees,Surat Mills,12500,https://example.com/saree1.jpg"
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2.5 font-mono text-[11px] focus:outline-none focus:border-black dark:focus:border-white"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2.5 font-mono text-[11px] focus:outline-none focus:border-black dark:focus:border-white"
                 />
               </div>
 
@@ -4582,7 +4582,7 @@ export default function AdminDashboard() {
                 </label>
               </div>
 
-              <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-end space-x-2">
+              <div className="pt-3 border-t border-black/[0.08] dark:border-white/[0.08] flex items-center justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setIsSupplierCsvModalOpen(false)}
@@ -4595,7 +4595,7 @@ export default function AdminDashboard() {
                   disabled={supplierCsvLoading || (!supplierCsvFile && !supplierCsvForm.csvText.trim())}
                   className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-widest font-semibold transition-all flex items-center space-x-1.5 disabled:opacity-50"
                 >
-                  <Upload className={`w-3.5 h-3.5 ${supplierCsvLoading ? 'animate-spin text-[#F5AFAF]' : 'text-[#F5AFAF]'}`} />
+                  <Upload className={`w-3.5 h-3.5 ${supplierCsvLoading ? 'animate-spin text-rose-600 dark:text-rose-400' : 'text-rose-600 dark:text-rose-400'}`} />
                   <span>{supplierCsvLoading ? 'Processing Batch...' : 'Process CSV Ingestion'}</span>
                 </button>
               </div>
@@ -4610,11 +4610,11 @@ export default function AdminDashboard() {
       {/* ============================================================== */}
       {isAddSupplierModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white dark:bg-slate-900 border border-[#F9DFDF] dark:border-slate-800 max-w-lg w-full shadow-2xl overflow-hidden">
+          <div className="bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] max-w-lg w-full shadow-2xl overflow-hidden">
             
-            <div className="flex items-center justify-between p-5 border-b border-[#F9DFDF] dark:border-slate-800">
+            <div className="flex items-center justify-between p-5 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center space-x-2">
-                <Building2 className="w-5 h-5 text-[#F5AFAF]" />
+                <Building2 className="w-5 h-5 text-rose-600 dark:text-rose-400" />
                 <div>
                   <h3 className="font-serif text-lg font-medium text-slate-900 dark:text-white">
                     Register New Supplier / Textile Mill
@@ -4650,7 +4650,7 @@ export default function AdminDashboard() {
                     placeholder="SUP-TEX-004"
                     value={newSupplierForm.supplierCode}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, supplierCode: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 font-mono text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 font-mono text-xs focus:outline-none"
                   />
                 </div>
                 <div>
@@ -4660,7 +4660,7 @@ export default function AdminDashboard() {
                   <select
                     value={newSupplierForm.partnershipType}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, partnershipType: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   >
                     <option value="manufacturer">Manufacturer / Mill</option>
                     <option value="wholesaler">Local Wholesaler</option>
@@ -4680,7 +4680,7 @@ export default function AdminDashboard() {
                   placeholder="e.g. Kanchipuram Heritage Silk Guild"
                   value={newSupplierForm.name}
                   onChange={(e) => setNewSupplierForm(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                 />
               </div>
 
@@ -4694,7 +4694,7 @@ export default function AdminDashboard() {
                     placeholder="e.g. Ramesh Chandra"
                     value={newSupplierForm.contactPerson}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, contactPerson: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   />
                 </div>
                 <div>
@@ -4706,7 +4706,7 @@ export default function AdminDashboard() {
                     placeholder="contact@heritageguild.in"
                     value={newSupplierForm.email}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   />
                 </div>
               </div>
@@ -4721,7 +4721,7 @@ export default function AdminDashboard() {
                     placeholder="Kanchipuram"
                     value={newSupplierForm.city}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, city: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   />
                 </div>
                 <div>
@@ -4733,7 +4733,7 @@ export default function AdminDashboard() {
                     placeholder="Tamil Nadu"
                     value={newSupplierForm.state}
                     onChange={(e) => setNewSupplierForm(prev => ({ ...prev, state: e.target.value }))}
-                    className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                    className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                   />
                 </div>
               </div>
@@ -4745,7 +4745,7 @@ export default function AdminDashboard() {
                 <select
                   value={newSupplierForm.imageUsageAgreement}
                   onChange={(e) => setNewSupplierForm(prev => ({ ...prev, imageUsageAgreement: e.target.value }))}
-                  className="w-full bg-[#FCF8F8] dark:bg-slate-950 border border-[#F9DFDF] dark:border-slate-700 p-2 text-xs focus:outline-none"
+                  className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] p-2 text-xs focus:outline-none"
                 >
                   <option value="full_commercial_rights">Full Commercial Try-On Visualization Rights</option>
                   <option value="limited_partner_rights">Limited Partner Showcase Rights</option>
@@ -4753,7 +4753,7 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
-              <div className="pt-3 border-t border-[#F9DFDF] dark:border-slate-800 flex items-center justify-end space-x-2">
+              <div className="pt-3 border-t border-black/[0.08] dark:border-white/[0.08] flex items-center justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setIsAddSupplierModalOpen(false)}

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Camera, X, RefreshCw, Check, AlertCircle, Sparkles, Shield, Maximize2, SwitchCamera } from 'lucide-react';
+import { Camera, X, RefreshCw, Check, AlertCircle, Shield, SwitchCamera } from 'lucide-react';
 import cameraService from '../services/cameraService';
 
 /**
@@ -137,11 +137,9 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
     const isHighResolution = maxDim >= 1024;
 
     // 2. Sample pixel luminance for blank/overexposed/underexposed detection
-    // Sample a 50x50 grid of pixels to keep performance instant
     const sampleWidth = Math.min(64, width);
     const sampleHeight = Math.min(64, height);
 
-    // Create a small helper canvas to compute statistics quickly
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = sampleWidth;
     tempCanvas.height = sampleHeight;
@@ -161,7 +159,6 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
       const r = data[i];
       const g = data[i + 1];
       const b = data[i + 2];
-      // ITU-R BT.601 formula for relative luminance
       const luma = 0.299 * r + 0.587 * g + 0.114 * b;
       totalLuminance += luma;
       lumas.push(luma);
@@ -171,14 +168,12 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
 
     const meanLuma = totalLuminance / pixelCount;
 
-    // Compute standard deviation of luminance (measures contrast and texture)
     let varianceSum = 0;
     for (const luma of lumas) {
       varianceSum += Math.pow(luma - meanLuma, 2);
     }
     const stdDev = Math.sqrt(varianceSum / pixelCount);
 
-    // 3. Simple edge contrast heuristic (rough sharpness indicator)
     let edgeSum = 0;
     for (let y = 1; y < sampleHeight - 1; y++) {
       for (let x = 1; x < sampleWidth - 1; x++) {
@@ -190,10 +185,9 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
     }
     const avgEdgeGradient = edgeSum / ((sampleWidth - 2) * (sampleHeight - 2));
 
-    // Determine specific quality issues
     const isTooDark = meanLuma < 15;
     const isTooBright = meanLuma > 245;
-    const isFlatOrBlank = stdDev < 9; // Flat color, lens capped, or featureless background
+    const isFlatOrBlank = stdDev < 9;
     const isLikelyBlurry = avgEdgeGradient < 6 && stdDev > 12;
 
     let error = null;
@@ -256,22 +250,18 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
     setIsCapturing(true);
 
     try {
-      // Shutter flash animation effect
       setShutterFlash(true);
       setTimeout(() => setShutterFlash(false), 180);
 
-      // Create full-resolution canvas without stretching or cropping
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(video, 0, 0, width, height);
 
-      // Perform quality validation
       const quality = inspectCapturedFrame(canvas, width, height);
       setQualityReport(quality);
 
-      // Convert to JPEG Blob (quality: 0.95)
       const blob = await new Promise((resolve, reject) => {
         canvas.toBlob(
           (b) => (b ? resolve(b) : reject(new Error('Failed to encode camera frame into image.'))),
@@ -293,7 +283,6 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
         height
       });
 
-      // Pause live feed while user inspects preview
       video.pause();
     } catch (err) {
       console.error('[Outfit Camera] Capture failed:', err);
@@ -326,18 +315,18 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-      <div className="bg-white dark:bg-[#0F172A] border border-slate-200 dark:border-slate-800 max-w-2xl w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh] rounded-lg">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-neutral-950/80 backdrop-blur-md">
+      <div className="bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] max-w-2xl w-full shadow-2xl relative overflow-hidden flex flex-col max-h-[92vh] rounded-xs">
         
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-black/[0.06] dark:border-white/[0.06] bg-neutral-50/70 dark:bg-[#17181C]">
           <div className="flex items-center space-x-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#F5AFAF] pulse-camera" />
+            <span className="w-2 h-2 rounded-full bg-[#A84B55] dark:bg-[#C96872]" />
             <div>
-              <h3 className="font-serif text-base sm:text-lg font-semibold text-slate-900 dark:text-[#FFFFFF]">
+              <h3 className="font-serif text-base sm:text-lg font-normal text-neutral-900 dark:text-neutral-50">
                 Capture Outfit Using Camera
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 hidden sm:block">
+              <p className="text-xs text-neutral-500 dark:text-neutral-400 hidden sm:block">
                 Position your physical garment (shirt, jacket, dress, or pants) clearly in the frame
               </p>
             </div>
@@ -348,8 +337,8 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
               <button
                 type="button"
                 onClick={toggleCamera}
-                title="Switch Camera (Front/Back)"
-                className="p-1.5 text-slate-600 dark:text-slate-300 hover:text-black dark:hover:text-white rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                title="Switch camera"
+                className="p-2 text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-neutral-50 rounded-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
               >
                 <SwitchCamera className="w-4 h-4" />
               </button>
@@ -357,26 +346,26 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-900 dark:hover:text-white rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Viewfinder / Preview Area */}
-        <div className="relative bg-black flex-1 min-h-[300px] sm:min-h-[400px] max-h-[58vh] overflow-hidden flex items-center justify-center">
+        <div className="relative bg-neutral-950 flex-1 min-h-[300px] sm:min-h-[400px] max-h-[58vh] overflow-hidden flex items-center justify-center">
           
           {/* Shutter Flash Animation */}
           {shutterFlash && (
-            <div className="absolute inset-0 bg-white z-40 animate-fadeOut pointer-events-none" />
+            <div className="absolute inset-0 bg-white z-40 transition-opacity duration-150 pointer-events-none" />
           )}
 
           {/* Initializing Spinner */}
           {isInitializing && (
             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/70 text-white space-y-3">
-              <RefreshCw className="w-8 h-8 animate-spin text-[#F5AFAF]" />
-              <p className="text-xs uppercase tracking-wider font-mono">Initializing camera sensor...</p>
+              <RefreshCw className="w-6 h-6 animate-spin text-[#C96872]" />
+              <p className="text-xs font-mono text-neutral-300">Initializing camera sensor...</p>
             </div>
           )}
 
@@ -391,7 +380,7 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
 
           {/* Captured Image Preview */}
           {capturedPhoto && (
-            <div className="relative w-full h-full flex items-center justify-center bg-slate-950">
+            <div className="relative w-full h-full flex items-center justify-center bg-neutral-950">
               <img
                 src={capturedPhoto.dataUrl}
                 alt="Captured Garment Preview"
@@ -403,26 +392,26 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
           {/* Garment Alignment Guide (Visible while framing before capture) */}
           {!capturedPhoto && !isInitializing && !cameraError && (
             <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-6 z-10">
-              {/* Outer Alignment Box with Corner Brackets */}
-              <div className="relative w-3/4 max-w-sm aspect-[3/4] border-2 border-dashed border-white/60 dark:border-white/50 rounded-xl flex flex-col items-center justify-between p-4 shadow-2xl">
+              {/* Outer Alignment Box with Atelier Framing */}
+              <div className="relative w-3/4 max-w-sm aspect-[3/4] border border-dashed border-white/40 rounded-xs flex flex-col items-center justify-between p-4">
                 
                 {/* Hanger Silhouette Icon Guide */}
-                <div className="w-16 h-8 border-t-2 border-r-2 border-white/80 rounded-tr-full mt-2 rotate-[-20deg] opacity-75" />
+                <div className="w-14 h-7 border-t border-r border-white/60 rounded-tr-full mt-2 rotate-[-20deg] opacity-60" />
                 
                 {/* Center Prompt */}
-                <div className="bg-black/60 backdrop-blur-sm text-white px-3 py-1 rounded text-[10px] font-mono uppercase tracking-wider border border-white/20">
-                  Align Garment Inside Frame
+                <div className="bg-black/70 backdrop-blur-sm text-neutral-200 px-3 py-1 rounded-xs text-xs font-mono border border-white/10">
+                  Align garment inside frame
                 </div>
 
-                <div className="text-[9px] text-white/70 font-mono tracking-widest uppercase">
-                  Hold Steady &bull; Avoid Glare
+                <div className="text-[10px] text-neutral-400 font-mono tracking-wider">
+                  Hold steady &bull; avoid glare
                 </div>
               </div>
 
               {/* Status Pill */}
-              <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded text-[10px] text-white font-mono flex items-center space-x-1.5 border border-white/10">
+              <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xs text-xs text-neutral-200 font-mono flex items-center space-x-1.5 border border-white/10">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Live Feed &bull; {facingMode === 'environment' ? 'Main Camera' : 'User Camera'}</span>
+                <span>Live &bull; {facingMode === 'environment' ? 'Main Camera' : 'User Camera'}</span>
               </div>
             </div>
           )}
@@ -430,24 +419,24 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
           {/* Camera Error Display */}
           {cameraError && (
             <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/85 text-white p-6 text-center space-y-3">
-              <div className="w-12 h-12 rounded-full bg-rose-950/80 border border-rose-600/50 flex items-center justify-center text-rose-400">
-                <AlertCircle className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-full bg-red-950/80 border border-red-600/50 flex items-center justify-center text-red-400">
+                <AlertCircle className="w-5 h-5" />
               </div>
-              <h4 className="font-serif text-base font-semibold">Camera Access Required</h4>
-              <p className="text-xs text-slate-300 max-w-md leading-relaxed">{cameraError}</p>
+              <h4 className="font-serif text-base font-normal">Camera access required</h4>
+              <p className="text-xs text-neutral-300 max-w-md leading-relaxed">{cameraError}</p>
               <div className="flex items-center space-x-3 pt-2">
                 <button
                   type="button"
                   onClick={() => startCameraStream(facingMode)}
-                  className="px-4 py-2 bg-white text-black text-xs font-semibold uppercase tracking-wider hover:bg-slate-100 transition-colors flex items-center space-x-1.5 rounded"
+                  className="min-h-[40px] px-4 py-2 bg-white text-neutral-950 text-xs font-medium hover:bg-neutral-100 transition-colors flex items-center space-x-1.5 rounded-xs"
                 >
-                  <RefreshCw className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                  <span>Try Again</span>
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  <span>Try again</span>
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 bg-slate-800 text-white text-xs font-semibold uppercase tracking-wider hover:bg-slate-700 transition-colors rounded"
+                  className="min-h-[40px] px-4 py-2 bg-neutral-800 text-white text-xs font-medium hover:bg-neutral-700 transition-colors rounded-xs"
                 >
                   Cancel
                 </button>
@@ -458,52 +447,51 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
 
         {/* Quality Audit Bar (Shown after capture) */}
         {capturedPhoto && qualityReport && (
-          <div className="px-5 py-3 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-2">
+          <div className="px-5 py-3 bg-neutral-50 dark:bg-[#17181C] border-t border-black/[0.06] dark:border-white/[0.06] space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                <span>Captured Frame Quality Verification</span>
+              <span className="font-medium text-neutral-700 dark:text-neutral-300 flex items-center space-x-1.5">
+                <span>Frame quality verification</span>
               </span>
-              <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+              <span className={`px-2 py-0.5 rounded-xs text-[10px] font-medium ${
                 qualityReport.isValid
-                  ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                  : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'
+                  ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-500/20'
+                  : 'bg-red-50 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-500/20'
               }`}>
-                {qualityReport.isValid ? '✓ ELIGIBLE FOR TRY-ON' : '⚠️ QUALITY ISSUE'}
+                {qualityReport.isValid ? 'Eligible for try-on' : 'Quality issue'}
               </span>
             </div>
 
             {/* Checklist */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-[10px] font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
               <div className="flex items-center space-x-1.5">
-                <Check className={`w-3.5 h-3.5 ${qualityReport.width >= 250 && qualityReport.height >= 250 ? 'text-emerald-600' : 'text-rose-600'}`} />
-                <span className="text-slate-600 dark:text-slate-400">
-                  Size: <strong>{qualityReport.dimensionLabel}</strong>
+                <Check className={`w-3.5 h-3.5 ${qualityReport.width >= 250 && qualityReport.height >= 250 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`} />
+                <span className="text-neutral-600 dark:text-neutral-400">
+                  Size: <strong className="text-neutral-800 dark:text-neutral-200">{qualityReport.dimensionLabel}</strong>
                   {qualityReport.isHighResolution ? ' (HD)' : ''}
                 </span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <Check className={`w-3.5 h-3.5 ${qualityReport.isGarmentVisible ? 'text-emerald-600' : 'text-rose-600'}`} />
-                <span className="text-slate-600 dark:text-slate-400">
-                  Lighting & Frame: <strong>{qualityReport.isGarmentVisible ? 'Valid' : 'Check Lighting'}</strong>
+                <Check className={`w-3.5 h-3.5 ${qualityReport.isGarmentVisible ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`} />
+                <span className="text-neutral-600 dark:text-neutral-400">
+                  Lighting: <strong className="text-neutral-800 dark:text-neutral-200">{qualityReport.isGarmentVisible ? 'Optimal' : 'Check Lighting'}</strong>
                 </span>
               </div>
               <div className="flex items-center space-x-1.5">
-                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                <span className="text-slate-600 dark:text-slate-400">
-                  Aspect: <strong>Original Uncropped</strong>
+                <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="text-neutral-600 dark:text-neutral-400">
+                  Aspect: <strong className="text-neutral-800 dark:text-neutral-200">Original uncropped</strong>
                 </span>
               </div>
             </div>
 
             {/* Error or Warning message */}
             {qualityReport.error && (
-              <p className="text-[11px] text-rose-600 dark:text-rose-400 font-medium">
+              <p className="text-xs text-red-600 dark:text-red-400 font-medium">
                 {qualityReport.error}
               </p>
             )}
             {qualityReport.warning && (
-              <p className="text-[11px] text-amber-600 dark:text-amber-400 font-medium">
+              <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
                 {qualityReport.warning}
               </p>
             )}
@@ -511,12 +499,12 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
         )}
 
         {/* Footer Actions */}
-        <div className="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-[#0F172A] flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="px-5 py-3.5 border-t border-black/[0.06] dark:border-white/[0.06] bg-white dark:bg-[#121316] flex flex-col sm:flex-row items-center justify-between gap-3">
           
           {/* Privacy Note */}
-          <div className="flex items-center space-x-1.5 text-[10px] text-slate-500 dark:text-slate-400">
-            <Shield className="w-3.5 h-3.5 text-[#F5AFAF] shrink-0" />
-            <span>Privacy: Snapshot is processed locally. Video is never recorded.</span>
+          <div className="flex items-center space-x-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+            <Shield className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+            <span>Privacy: Snapshot is processed locally. Live stream is never recorded.</span>
           </div>
 
           {/* Action Buttons */}
@@ -526,7 +514,7 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 border border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors rounded min-h-[44px]"
+                  className="min-h-[44px] px-4 py-2 border border-black/[0.1] dark:border-white/[0.1] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#17181C] transition-colors rounded-xs"
                 >
                   Cancel
                 </button>
@@ -534,10 +522,10 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
                   type="button"
                   onClick={handleCapture}
                   disabled={isInitializing || !!cameraError || isCapturing}
-                  className="px-6 py-2 bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-slate-100 text-xs uppercase tracking-wider font-semibold transition-all shadow-md flex items-center space-x-2 rounded min-h-[44px] disabled:opacity-50"
+                  className="min-h-[44px] px-6 py-2 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-100 text-xs font-medium transition-colors shadow-xs flex items-center space-x-2 rounded-xs disabled:opacity-50"
                 >
-                  <Camera className="w-4 h-4 text-[#F5AFAF]" />
-                  <span>Capture Outfit</span>
+                  <Camera className="w-4 h-4" />
+                  <span>Capture outfit</span>
                 </button>
               </>
             ) : (
@@ -545,19 +533,19 @@ export default function OutfitCameraModal({ isOpen, onClose, onOutfitCaptured })
                 <button
                   type="button"
                   onClick={handleRetake}
-                  className="px-4 py-2 border border-slate-200 dark:border-slate-700 text-xs uppercase tracking-wider font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors flex items-center space-x-1.5 rounded min-h-[44px]"
+                  className="min-h-[44px] px-4 py-2 border border-black/[0.1] dark:border-white/[0.1] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-[#17181C] transition-colors flex items-center space-x-1.5 rounded-xs"
                 >
-                  <RefreshCw className="w-3.5 h-3.5 text-[#F5AFAF]" />
+                  <RefreshCw className="w-3.5 h-3.5" />
                   <span>Retake</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleConfirm}
                   disabled={qualityReport && !qualityReport.isValid}
-                  className="px-6 py-2 bg-slate-900 hover:bg-black text-white dark:bg-white dark:text-black dark:hover:bg-slate-100 text-xs uppercase tracking-wider font-semibold transition-all shadow-md flex items-center space-x-2 rounded min-h-[44px] disabled:opacity-50"
+                  className="min-h-[44px] px-6 py-2 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-100 text-xs font-medium transition-colors shadow-xs flex items-center space-x-2 rounded-xs disabled:opacity-50"
                 >
                   <Check className="w-4 h-4 text-emerald-400" />
-                  <span>Use This Image</span>
+                  <span>Use this image</span>
                 </button>
               </>
             )}

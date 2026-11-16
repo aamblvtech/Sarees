@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import {
-  Sparkles,
   Camera,
   QrCode,
   ShieldCheck,
@@ -335,48 +334,48 @@ export default function KioskMode() {
   };
 
   return (
-    <div className="fixed inset-0 bg-[#0B0F19] text-white overflow-hidden flex flex-col select-none touch-manipulation font-sans">
+    <div className="fixed inset-0 bg-[#0D0E10] text-white overflow-hidden flex flex-col select-none touch-manipulation font-sans">
       
       {/* Top Kiosk Bar */}
-      <header className="h-20 bg-black/60 border-b border-white/10 px-6 sm:px-10 flex items-center justify-between backdrop-blur-md z-30">
+      <header className="h-16 bg-[#121316] border-b border-white/[0.08] px-6 sm:px-10 flex items-center justify-between z-30">
         <div className="flex items-center space-x-4">
-          <span className="font-serif text-3xl tracking-[0.25em] font-bold text-white">
+          <span className="font-serif text-2xl tracking-[0.25em] font-light text-white">
             VESTRA
           </span>
-          <span className="text-white/30 text-lg">|</span>
-          <span className="text-xs uppercase tracking-widest font-semibold text-amber-400 hidden sm:inline">
-            Smart Fitting Kiosk
+          <span className="text-white/20 text-sm">|</span>
+          <span className="text-xs font-mono text-neutral-400 hidden sm:inline">
+            Interactive Atelier Mirror
           </span>
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           {step !== 'welcome' && (
             <button
               onClick={endSession}
-              className="px-5 py-2.5 bg-red-950/60 hover:bg-red-900 border border-red-800 text-red-200 text-xs uppercase tracking-widest font-bold rounded-xl flex items-center space-x-2 transition-all shadow-lg"
+              className="min-h-[44px] px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-white/[0.08] text-neutral-200 text-xs font-medium rounded-md flex items-center space-x-2 transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              <span>End Session</span>
+              <span>End session</span>
             </button>
           )}
 
           <button
             onClick={toggleFullscreen}
-            className="p-3 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-all border border-white/10"
+            className="min-h-[44px] min-w-[44px] p-2.5 bg-neutral-800/80 hover:bg-neutral-700 rounded-md text-white transition-colors border border-white/[0.08] flex items-center justify-center"
             title="Toggle Fullscreen"
           >
-            {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </button>
         </div>
       </header>
 
       {/* Idle Reset Warning Modal */}
       {showIdleWarning && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/85 backdrop-blur-md animate-fadeIn">
-          <div className="bg-stone-900 border border-amber-500/40 p-8 rounded-3xl max-w-md w-full text-center space-y-4 shadow-2xl">
-            <Clock className="w-12 h-12 text-amber-400 mx-auto animate-pulse" />
-            <h3 className="font-serif text-2xl font-bold">Are You Still There?</h3>
-            <p className="text-sm text-stone-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-[#121316] border border-white/[0.08] p-8 rounded-md max-w-md w-full text-center space-y-4 shadow-2xl">
+            <Clock className="w-10 h-10 text-neutral-400 mx-auto" />
+            <h3 className="font-serif text-2xl font-normal text-white">Are you still there?</h3>
+            <p className="text-xs text-neutral-400">
               For your privacy, this kiosk will automatically clear your photos and reset in {90 - idleTime} seconds.
             </p>
             <button
@@ -384,9 +383,9 @@ export default function KioskMode() {
                 setIdleTime(0);
                 setShowIdleWarning(false);
               }}
-              className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold uppercase tracking-wider rounded-xl text-sm"
+              className="w-full min-h-[48px] py-3 bg-white hover:bg-neutral-100 text-neutral-950 font-medium rounded-md text-sm transition-colors"
             >
-              I'm Still Here &bull; Continue Fitting
+              I'm still here &bull; Continue fitting
             </button>
           </div>
         </div>
@@ -397,51 +396,49 @@ export default function KioskMode() {
         
         {/* ===================== STEP 1: WELCOME SCREEN ===================== */}
         {step === 'welcome' && (
-          <div className="max-w-3xl text-center space-y-8 animate-fadeIn my-auto">
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs uppercase tracking-widest font-semibold rounded-full">
-              <Sparkles className="w-4 h-4" />
-              <span>Mall Interactive Touchscreen Edition</span>
+          <div className="max-w-2xl text-center space-y-6 animate-fadeIn my-auto">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/[0.05] border border-white/[0.08] text-neutral-300 text-xs font-mono rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Mall Interactive Touchscreen</span>
             </div>
 
-            <h1 className="font-serif text-5xl sm:text-6xl font-bold tracking-tight text-white leading-tight">
-              Experience Fashion <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200">
-                Before You Wear It.
-              </span>
+            <h1 className="font-serif text-4xl sm:text-6xl font-normal text-white tracking-tight leading-tight">
+              Experience fashion <br />
+              <span className="italic font-light text-neutral-300">before you wear it.</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-stone-300 max-w-xl mx-auto leading-relaxed">
-              Step into the future of luxury shopping. Stand in front of our smart AI camera to preview sarees, dresses, and designer attire instantly on your body.
+            <p className="text-sm sm:text-base text-neutral-400 max-w-lg mx-auto leading-relaxed">
+              Stand in front of our smart atelier camera to preview sarees, dresses, and designer attire instantly draped onto your silhouette.
             </p>
 
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={() => setStep('consent')}
-                className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-stone-950 text-base uppercase tracking-widest font-extrabold rounded-2xl flex items-center justify-center space-x-3 transition-all transform hover:scale-105 shadow-2xl"
+                className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-white hover:bg-neutral-100 text-neutral-950 text-sm font-medium rounded-md flex items-center justify-center space-x-2 transition-colors shadow-sm"
               >
-                <span>Start Virtual Fitting</span>
-                <ArrowRight className="w-5 h-5" />
+                <span>Start virtual fitting</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
 
               <button
                 onClick={() => {
                   setStep('select_category');
                 }}
-                className="w-full sm:w-auto px-8 py-5 bg-white/10 hover:bg-white/15 border border-white/20 text-white text-base uppercase tracking-widest font-bold rounded-2xl flex items-center justify-center space-x-2 transition-all"
+                className="w-full sm:w-auto min-h-[48px] px-6 py-3.5 bg-neutral-900 hover:bg-neutral-800 border border-white/[0.08] text-white text-sm font-medium rounded-md flex items-center justify-center space-x-2 transition-colors"
               >
-                <Layers className="w-5 h-5 text-amber-400" />
-                <span>Browse Outfits First</span>
+                <Layers className="w-4 h-4 text-neutral-400" />
+                <span>Browse outfits first</span>
               </button>
             </div>
 
-            <div className="pt-8 flex items-center justify-center space-x-6 text-xs text-stone-400">
-              <div className="flex items-center space-x-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Automatic Session Erasure</span>
+            <div className="pt-6 flex items-center justify-center space-x-6 text-xs text-neutral-500 font-mono">
+              <div className="flex items-center space-x-1.5">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Automatic session erasure</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <Zap className="w-4 h-4 text-amber-400" />
-                <span>Touchless Pose Auto-Capture</span>
+              <div className="flex items-center space-x-1.5">
+                <Zap className="w-3.5 h-3.5 text-neutral-400" />
+                <span>Hands-free auto capture</span>
               </div>
             </div>
           </div>
@@ -449,41 +446,41 @@ export default function KioskMode() {
 
         {/* ===================== STEP 2: PRIVACY & CONSENT ===================== */}
         {step === 'consent' && (
-          <div className="max-w-2xl bg-stone-900/90 border border-white/15 p-8 sm:p-12 rounded-3xl text-center space-y-6 shadow-2xl animate-fadeIn">
-            <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto text-emerald-400">
-              <ShieldCheck className="w-8 h-8" />
+          <div className="max-w-xl bg-[#121316] border border-white/[0.08] p-8 sm:p-10 rounded-md text-center space-y-6 shadow-2xl animate-fadeIn">
+            <div className="w-12 h-12 bg-white/[0.05] border border-white/[0.08] rounded-full flex items-center justify-center mx-auto text-emerald-400">
+              <ShieldCheck className="w-6 h-6" />
             </div>
 
-            <h2 className="font-serif text-3xl font-bold">Your Privacy Is Protected</h2>
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-white">Your privacy is protected</h2>
 
-            <div className="text-sm text-stone-300 text-left space-y-3 bg-black/40 p-5 rounded-2xl border border-white/10">
+            <div className="text-xs text-neutral-300 text-left space-y-3 bg-[#17181C] p-5 rounded-md border border-white/[0.08]">
               <div className="flex items-start space-x-3">
                 <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <span><strong>No Public Storage:</strong> Your photo is processed strictly in temporary volatile memory.</span>
+                <span><strong>No public storage:</strong> Your photo is processed strictly in temporary volatile memory.</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <span><strong>Zero Data Sharing:</strong> Your photograph is never shown to other shoppers or sold.</span>
+                <span><strong>Zero data sharing:</strong> Your photograph is never shown to other shoppers or sold.</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
-                <span><strong>Instant Purge:</strong> When your session ends or times out, your photo is permanently erased.</span>
+                <span><strong>Instant purge:</strong> When your session ends or times out, your photo is permanently erased.</span>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-4 pt-4">
+            <div className="flex items-center justify-center gap-3 pt-2">
               <button
                 onClick={() => setStep('welcome')}
-                className="px-6 py-4 border border-white/20 rounded-xl text-xs uppercase tracking-wider font-semibold text-stone-400 hover:text-white"
+                className="min-h-[48px] px-6 py-3 border border-white/[0.08] rounded-md text-xs font-medium text-neutral-400 hover:text-white"
               >
                 Back
               </button>
 
               <button
                 onClick={() => setStep('select_category')}
-                className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2"
+                className="flex-1 min-h-[48px] py-3 bg-white hover:bg-neutral-100 text-neutral-950 font-medium text-xs rounded-md transition-colors shadow-sm flex items-center justify-center space-x-2"
               >
-                <span>I Agree &bull; Continue</span>
+                <span>I agree &bull; Continue</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -492,13 +489,13 @@ export default function KioskMode() {
 
         {/* ===================== STEP 3: SELECT CATEGORY ===================== */}
         {step === 'select_category' && (
-          <div className="w-full max-w-5xl space-y-8 animate-fadeIn">
-            <div className="text-center space-y-2">
-              <h2 className="font-serif text-3xl sm:text-4xl font-bold">What Would You Like to Try On?</h2>
-              <p className="text-stone-400 text-sm">Select an apparel category to view luxury catalogue styles</p>
+          <div className="w-full max-w-4xl space-y-6 animate-fadeIn">
+            <div className="text-center space-y-1">
+              <h2 className="font-serif text-3xl font-normal text-white">What would you like to try on?</h2>
+              <p className="text-neutral-400 text-xs">Select an apparel category to view catalogue styles</p>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -506,27 +503,27 @@ export default function KioskMode() {
                     setSelectedCategory(cat);
                     setStep('select_products');
                   }}
-                  className="group bg-stone-900/80 hover:bg-stone-800 border border-white/10 hover:border-amber-500/50 p-6 rounded-3xl flex flex-col items-center justify-center text-center space-y-3 transition-all transform hover:-translate-y-1 shadow-lg"
+                  className="group bg-[#121316] hover:bg-[#17181C] border border-white/[0.08] hover:border-white/[0.2] p-6 rounded-md flex flex-col items-center justify-center text-center space-y-3 transition-colors min-h-[140px]"
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
-                    <Sparkles className="w-7 h-7" />
+                  <div className="w-12 h-12 rounded-full bg-white/[0.05] border border-white/[0.08] flex items-center justify-center text-neutral-300 group-hover:text-white transition-colors">
+                    <Layers className="w-5 h-5" strokeWidth={1.5} />
                   </div>
-                  <span className="font-serif text-lg font-bold text-white group-hover:text-amber-300">
+                  <span className="font-serif text-base font-normal text-white">
                     {cat.name}
                   </span>
-                  <span className="text-[11px] text-stone-400 uppercase tracking-wider">
-                    Browse Collection
+                  <span className="text-[11px] text-neutral-400">
+                    Browse collection
                   </span>
                 </button>
               ))}
             </div>
 
-            <div className="flex justify-between items-center pt-4">
+            <div className="flex justify-between items-center pt-2">
               <button
                 onClick={() => setStep('welcome')}
-                className="px-6 py-3 border border-white/20 rounded-xl text-xs uppercase tracking-wider font-semibold"
+                className="min-h-[44px] px-5 py-2.5 border border-white/[0.08] rounded-md text-xs font-medium text-neutral-400 hover:text-white"
               >
-                &larr; Back to Welcome
+                &larr; Back to welcome
               </button>
             </div>
           </div>
@@ -534,22 +531,22 @@ export default function KioskMode() {
 
         {/* ===================== STEP 4: SELECT PRODUCTS ===================== */}
         {step === 'select_products' && (
-          <div className="w-full max-w-6xl space-y-6 animate-fadeIn">
+          <div className="w-full max-w-5xl space-y-6 animate-fadeIn">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h2 className="font-serif text-3xl font-bold">Select Outfits to Try On</h2>
-                <p className="text-stone-400 text-xs">
+                <h2 className="font-serif text-2xl sm:text-3xl font-normal text-white">Select outfits to try on</h2>
+                <p className="text-neutral-400 text-xs">
                   Tap garments to select (up to 4 outfits at once). Currently selected:{' '}
-                  <span className="text-amber-400 font-bold">{selectedProducts.length}</span>
+                  <span className="text-white font-medium">{selectedProducts.length}</span>
                 </p>
               </div>
 
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setStep('select_category')}
-                  className="px-4 py-2 border border-white/20 rounded-xl text-xs font-semibold"
+                  className="min-h-[44px] px-4 py-2 border border-white/[0.08] rounded-md text-xs font-medium text-neutral-300 hover:text-white"
                 >
-                  Change Category
+                  Change category
                 </button>
 
                 <button
@@ -558,9 +555,9 @@ export default function KioskMode() {
                     setStep('capture_pose');
                     startCamera();
                   }}
-                  className="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg disabled:opacity-40 flex items-center space-x-2"
+                  className="min-h-[44px] px-6 py-2.5 bg-white hover:bg-neutral-100 text-neutral-950 font-medium text-xs rounded-md transition-colors shadow-sm disabled:opacity-40 flex items-center space-x-2"
                 >
-                  <span>Proceed to Camera ({selectedProducts.length})</span>
+                  <span>Proceed to camera ({selectedProducts.length})</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -584,25 +581,25 @@ export default function KioskMode() {
                           }
                         }
                       }}
-                      className={`relative bg-stone-900 border rounded-2xl overflow-hidden cursor-pointer transition-all transform hover:scale-[1.02] ${
-                        isSelected ? 'border-amber-400 ring-2 ring-amber-400/50' : 'border-white/10'
+                      className={`relative bg-[#121316] border rounded-md overflow-hidden cursor-pointer transition-colors ${
+                        isSelected ? 'border-white ring-1 ring-white' : 'border-white/[0.08] hover:border-white/[0.2]'
                       }`}
                     >
-                      <div className="aspect-[3/4] bg-stone-950 overflow-hidden relative">
+                      <div className="aspect-[3/4] bg-[#0D0E10] overflow-hidden relative">
                         <img
                           src={prod.primary_image_url || prod.image_url}
                           alt={prod.name}
                           className="w-full h-full object-cover"
                         />
                         {isSelected && (
-                          <div className="absolute top-3 right-3 bg-amber-500 text-stone-950 p-1.5 rounded-full shadow-lg">
-                            <Check className="w-4 h-4 stroke-[3]" />
+                          <div className="absolute top-2 right-2 bg-neutral-900 text-white p-1 rounded-full shadow-sm">
+                            <Check className="w-3.5 h-3.5" />
                           </div>
                         )}
                       </div>
-                      <div className="p-3.5 space-y-1">
-                        <div className="text-xs font-bold line-clamp-1 text-white">{prod.name}</div>
-                        <div className="text-[11px] text-amber-400 font-bold">₹{prod.price}</div>
+                      <div className="p-3 space-y-0.5">
+                        <div className="text-xs font-serif font-normal line-clamp-1 text-white">{prod.name}</div>
+                        <div className="text-xs text-neutral-300 font-mono">₹{prod.price}</div>
                       </div>
                     </div>
                   );
@@ -613,29 +610,29 @@ export default function KioskMode() {
 
         {/* ===================== STEP 5: CAMERA POSE CAPTURE ===================== */}
         {step === 'capture_pose' && (
-          <div className="w-full max-w-4xl space-y-4 animate-fadeIn">
+          <div className="w-full max-w-3xl space-y-4 animate-fadeIn">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="font-serif text-2xl font-bold">Smart AI Camera</h2>
-                <p className="text-stone-400 text-xs">Stand still in front of the lens. The photo captures automatically.</p>
+                <h2 className="font-serif text-2xl font-normal text-white">Smart camera</h2>
+                <p className="text-neutral-400 text-xs">Stand still facing the lens. The photograph captures automatically.</p>
               </div>
 
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setIsAutoCaptureOn(!isAutoCaptureOn)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-lg border ${
+                  className={`min-h-[36px] px-3 py-1.5 text-xs font-mono rounded-md border ${
                     isAutoCaptureOn
-                      ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                      : 'bg-stone-800 border-stone-700 text-stone-400'
+                      ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300'
+                      : 'bg-neutral-800 border-neutral-700 text-neutral-400'
                   }`}
                 >
-                  Auto-Capture: {isAutoCaptureOn ? 'ON' : 'OFF'}
+                  Auto-capture: {isAutoCaptureOn ? 'ON' : 'OFF'}
                 </button>
               </div>
             </div>
 
             {/* Viewfinder Container */}
-            <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-black rounded-3xl overflow-hidden border border-white/20 shadow-2xl flex items-center justify-center">
+            <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-black rounded-md overflow-hidden border border-white/[0.08] shadow-2xl flex items-center justify-center">
               
               {!customerPhotoUrl ? (
                 <>
@@ -652,34 +649,34 @@ export default function KioskMode() {
                   />
 
                   {/* Framing Guide */}
-                  <div className="absolute inset-8 border border-dashed border-amber-400/40 pointer-events-none rounded-2xl flex flex-col justify-between p-4">
+                  <div className="absolute inset-8 border border-dashed border-white/20 pointer-events-none rounded-md flex flex-col justify-between p-4">
                     <div className="flex justify-between">
-                      <span className="w-4 h-4 border-t-2 border-l-2 border-amber-400" />
-                      <span className="w-4 h-4 border-t-2 border-r-2 border-amber-400" />
+                      <span className="w-4 h-4 border-t-2 border-l-2 border-white/60" />
+                      <span className="w-4 h-4 border-t-2 border-r-2 border-white/60" />
                     </div>
                     <div className="flex justify-between">
-                      <span className="w-4 h-4 border-b-2 border-l-2 border-amber-400" />
-                      <span className="w-4 h-4 border-b-2 border-r-2 border-amber-400" />
+                      <span className="w-4 h-4 border-b-2 border-l-2 border-white/60" />
+                      <span className="w-4 h-4 border-b-2 border-r-2 border-white/60" />
                     </div>
                   </div>
 
                   {/* Pose Guidance Alert */}
                   <div className="absolute top-6 inset-x-6 flex flex-col items-center pointer-events-none">
-                    <div className={`px-5 py-2.5 rounded-2xl text-xs font-bold border shadow-xl flex items-center space-x-2 ${
+                    <div className={`px-4 py-2 rounded-md text-xs font-mono border shadow-xl flex items-center space-x-2 ${
                       poseState.status === 'perfect'
-                        ? 'bg-emerald-500 text-white border-emerald-400'
+                        ? 'bg-emerald-600 text-white border-emerald-500'
                         : poseState.status === 'holding_still'
-                        ? 'bg-amber-500 text-stone-950 border-amber-400'
+                        ? 'bg-neutral-900 text-white border-white/20'
                         : 'bg-black/80 text-white border-white/20'
                     }`}>
-                      <Scan className="w-4 h-4 animate-spin text-amber-300" />
+                      <Scan className="w-4 h-4 animate-spin text-neutral-300" />
                       <span>{poseState.guidance}</span>
                     </div>
 
                     {poseState.progress > 0 && poseState.progress < 1.0 && (
-                      <div className="w-48 bg-black/60 rounded-full h-1.5 overflow-hidden border border-white/20 mt-2">
+                      <div className="w-48 bg-black/60 rounded-full h-1 overflow-hidden border border-white/20 mt-2">
                         <div
-                          className="bg-amber-400 h-full transition-all duration-75"
+                          className="bg-white h-full transition-all duration-75"
                           style={{ width: `${Math.round(poseState.progress * 100)}%` }}
                         />
                       </div>
@@ -690,18 +687,18 @@ export default function KioskMode() {
                   <div className="absolute bottom-6 inset-x-6 flex justify-center pointer-events-auto">
                     <button
                       onClick={() => capturePhoto('manual')}
-                      className="px-6 py-3 bg-white text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-2xl flex items-center space-x-2 hover:bg-stone-200"
+                      className="min-h-[48px] px-6 py-3 bg-white text-neutral-950 font-medium text-xs rounded-md shadow-2xl flex items-center space-x-2 hover:bg-neutral-100"
                     >
                       <Camera className="w-4 h-4" />
-                      <span>Capture Now</span>
+                      <span>Capture now</span>
                     </button>
                   </div>
                 </>
               ) : (
                 <div className="relative w-full h-full">
                   <img src={customerPhotoUrl} alt="Captured" className="w-full h-full object-cover" />
-                  <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-1.5 rounded-lg text-xs font-bold border border-white/20">
-                    Silhouette Captured &bull; HD
+                  <div className="absolute top-4 left-4 bg-black/80 text-white px-3 py-1.5 rounded-md text-xs font-mono border border-white/20">
+                    Silhouette captured &bull; HD
                   </div>
                 </div>
               )}
@@ -712,16 +709,16 @@ export default function KioskMode() {
               <div className="flex items-center justify-between pt-2">
                 <button
                   onClick={retakePhoto}
-                  className="px-6 py-3 border border-white/20 rounded-xl text-xs font-bold uppercase tracking-wider"
+                  className="min-h-[48px] px-6 py-3 border border-white/[0.08] rounded-md text-xs font-medium text-neutral-300 hover:text-white"
                 >
-                  Retake Photo
+                  Retake photo
                 </button>
 
                 <button
                   onClick={executeTryOn}
-                  className="px-8 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg flex items-center space-x-2"
+                  className="min-h-[48px] px-8 py-3 bg-white hover:bg-neutral-100 text-neutral-950 font-medium text-xs rounded-md shadow-sm flex items-center space-x-2"
                 >
-                  <span>Start AI Try-On ({selectedProducts.length} Outfits)</span>
+                  <span>Start virtual try-on ({selectedProducts.length} outfits)</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
@@ -732,19 +729,18 @@ export default function KioskMode() {
         {/* ===================== STEP 6: PROCESSING ANIMATION ===================== */}
         {step === 'processing' && (
           <div className="max-w-md text-center space-y-6 animate-fadeIn my-auto">
-            <div className="relative w-28 h-28 mx-auto">
-              <RefreshCw className="w-28 h-28 text-amber-500 animate-spin" />
-              <Sparkles className="w-10 h-10 text-white absolute inset-0 m-auto" />
+            <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
+              <RefreshCw className="w-12 h-12 text-neutral-300 animate-spin" strokeWidth={1.5} />
             </div>
 
-            <h2 className="font-serif text-3xl font-bold">Draping Garments on Your Body...</h2>
-            <p className="text-stone-300 text-xs">
-              Genlook neural virtual try-on engine is rendering realistic fabric folds, pleats, and anatomical contours.
+            <h2 className="font-serif text-3xl font-normal text-white">Draping garments...</h2>
+            <p className="text-neutral-400 text-xs">
+              Genlook neural virtual try-on engine is synthesizing fabric drape, pleats, and anatomical contours.
             </p>
 
-            <div className="w-full bg-stone-800 rounded-full h-2 overflow-hidden border border-white/10">
+            <div className="w-full bg-neutral-800 rounded-full h-1 overflow-hidden border border-white/[0.08]">
               <div
-                className="bg-gradient-to-r from-amber-500 to-amber-300 h-full transition-all duration-300"
+                className="bg-white h-full transition-all duration-300"
                 style={{ width: `${generationProgress}%` }}
               />
             </div>
@@ -753,11 +749,11 @@ export default function KioskMode() {
 
         {/* ===================== STEP 7: COMPARE RESULTS ===================== */}
         {step === 'compare_results' && (
-          <div className="w-full max-w-6xl space-y-6 animate-fadeIn">
+          <div className="w-full max-w-5xl space-y-6 animate-fadeIn">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
-                <h2 className="font-serif text-3xl font-bold">Your Tried Outfits</h2>
-                <p className="text-stone-400 text-xs">Side-by-side comparison of your virtual fitting results</p>
+                <h2 className="font-serif text-2xl sm:text-3xl font-normal text-white">Your tried outfits</h2>
+                <p className="text-neutral-400 text-xs">Side-by-side comparison of your virtual fitting results</p>
               </div>
 
               <div className="flex items-center space-x-3">
@@ -765,16 +761,16 @@ export default function KioskMode() {
                   onClick={() => {
                     setStep('select_products');
                   }}
-                  className="px-4 py-2 border border-white/20 rounded-xl text-xs font-semibold"
+                  className="min-h-[44px] px-4 py-2 border border-white/[0.08] rounded-md text-xs font-medium text-neutral-300 hover:text-white"
                 >
-                  Try More Outfits
+                  Try more outfits
                 </button>
 
                 <button
                   onClick={endSession}
-                  className="px-6 py-2.5 bg-red-600 hover:bg-red-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg"
+                  className="min-h-[44px] px-6 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-xs rounded-md shadow-sm border border-white/[0.08]"
                 >
-                  Done &bull; Clear Session
+                  Done &bull; Clear session
                 </button>
               </div>
             </div>
@@ -784,7 +780,7 @@ export default function KioskMode() {
               {triedOutfits.map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-stone-900 border border-white/15 rounded-3xl overflow-hidden shadow-2xl flex flex-col"
+                  className="bg-[#121316] border border-white/[0.08] rounded-md overflow-hidden shadow-2xl flex flex-col"
                 >
                   <div className="aspect-[3/4] bg-black overflow-hidden relative">
                     <img
@@ -792,17 +788,17 @@ export default function KioskMode() {
                       alt={item.product?.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-emerald-400 border border-emerald-500/30">
-                      ✓ Fit Confidence: {item.drapeScore}%
+                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2.5 py-1 rounded-sm text-[10px] font-mono text-emerald-400 border border-emerald-500/30">
+                      ✓ Fit confidence: {item.drapeScore}%
                     </div>
                   </div>
 
                   <div className="p-4 space-y-1">
-                    <div className="text-sm font-bold text-white line-clamp-1">
+                    <div className="text-sm font-serif font-normal text-white line-clamp-1">
                       {item.product?.name}
                     </div>
-                    <div className="text-xs text-stone-400">
-                      Brand: <span className="text-white font-medium">{item.product?.brand}</span> &bull; ₹{item.product?.price}
+                    <div className="text-xs text-neutral-400 font-mono">
+                      {item.product?.brand ? `${item.product.brand} · ` : ''}₹{item.product?.price}
                     </div>
                   </div>
                 </div>

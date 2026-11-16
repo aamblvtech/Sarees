@@ -35,6 +35,13 @@ export const cameraService = {
   },
 
   /**
+   * Alias for startCamera to maintain backwards compatibility
+   */
+  async startStream(constraints) {
+    return this.startCamera(constraints);
+  },
+
+  /**
    * Capture snapshot frame from an active video element
    *
    * Validations enforced:

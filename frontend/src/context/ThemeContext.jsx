@@ -44,7 +44,7 @@ export function ThemeProvider({ children }) {
       localStorage.setItem('vestra_theme', theme);
     } catch {}
 
-    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0F172A' : '#FFFFFF'})`);
+    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0D0E10' : '#FFFFFF'})`);
   }, [theme]);
 
   const toggleTheme = () => {

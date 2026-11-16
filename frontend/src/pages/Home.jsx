@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Sparkles, ArrowRight, Camera, CheckCircle2, Shield, Cpu, Layers } from 'lucide-react';
+import { ArrowRight, Camera, Layers, Cpu, Check } from 'lucide-react';
 import productService from '../services/productService';
 import ProductCard from '../components/ProductCard';
 
@@ -17,7 +17,6 @@ export default function Home() {
           productService.getProducts()
         ]);
         setCategories(cats || []);
-        // Display top 4 featured garments for hero showcase
         const featured = (prods || []).filter(p => p.isFeatured).slice(0, 4);
         setFeaturedProducts(featured.length > 0 ? featured : (prods || []).slice(0, 4));
       } catch (e) {
@@ -30,101 +29,103 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-[#FFFFFF] transition-colors duration-200">
+    <div className="min-h-screen bg-white dark:bg-[#121316] text-neutral-900 dark:text-neutral-100 transition-colors">
       
       {/* 1. HERO SECTION */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-slate-100 dark:border-slate-800">
-        
-        {/* Background Editorial Image with subtle veil */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=2000&q=88"
-            alt="VESTRA Luxury Editorial"
-            className="w-full h-full object-cover object-top filter brightness-[0.98] dark:brightness-[0.4]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent dark:from-[#0F172A] dark:via-[#0F172A]/90 dark:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-white dark:from-[#0F172A] via-transparent to-transparent" />
-        </div>
-
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 w-full">
-          <div className="max-w-2xl space-y-8">
+      <section className="border-b border-black/[0.08] dark:border-white/[0.08]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-[#F5AFAF] pulse-camera" />
-              <span className="text-[10px] tracking-[0.2em] uppercase font-mono font-medium text-slate-800 dark:text-slate-300">
-                AI Virtual Try-On Studio &bull; Precision Draping
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl font-normal leading-[1.06] tracking-tight text-slate-900 dark:text-[#FFFFFF]">
-                Try Before <br />
-                <span className="italic font-normal">You Buy.</span>
-              </h1>
-              <p className="text-lg sm:text-xl font-light text-slate-600 dark:text-slate-300 tracking-wide leading-relaxed">
-                Experience Fashion Before You Wear It. Neural garment synthesis calibrated directly to your personal silhouette portrait.
-              </p>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-              <Link
-                to="/try-on"
-                className="px-8 py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 dark:bg-[#FFFFFF] dark:hover:bg-slate-100 dark:text-[#000000] text-xs uppercase tracking-[0.2em] font-semibold text-center transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center space-x-3 border-2 border-slate-900 dark:border-white group"
-              >
-                <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
-                <span>Enter Virtual Fitting Room</span>
-              </Link>
+            {/* Left Column: Calm Typography & Clear Actions */}
+            <div className="lg:col-span-7 space-y-6">
               
-              <Link
-                to="/catalogue"
-                className="px-8 py-4 bg-white dark:bg-[#1E293B] hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-[#FFFFFF] text-xs uppercase tracking-[0.2em] font-medium text-center transition-all duration-200 flex items-center justify-center space-x-2 shadow-xs group"
-              >
-                <span>Browse Clothing Archive</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              <div className="inline-flex items-center space-x-2 text-[11px] text-neutral-500 dark:text-neutral-400 font-mono tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-400" />
+                <span>Virtual Fitting Atelier &bull; Precision Draping</span>
+              </div>
+
+              <div className="space-y-4 max-w-xl">
+                <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal leading-[1.08] text-neutral-900 dark:text-neutral-100">
+                  Experience Fashion Before You Wear It
+                </h1>
+                <p className="text-base sm:text-lg font-normal text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                  Calibrated virtual fitting for Indian heritage weaves, bespoke tailoring, and contemporary silhouettes. Preview genuine garment drape on your silhouette portrait.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
+                <Link
+                  to="/try-on"
+                  className="h-11 px-6 rounded-md bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-white dark:text-neutral-900 text-xs font-medium inline-flex items-center justify-center transition-colors shadow-xs"
+                >
+                  Start Virtual Try-On
+                </Link>
+                
+                <Link
+                  to="/catalogue"
+                  className="h-11 px-6 rounded-md bg-white dark:bg-[#17181C] hover:bg-neutral-50 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-200 border border-black/[0.12] dark:border-white/[0.12] text-xs font-medium inline-flex items-center justify-center space-x-1.5 transition-colors"
+                >
+                  <span>Browse Collection</span>
+                  <ArrowRight className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
+                </Link>
+              </div>
+
+              {/* Plain Trust Metrics */}
+              <div className="pt-6 grid grid-cols-3 gap-6 border-t border-black/[0.06] dark:border-white/[0.06] max-w-lg">
+                <div>
+                  <p className="font-mono text-2xl font-medium text-neutral-900 dark:text-neutral-100">91+</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Archival garments</p>
+                </div>
+                <div>
+                  <p className="font-mono text-2xl font-medium text-neutral-900 dark:text-neutral-100">&lt; 3s</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">AI synthesis time</p>
+                </div>
+                <div>
+                  <p className="font-mono text-2xl font-medium text-neutral-900 dark:text-neutral-100">Zero</p>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">Portrait retention</p>
+                </div>
+              </div>
+
             </div>
 
-            {/* Trust Metrics */}
-            <div className="pt-6 grid grid-cols-3 gap-6 border-t border-slate-200/80 dark:border-slate-800 text-left">
-              <div>
-                <p className="font-mono text-2xl font-bold text-slate-900 dark:text-[#FFFFFF]">100%</p>
-                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-mono">Zero Fabric Waste</p>
-              </div>
-              <div>
-                <p className="font-mono text-2xl font-bold text-slate-900 dark:text-[#FFFFFF]">&lt; 3s</p>
-                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-mono">Drape Synthesis</p>
-              </div>
-              <div>
-                <p className="font-mono text-2xl font-bold text-slate-900 dark:text-[#FFFFFF]">Isolated</p>
-                <p className="text-[10px] uppercase tracking-wider text-slate-500 font-mono">Private Sessions</p>
+            {/* Right Column: High-Fashion Editorial Moment */}
+            <div className="lg:col-span-5">
+              <div className="relative aspect-[4/5] rounded-lg overflow-hidden border border-black/[0.08] dark:border-white/[0.08] bg-neutral-100 dark:bg-neutral-900 shadow-atelier-card">
+                <img
+                  src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85"
+                  alt="VESTRA Luxury Editorial"
+                  className="w-full h-full object-cover object-top filter brightness-[0.98] dark:brightness-[0.9]"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <p className="text-[11px] font-mono tracking-wider text-white/80 uppercase">Atelier Archive</p>
+                  <p className="font-serif text-lg font-normal">Authentic Drape Simulation</p>
+                </div>
               </div>
             </div>
 
           </div>
         </div>
-
       </section>
-
 
       {/* 2. CAPSULE CATEGORIES */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] gap-4">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] font-mono text-[#F5AFAF] font-bold mb-2">
+            <p className="text-xs font-mono uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
               Curated Capsules
             </p>
-            <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-[#FFFFFF]">
+            <h2 className="font-serif text-2xl sm:text-3xl text-neutral-900 dark:text-neutral-100">
               Explore by Silhouette
             </h2>
           </div>
           <Link
             to="/catalogue"
-            className="mt-4 md:mt-0 text-xs uppercase tracking-widest text-slate-800 dark:text-[#FFFFFF] hover:text-[#F5AFAF] font-semibold inline-flex items-center space-x-2 transition-colors"
+            className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white inline-flex items-center space-x-1.5 transition-colors"
           >
-            <span>View Full Archive</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>View all garments</span>
+            <ArrowRight className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
           </Link>
         </div>
 
@@ -134,55 +135,56 @@ export default function Home() {
             <Link
               key={category.id || idx}
               to={`/catalogue?category=${category.slug}`}
-              className="group relative aspect-[4/5] overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-800 block shadow-xs hover:shadow-md transition-shadow"
+              className="group relative aspect-[4/5] rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-black/[0.08] dark:border-white/[0.08] block transition-all hover:border-black/20 dark:hover:border-white/20"
             >
               <img
                 src={category.imageUrl}
                 alt={category.name}
-                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-white space-y-2">
-                <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-semibold block">
-                  Capsule 0{idx + 1}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white space-y-1.5">
+                <span className="text-[10px] font-mono tracking-wider text-neutral-300 block">
+                  Collection 0{idx + 1}
                 </span>
-                <h3 className="font-serif text-2xl font-semibold tracking-wide">
+                <h3 className="font-serif text-xl font-normal">
                   {category.name}
                 </h3>
-                <p className="text-xs text-slate-200 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-neutral-200 line-clamp-2 leading-relaxed">
                   {category.description}
                 </p>
-                <div className="pt-2 flex items-center space-x-1.5 text-xs text-white font-semibold uppercase tracking-wider group-hover:underline">
-                  <span>Explore Capsule</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
               </div>
             </Link>
           ))}
         </div>
       </section>
 
-
       {/* 3. FEATURED PRODUCTS SECTION */}
-      <section className="py-20 bg-slate-50/50 dark:bg-[#0F172A] border-y border-slate-100 dark:border-slate-800">
+      <section className="py-20 bg-neutral-50 dark:bg-[#0D0E10] border-y border-black/[0.08] dark:border-white/[0.08]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-xl mx-auto mb-16 space-y-3">
-            <span className="text-xs uppercase tracking-[0.25em] font-mono text-[#F5AFAF] font-bold">
-              Signature Editions
-            </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-[#FFFFFF]">
-              Featured Garments Ready for Fitting
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Select any garment below to immediately launch the virtual fitting room.
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-black/[0.06] dark:border-white/[0.06] gap-4">
+            <div>
+              <p className="text-xs font-mono uppercase tracking-wider text-neutral-500 dark:text-neutral-400 mb-1">
+                Featured Edits
+              </p>
+              <h2 className="font-serif text-2xl sm:text-3xl text-neutral-900 dark:text-neutral-100">
+                Signature Garments
+              </h2>
+            </div>
+            <Link
+              to="/catalogue"
+              className="text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white inline-flex items-center space-x-1.5 transition-colors"
+            >
+              <span>View full collection</span>
+              <ArrowRight className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
+            </Link>
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map(n => (
-                <div key={n} className="aspect-[3/4] bg-white dark:bg-slate-800 border border-slate-100" />
+                <div key={n} className="aspect-[3/4] bg-white dark:bg-neutral-800 rounded-lg border border-black/[0.08] animate-pulse" />
               ))}
             </div>
           ) : (
@@ -193,115 +195,97 @@ export default function Home() {
             </div>
           )}
 
-          <div className="text-center mt-12">
-            <Link
-              to="/catalogue"
-              className="inline-flex items-center space-x-2 px-8 py-3.5 border border-slate-300 dark:border-[#FFFFFF] bg-white text-xs uppercase tracking-[0.2em] font-semibold text-slate-800 dark:text-[#FFFFFF] hover:bg-slate-50 shadow-xs transition-colors"
-            >
-              <span>Explore Complete Collection</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
         </div>
       </section>
 
-
-      {/* 4. HOW IT WORKS (Minimal Numbered Steps) */}
+      {/* 4. HOW IT WORKS */}
       <section id="how-it-works" className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
-          <span className="text-xs uppercase tracking-[0.25em] font-mono text-[#F5AFAF] font-bold">
-            How It Works
-          </span>
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-slate-900 dark:text-[#FFFFFF]">
-            Neural Fitting in Four Steps
+        <div className="max-w-2xl mb-16 space-y-2">
+          <p className="text-xs font-mono uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+            Process
+          </p>
+          <h2 className="font-serif text-3xl sm:text-4xl text-neutral-900 dark:text-neutral-100">
+            Virtual Try-On in Four Steps
           </h2>
-          <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-            VESTRA integrates computer vision pose landmark detection with volumetric cloth draping for accurate size and fit preview.
+          <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            Real-time pose estimation combined with cloth draping models to preview garment fit and proportions.
           </p>
         </div>
 
-        {/* 4-Step Grid with Minimal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* 4-Step Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           
-          <div className="p-6 bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 space-y-4 relative shadow-xs">
-            <span className="font-mono text-3xl font-bold text-[#F5AFAF] dark:text-slate-700 block">01</span>
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-[#FFFFFF]">
-              <Camera className="w-5 h-5 text-[#F5AFAF]" />
+          <div className="p-6 bg-white dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-lg space-y-3">
+            <span className="font-mono text-sm text-neutral-400 block">01</span>
+            <div className="w-9 h-9 rounded-md bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+              <Camera className="w-4 h-4" strokeWidth={1.5} />
             </div>
-            <h3 className="font-serif text-xl font-semibold text-slate-900 dark:text-[#FFFFFF]">
-              Upload Portrait
+            <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-100">
+              Capture Portrait
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Upload a full-length photograph, capture a live webcam portrait, or scan a QR code to transfer directly from mobile.
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Upload a photograph, capture via live camera with auto-pose detection, or scan a QR code from mobile.
             </p>
           </div>
 
-          <div className="p-6 bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 space-y-4 relative shadow-xs">
-            <span className="font-mono text-3xl font-bold text-[#F5AFAF] dark:text-slate-700 block">02</span>
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-[#FFFFFF]">
-              <Layers className="w-5 h-5 text-[#F5AFAF]" />
+          <div className="p-6 bg-white dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-lg space-y-3">
+            <span className="font-mono text-sm text-neutral-400 block">02</span>
+            <div className="w-9 h-9 rounded-md bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+              <Layers className="w-4 h-4" strokeWidth={1.5} />
             </div>
-            <h3 className="font-serif text-xl font-semibold text-slate-900 dark:text-[#FFFFFF]">
+            <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-100">
               Select Garment
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Choose from our catalogue across Men's, Women's, Sarees, or upload a custom bespoke garment image.
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Choose from our curated archive across men's, women's, traditional sarees, or upload a custom outfit.
             </p>
           </div>
 
-          <div className="p-6 bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 space-y-4 relative shadow-xs">
-            <span className="font-mono text-3xl font-bold text-[#F5AFAF] dark:text-slate-700 block">03</span>
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-[#FFFFFF]">
-              <Cpu className="w-5 h-5 text-[#F5AFAF]" />
+          <div className="p-6 bg-white dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-lg space-y-3">
+            <span className="font-mono text-sm text-neutral-400 block">03</span>
+            <div className="w-9 h-9 rounded-md bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+              <Cpu className="w-4 h-4" strokeWidth={1.5} />
             </div>
-            <h3 className="font-serif text-xl font-semibold text-slate-900 dark:text-[#FFFFFF]">
-              Cloud AI Synthesis
+            <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-100">
+              Drape Synthesis
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Genlook cloud engine maps torso landmarks, resolves seam tension, and generates a realistic composite image.
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              AI model aligns garment landmarks to customer posture, resolving seams, neckline, and pleat drape.
             </p>
           </div>
 
-          <div className="p-6 bg-white dark:bg-[#1E293B] border border-slate-200/80 dark:border-slate-800 space-y-4 relative shadow-xs">
-            <span className="font-mono text-3xl font-bold text-[#F5AFAF] dark:text-slate-700 block">04</span>
-            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-900 dark:text-[#FFFFFF]">
-              <CheckCircle2 className="w-5 h-5 text-[#F5AFAF]" />
+          <div className="p-6 bg-white dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] rounded-lg space-y-3">
+            <span className="font-mono text-sm text-neutral-400 block">04</span>
+            <div className="w-9 h-9 rounded-md bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-800 dark:text-neutral-200">
+              <Check className="w-4 h-4" strokeWidth={1.5} />
             </div>
-            <h3 className="font-serif text-xl font-semibold text-slate-900 dark:text-[#FFFFFF]">
-              Inspect & Save
+            <h3 className="font-serif text-lg text-neutral-900 dark:text-neutral-100">
+              Compare & Fit
             </h3>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-              Compare the Before portrait with the AI-generated After result side-by-side and save your high-resolution fitting dossier.
+            <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed">
+              Review side-by-side Before and After views, inspect sizing recommendations, and save your fitting dossier.
             </p>
           </div>
 
         </div>
 
-        {/* Studio Launch Banner - Clean Pure White Luxury Card */}
-        <div className="mt-16 p-8 sm:p-12 bg-white dark:bg-[#1E293B] text-slate-900 dark:text-white flex flex-col md:flex-row items-center justify-between gap-8 border border-slate-200/90 dark:border-slate-800 shadow-sm">
-          <div className="space-y-2 max-w-xl">
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-[#F5AFAF]" />
-              <span className="text-[10px] uppercase font-mono tracking-[0.2em] text-[#F5AFAF] font-bold">
-                Live Studio Active
-              </span>
-            </div>
-            <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-white">
-              Ready to test your silhouette?
+        {/* Clean Callout */}
+        <div className="mt-12 p-8 rounded-lg bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1 text-center md:text-left">
+            <h3 className="font-serif text-xl text-neutral-900 dark:text-neutral-100">
+              Ready to preview your fitting?
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-300 leading-relaxed">
-              Upload your photo once and preview any outfit in our catalogue with genuine AI generation.
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              Capture your portrait once to try on multiple outfits with zero credits required in mock preview mode.
             </p>
           </div>
 
           <Link
             to="/try-on"
-            className="whitespace-nowrap px-8 py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 text-slate-900 text-xs uppercase tracking-[0.2em] font-semibold transition-all shadow-xs flex items-center space-x-2 border-2 border-slate-900"
+            className="h-10 px-6 rounded-md bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-white dark:text-neutral-900 text-xs font-medium inline-flex items-center justify-center transition-colors whitespace-nowrap"
           >
-            <Sparkles className="w-4 h-4 text-[#F5AFAF]" />
-            <span>Open Fitting Studio</span>
+            Launch Fitting Studio
           </Link>
         </div>
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { Sparkles, ArrowLeft, RefreshCw, Scissors, ShieldCheck, Check, AlertCircle } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Scissors, AlertCircle, Check } from 'lucide-react';
 import productService from '../services/productService';
 import ProductStatusBadge, { ATELIER_FALLBACK_IMAGE } from '../components/ProductStatusBadge';
 
@@ -46,10 +46,10 @@ export default function ProductDetails() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
+      <div className="min-h-screen bg-white dark:bg-[#121316] flex items-center justify-center p-8 transition-colors">
         <div className="text-center space-y-3">
-          <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#F5AFAF]" />
-          <p className="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">Retrieving Garment Dossier...</p>
+          <RefreshCw className="w-6 h-6 animate-spin mx-auto text-neutral-400" strokeWidth={1.5} />
+          <p className="text-xs text-neutral-500 font-mono">Loading garment details...</p>
         </div>
       </div>
     );
@@ -57,13 +57,13 @@ export default function ProductDetails() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-[#FCF8F8] dark:bg-[#0F172A] flex items-center justify-center p-8 transition-colors">
-        <div className="text-center space-y-4 max-w-md bg-white dark:bg-slate-900 p-8 border border-[#F9DFDF] dark:border-slate-800 shadow-sm">
-          <h2 className="font-serif text-2xl text-slate-900 dark:text-white">Garment Unavailable</h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400">{error || 'Unable to locate this garment in the archive.'}</p>
+      <div className="min-h-screen bg-white dark:bg-[#121316] flex items-center justify-center p-8 transition-colors">
+        <div className="text-center space-y-4 max-w-md bg-neutral-50 dark:bg-[#17181C] p-8 border border-black/[0.08] dark:border-white/[0.08] rounded-lg">
+          <h2 className="font-serif text-2xl text-neutral-900 dark:text-neutral-100">Garment Unavailable</h2>
+          <p className="text-xs text-neutral-500">{error || 'Unable to locate this garment in the collection.'}</p>
           <Link
             to="/catalogue"
-            className="inline-block px-6 py-2.5 bg-[#000000] dark:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#000000] text-xs uppercase tracking-widest font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex h-9 px-5 bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-xs font-medium rounded items-center justify-center transition-colors"
           >
             Return to Catalogue
           </Link>
@@ -72,16 +72,16 @@ export default function ProductDetails() {
     );
   }
 
-  const formattedPrice = new Intl.NumberFormat('en-US', {
+  const formattedPrice = new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: product.currency || 'USD',
+    currency: product.currency || 'INR',
     maximumFractionDigits: 0
   }).format(product.price);
 
   const formattedOriginalPrice = product.originalPrice
-    ? new Intl.NumberFormat('en-US', {
+    ? new Intl.NumberFormat('en-IN', {
         style: 'currency',
-        currency: product.currency || 'USD',
+        currency: product.currency || 'INR',
         maximumFractionDigits: 0
       }).format(product.originalPrice)
     : null;
@@ -93,17 +93,17 @@ export default function ProductDetails() {
   const availableSizes = product.sizes || ['XS', 'S', 'M', 'L', 'XL'];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-white dark:bg-[#121316] text-neutral-900 dark:text-neutral-100 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 transition-colors">
+      <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Back Link */}
-        <div className="mb-8">
+        <div>
           <Link
             to="/catalogue"
-            className="inline-flex items-center space-x-2 text-xs uppercase tracking-widest text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
+            className="inline-flex items-center space-x-1.5 text-xs text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Collection</span>
+            <ArrowLeft className="w-3.5 h-3.5 opacity-60" strokeWidth={1.5} />
+            <span>Collection</span>
           </Link>
         </div>
 
@@ -114,33 +114,25 @@ export default function ProductDetails() {
           <div className="lg:col-span-7 space-y-4">
             
             {/* Main Stage Image */}
-            <div className="relative aspect-[3/4] bg-slate-50 dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 overflow-hidden group shadow-xs">
+            <div className="relative aspect-[3/4] bg-neutral-100 dark:bg-neutral-900 border border-black/[0.08] dark:border-white/[0.08] rounded-lg overflow-hidden group">
               <img
                 src={selectedImage || ATELIER_FALLBACK_IMAGE}
                 alt={product.name}
                 onError={(e) => { e.currentTarget.src = ATELIER_FALLBACK_IMAGE; }}
-                className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.02]"
               />
               
-              {/* Try On Quick Floating Pill */}
-              {product.tryonCompatibility !== 'needs_image_replacement' && product.isAiReady !== false && product.tryonCompatibility !== 'unsupported' && (
-                <button
-                  onClick={handleLaunchTryOn}
-                  className="absolute top-4 right-4 bg-white/95 dark:bg-[#FFFFFF]/90 backdrop-blur-md text-slate-900 dark:text-black hover:bg-slate-50 dark:hover:bg-white px-4 py-2 text-xs uppercase tracking-wider font-semibold flex items-center space-x-2 shadow-sm border border-slate-200 transition-all"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#F5AFAF]" />
-                  <span>Virtual Try-On</span>
-                </button>
-              )}
-
               <div className="absolute top-4 left-4">
                 <ProductStatusBadge product={product} size="sm" />
               </div>
 
-              {product.isSample && (
-                <div className="absolute bottom-4 left-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur border border-[#F9DFDF] dark:border-slate-800 px-3 py-1 text-[10px] tracking-widest uppercase text-slate-600 dark:text-slate-300 font-semibold">
-                  Sample Inventory Model
-                </div>
+              {product.tryonCompatibility !== 'needs_image_replacement' && product.isAiReady !== false && product.tryonCompatibility !== 'unsupported' && (
+                <button
+                  onClick={handleLaunchTryOn}
+                  className="absolute top-4 right-4 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md text-neutral-900 dark:text-white px-3.5 py-1.5 text-xs font-medium rounded-md shadow-xs border border-black/[0.08] dark:border-white/[0.08] hover:bg-neutral-50 transition-colors"
+                >
+                  Start Virtual Try-On
+                </button>
               )}
             </div>
 
@@ -151,13 +143,13 @@ export default function ProductDetails() {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(imgUrl)}
-                    className={`relative w-20 aspect-[3/4] border-2 overflow-hidden transition-all flex-shrink-0 ${
+                    className={`relative w-20 aspect-[3/4] rounded border overflow-hidden transition-all flex-shrink-0 ${
                       selectedImage === imgUrl
-                        ? 'border-[#000000] dark:border-[#FFFFFF]'
-                        : 'border-[#F9DFDF] dark:border-slate-800 opacity-70 hover:opacity-100'
+                        ? 'border-neutral-900 dark:border-white'
+                        : 'border-black/[0.08] dark:border-white/[0.08] opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover object-top" />
                   </button>
                 ))}
               </div>
@@ -166,57 +158,53 @@ export default function ProductDetails() {
           </div>
 
           {/* Right Column: Garment Information & Actions */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-6">
             
             {/* Header info */}
-            <div className="space-y-3 pb-6 border-b border-[#F9DFDF] dark:border-slate-800">
-              <div className="flex items-center justify-between">
-                <span className="text-xs uppercase tracking-[0.25em] text-slate-500 dark:text-slate-400 font-semibold">
-                  {product.categoryName || 'Couture Silhouette'}
-                </span>
-                <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
-                  {product.sku}
-                </span>
+            <div className="space-y-2 pb-6 border-b border-black/[0.08] dark:border-white/[0.08]">
+              <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
+                <span>{product.brand || 'VESTRA'} &bull; {product.categoryName || 'Couture'}</span>
+                <span className="font-mono">{product.sku}</span>
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl text-slate-900 dark:text-white font-normal leading-tight">
+              <h1 className="font-serif text-3xl sm:text-4xl text-neutral-900 dark:text-neutral-100 font-normal leading-tight">
                 {product.name}
               </h1>
 
               <div className="flex items-baseline space-x-3 pt-1">
-                <span className="text-2xl font-semibold text-slate-900 dark:text-white tracking-tight">
+                <span className="text-2xl font-mono font-medium text-neutral-900 dark:text-neutral-100">
                   {formattedPrice}
                 </span>
                 {formattedOriginalPrice && (
-                  <span className="text-sm text-slate-400 dark:text-slate-500 line-through">
+                  <span className="text-sm font-mono text-neutral-400 line-through">
                     {formattedOriginalPrice}
                   </span>
                 )}
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide">
-                  Taxes & duties included
+                <span className="text-xs text-neutral-500">
+                  Taxes included
                 </span>
               </div>
             </div>
 
             {/* Garment Description */}
-            <div className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-light">
+            <div className="space-y-3">
+              <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed font-light">
                 {product.description}
               </p>
             </div>
 
             {/* Size Selector */}
-            <div className="space-y-3 pt-2">
+            <div className="space-y-2.5 pt-2">
               <div className="flex items-center justify-between">
-                <label className="text-xs uppercase tracking-widest text-slate-900 dark:text-white font-semibold">
+                <label className="text-xs font-medium text-neutral-900 dark:text-neutral-100">
                   Select Size
                 </label>
                 <button
                   onClick={handleLaunchTryOn}
-                  className="text-xs text-[#F5AFAF] hover:underline inline-flex items-center space-x-1"
+                  className="text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white inline-flex items-center space-x-1"
                 >
-                  <Scissors className="w-3 h-3" />
-                  <span>Unsure about fit? Try virtually</span>
+                  <Scissors className="w-3 h-3 opacity-60" strokeWidth={1.5} />
+                  <span>Virtual fit preview</span>
                 </button>
               </div>
 
@@ -225,10 +213,10 @@ export default function ProductDetails() {
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
-                    className={`py-3 text-xs uppercase tracking-wider font-semibold border transition-all rounded ${
+                    className={`py-2.5 text-xs font-medium border rounded transition-colors ${
                       selectedSize === size
-                        ? 'bg-slate-900 dark:bg-[#FFFFFF] text-white dark:text-black border-slate-900 dark:border-[#FFFFFF] shadow-xs'
-                        : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600'
+                        ? 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 border-neutral-900 dark:border-white shadow-xs'
+                        : 'bg-white dark:bg-[#17181C] text-neutral-800 dark:text-neutral-200 border-black/[0.08] dark:border-white/[0.08] hover:border-black/20'
                     }`}
                   >
                     {size}
@@ -237,98 +225,75 @@ export default function ProductDetails() {
               </div>
             </div>
 
-            {/* CTAs */}
-            <div className="space-y-3 pt-4">
-              
-              {/* PRIMARY: Try It On Button */}
+            {/* Action Buttons */}
+            <div className="space-y-3 pt-3">
               {product.tryonCompatibility === 'needs_image_replacement' || product.isAiReady === false ? (
-                <div className="w-full py-3.5 px-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200 flex items-center space-x-2.5">
-                  <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                <div className="p-3.5 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/40 rounded text-xs text-amber-900 dark:text-amber-200 flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" strokeWidth={1.5} />
                   <div>
-                    <p className="font-semibold uppercase tracking-wider text-[11px]">Catalogue Only (Image Needs Replacement)</p>
-                    <p className="text-[10px] text-amber-700 dark:text-amber-300">This garment requires high-resolution studio photography (&ge;250px) before virtual try-on can be rendered.</p>
+                    <p className="font-medium">Catalogue preview only</p>
+                    <p className="text-[11px] text-amber-700 dark:text-amber-300 mt-0.5">High-resolution photography is currently being scheduled for this piece.</p>
                   </div>
                 </div>
               ) : (
                 <button
                   onClick={handleLaunchTryOn}
-                  className="w-full py-4 bg-white hover:bg-rose-50/50 hover:border-rose-300 dark:bg-[#FFFFFF] text-slate-900 dark:text-black text-xs uppercase tracking-[0.2em] font-semibold flex items-center justify-center space-x-3 transition-all duration-300 shadow-sm border-2 border-slate-900 dark:border-white group"
+                  className="w-full h-11 bg-neutral-900 hover:bg-neutral-800 text-white dark:bg-neutral-100 dark:hover:bg-white dark:text-neutral-900 text-xs font-medium rounded-md flex items-center justify-center transition-colors shadow-xs"
                 >
-                  <Sparkles className="w-4 h-4 text-[#F5AFAF] transition-transform group-hover:rotate-12" />
-                  <span>Try It On in Virtual Fitting Room</span>
+                  Try On in Virtual Fitting Room
                 </button>
               )}
 
-              {/* SECONDARY: Add to Bag */}
               <button
-                onClick={() => alert(`Added ${product.name} (Size: ${selectedSize}) to your luxury shopping bag.`)}
-                className="w-full py-3.5 bg-white hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-300 dark:border-white text-slate-900 dark:text-white text-xs uppercase tracking-[0.2em] font-medium transition-colors shadow-xs"
+                onClick={() => alert(`Added ${product.name} (Size: ${selectedSize}) to your bag.`)}
+                className="w-full h-11 bg-white hover:bg-neutral-50 dark:bg-[#17181C] dark:hover:bg-neutral-800 border border-black/[0.12] dark:border-white/[0.12] text-neutral-900 dark:text-white text-xs font-medium rounded-md transition-colors"
               >
                 Add Size {selectedSize} to Bag &bull; {formattedPrice}
               </button>
-
             </div>
 
-            {/* Accordion Specification Tabs */}
-            <div className="pt-6 border-t border-[#F9DFDF] dark:border-slate-800 space-y-4">
-              
-              <div className="flex border-b border-[#F9DFDF] dark:border-slate-800">
-                <button
-                  onClick={() => setActiveTab('details')}
-                  className={`pb-2.5 text-xs uppercase tracking-wider font-semibold mr-6 transition-colors ${
-                    activeTab === 'details'
-                      ? 'border-b-2 border-[#000000] dark:border-white text-slate-900 dark:text-white'
-                      : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                >
-                  Material & Craft
-                </button>
-                <button
-                  onClick={() => setActiveTab('fit')}
-                  className={`pb-2.5 text-xs uppercase tracking-wider font-semibold mr-6 transition-colors ${
-                    activeTab === 'fit'
-                      ? 'border-b-2 border-[#000000] dark:border-white text-slate-900 dark:text-white'
-                      : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                >
-                  Silhouette & Fit
-                </button>
-                <button
-                  onClick={() => setActiveTab('delivery')}
-                  className={`pb-2.5 text-xs uppercase tracking-wider font-semibold transition-colors ${
-                    activeTab === 'delivery'
-                      ? 'border-b-2 border-[#000000] dark:border-white text-slate-900 dark:text-white'
-                      : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                >
-                  Delivery & Care
-                </button>
+            {/* Specification Tabs */}
+            <div className="pt-6 border-t border-black/[0.08] dark:border-white/[0.08] space-y-3">
+              <div className="flex border-b border-black/[0.06] dark:border-white/[0.06] text-xs">
+                {[
+                  { id: 'details', label: 'Material & Craft' },
+                  { id: 'fit', label: 'Silhouette & Fit' },
+                  { id: 'delivery', label: 'Delivery & Care' }
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`pb-2.5 mr-6 font-medium transition-colors ${
+                      activeTab === tab.id
+                        ? 'border-b-2 border-neutral-900 dark:border-white text-neutral-900 dark:text-white'
+                        : 'text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
-              <div className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed pt-2">
+              <div className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed pt-1">
                 {activeTab === 'details' && (
-                  <div className="space-y-2">
-                    <p><strong>Composition:</strong> {product.material || '100% Certified Luxury Silk & Virgin Wool Blend'}</p>
-                    <p><strong>Origin:</strong> Crafted in Italy & France by Master Tailors</p>
-                    <p><strong>Finishing:</strong> Hand-rolled hems and reinforced internal seam binding</p>
+                  <div className="space-y-1.5">
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Fabric:</span> {product.material || 'Mulberry Silk & Fine Wool Blend'}</p>
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Finishing:</span> Hand-rolled edges with reinforced structural seams</p>
                   </div>
                 )}
                 {activeTab === 'fit' && (
-                  <div className="space-y-2">
-                    <p><strong>Silhouette:</strong> {product.fit || 'True to size; tailored through shoulders with fluid drape'}</p>
-                    <p><strong>Model Specs:</strong> Model is 5'10" wearing size S</p>
-                    <p><strong>AI Fitting:</strong> Use our Virtual Fitting Room to simulate how the fabric drapes across your specific shoulders and waist.</p>
+                  <div className="space-y-1.5">
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Silhouette:</span> {product.fit || 'Tailored shoulder with fluid fall'}</p>
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Virtual Fitting:</span> Calibrated with 2D garment drape models</p>
                   </div>
                 )}
                 {activeTab === 'delivery' && (
-                  <div className="space-y-2">
-                    <p><strong>Care:</strong> {product.careInstructions || 'Specialist dry clean only. Store in breathable cotton garment cover.'}</p>
-                    <p><strong>Complimentary Courier:</strong> Dispatched within 24 hours in archival signature packaging.</p>
-                    <p><strong>White-Glove Returns:</strong> 30-day complimentary door-to-door returns with prepaid courier pickup.</p>
+                  <div className="space-y-1.5">
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Care:</span> {product.careInstructions || 'Specialist dry clean only'}</p>
+                    <p><span className="text-neutral-900 dark:text-neutral-200">Shipping:</span> Dispatched in archival protective packaging</p>
                   </div>
                 )}
               </div>
-
             </div>
 
           </div>
