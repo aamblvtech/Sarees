@@ -163,7 +163,7 @@ export default function ProductDetails() {
             {/* Header info */}
             <div className="space-y-2 pb-6 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400">
-                <span>{product.brand || 'VESTRA'} &bull; {product.categoryName || 'Couture'}</span>
+                <span>{product.brand || 'VASTRA'} &bull; {product.categoryName || 'Couture'}</span>
                 <span className="font-mono">{product.sku}</span>
               </div>
 

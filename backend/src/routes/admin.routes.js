@@ -325,7 +325,7 @@ router.post('/products', requireAdminAuth, async (req, res) => {
     garmentType = 'upper_body',
     tryonCompatibility = 'supported',
     stockStatus = 'in_stock',
-    brand = 'VESTRA',
+    brand = 'VASTRA',
     sizes = ['XS', 'S', 'M', 'L', 'XL'],
     material = 'Luxury Fabric Blend',
     fit = 'Tailored fit',
@@ -1167,7 +1167,7 @@ router.get('/reports/export', requireAdminAuth, async (req, res) => {
       ).join('\n');
 
       res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', 'attachment; filename="vestra_suppliers_report.csv"');
+      res.setHeader('Content-Disposition', 'attachment; filename="vastra_suppliers_report.csv"');
       return res.send(headers + rows);
     }
 
@@ -1184,7 +1184,7 @@ router.get('/reports/export', requireAdminAuth, async (req, res) => {
       ).join('\n');
 
       res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', 'attachment; filename="vestra_tryon_jobs_report.csv"');
+      res.setHeader('Content-Disposition', 'attachment; filename="vastra_tryon_jobs_report.csv"');
       return res.send(headers + rows);
     }
 
@@ -1202,7 +1202,7 @@ router.get('/reports/export', requireAdminAuth, async (req, res) => {
     ).join('\n');
 
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename="vestra_inventory_report.csv"');
+    res.setHeader('Content-Disposition', 'attachment; filename="vastra_inventory_report.csv"');
     return res.send(headers + rows);
   } catch (err) {
     console.error('[Export Report Error]:', err.message);

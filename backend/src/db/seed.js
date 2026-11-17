@@ -3,14 +3,14 @@ import { query, pool, syncPgMemSequences } from '../config/db.js';
 import { sampleCategories, sampleProducts } from '../data/sampleProducts.js';
 
 export async function runSeed() {
-  console.log('[Seed] Seeding VESTRA database with admin, categories, and luxury collection...');
+  console.log('[Seed] Seeding VASTRA database with admin, categories, and luxury collection...');
 
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
     // 1. Seed Default Admin Account (Bcrypt hashed)
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@vestra.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@vastra.com';
     const adminPassword = process.env.ADMIN_PASSWORD || 'AdminPassword2026!';
     const passwordHash = await bcrypt.hash(adminPassword, 10);
 
@@ -19,9 +19,17 @@ export async function runSeed() {
        VALUES ($1, $2, $3, $4)
        ON CONFLICT (email) DO UPDATE
        SET password_hash = EXCLUDED.password_hash, name = EXCLUDED.name`,
-      [adminEmail, passwordHash, 'VESTRA Atelier Administrator', 'superadmin']
+      [adminEmail, passwordHash, 'VASTRA Atelier Administrator', 'superadmin']
     );
-    console.log(`[Seed] Seeded admin user: ${adminEmail} (password: ${adminPassword})`);
+
+    // Also ensure admin@vestra.com exists for backwards compatibility
+    await client.query(
+      `INSERT INTO admins (email, password_hash, name, role)
+       VALUES ($1, $2, $3, $4)
+       ON CONFLICT (email) DO NOTHING`,
+      ['admin@vestra.com', passwordHash, 'VASTRA Atelier Administrator (Legacy)', 'superadmin']
+    );
+    console.log(`[Seed] Seeded admin user: ${adminEmail} and admin@vestra.com (password: ${adminPassword})`);
 
     // 2. Seed Categories
     const categoryMap = new Map();
@@ -61,7 +69,7 @@ export async function runSeed() {
           prod.sku,
           prod.name,
           prod.slug,
-          prod.brand || 'VESTRA',
+          prod.brand || 'VASTRA',
           categoryId,
           prod.subcategory || 'sarees',
           prod.gender || 'women',

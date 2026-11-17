@@ -2,7 +2,7 @@ import React from 'react';
 import { AlertCircle, RefreshCw, Home } from 'lucide-react';
 
 /**
- * VESTRA React Error Boundary
+ * VASTRA React Error Boundary
  * Uses Atelier aesthetic: neutral ramp (#0D0E10 / #121316), subtle hairline borders, Playfair Display typography.
  */
 export class ErrorBoundary extends React.Component {
@@ -20,7 +20,7 @@ export class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('[VESTRA ErrorBoundary Caught Error]:', error, errorInfo);
+    console.error('[VASTRA ErrorBoundary Caught Error]:', error, errorInfo);
     this.setState({ errorInfo });
   }
 

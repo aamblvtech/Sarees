@@ -340,7 +340,7 @@ export default function KioskMode() {
       <header className="h-16 bg-[#121316] border-b border-white/[0.08] px-6 sm:px-10 flex items-center justify-between z-30">
         <div className="flex items-center space-x-4">
           <span className="font-serif text-2xl tracking-[0.25em] font-light text-white">
-            VESTRA
+            VASTRA
           </span>
           <span className="text-white/20 text-sm">|</span>
           <span className="text-xs font-mono text-neutral-400 hidden sm:inline">

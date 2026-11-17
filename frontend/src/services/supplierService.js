@@ -1,15 +1,17 @@
 import apiClient from './apiClient';
 
-const TOKEN_KEY = 'vestra_supplier_token';
-const USER_KEY = 'vestra_supplier_user';
+const TOKEN_KEY = 'vastra_supplier_token';
+const LEGACY_TOKEN_KEY = 'vestra_supplier_token';
+const USER_KEY = 'vastra_supplier_user';
+const LEGACY_USER_KEY = 'vestra_supplier_user';
 
 export const supplierService = {
   getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
   },
 
   getCurrentSupplier() {
-    const raw = localStorage.getItem(USER_KEY);
+    const raw = localStorage.getItem(USER_KEY) || localStorage.getItem(LEGACY_USER_KEY);
     try {
       return raw ? JSON.parse(raw) : null;
     } catch {
@@ -28,7 +30,9 @@ export const supplierService = {
 
   logout() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(LEGACY_USER_KEY);
   },
 
   getAuthHeaders() {

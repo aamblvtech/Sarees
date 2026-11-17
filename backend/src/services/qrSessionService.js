@@ -48,7 +48,7 @@ export const qrSessionService = {
 
     const mobileUrl = `${mobileBaseUrl}/mobile-upload/${token}`;
 
-    // Generate high-contrast, elegant QR code data URL matching VESTRA aesthetic
+    // Generate high-contrast, elegant QR code data URL matching VASTRA aesthetic
     const qrCodeDataUrl = await QRCode.toDataURL(mobileUrl, {
       width: 320,
       margin: 2,

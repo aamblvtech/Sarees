@@ -21,7 +21,7 @@ async function run() {
   const browser = await chromium.launch({ headless: true });
 
   console.log('========================================================');
-  console.log('  STARTING VESTRA E2E COMPREHENSIVE CLIENT AUDIT');
+  console.log('  STARTING VASTRA E2E COMPREHENSIVE CLIENT AUDIT');
   console.log('========================================================\n');
 
   // ---------------------------------------------------------
@@ -33,7 +33,7 @@ async function run() {
 
     // Check title and brand
     const title = await page.title();
-    const hasBrand = await page.$('text=VESTRA');
+    const hasBrand = await page.$('text=VASTRA');
     record('Homepage', 'Brand & Title Verification', hasBrand ? 'PASSED' : 'FAILED', title);
 
     // Hero CTA navigation to fitting room

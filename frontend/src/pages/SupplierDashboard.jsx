@@ -459,7 +459,7 @@ export default function SupplierDashboard() {
           
           <div className="flex items-center space-x-3">
             <Link to="/" className="font-serif text-2xl tracking-[0.2em] font-light text-neutral-900 dark:text-white">
-              VESTRA
+              VASTRA
             </Link>
             <span className="text-neutral-300 dark:text-neutral-700">|</span>
             <div className="flex items-center space-x-2">
@@ -1361,7 +1361,7 @@ export default function SupplierDashboard() {
               <div className="flex items-center justify-between pt-3 border-t border-stone-200 dark:border-stone-800">
                 <a
                   href="/api/admin/import/template"
-                  download="vestra_catalogue_template.csv"
+                  download="vastra_catalogue_template.csv"
                   className="text-xs text-amber-600 dark:text-amber-400 font-semibold underline underline-offset-4 flex items-center space-x-1"
                 >
                   <FileText className="w-3.5 h-3.5" />

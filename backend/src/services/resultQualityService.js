@@ -1,5 +1,5 @@
 /**
- * VESTRA AI Virtual Try-On - Result Quality & Identity Preservation Verifier
+ * VASTRA AI Virtual Try-On - Result Quality & Identity Preservation Verifier
  * Evaluates generated try-on outputs against customer silhouettes and garment specifications.
  * Strictly prevents artificial hardcoding while providing evidence-based drape assessment.
  */

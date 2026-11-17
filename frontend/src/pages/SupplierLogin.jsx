@@ -123,7 +123,7 @@ export default function SupplierLogin() {
         <div className="text-center space-y-3">
           <Link to="/" className="inline-block">
             <span className="font-serif text-3xl tracking-[0.25em] text-neutral-900 dark:text-white font-light">
-              VESTRA
+              VASTRA
             </span>
           </Link>
           <div className="inline-flex items-center space-x-2 px-2.5 py-0.5 bg-neutral-100 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-neutral-600 dark:text-neutral-300 text-xs font-mono rounded-sm">

@@ -62,9 +62,9 @@ app.use('/api/supplier', supplierRoutes);
 // Root route
 app.get('/', (req, res) => {
   res.json({
-    brand: 'VESTRA',
+    brand: 'VASTRA',
     tagline: 'Experience Fashion Before You Wear It',
-    description: 'VESTRA AI Virtual Try-On REST API',
+    description: 'VASTRA AI Virtual Try-On REST API',
     endpoints: {
       health: '/api/health',
       categories: '/api/categories',
@@ -101,7 +101,7 @@ app.use((err, req, res, next) => {
 // Start Server & Connect to Database
 const server = app.listen(PORT, '0.0.0.0', async () => {
   console.log('========================================================');
-  console.log(`  VESTRA Virtual Try-On Backend Service`);
+  console.log(`  VASTRA Virtual Try-On Backend Service`);
   console.log(`  Running on http://localhost:${PORT}`);
   console.log(`  Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('========================================================');

@@ -1,7 +1,7 @@
 {
-  "name": "vestra-backend",
+  "name": "vastra-backend",
   "version": "1.0.0",
-  "description": "VESTRA Luxury AI Virtual Try-On Platform - REST API Service",
+  "description": "VASTRA Luxury AI Virtual Try-On Platform - REST API Service",
   "main": "src/server.js",
   "type": "module",
   "scripts": {

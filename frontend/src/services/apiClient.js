@@ -33,7 +33,7 @@ apiClient.interceptors.response.use(
   (error) => {
     let errorMsg = error.response?.data?.error || error.message || 'API Communication Error';
     if (error.message === 'Network Error') {
-      errorMsg = 'Cannot reach VESTRA backend service. Please check that port 5000 is running.';
+      errorMsg = 'Cannot reach VASTRA backend service. Please check that port 5000 is running.';
     }
     console.warn('[API Client Error]:', errorMsg);
     return Promise.reject(error);

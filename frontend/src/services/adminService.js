@@ -1,15 +1,17 @@
 import apiClient from './apiClient';
 
-const TOKEN_KEY = 'vestra_admin_token';
-const ADMIN_USER_KEY = 'vestra_admin_user';
+const TOKEN_KEY = 'vastra_admin_token';
+const LEGACY_TOKEN_KEY = 'vestra_admin_token';
+const ADMIN_USER_KEY = 'vastra_admin_user';
+const LEGACY_ADMIN_USER_KEY = 'vestra_admin_user';
 
 export const adminService = {
   getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+    return localStorage.getItem(TOKEN_KEY) || localStorage.getItem(LEGACY_TOKEN_KEY);
   },
 
   getCurrentAdmin() {
-    const raw = localStorage.getItem(ADMIN_USER_KEY);
+    const raw = localStorage.getItem(ADMIN_USER_KEY) || localStorage.getItem(LEGACY_ADMIN_USER_KEY);
     return raw ? JSON.parse(raw) : null;
   },
 
@@ -24,7 +26,9 @@ export const adminService = {
 
   logout() {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
     localStorage.removeItem(ADMIN_USER_KEY);
+    localStorage.removeItem(LEGACY_ADMIN_USER_KEY);
   },
 
   getAuthHeaders() {

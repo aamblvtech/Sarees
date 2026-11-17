@@ -1,5 +1,5 @@
 -- ==============================================================================
--- Migration 012: VESTRA Expand Catalogue to All Fashion Categories & Outfit Types
+-- Migration 012: VASTRA Expand Catalogue to All Fashion Categories & Outfit Types
 -- Adds:
 --  - Core fashion department categories:
 --      * Women's Traditional Wear (womens-traditional)
@@ -30,7 +30,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(93, 'VES-SAR-093', 'Royal Yeola Paithani Pure Silk Saree with Peacock Pallu', 'royal-yeola-paithani-pure-silk-saree', 'VESTRA Heritage', 9, 'paithani_sarees', 'women', 'saree',
+(93, 'VES-SAR-093', 'Royal Yeola Paithani Pure Silk Saree with Peacock Pallu', 'royal-yeola-paithani-pure-silk-saree', 'VASTRA Heritage', 9, 'paithani_sarees', 'women', 'saree',
    'supported', 'in_stock', 2200.00, 2600.00, 'INR',
    'Hand-woven in Yeola with pure silk threads, featuring the signature kaleidoscopic peacock and parrot motifs on an opulent gold zari pallu with oblique square borders.',
    '100% Grade-A Pure Mulberry Silk & Fine Gold Zari', 'Classic 6-yard unstitched handloom drape with 0.8m matching blouse piece',
@@ -48,7 +48,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(94, 'VES-SAR-094', 'Chanderi Handloom Cotton-Silk Saree with Antique Zari', 'chanderi-handloom-cotton-silk-saree', 'VESTRA Heritage', 9, 'cotton_sarees', 'women', 'saree',
+(94, 'VES-SAR-094', 'Chanderi Handloom Cotton-Silk Saree with Antique Zari', 'chanderi-handloom-cotton-silk-saree', 'VASTRA Heritage', 9, 'cotton_sarees', 'women', 'saree',
    'supported', 'in_stock', 950.00, 1150.00, 'INR',
    'Lightweight, sheer gossamer Chanderi drape combining mercerized cotton with pure silk yarns, accentuated by intricate gold zari buti motifs and hand-woven borders.',
    '70% Pure Cotton, 30% Fine Silk Blend', 'Flowing, featherlight 6-yard silhouette with unstitched blouse piece',
@@ -66,7 +66,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(95, 'VES-ETH-095', 'Mughal Jaal Embroidered Raw Silk Floor-Length Ethnic Gown', 'mughal-jaal-embroidered-ethnic-gown', 'VESTRA Atelier', 9, 'ethnic_gowns', 'women', 'full_body',
+(95, 'VES-ETH-095', 'Mughal Jaal Embroidered Raw Silk Floor-Length Ethnic Gown', 'mughal-jaal-embroidered-ethnic-gown', 'VASTRA Atelier', 9, 'ethnic_gowns', 'women', 'full_body',
    'supported', 'in_stock', 1750.00, 2100.00, 'INR',
    'A regal floor-sweeping gown sculpted from pure raw silk, adorned with elaborate Mughal floral vine embroidery, sequin embellishments, and a flared circular hem.',
    '100% Pure Raw Silk with Antique Gold Zardozi', 'Flared floor-length silhouette with structured corset bodice',
@@ -84,7 +84,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(96, 'VES-ACC-096', 'Banarasi Katan Silk Gold Zari Woven Bridal Dupatta', 'banarasi-katan-silk-bridal-dupatta', 'VESTRA Heritage', 9, 'dupattas', 'women', 'accessory',
+(96, 'VES-ACC-096', 'Banarasi Katan Silk Gold Zari Woven Bridal Dupatta', 'banarasi-katan-silk-bridal-dupatta', 'VASTRA Heritage', 9, 'dupattas', 'women', 'accessory',
    'unsupported', 'in_stock', 620.00, 750.00, 'INR',
    'Hand-woven Banarasi Katan silk dupatta enriched with dense floral jaal weaving and wide scalloped borders with heavy antique gold zari accents.',
    '100% Pure Katan Silk & Antique Zari', '2.5 metres length with hand-knotted silk tassels',
@@ -102,7 +102,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(97, 'VES-WES-097', 'Emerald Duchesse Satin Fluted Hem Cocktail Mini Dress', 'emerald-satin-fluted-cocktail-mini-dress', 'VESTRA Modern', 10, 'mini_dresses', 'women', 'full_body',
+(97, 'VES-WES-097', 'Emerald Duchesse Satin Fluted Hem Cocktail Mini Dress', 'emerald-satin-fluted-cocktail-mini-dress', 'VASTRA Modern', 10, 'mini_dresses', 'women', 'full_body',
    'supported', 'in_stock', 890.00, 1050.00, 'INR',
    'Architectural mini dress crafted from heavyweight silk-blend duchesse satin, featuring a square neckline, sculpted darting, and a dramatic fluted flounce hem.',
    '75% Silk, 25% Polyester Duchesse Satin', 'Tailored mini length with body-contouring seams',
@@ -120,7 +120,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(98, 'VES-WES-098', 'Sculptural Knife-Pleated Sunray Georgette Midi Skirt', 'sculptural-knife-pleated-midi-skirt', 'VESTRA Modern', 10, 'skirts', 'women', 'lower_body',
+(98, 'VES-WES-098', 'Sculptural Knife-Pleated Sunray Georgette Midi Skirt', 'sculptural-knife-pleated-midi-skirt', 'VASTRA Modern', 10, 'skirts', 'women', 'lower_body',
    'supported', 'in_stock', 480.00, 580.00, 'INR',
    'Fluid accordion knife pleats radiate from a high-rise grosgrain waistband, offering mesmerizing kinetic movement in lightweight Japanese chiffon-georgette.',
    '100% Fine Japanese Chiffon-Georgette', 'High-waisted A-line midi silhouette',
@@ -138,7 +138,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(99, 'VES-WES-099', 'Textured Bouclé Wool Double-Breasted Cropped Jacket', 'boucle-wool-double-breasted-cropped-jacket', 'VESTRA Sartorial', 10, 'jackets', 'women', 'upper_body',
+(99, 'VES-WES-099', 'Textured Bouclé Wool Double-Breasted Cropped Jacket', 'boucle-wool-double-breasted-cropped-jacket', 'VASTRA Sartorial', 10, 'jackets', 'women', 'upper_body',
    'supported', 'in_stock', 1150.00, 1380.00, 'INR',
    'Bespoke cropped jacket tailored from tactile heritage bouclé wool, distinguished by embossed gold buttons, raw fringe-trimmed lapels, and cupro lining.',
    '80% Virgin Wool, 20% Silk Bouclé with 100% Cupro Lining', 'Cropped tailored boxy silhouette',
@@ -156,7 +156,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(100, 'VES-WES-100', 'Peruvian Pima Cotton Minimalist Crewneck T-Shirt', 'pima-cotton-minimalist-crewneck-tshirt', 'VESTRA Essentials', 10, 't_shirts', 'women', 'upper_body',
+(100, 'VES-WES-100', 'Peruvian Pima Cotton Minimalist Crewneck T-Shirt', 'pima-cotton-minimalist-crewneck-tshirt', 'VASTRA Essentials', 10, 't_shirts', 'women', 'upper_body',
    'supported', 'in_stock', 180.00, 220.00, 'INR',
    'Spun from long-staple Peruvian pima cotton for a silky hand-feel and natural drape. Features a ribbed collar, blind-stitched hems, and clean dropped shoulder seams.',
    '100% Long-Staple Peruvian Pima Cotton', 'Relaxed refined modern fit',
@@ -174,7 +174,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(101, 'VES-MEN-101', 'Handloom Tussar Silk Mandarin Embroidered Kurta', 'handloom-tussar-silk-mandarin-kurta', 'VESTRA Heritage', 11, 'mens_kurtas', 'men', 'upper_body',
+(101, 'VES-MEN-101', 'Handloom Tussar Silk Mandarin Embroidered Kurta', 'handloom-tussar-silk-mandarin-kurta', 'VASTRA Heritage', 11, 'mens_kurtas', 'men', 'upper_body',
    'supported', 'in_stock', 640.00, 780.00, 'INR',
    'Pure raw tussar silk kurta tailored with a refined mandarin collar, hidden horn button placket, and subtle tone-on-tone kantha embroidery along the chest.',
    '100% Handloom Tussar Silk', 'Relaxed knee-length traditional straight fit',
@@ -192,7 +192,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(102, 'VES-MEN-102', 'Pure Handspun Matka Silk Mandarin Collar Nehru Jacket', 'handspun-matka-silk-nehru-jacket', 'VESTRA Heritage', 11, 'nehru_jackets', 'men', 'upper_body',
+(102, 'VES-MEN-102', 'Pure Handspun Matka Silk Mandarin Collar Nehru Jacket', 'handspun-matka-silk-nehru-jacket', 'VASTRA Heritage', 11, 'nehru_jackets', 'men', 'upper_body',
    'supported', 'in_stock', 780.00, 950.00, 'INR',
    'Artisanal structured Nehru waistcoat crafted from textural handspun Matka silk. Features signature five-button front, welt chest pocket, and mother-of-pearl buttons.',
    '100% Pure Indian Matka Silk', 'Tailored sleeveless slim fit',
@@ -210,7 +210,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(103, 'VES-MEN-103', 'Bespoke Banarasi Brocade Traditional Waistcoat', 'banarasi-brocade-traditional-waistcoat', 'VESTRA Heritage', 11, 'traditional_waistcoats', 'men', 'upper_body',
+(103, 'VES-MEN-103', 'Bespoke Banarasi Brocade Traditional Waistcoat', 'banarasi-brocade-traditional-waistcoat', 'VASTRA Heritage', 11, 'traditional_waistcoats', 'men', 'upper_body',
    'supported', 'in_stock', 820.00, 990.00, 'INR',
    'Luxurious ceremonial waistcoat woven in Varanasi with antique gold zari and rich silk threads. Impeccably lined with breathable silk habotai.',
    'Pure Silk Banarasi Brocade with Gold Zari', 'Structured sleeveless ceremonial fit',
@@ -228,7 +228,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(104, 'VES-MEN-104', 'Fine Gauge Sea Island Knit Cotton Polo Shirt', 'sea-island-knit-cotton-polo-shirt', 'VESTRA Modern', 12, 'polo_t_shirts', 'men', 'upper_body',
+(104, 'VES-MEN-104', 'Fine Gauge Sea Island Knit Cotton Polo Shirt', 'sea-island-knit-cotton-polo-shirt', 'VASTRA Modern', 12, 'polo_t_shirts', 'men', 'upper_body',
    'supported', 'in_stock', 320.00, 390.00, 'INR',
    'Crafted from rare 18-gauge Sea Island cotton knit with a mother-of-pearl three-button placket, ribbed collar, and fine ribbed cuffs.',
    '100% Sea Island Long-Staple Cotton', 'Contemporary tailored polo fit',
@@ -246,7 +246,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(105, 'VES-MEN-105', 'Double-Pleated Linen-Cotton Sartorial Resort Shorts', 'pleated-linen-cotton-resort-shorts', 'VESTRA Sartorial', 12, 'shorts', 'men', 'lower_body',
+(105, 'VES-MEN-105', 'Double-Pleated Linen-Cotton Sartorial Resort Shorts', 'pleated-linen-cotton-resort-shorts', 'VASTRA Sartorial', 12, 'shorts', 'men', 'lower_body',
    'supported', 'in_stock', 260.00, 310.00, 'INR',
    'Tailored Bermuda shorts with forward double pleats, side adjusters, and cuffed hems in a breathable Italian linen-cotton herringbone weave.',
    '55% French Linen, 45% Italian Cotton', 'Relaxed tailored above-knee fit (7-inch inseam)',
@@ -264,7 +264,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(106, 'VES-MEN-106', 'Heavyweight French Terry Tailored Luxury Hoodie', 'heavyweight-french-terry-luxury-hoodie', 'VESTRA Essentials', 12, 'hoodies', 'men', 'upper_body',
+(106, 'VES-MEN-106', 'Heavyweight French Terry Tailored Luxury Hoodie', 'heavyweight-french-terry-luxury-hoodie', 'VASTRA Essentials', 12, 'hoodies', 'men', 'upper_body',
    'supported', 'in_stock', 420.00, 490.00, 'INR',
    '500gsm custom-knit loopback French terry hoodie engineered with double-layered hood, flatlock stitching, and ergonomic raglan sleeves.',
    '100% Combed Organic Cotton (500 GSM)', 'Clean boxy contemporary fit',
@@ -282,7 +282,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(107, 'VES-MEN-107', 'Cognac Lambskin Suede Minimalist Bomber Jacket', 'cognac-lambskin-suede-bomber-jacket', 'VESTRA Sartorial', 12, 'jackets', 'men', 'upper_body',
+(107, 'VES-MEN-107', 'Cognac Lambskin Suede Minimalist Bomber Jacket', 'cognac-lambskin-suede-bomber-jacket', 'VASTRA Sartorial', 12, 'jackets', 'men', 'upper_body',
    'supported', 'in_stock', 1650.00, 1950.00, 'INR',
    'Buttery Italian lambskin suede with matte antique brass 2-way zipper, ribbed cashmere collar, cuffs, and hem. Fully lined in cupro.',
    '100% Genuine Italian Lambskin Suede, Cashmere Trim', 'Sleek bomber jacket silhouette',
@@ -300,7 +300,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(108, 'VES-ACC-108', 'Hand-Finished 7-Fold Italian Silk Jacquard Necktie', 'hand-finished-7-fold-italian-silk-tie', 'VESTRA Sartorial', 4, 'ties', 'men', 'accessory',
+(108, 'VES-ACC-108', 'Hand-Finished 7-Fold Italian Silk Jacquard Necktie', 'hand-finished-7-fold-italian-silk-tie', 'VASTRA Sartorial', 4, 'ties', 'men', 'accessory',
    'unsupported', 'in_stock', 240.00, 290.00, 'INR',
    'Crafted by artisans in Como, Italy using the time-honored unlined 7-fold construction method. Woven from high-density pure silk jacquard.',
    '100% Pure Italian Silk Jacquard', '3.25 inches (8.5 cm) classic width',
@@ -318,7 +318,7 @@ INSERT INTO products (
   tryon_image_url, is_sample, is_featured, is_active, color, discount_percent,
   approval_status, image_width, image_height, source
 ) VALUES 
-(109, 'VES-ACC-109', 'Artisanal Mulberry Silk Hand-Rolled Pocket Square', 'mulberry-silk-hand-rolled-pocket-square', 'VESTRA Sartorial', 4, 'fashion_accessories', 'unisex', 'accessory',
+(109, 'VES-ACC-109', 'Artisanal Mulberry Silk Hand-Rolled Pocket Square', 'mulberry-silk-hand-rolled-pocket-square', 'VASTRA Sartorial', 4, 'fashion_accessories', 'unisex', 'accessory',
    'unsupported', 'in_stock', 150.00, 180.00, 'INR',
    'Hand-printed on pure mulberry silk twill with meticulously hand-rolled and hand-sewn edges. Features an archival botanical medallion motif.',
    '100% Pure Mulberry Silk Twill (16 Momme)', '17 x 17 inches (43 x 43 cm)',

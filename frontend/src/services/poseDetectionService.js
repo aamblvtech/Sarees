@@ -1,5 +1,5 @@
 /**
- * VESTRA Smart AI Camera - Browser-Based Body Pose Estimation & Auto-Capture Engine
+ * VASTRA Smart AI Camera - Browser-Based Body Pose Estimation & Auto-Capture Engine
  * 
  * Powered by Google MediaPipe Tasks Vision PoseLandmarker with resilient fallback.
  * Processes camera frames locally in real time (zero frames sent to backend).
@@ -372,7 +372,7 @@ class PoseDetectionService {
 
     // Draw glowing aesthetic connection lines
     ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(245, 175, 175, 0.85)'; // VESTRA rose gold
+    ctx.strokeStyle = 'rgba(245, 175, 175, 0.85)'; // VASTRA rose gold
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
 

@@ -13,7 +13,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="md:col-span-1 space-y-3">
             <span className="font-serif text-2xl tracking-[0.16em] text-neutral-900 dark:text-neutral-100 font-normal block">
-              VESTRA
+              VASTRA
             </span>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
               Virtual fashion fitting room synthesizing luxury garments onto customer silhouette portraits with true-to-life draping.
@@ -97,7 +97,7 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 gap-4">
-          <p>&copy; {new Date().getFullYear()} VESTRA Atelier. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} VASTRA Atelier. All rights reserved.</p>
           <p className="text-[11px] text-neutral-400 dark:text-neutral-500">
             Experience Fashion Before You Wear It
           </p>

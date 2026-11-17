@@ -37,8 +37,8 @@ router.get('/health', async (req, res) => {
 
   res.status(overallHealthy ? 200 : 503).json({
     status: overallHealthy ? 'healthy' : 'initializing',
-    service: 'VESTRA Virtual Try-On API',
-    brand: 'VESTRA',
+    service: 'VASTRA Virtual Try-On API',
+    brand: 'VASTRA',
     tagline: 'Experience Fashion Before You Wear It',
     version: '1.1.0',
     timestamp: new Date().toISOString(),

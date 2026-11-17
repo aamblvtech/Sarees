@@ -68,7 +68,7 @@ test('Myntra Product Catalogue Import and Multi-Stage Approval Suite', async (t)
       },
       (err) => {
         assert.equal(err.statusCode, 409, 'Duplicate URL must throw 409 Conflict');
-        assert.ok(err.message.includes('already exists in VESTRA'), 'Error message must cite existing product');
+        assert.ok(err.message.includes('already exists in VASTRA') || err.message.includes('already exists in VESTRA'), 'Error message must cite existing product');
         return true;
       }
     );

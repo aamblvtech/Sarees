@@ -94,7 +94,7 @@ export default function Home() {
               <div className="relative aspect-[4/5] rounded-lg overflow-hidden border border-black/[0.08] dark:border-white/[0.08] bg-neutral-100 dark:bg-neutral-900 shadow-atelier-card">
                 <img
                   src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=85"
-                  alt="VESTRA Luxury Editorial"
+                  alt="VASTRA Luxury Editorial"
                   className="w-full h-full object-cover object-top filter brightness-[0.98] dark:brightness-[0.9]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />

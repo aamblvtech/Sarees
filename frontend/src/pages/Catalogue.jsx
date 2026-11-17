@@ -481,7 +481,7 @@ export default function Catalogue() {
         };
       default:
         return {
-          tag: 'VESTRA Studio Archive',
+          tag: 'VASTRA Studio Archive',
           title: 'Fashion Product Catalogue',
           desc: 'Browse precision garments calibrated for neural cloth draping and AI virtual try-on.'
         };
@@ -608,7 +608,7 @@ export default function Catalogue() {
             </span>
             {[
               { id: 'all', label: 'All Sources' },
-              { id: 'atelier', label: 'VESTRA Atelier' },
+              { id: 'atelier', label: 'VASTRA Atelier' },
               { id: 'flipkart', label: 'Flipkart' },
               { id: 'myntra', label: 'Myntra' },
               { id: 'amazon', label: 'Amazon' },

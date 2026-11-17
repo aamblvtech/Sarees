@@ -38,7 +38,7 @@ export default function AdminLogin() {
         <div className="text-center space-y-2">
           <Link to="/" className="inline-block">
             <span className="font-serif text-3xl tracking-[0.25em] text-neutral-900 dark:text-white font-light block">
-              VESTRA
+              VASTRA
             </span>
           </Link>
           <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 bg-neutral-100 dark:bg-[#17181C] text-neutral-600 dark:text-neutral-300 text-[11px] font-mono rounded-sm">
@@ -75,7 +75,7 @@ export default function AdminLogin() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@vestra.com"
+                placeholder="admin@vastra.com"
                 className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs text-neutral-900 dark:text-white pl-9 pr-3 py-2.5 rounded-md focus:outline-none focus:border-neutral-900 dark:focus:border-white transition-colors"
               />
             </div>

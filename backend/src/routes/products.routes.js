@@ -26,7 +26,7 @@ const FASHION_CATEGORIES = [
 ];
 
 /**
- * Main shopping navigation tabs requested for VESTRA
+ * Main shopping navigation tabs requested for VASTRA
  */
 const MAIN_NAVIGATION_TABS = [
   { id: 'all', slug: 'all', name: 'All Garments', key: 'all', description: 'Complete luxury fashion archive for men and women' },

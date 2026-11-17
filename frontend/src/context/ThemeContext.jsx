@@ -6,13 +6,13 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     try {
       // Version flag to force-reset stale dark mode from previous sessions to the new pure white light palette
-      const version = localStorage.getItem('vestra_pure_white_v1');
+      const version = localStorage.getItem('vastra_pure_white_v1') || localStorage.getItem('vestra_pure_white_v1');
       if (!version) {
-        localStorage.setItem('vestra_pure_white_v1', 'true');
-        localStorage.setItem('vestra_theme', 'light');
+        localStorage.setItem('vastra_pure_white_v1', 'true');
+        localStorage.setItem('vastra_theme', 'light');
         return 'light';
       }
-      const saved = localStorage.getItem('vestra_theme');
+      const saved = localStorage.getItem('vastra_theme') || localStorage.getItem('vestra_theme');
       if (saved === 'dark' || saved === 'light') return saved;
       return 'light';
     } catch {
@@ -41,10 +41,10 @@ export function ThemeProvider({ children }) {
     }
 
     try {
-      localStorage.setItem('vestra_theme', theme);
+      localStorage.setItem('vastra_theme', theme);
     } catch {}
 
-    console.log(`[VESTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0D0E10' : '#FFFFFF'})`);
+    console.log(`[VASTRA Theme] Switched to: ${theme.toUpperCase()} MODE (bg: ${theme === 'dark' ? '#0D0E10' : '#FFFFFF'})`);
   }, [theme]);
 
   const toggleTheme = () => {

@@ -1,5 +1,5 @@
 // ==============================================================================
-// VESTRA Luxury Product Taxonomy, Saree Collection & Expanded Multi-Category Apparel
+// VASTRA Luxury Product Taxonomy, Saree Collection & Expanded Multi-Category Apparel
 // Complete Catalogue Dataset: 1-40 Atelier, 41-64 Imported Sarees, 65-92 Extended Apparel
 // Includes Image Status, Dimensions, and AI Technical Readiness Audit Attributes
 // ==============================================================================
@@ -2479,7 +2479,7 @@ export const sampleProducts = [
   {
     "id": 65,
     "sku": "VES-SAR-019",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Kasavu Heritage Kerala Gold Tissue Saree",
     "slug": "kasavu-heritage-kerala-gold-tissue-saree-65",
     "categoryId": 1,
@@ -2518,7 +2518,7 @@ export const sampleProducts = [
   {
     "id": 66,
     "sku": "VES-SAR-020",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Jamdani Fine Dhakai Muslin Floral Saree",
     "slug": "jamdani-fine-dhakai-muslin-floral-saree-66",
     "categoryId": 1,
@@ -2557,7 +2557,7 @@ export const sampleProducts = [
   {
     "id": 67,
     "sku": "VES-SAR-021",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Sambalpuri Handwoven Ikat Silk Saree",
     "slug": "sambalpuri-handwoven-ikat-silk-saree-67",
     "categoryId": 1,
@@ -2596,7 +2596,7 @@ export const sampleProducts = [
   {
     "id": 68,
     "sku": "VES-SAR-022",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Baluchari Swarnachari Narrative Silk Brocade Saree",
     "slug": "baluchari-swarnachari-narrative-silk-brocade-saree-68",
     "categoryId": 1,
@@ -2635,7 +2635,7 @@ export const sampleProducts = [
   {
     "id": 69,
     "sku": "VES-SAR-023",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Chikankari Georgette Lucknowi Pearl Saree",
     "slug": "chikankari-georgette-lucknowi-pearl-saree-69",
     "categoryId": 1,
@@ -2674,7 +2674,7 @@ export const sampleProducts = [
   {
     "id": 70,
     "sku": "VES-SAR-024",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Kashmiri Tilla Hand-Embroidered Velvet Silk Saree",
     "slug": "kashmiri-tilla-hand-embroidered-velvet-silk-saree-70",
     "categoryId": 1,
@@ -2713,7 +2713,7 @@ export const sampleProducts = [
   {
     "id": 71,
     "sku": "VES-SHT-001",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Egyptian Giza Cotton Oxford Button-Down Shirt",
     "slug": "egyptian-giza-cotton-oxford-button-down-shirt-71",
     "categoryId": 5,
@@ -2756,7 +2756,7 @@ export const sampleProducts = [
   {
     "id": 72,
     "sku": "VES-SHT-002",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Italian Spread Collar Crisp White Poplin Shirt",
     "slug": "italian-spread-collar-crisp-white-poplin-shirt-72",
     "categoryId": 5,
@@ -2799,7 +2799,7 @@ export const sampleProducts = [
   {
     "id": 73,
     "sku": "VES-SHT-003",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "French Riviera Linen Relaxed Camp Collar Shirt",
     "slug": "french-riviera-linen-relaxed-camp-collar-shirt-73",
     "categoryId": 5,
@@ -2841,7 +2841,7 @@ export const sampleProducts = [
   {
     "id": 74,
     "sku": "VES-SHT-004",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Mulberry Silk Charmeuse Pussy-Bow Blouse",
     "slug": "mulberry-silk-charmeuse-pussy-bow-blouse-74",
     "categoryId": 5,
@@ -2884,7 +2884,7 @@ export const sampleProducts = [
   {
     "id": 75,
     "sku": "VES-SHT-005",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Oversized Crisp Poplin Striped Boyfriend Shirt",
     "slug": "oversized-crisp-poplin-striped-boyfriend-shirt-75",
     "categoryId": 5,
@@ -2926,7 +2926,7 @@ export const sampleProducts = [
   {
     "id": 76,
     "sku": "VES-SHT-006",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Cuban Collar Silk-Cotton Botanical Resort Shirt",
     "slug": "cuban-collar-silk-cotton-botanical-resort-shirt-76",
     "categoryId": 5,
@@ -2968,7 +2968,7 @@ export const sampleProducts = [
   {
     "id": 77,
     "sku": "VES-JEA-001",
-    "brand": "VESTRA Denim",
+    "brand": "VASTRA Denim",
     "name": "Kuroki Japanese Selvedge Raw Denim Jeans",
     "slug": "kuroki-japanese-selvedge-raw-denim-jeans-77",
     "categoryId": 6,
@@ -3010,7 +3010,7 @@ export const sampleProducts = [
   {
     "id": 78,
     "sku": "VES-JEA-002",
-    "brand": "VESTRA Denim",
+    "brand": "VASTRA Denim",
     "name": "90s Vintage Washed Baggy Skate Jeans",
     "slug": "90s-vintage-washed-baggy-skate-jeans-78",
     "categoryId": 6,
@@ -3053,7 +3053,7 @@ export const sampleProducts = [
   {
     "id": 79,
     "sku": "VES-JEA-003",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "High-Waisted Wide-Leg Atelier Denim Trousers",
     "slug": "high-waisted-wide-leg-atelier-denim-trousers-79",
     "categoryId": 6,
@@ -3097,7 +3097,7 @@ export const sampleProducts = [
   {
     "id": 80,
     "sku": "VES-JEA-004",
-    "brand": "VESTRA Denim",
+    "brand": "VASTRA Denim",
     "name": "Straight-Fit Classic Black Obsidian Jeans",
     "slug": "straight-fit-classic-black-obsidian-jeans-80",
     "categoryId": 6,
@@ -3139,7 +3139,7 @@ export const sampleProducts = [
   {
     "id": 81,
     "sku": "VES-JEA-005",
-    "brand": "VESTRA Denim",
+    "brand": "VASTRA Denim",
     "name": "Carpenter Utility Relaxed Workwear Jeans",
     "slug": "carpenter-utility-relaxed-workwear-jeans-81",
     "categoryId": 6,
@@ -3182,7 +3182,7 @@ export const sampleProducts = [
   {
     "id": 82,
     "sku": "VES-PNT-001",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Double-Pleated Atelier Baggy Wool Trousers",
     "slug": "double-pleated-atelier-baggy-wool-trousers-82",
     "categoryId": 7,
@@ -3224,7 +3224,7 @@ export const sampleProducts = [
   {
     "id": 83,
     "sku": "VES-PNT-002",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Relaxed Oversized Wide-Leg Chinos",
     "slug": "relaxed-oversized-wide-leg-chinos-83",
     "categoryId": 7,
@@ -3266,7 +3266,7 @@ export const sampleProducts = [
   {
     "id": 84,
     "sku": "VES-PNT-003",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "High-Waist Fluid Wide-Leg Palazzo Pants",
     "slug": "high-waist-fluid-wide-leg-palazzo-pants-84",
     "categoryId": 7,
@@ -3308,7 +3308,7 @@ export const sampleProducts = [
   {
     "id": 85,
     "sku": "VES-PNT-004",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Technical Utility Baggy Cargo Trousers",
     "slug": "technical-utility-baggy-cargo-trousers-85",
     "categoryId": 7,
@@ -3350,7 +3350,7 @@ export const sampleProducts = [
   {
     "id": 86,
     "sku": "VES-PNT-005",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Draped Tailored Balloon Silhouette Pants",
     "slug": "draped-tailored-balloon-silhouette-pants-86",
     "categoryId": 7,
@@ -3392,7 +3392,7 @@ export const sampleProducts = [
   {
     "id": 87,
     "sku": "VES-FOR-001",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Savile Row Midnight Blue Grosgrain Tuxedo",
     "slug": "savile-row-midnight-blue-grosgrain-tuxedo-87",
     "categoryId": 8,
@@ -3434,7 +3434,7 @@ export const sampleProducts = [
   {
     "id": 88,
     "sku": "VES-FOR-002",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Mayfair Charcoal Chalk-Stripe 3-Piece Tailored Suit",
     "slug": "mayfair-charcoal-chalk-stripe-3-piece-tailored-suit-88",
     "categoryId": 8,
@@ -3476,7 +3476,7 @@ export const sampleProducts = [
   {
     "id": 89,
     "sku": "VES-FOR-003",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Emerald Velvet Black-Tie Smoking Jacket Ensemble",
     "slug": "emerald-velvet-black-tie-smoking-jacket-ensemble-89",
     "categoryId": 8,
@@ -3518,7 +3518,7 @@ export const sampleProducts = [
   {
     "id": 90,
     "sku": "VES-FOR-004",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Sculptural Ivory Silk-Crepe Women Evening Tuxedo Suit",
     "slug": "sculptural-ivory-silk-crepe-women-evening-tuxedo-suit-90",
     "categoryId": 8,
@@ -3560,7 +3560,7 @@ export const sampleProducts = [
   {
     "id": 91,
     "sku": "VES-FOR-005",
-    "brand": "VESTRA Sartorial",
+    "brand": "VASTRA Sartorial",
     "name": "Monaco Ivory Shawl-Lapel Dinner Jacket Ensemble",
     "slug": "monaco-ivory-shawl-lapel-dinner-jacket-ensemble-91",
     "categoryId": 8,
@@ -3602,7 +3602,7 @@ export const sampleProducts = [
   {
     "id": 92,
     "sku": "VES-FOR-006",
-    "brand": "VESTRA Atelier",
+    "brand": "VASTRA Atelier",
     "name": "Architectural Black Double-Breasted Power Suit",
     "slug": "architectural-black-double-breasted-power-suit-92",
     "categoryId": 8,

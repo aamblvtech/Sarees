@@ -4,7 +4,7 @@ import { Camera, Image as ImageIcon, ShieldCheck, AlertCircle, CheckCircle2, Ref
 import axios from 'axios';
 
 /**
- * VESTRA Mobile Silhouette Upload Companion
+ * VASTRA Mobile Silhouette Upload Companion
  * Accessible via QR Code from Virtual Fitting Room.
  * Uses Atelier aesthetic tokens.
  */
@@ -146,7 +146,7 @@ export default function MobileUpload() {
       {/* Header Bar */}
       <header className="max-w-md mx-auto w-full pt-4 pb-6 text-center border-b border-black/[0.06] dark:border-white/[0.06]">
         <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 text-xs font-mono mb-2 rounded-xs">
-          <span>VESTRA Atelier</span>
+          <span>VASTRA Atelier</span>
         </div>
         <h1 className="font-serif text-2xl text-neutral-900 dark:text-neutral-50 font-normal">
           Mobile Silhouette Transfer
@@ -316,7 +316,7 @@ export default function MobileUpload() {
                   className="mt-0.5 w-4 h-4 text-neutral-900 focus:ring-neutral-500 border-neutral-300 dark:border-neutral-700 rounded-xs"
                 />
                 <span className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                  I consent to uploading this photograph for VESTRA virtual try-on processing. Photos are stored in a private directory and deleted automatically after use.
+                  I consent to uploading this photograph for VASTRA virtual try-on processing. Photos are stored in a private directory and deleted automatically after use.
                 </span>
               </label>
 
@@ -348,7 +348,7 @@ export default function MobileUpload() {
 
       {/* Footer */}
       <footer className="max-w-md mx-auto w-full pt-4 pb-2 text-center text-xs text-neutral-400 dark:text-neutral-500 border-t border-black/[0.06] dark:border-white/[0.06]">
-        <p>VESTRA Atelier &bull; Zero credentials or personal data exposed</p>
+        <p>VASTRA Atelier &bull; Zero credentials or personal data exposed</p>
       </footer>
 
     </div>

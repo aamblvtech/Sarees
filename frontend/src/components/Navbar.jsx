@@ -28,7 +28,7 @@ export default function Navbar() {
           {/* Brand Identity */}
           <Link to="/" className="flex items-baseline space-x-2.5 group">
             <span className="font-serif text-2xl tracking-[0.16em] text-neutral-900 dark:text-neutral-100 font-normal transition-opacity group-hover:opacity-80">
-              VESTRA
+              VASTRA
             </span>
             <span className="text-[11px] font-sans tracking-wide text-neutral-500 dark:text-neutral-400 hidden sm:inline">
               Virtual Fitting Atelier

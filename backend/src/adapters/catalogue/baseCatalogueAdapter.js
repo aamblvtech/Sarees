@@ -1,5 +1,5 @@
 /**
- * VESTRA Multi-Source Fashion Catalogue Integration
+ * VASTRA Multi-Source Fashion Catalogue Integration
  * Base Catalogue Adapter (Interface & Normalizer for all external product sources)
  */
 
@@ -44,7 +44,7 @@ export class BaseCatalogueAdapter {
   }
 
   /**
-   * Normalizes raw source product data into standard VESTRA product schema.
+   * Normalizes raw source product data into standard VASTRA product schema.
    * STRICT: Do not invent missing product attributes.
    * @param {Object} rawItem - Raw item from API or file
    * @returns {Object} Normalized product
@@ -54,7 +54,7 @@ export class BaseCatalogueAdapter {
   }
 
   /**
-   * Utility: Map diverse external category labels into VESTRA's 8 registered apparel taxonomies
+   * Utility: Map diverse external category labels into VASTRA's 8 registered apparel taxonomies
    */
   mapCategory(rawCategory = '', rawName = '', rawType = '') {
     const text = `${rawCategory} ${rawName} ${rawType}`.toLowerCase();

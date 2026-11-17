@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-17T06:22:07.181Z",
+  "timestamp": "2026-11-17T07:02:50.223Z",
   "passed": 12,
   "failed": 0,
   "tests": [
@@ -7,85 +7,85 @@
       "testId": "SC-01",
       "title": "Backend API Health Check",
       "status": "PASSED",
-      "details": "Uptime: 87908s, DB: PostgreSQL Engine (pg-mem)",
-      "time": "2026-11-17T06:22:07.336Z"
+      "details": "Uptime: 243s, DB: PostgreSQL Engine (pg-mem)",
+      "time": "2026-11-17T07:02:50.471Z"
     },
     {
       "testId": "SC-02",
       "title": "Smart Studio Camera Initialization & Stream",
       "status": "PASSED",
       "details": "Video readyState >= 2, no method mismatch error",
-      "time": "2026-11-17T06:22:09.099Z"
+      "time": "2026-11-17T07:02:55.894Z"
     },
     {
       "testId": "SC-03",
       "title": "Initial Camera Viewfinder Screenshot",
       "status": "PASSED",
       "details": "D:\\AAMBLV\\tryon\\frontend\\screenshots\\camera_01_smart_camera_modal.png",
-      "time": "2026-11-17T06:22:09.335Z"
+      "time": "2026-11-17T07:02:56.087Z"
     },
     {
       "testId": "SC-04",
       "title": "evaluatePose() & drawPoseSkeleton() Runtime Execution",
       "status": "PASSED",
       "details": "{\"hasDetect\":true,\"hasEvaluate\":true,\"hasDraw\":true,\"hasDrawSkeleton\":true}",
-      "time": "2026-11-17T06:22:09.349Z"
+      "time": "2026-11-17T07:02:56.097Z"
     },
     {
       "testId": "SC-05",
       "title": "Multi-Person Crowd Guard & Landmark Detection",
       "status": "PASSED",
       "details": "Crowd guard active: \"Multiple people detected. Please stand alone in the frame.\"",
-      "time": "2026-11-17T06:22:09.352Z"
+      "time": "2026-11-17T07:02:56.099Z"
     },
     {
       "testId": "SC-06",
       "title": "Photo Capture & Review Mode Transition",
       "status": "PASSED",
       "details": "Preview displayed with Retake and Use Photo controls",
-      "time": "2026-11-17T06:22:09.879Z"
+      "time": "2026-11-17T07:02:56.613Z"
     },
     {
       "testId": "SC-07",
       "title": "Retake Photo Workflow",
       "status": "PASSED",
       "details": "Stream resumed, captured state cleared",
-      "time": "2026-11-17T06:22:10.423Z"
+      "time": "2026-11-17T07:02:57.155Z"
     },
     {
       "testId": "SC-08",
       "title": "Use Photo Workflow & Studio Canvas Population",
       "status": "PASSED",
       "details": "Modal dismissed, silhouette state updated",
-      "time": "2026-11-17T06:22:12.123Z"
+      "time": "2026-11-17T07:02:58.868Z"
     },
     {
       "testId": "SC-09",
       "title": "Camera Permission Denial Handling",
       "status": "PASSED",
       "details": "Graceful error message and Restart button rendered",
-      "time": "2026-11-17T06:22:14.139Z"
+      "time": "2026-11-17T07:03:00.883Z"
     },
     {
       "testId": "SC-10",
       "title": "Disconnected Camera / Device Not Found Handling",
       "status": "PASSED",
       "details": "Clear hardware diagnostic displayed",
-      "time": "2026-11-17T06:22:16.166Z"
+      "time": "2026-11-17T07:03:04.795Z"
     },
     {
       "testId": "SC-11",
       "title": "OutfitCameraModal Independence from Pose Detection",
       "status": "PASSED",
       "details": "Garment capture modal operates completely decoupled from customer pose detection",
-      "time": "2026-11-17T06:22:19.204Z"
+      "time": "2026-11-17T07:03:07.720Z"
     },
     {
       "testId": "SC-12",
       "title": "Mall Kiosk Camera Integration",
       "status": "PASSED",
       "details": "Kiosk mode verified",
-      "time": "2026-11-17T06:22:20.611Z"
+      "time": "2026-11-17T07:03:09.106Z"
     }
   ]
 }

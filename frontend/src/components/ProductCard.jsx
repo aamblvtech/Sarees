@@ -12,7 +12,7 @@ export default function ProductCard({ product, initialWishlisted = false, onWish
 
   useEffect(() => {
     try {
-      const savedWishlist = JSON.parse(localStorage.getItem('vestra_wishlist') || '[]');
+      const savedWishlist = JSON.parse(localStorage.getItem('vastra_wishlist') || localStorage.getItem('vestra_wishlist') || '[]');
       if (savedWishlist.includes(product.id)) {
         setIsWishlisted(true);
       }
@@ -35,21 +35,21 @@ export default function ProductCard({ product, initialWishlisted = false, onWish
     setIsWishlisted(nextState);
 
     try {
-      const savedWishlist = JSON.parse(localStorage.getItem('vestra_wishlist') || '[]');
+      const savedWishlist = JSON.parse(localStorage.getItem('vastra_wishlist') || localStorage.getItem('vestra_wishlist') || '[]');
       const updated = nextState
         ? Array.from(new Set([...savedWishlist, product.id]))
         : savedWishlist.filter((id) => id !== product.id);
-      localStorage.setItem('vestra_wishlist', JSON.stringify(updated));
+      localStorage.setItem('vastra_wishlist', JSON.stringify(updated));
     } catch (err) {
       console.warn('Wishlist storage warning:', err);
     }
 
     try {
       setWishlistLoading(true);
-      let sessionId = localStorage.getItem('vestra_session_id');
+      let sessionId = localStorage.getItem('vastra_session_id') || localStorage.getItem('vestra_session_id');
       if (!sessionId) {
         sessionId = 'sess_' + Math.random().toString(36).substring(2, 11);
-        localStorage.setItem('vestra_session_id', sessionId);
+        localStorage.setItem('vastra_session_id', sessionId);
       }
 
       if (nextState) {
@@ -85,7 +85,7 @@ export default function ProductCard({ product, initialWishlisted = false, onWish
     ? ATELIER_FALLBACK_IMAGE
     : product.primaryImage || product.images?.[0] || ATELIER_FALLBACK_IMAGE;
 
-  const brandOrSupplier = product.brand || product.supplierName || 'VESTRA';
+  const brandOrSupplier = product.brand || product.supplierName || 'VASTRA';
   const categoryDisplay = product.categoryName || 'Garment';
 
   const rawStock = (product.stockStatus || 'in_stock').toLowerCase();

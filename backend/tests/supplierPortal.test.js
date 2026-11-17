@@ -7,7 +7,7 @@ import { runSeed } from '../src/db/seed.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vestra_luxury_jwt_secret_atelier_key_2026';
 
-test('VESTRA Supplier Portal Suite', async (t) => {
+test('VASTRA Supplier Portal Suite', async (t) => {
   await initializeDatabase();
   await runSeed();
 

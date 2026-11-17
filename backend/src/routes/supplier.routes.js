@@ -277,7 +277,7 @@ router.post('/login', authLimiter, async (req, res) => {
         status: isPending ? 'pending' : user.user_status,
         error: isPending
           ? 'Your supplier account is pending administrator approval. An onboarding email will be sent once reviewed.'
-          : 'Your supplier account is not active. Please contact VESTRA partner support.'
+          : 'Your supplier account is not active. Please contact VASTRA partner support.'
       });
     }
 

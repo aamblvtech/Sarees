@@ -1,7 +1,7 @@
 async function runComprehensiveVerification() {
   const BASE_URL = 'http://127.0.0.1:5000/api';
   console.log('================================================================');
-  console.log('  VESTRA MULTI-SOURCE CATALOGUE INTEGRATION LIVE VERIFICATION');
+  console.log('  VASTRA MULTI-SOURCE CATALOGUE INTEGRATION LIVE VERIFICATION');
   console.log('================================================================\n');
 
   // STEP 2: Test GET /api/catalogue-sources and registered sources

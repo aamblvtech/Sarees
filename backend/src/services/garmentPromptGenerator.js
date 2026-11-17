@@ -1,5 +1,5 @@
 /**
- * VESTRA AI Virtual Try-On - Garment Prompt & Metadata Generator
+ * VASTRA AI Virtual Try-On - Garment Prompt & Metadata Generator
  * Produces structured, domain-accurate prompts for AI diffusion models (Genlook)
  * based strictly on recorded garment attributes without inventing unseen details.
  * 

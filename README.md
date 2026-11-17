@@ -1,7 +1,7 @@
-# VESTRA — Luxury AI Virtual Try-On Platform
+# VASTRA — Luxury AI Virtual Try-On Platform
 > *“Experience Fashion Before You Wear It.”*
 
-The first working version of **VESTRA**, a premium luxury fashion technology platform with simulated AI virtual try-on draping, architectural tailoring, fluid silks, and computer vision fitting room workflows.
+The first working version of **VASTRA**, a premium luxury fashion technology platform with simulated AI virtual try-on draping, architectural tailoring, fluid silks, and computer vision fitting room workflows.
 
 ---
 
@@ -20,7 +20,7 @@ The first working version of **VESTRA**, a premium luxury fashion technology pla
                        |                                                   |
                        v                                                   v
       +-------------------------------------------------------------------------------+
-      |                       VESTRA Express REST API (Node.js)                       |
+      |                       VASTRA Express REST API (Node.js)                       |
       |                 Port: 5000 | Parameterized SQL | Multer Upload                |
       +-------------------------------------------------------------------------------+
               |                                           |
@@ -41,7 +41,7 @@ The first working version of **VESTRA**, a premium luxury fashion technology pla
 ## 2. Key Pages & Features
 
 ### 1. Home Page (`/`)
-- **Luxury Navigation Bar**: Brand identity (`VESTRA`), luxury tracking, direct navigation links, and rapid CTA to the fitting room.
+- **Luxury Navigation Bar**: Brand identity (`VASTRA`), luxury tracking, direct navigation links, and rapid CTA to the fitting room.
 - **Hero Section**: High-fashion photography, bold headline (*"Try Before You Buy"*), and tagline (*"Experience Fashion Before You Wear It"*).
 - **Curated Silhouette Capsules**: Category cards (Eveningwear, Structured Tailoring, Modern Outerwear, Silk Essentials, Resort Atelier).
 - **Featured Garment Showcase**: Curated product cards with direct "Try It On" quick-action buttons.

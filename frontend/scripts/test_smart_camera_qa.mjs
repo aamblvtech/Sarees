@@ -31,7 +31,7 @@ function logTest(testId, title, status, details = '') {
 
 async function runSmartCameraAudit() {
   console.log('================================================================');
-  console.log('  VESTRA SMART CAMERA & POSE ESTIMATION QA AUTOMATION');
+  console.log('  VASTRA SMART CAMERA & POSE ESTIMATION QA AUTOMATION');
   console.log('================================================================\n');
 
   // Launch browser with fake webcam media stream capabilities

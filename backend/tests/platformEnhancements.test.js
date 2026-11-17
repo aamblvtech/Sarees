@@ -7,7 +7,7 @@ import { garmentPromptGenerator } from '../src/services/garmentPromptGenerator.j
 
 const JWT_SECRET = process.env.JWT_SECRET || 'vestra_luxury_jwt_secret_atelier_key_2026';
 
-test('VESTRA Platform Enhancements, Smart Camera & Multi-Category Suite', async (t) => {
+test('VASTRA Platform Enhancements, Smart Camera & Multi-Category Suite', async (t) => {
   await initializeDatabase();
   await runSeed();
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Check, Layers, AlertCircle, EyeOff } from 'lucide-react';
 
-export const ATELIER_FALLBACK_IMAGE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800"><rect width="100%" height="100%" fill="%23FAFAFA"/><circle cx="300" cy="200" r="40" fill="%23F4F4F5" stroke="%23E4E4E7" stroke-width="1.5"/><path d="M260 250 Q300 235 340 250 L360 400 Q300 420 240 400 Z" fill="%23F4F4F5" stroke="%23E4E4E7" stroke-width="1.5"/><text x="300" y="740" font-family="sans-serif" font-weight="500" font-size="12" fill="%2371717A" text-anchor="middle" letter-spacing="3">VESTRA ATELIER</text></svg>`;
+export const ATELIER_FALLBACK_IMAGE = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800"><rect width="100%" height="100%" fill="%23FAFAFA"/><circle cx="300" cy="200" r="40" fill="%23F4F4F5" stroke="%23E4E4E7" stroke-width="1.5"/><path d="M260 250 Q300 235 340 250 L360 400 Q300 420 240 400 Z" fill="%23F4F4F5" stroke="%23E4E4E7" stroke-width="1.5"/><text x="300" y="740" font-family="sans-serif" font-weight="500" font-size="12" fill="%2371717A" text-anchor="middle" letter-spacing="3">VASTRA ATELIER</text></svg>`;
 
 export function getProductStatus(product, isImageMissing = false) {
   if (product?.isActive === false) {

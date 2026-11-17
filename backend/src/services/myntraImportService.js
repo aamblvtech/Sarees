@@ -481,7 +481,7 @@ export const myntraImportService = {
     if (cleanUrl) {
       const existing = await query('SELECT id, name FROM products WHERE myntra_url = $1 LIMIT 1', [cleanUrl]);
       if (existing.rows && existing.rows.length > 0) {
-        const err = new Error(`A product with this Myntra URL already exists in VESTRA (Product #${existing.rows[0].id}: "${existing.rows[0].name}").`);
+        const err = new Error(`A product with this Myntra URL already exists in VASTRA (Product #${existing.rows[0].id}: "${existing.rows[0].name}").`);
         err.statusCode = 409;
         throw err;
       }

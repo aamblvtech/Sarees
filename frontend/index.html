@@ -3,23 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VESTRA — Experience Fashion Before You Wear It | AI Virtual Try-On</title>
-    <meta name="description" content="VESTRA — Luxury fashion technology platform with AI virtual draping. Try before you buy with architectural tailoring, fluid silks, and bespoke fitting." />
+    <title>VASTRA — Experience Fashion Before You Wear It | AI Virtual Try-On</title>
+    <meta name="description" content="VASTRA — Luxury fashion technology platform with AI virtual draping. Try before you buy with architectural tailoring, fluid silks, and bespoke fitting." />
     
     <!-- Instant Theme Bootstrap (Forces Pure White Light Mode by default) -->
     <script>
       (function() {
         try {
-          var v = localStorage.getItem('vestra_pure_white_v1');
+          var v = localStorage.getItem('vastra_pure_white_v1') || localStorage.getItem('vestra_pure_white_v1');
           if (!v) {
-            localStorage.setItem('vestra_pure_white_v1', 'true');
-            localStorage.setItem('vestra_theme', 'light');
+            localStorage.setItem('vastra_pure_white_v1', 'true');
+            localStorage.setItem('vastra_theme', 'light');
             document.documentElement.classList.remove('dark');
             document.documentElement.setAttribute('data-theme', 'light');
             document.documentElement.style.colorScheme = 'light';
             return;
           }
-          var t = localStorage.getItem('vestra_theme');
+          var t = localStorage.getItem('vastra_theme') || localStorage.getItem('vestra_theme');
           if (t === 'dark') {
             document.documentElement.classList.add('dark');
             document.documentElement.setAttribute('data-theme', 'dark');

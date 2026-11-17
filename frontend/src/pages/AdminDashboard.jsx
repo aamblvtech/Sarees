@@ -163,7 +163,7 @@ export default function AdminDashboard() {
   // Product Form State
   const [formData, setFormData] = useState({
     name: '',
-    brand: 'VESTRA',
+    brand: 'VASTRA',
     categoryId: '',
     subcategory: 'sarees',
     gender: 'women',
@@ -368,7 +368,7 @@ export default function AdminDashboard() {
       const downloadUrl = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = downloadUrl;
-      a.download = `vestra_${reportType}_report.csv`;
+      a.download = `vastra_${reportType}_report.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -493,7 +493,7 @@ export default function AdminDashboard() {
     setEditingProduct(null);
     setFormData({
       name: '',
-      brand: 'VESTRA',
+      brand: 'VASTRA',
       categoryId: categories[0]?.id || '',
       subcategory: 'sarees',
       gender: 'women',
@@ -560,7 +560,7 @@ export default function AdminDashboard() {
     setEditingProduct(prod);
     setFormData({
       name: prod.name,
-      brand: prod.brand || 'VESTRA',
+      brand: prod.brand || 'VASTRA',
       categoryId: prod.categoryId || prod.category_id || '',
       subcategory: prod.subcategory || 'sarees',
       gender: prod.gender || 'women',
@@ -952,7 +952,7 @@ export default function AdminDashboard() {
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-serif text-2xl sm:text-3xl font-semibold tracking-wider text-slate-900 dark:text-white">
-                VESTRA
+                VASTRA
               </span>
               <span className="text-[10px] tracking-widest uppercase bg-[#000000] dark:bg-[#FFFFFF] text-[#FFFFFF] dark:text-[#000000] px-2 py-0.5 font-medium rounded-none">
                 Atelier Admin Console
@@ -1510,7 +1510,7 @@ export default function AdminDashboard() {
                           <div className="flex flex-wrap items-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
                             <span className="font-mono">{p.sku}</span>
                             <span>&bull;</span>
-                            <span className="font-semibold text-slate-700 dark:text-slate-300">{p.brand || 'VESTRA'}</span>
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{p.brand || 'VASTRA'}</span>
                             {p.source && p.source !== 'atelier' && (
                               <>
                                 <span>&bull;</span>
@@ -1946,7 +1946,7 @@ export default function AdminDashboard() {
 
                       {/* Adapter Description & Notes */}
                       <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed min-h-[38px]">
-                        {src.message || 'Modular catalogue connector integrated with VESTRA standard fashion taxonomy.'}
+                        {src.message || 'Modular catalogue connector integrated with VASTRA standard fashion taxonomy.'}
                       </p>
 
                       {/* Credentials Checklist */}
@@ -3020,7 +3020,7 @@ export default function AdminDashboard() {
                     required
                     value={formData.brand}
                     onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                    placeholder="VESTRA"
+                    placeholder="VASTRA"
                     className="w-full bg-neutral-50 dark:bg-[#17181C] border border-black/[0.08] dark:border-white/[0.08] text-xs p-2.5 text-slate-900 dark:text-white focus:outline-none focus:border-[#000000] dark:focus:border-white"
                   />
                 </div>
@@ -4038,7 +4038,7 @@ export default function AdminDashboard() {
                   {comparingProduct.name}
                 </h3>
                 <p className="text-xs text-slate-500 font-mono mt-0.5">
-                  Brand: {comparingProduct.brand || 'VESTRA'} • SKU: {comparingProduct.sku} • Category: Saree
+                  Brand: {comparingProduct.brand || 'VASTRA'} • SKU: {comparingProduct.sku} • Category: Saree
                 </p>
               </div>
               <button
@@ -4231,7 +4231,7 @@ export default function AdminDashboard() {
 
               <div className="p-3 bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200 dark:border-rose-900/50 text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
                 <p className="font-semibold text-slate-800 dark:text-slate-200 mb-0.5">Policy Notice</p>
-                Under VESTRA zero-cost guidelines, paid aggregators and scraping bots are disabled. When credentials are not set, you can use partner CSV/TSV uploads or obtain free official developer keys.
+                Under VASTRA zero-cost guidelines, paid aggregators and scraping bots are disabled. When credentials are not set, you can use partner CSV/TSV uploads or obtain free official developer keys.
               </div>
             </div>
 
@@ -4413,7 +4413,7 @@ export default function AdminDashboard() {
                             className="px-3.5 py-1.5 bg-black dark:bg-white text-white dark:text-black hover:opacity-90 text-xs uppercase tracking-wider font-semibold transition-colors flex items-center space-x-1.5"
                           >
                             <Plus className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
-                            <span>{isImporting ? 'Importing...' : 'Import to VESTRA'}</span>
+                            <span>{isImporting ? 'Importing...' : 'Import to VASTRA'}</span>
                           </button>
                         </div>
                       </div>
@@ -4579,7 +4579,7 @@ export default function AdminDashboard() {
                   className="mt-0.5 rounded border-slate-300 text-black focus:ring-0"
                 />
                 <label htmlFor="supplierAgreementConfirm">
-                  I certify that the supplier has granted authorized rights to use these garment assets in the VESTRA virtual try-on engine, and that imported images will undergo ≥250×250px quality verification.
+                  I certify that the supplier has granted authorized rights to use these garment assets in the VASTRA virtual try-on engine, and that imported images will undergo ≥250×250px quality verification.
                 </label>
               </div>
 
@@ -4621,7 +4621,7 @@ export default function AdminDashboard() {
                     Register New Supplier / Textile Mill
                   </h3>
                   <p className="text-[11px] text-slate-500">
-                    Add verified manufacturer or wholesale partner to VESTRA database.
+                    Add verified manufacturer or wholesale partner to VASTRA database.
                   </p>
                 </div>
               </div>

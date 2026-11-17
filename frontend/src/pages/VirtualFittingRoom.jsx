@@ -79,10 +79,10 @@ export default function VirtualFittingRoom() {
 
   // Customer Session ID for persistent tracking across generations
   const [sessionId] = useState(() => {
-    let s = sessionStorage.getItem('vestra_customer_session_id');
+    let s = sessionStorage.getItem('vastra_customer_session_id') || sessionStorage.getItem('vestra_customer_session_id');
     if (!s) {
       s = `sess_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-      sessionStorage.setItem('vestra_customer_session_id', s);
+      sessionStorage.setItem('vastra_customer_session_id', s);
     }
     return s;
   });
@@ -190,7 +190,7 @@ export default function VirtualFittingRoom() {
       }).catch(() => {});
     } catch (err) {
       console.error('Failed to initialize fitting room:', err);
-      setInitError('Unable to connect to VESTRA database service. Please retry.');
+      setInitError('Unable to connect to VASTRA database service. Please retry.');
     } finally {
       setIsPageLoading(false);
     }
@@ -617,7 +617,7 @@ export default function VirtualFittingRoom() {
           : err.response?.status === 504
           ? 'AI cloud generation timed out. Please click Retry Generation.'
           : err.message === 'Network Error'
-          ? 'Cannot connect to VESTRA backend server (port 5000). Please ensure backend is running.'
+          ? 'Cannot connect to VASTRA backend server (port 5000). Please ensure backend is running.'
           : err.message) ||
         'Generation dispatch failed.';
       setGenerationError(errorMsg);
@@ -721,7 +721,7 @@ export default function VirtualFittingRoom() {
       const errorMsg =
         err.response?.data?.error ||
         (err.message === 'Network Error'
-          ? 'Cannot connect to VESTRA backend server (port 5000).'
+          ? 'Cannot connect to VASTRA backend server (port 5000).'
           : err.message) ||
         'Batch generation dispatch failed.';
       setGenerationError(errorMsg);
@@ -1150,7 +1150,7 @@ export default function VirtualFittingRoom() {
     if (!tryOnResult?.resultImageUrl) return;
     const link = document.createElement('a');
     link.href = tryOnResult.resultImageUrl;
-    link.download = `vestra-tryon-${tryOnResult?.generatingProduct?.slug || selectedProduct?.slug || 'bespoke'}-${Date.now()}.jpg`;
+    link.download = `vastra-tryon-${tryOnResult?.generatingProduct?.slug || selectedProduct?.slug || 'bespoke'}-${Date.now()}.jpg`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -1244,7 +1244,7 @@ export default function VirtualFittingRoom() {
       <div className="min-h-screen bg-neutral-50 dark:bg-[#0D0E10] text-neutral-900 dark:text-neutral-100 py-20 px-4 flex items-center justify-center">
         <div className="max-w-md w-full bg-white dark:bg-[#121316] border border-black/[0.08] dark:border-white/[0.08] p-8 text-center space-y-4 rounded-md">
           <RefreshCw className="w-6 h-6 animate-spin mx-auto text-rose-700 dark:text-rose-400" />
-          <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">VESTRA Atelier</p>
+          <p className="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">VASTRA Atelier</p>
           <h2 className="font-serif text-2xl font-normal">Opening virtual fitting room</h2>
           <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
             Connecting to clothing inventory and Genlook cloud AI try-on engine...
@@ -1510,7 +1510,7 @@ export default function VirtualFittingRoom() {
                         Upload Your Photo
                       </h3>
                       <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
-                        Upload a front-facing full-body portrait to preview any VESTRA creation.
+                        Upload a front-facing full-body portrait to preview any VASTRA creation.
                       </p>
                     </div>
 
@@ -2792,7 +2792,7 @@ export default function VirtualFittingRoom() {
             ) : (
               <form onSubmit={handleSubmitDefectReport} className="space-y-3 text-xs">
                 <p className="text-neutral-600 dark:text-neutral-400 text-xs">
-                  Help us refine VESTRA's inpainting segmentation. What issue was observed in the generated result?
+                  Help us refine VASTRA's inpainting segmentation. What issue was observed in the generated result?
                 </p>
 
                 <div className="space-y-2">
