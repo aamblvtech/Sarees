@@ -133,6 +133,7 @@ class PoseDetectionService {
 
     // Case 3: Exactly one person detected
     const lm = poses[0]; // 33 landmarks
+    const personCount = 1;
 
     // Key landmarks indices:
     // 0: nose, 11: left_shoulder, 12: right_shoulder, 13: left_elbow, 14: right_elbow,
@@ -162,6 +163,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'head_cut_off',
         guidance: 'Move slightly backwards. Your head is close to the top edge.',
         progress: 0,
@@ -175,6 +177,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'lower_body_cut_off',
         guidance: 'Move slightly backwards. Make sure your full body is visible.',
         progress: 0,
@@ -189,6 +192,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'too_close',
         guidance: 'Move backwards 4–6 feet for full outfit fitting.',
         progress: 0,
@@ -202,6 +206,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'too_far',
         guidance: 'Step forward slightly into the fitting frame.',
         progress: 0,
@@ -217,6 +222,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'not_straight',
         guidance: 'Stand straight and face the camera.',
         progress: 0,
@@ -243,6 +249,7 @@ class PoseDetectionService {
       this.resetStability();
       return {
         detected: true,
+        personCount: 1,
         status: 'moving',
         guidance: 'Hold still...',
         progress: 0.15,
@@ -263,6 +270,7 @@ class PoseDetectionService {
     if (progress >= 1.0) {
       return {
         detected: true,
+        personCount: 1,
         status: 'perfect',
         guidance: 'Perfect! Capturing your photo.',
         progress: 1.0,
@@ -273,6 +281,7 @@ class PoseDetectionService {
 
     return {
       detected: true,
+      personCount: 1,
       status: 'holding_still',
       guidance: 'Hold still...',
       progress,

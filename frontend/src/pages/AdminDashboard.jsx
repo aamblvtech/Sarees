@@ -5,7 +5,8 @@ import {
   Upload, Sparkles, RefreshCw, AlertCircle, Eye, EyeOff, Layers,
   ExternalLink, Database, ShieldCheck, X, Download, FileSpreadsheet,
   CheckCircle2, AlertTriangle, Globe, RotateCcw, FileText, CheckCheck,
-  Building2, Store, ShoppingBag, ArrowUpRight, CheckSquare, UserCheck, Users
+  Building2, Store, ShoppingBag, ArrowUpRight, CheckSquare, UserCheck, Users,
+  DollarSign
 } from 'lucide-react';
 import adminService from '../services/adminService';
 import tryOnService from '../services/tryOnService';

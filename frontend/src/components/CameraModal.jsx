@@ -99,6 +99,7 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
 
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
+        videoRef.current.play().catch((e) => console.warn('[CameraModal] Auto-play notice:', e));
       }
       setIsInitializing(false);
     } catch (err) {
@@ -283,7 +284,17 @@ export default function CameraModal({ isOpen, onClose, onPhotoCaptured }) {
                 playsInline
                 muted
                 className="w-full h-full object-cover transform -scale-x-100"
-                onCanPlay={() => setIsVideoReady(true)}
+                onLoadedMetadata={() => {
+                  if (videoRef.current) {
+                    videoRef.current.play().catch(() => {});
+                  }
+                }}
+                onCanPlay={() => {
+                  setIsVideoReady(true);
+                  if (videoRef.current && videoRef.current.paused) {
+                    videoRef.current.play().catch(() => {});
+                  }
+                }}
               />
 
               <canvas

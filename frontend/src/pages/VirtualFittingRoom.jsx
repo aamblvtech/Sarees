@@ -1433,13 +1433,23 @@ export default function VirtualFittingRoom() {
                 </div>
 
                 {userPhotoUrl && (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsCameraModalOpen(true)}
+                      title="Open Smart Studio Camera"
+                      className="text-[11px] font-mono text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center space-x-1 transition-colors"
+                    >
+                      <Camera className="w-3 h-3" />
+                      <span>Live Camera</span>
+                    </button>
+
                     <label
                       title="Replace photograph"
-                      className="cursor-pointer text-[11px] uppercase font-mono tracking-wider font-semibold text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-[#FFFFFF] flex items-center space-x-1 transition-colors"
+                      className="cursor-pointer text-[11px] font-mono text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white flex items-center space-x-1 transition-colors"
                     >
                       <RefreshCw className="w-3 h-3" />
-                      <span>Replace Photo</span>
+                      <span>Upload File</span>
                       <input
                         ref={replaceFileInputRef}
                         type="file"
@@ -1453,7 +1463,7 @@ export default function VirtualFittingRoom() {
                       type="button"
                       onClick={handleRemoveCustomerPhoto}
                       title="Remove photograph"
-                      className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
+                      className="p-1 text-neutral-400 hover:text-rose-600 transition-colors"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
